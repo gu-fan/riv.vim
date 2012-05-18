@@ -2,7 +2,7 @@
 " fix rst.vim
 " Author:   Rykka. G  <Rykka10(at)gmail.com>
 " Update:   2012-05-17
-" first load file:/usr/share/vim/vim73/syntax/rst.vim
+" first load /usr/share/vim/vim73/syntax/rst.vim
 " vim: fdm=marker:
 
 " rstComment:a line start with '\n\n\s\w' maybe considered end comment
@@ -47,19 +47,32 @@ execute 'syn match rstSubstitutionDefinition contained' .
 " if we using syntax fold. "{{{
 " we should use several section region to contain things
 " error foldlevel
-" syn region rstSectionR start=@^.\+\n\([=`:.'"~^_*+#-]\)\1\+$@ end=@^.\+\n\zs1\+$@ fold keepend transparent
+" let i =1
+" for punc  in [ "#", "=", "~", "-", "."]
+"     exe 'syn region rstSectionR'.i.' start=@^.\+\n\('.punc.'\+\)$@ end=@^.\+\n\zs1$@ fold contains=@rstAll'
+"     let i += 2
+" endfor
+" syn cluster rstSectionRs contains=rstSectionR1,rstSectionR2,rstSectionR3,
+"             \rstSectionR4,rstSectionR5,rstSectionR6
+" syn cluster rstAll contains=rstTransition,rstComment,@rstCruft,rstLiteralBlock,
+"             \rstQuotedLiteralBlock,rstDoctestBlock,rstTable,rstSimpleTable,
+"             \@rstDirectives,rstExplicitMarkup,rstStandaloneHyperlink,
+"             \@rstSectionRs
+
 " but maybe it's faster than fold-expr.
+" r
 "}}}
 " fix section and transition "{{{
 " NOTE: use %(\_^\s*\n)@<=  to match preceding with a blank line.
+" %(\S.*\n)@<! matches no preceding non-blank line (blank or file start)
 syn clear rstSections
-syn match   rstSections "\v%(\_^\s*\n)@<=\S+\n([=`:.'"~^_*+#-])\1+$"
-syn match   rstSections "^\%^.\+\n\([=`:.'"~^_*+#-]\)\1\+$"
-syn match   rstSections "^\(\([=`:.'"~^_*+#-]\)\2\+\)\n.\+\n\1$"
+syn match   rstSections &\v%(\S+\s*\n)@<!\_^.*\S.*\n([=`:.'"~^_*+#-])\1+$&
+" syn match   rstSections "^\%^.\+\n\([=`:.'"~^_*+#-]\)\1\+$"
+syn match   rstSections "^\v%(\S+\s*\n)@<!(([=`:.'"~^_*+#-])\2+)\n.*\S.*\n\1$"
 
-" transition should sep with blank line
+" NOTE: transition should sep with blank line before and after.
 syn clear rstTransition
-syn match   rstTransition  /\v%(\_^\s*\n)@<=[=`:.'"~^_*+#-]{4,}\s*$/
+syn match   rstTransition  /\v%(\_^\s*\n)@<=[=`:.'"~^_*+#-]{4,}\s*(\n\s*\_$)\@=/
 "}}}
 
 " define missing rst objects "{{{

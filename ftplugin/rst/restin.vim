@@ -18,9 +18,15 @@
 "
 " Files:
 " xxx.rst  ~/xxx.rst  ../xxx.rst
+setl fdls=1 fdl=1
+setl foldmethod=expr
+setl foldexpr=RstFoldExpr(v:lnum)
+setl foldtext=RstFoldText()
+
 if exists("b:did_rstftplugin")
     finish
 endif
+let b:undo_ftplugin = "setlocal fdm< fde< fdt< fdls< fdl<"
 let b:did_rstftplugin = 1
 let g:rst_debug = exists("g:rst_debug") ? g:rst_debug : 0
 
@@ -304,10 +310,7 @@ if !exists("*s:find_lnk") "{{{
         endif
     endfun
 endif "}}}
-" autocmd InsertLeave *.rst call vimwiki#tbl#format(line("."))
-setl fdls=1 fdl=1
-let b:undo_ftplugin = "setlocal fdm< fde< fdt< fdls< fdl<"
-" fold
+" fold "{{{
 if !exists("s:is_fold_defined")
     let s:is_fold_defined=1
 
@@ -345,6 +348,22 @@ fun! RstFoldExpr(row) "{{{
             return (index(punc_list,nlist[1])+1)
         endif
     endif
+
+    " Comment Items
+    let c_hlgrp = synIDattr(synID(a:row,1,1),"name") 
+    if c_hlgrp == "rstExplicitMarkup" 
+        if synIDattr(synID(a:row,4,1),"name")=="rstComment" && 
+                    \ synIDattr(synID(a:row+1,1,1),"name")=="rstComment"
+            return ">5"
+        endif
+    endif
+    if c_hlgrp == "rstComment" 
+        let n_hlgrp=synIDattr(synID(a:row+1,1,1),"name")
+        if n_hlgrp != "rstComment" && !empty(n_hlgrp)
+            return "<5"
+        endif
+    endif
+
     " it is slow to use "=" though
     return "="
     
@@ -363,13 +382,9 @@ fun! RstFoldText() "{{{
     let num = printf("%4s",(v:foldend-v:foldstart))
     return line."[".num.dash."]"
 endfun "}}}
-endif
-set foldmethod=expr
-set foldexpr=RstFoldExpr(v:lnum)
-set foldtext=RstFoldText()
+endif "}}}
 
-
-if !exists("s:is_defined")
+if !exists("s:is_defined") "{{{
     let s:is_defined=1
 
     fun! s:cindex(ftype) "{{{
@@ -421,9 +436,9 @@ if !exists("s:is_defined")
     fun! s:is_todo_list()
         
     endfun
-endif
+endif "}}}
 
-exe 'let w:last_rst_file="'.expand('%:p').'"'
+exe 'let g:last_rst_file="'.expand('%:p').'"'
 nno <silent><buffer><Leader>ri :call <SID>cindex("rst")<CR>
 
 nno <silent><buffer><CR> :call <SID>parse_cur()<CR>
