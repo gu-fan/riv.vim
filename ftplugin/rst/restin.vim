@@ -66,8 +66,10 @@ endif "}}}
 if !exists("*s:parse_cur") "{{{
 fun! s:parse_cur() "{{{
     let [row,col] = getpos('.')[1:2]
+    let ptn = '\[\=\zs[0-9a-zA-Z]*\%'.col.'c[0-9a-zA-Z]*\ze\]\=_'
     let line = getline(row)
-    let word = matchstr(line,'\[\=\zs[0-9a-zA-Z]*\%'.col.'c[0-9a-zA-Z]*\ze\]\=_')
+    let word = matchstr(line,ptn)
+    " get ref
     if !empty(word)
         let [sr,sc,type] = s:find_ref_def(word)
         if sr != 0
@@ -81,7 +83,7 @@ fun! s:parse_cur() "{{{
     let ptn = s:ptn_lnk
     let links = matchlist(line,ptn)
     let idx = match(line,ptn)
-    if !empty(links) 
+    while !empty(links) 
         if col>=idx && col <=idx+len(links[0])
             if links[1] =~ 'file'
                 exe "edit ".expand(links[2])
@@ -89,14 +91,17 @@ fun! s:parse_cur() "{{{
                 sil! exe "!firefox ". links[2]
             endif
             return 1
+        else
+            let links = matchlist(line,ptn,idx+1)
+            let idx = match(line,ptn,idx+1)
         endif
-    endif
+    endwhile
 
-    " get defined file
+    " get defined file 
     let ptn = s:ptn_rst
     let links = matchlist(line,ptn)
     let idx = match(line,ptn)
-    if !empty(links) 
+    while !empty(links) 
         if col>=idx && col <=idx+len(links[0])
             if links[1] !~ '^[/~]'
                 let dir = expand('%:p:h')
@@ -112,8 +117,12 @@ fun! s:parse_cur() "{{{
             endif
             exe "edit ".file
             return 1
+        else
+            "let let
+            let links = matchlist(line,ptn,idx+1)
+            let idx = match(line,ptn,idx+1)
         endif
-    endif
+    endwhile
 
     return 0
 endfun "}}}

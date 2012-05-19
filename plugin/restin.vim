@@ -2,9 +2,14 @@
 "    Name: restin.vim
 "    File: restin.vim
 "  Author: Rykka G.Forest
-"  Update: 2012-05-18
+"  Update: 2012-05-19
 " Version: 0.1
 "=============================================
+
+if exists("g:restin_loaded")
+    finish
+endif
+let g:restin_loaded = 1
 
 fun! s:up_index()
     if filereadable("../index.rst")
@@ -28,6 +33,14 @@ fun! s:cindex(ftype) "{{{
         echo "No index for current page"
     endif
 endfun "}}}
+
+if has("python")
+    py import sys
+    py import vim
+    py sys.path.append(vim.eval("expand('<sfile>:p:h')")  + '/restin/')
+    py from restin import *
+    com! RestFormatTable exe "py BufParse().format_table(".line('.').")"
+endif
 com! RestInIndex  e ~/Dropbox/rst/index.rst
 com! RestInUpIndex  call <SID>up_index()
 com! RestInCIndex  call <SID>cindex("rst")
