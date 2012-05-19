@@ -56,8 +56,8 @@ nno <script><Plug>RestInUpIndex     :RestInUpIndex<CR>
 nno <script><Plug>RestInCIndex      :RestInCIndex<CR>
 nno <script><Plug>RestInLastRest    :RestInLastRest<CR>
 
-map <unique><silent><leader>rr <Plug>RestInIndex
-map <unique><silent><leader>ro <Plug>RestInLastRest
-map <unique><silent><leader>ru <Plug>RestInUpIndex
-map <unique><silent><leader>ri <Plug>RestInCIndex
+sil! map <unique><silent><leader>rr <Plug>RestInIndex
+sil! map <unique><silent><leader>ro <Plug>RestInLastRest
+sil! map <unique><silent><leader>ru <Plug>RestInUpIndex
+sil! map <unique><silent><leader>ri <Plug>RestInCIndex
 
