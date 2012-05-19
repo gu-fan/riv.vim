@@ -28,13 +28,17 @@ class RestTable:
                 if c_len>max_len:
                     max_len = c_len
             c_max.append(max_len)
+
         line_sep = " "*indent
+        line_head = " "*indent
         for i in c_max:
             # we should use join here.
             line_sep += "+"+"-"*(i+2)
+            line_head += "+"+"="*(i+2)
         line_sep += "+"
-        lines = []
+        line_head += "+"
 
+        lines = []
         for rows in self.table:
             line_con = " "*indent
             i = 0
@@ -51,6 +55,8 @@ class RestTable:
             lines.append(line_sep)
             lines.append(line_con)
         lines.append(line_sep)
+        if len(lines)>=5:
+            lines[2] = line_head
         return lines
 class BufParse:
     def __init__(self):

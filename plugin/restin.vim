@@ -39,21 +39,25 @@ if has("python")
     py import vim
     py sys.path.append(vim.eval("expand('<sfile>:p:h')")  + '/restin/')
     py from restin import *
-    com! RestFormatTable exe "py BufParse().format_table(".line('.').")"
+    com! RestFormatTable py BufParse().format_table(int(vim.eval("line('.')")))
+    nno <script><Plug>RestInFormatTable    :RestFormatTable<CR>
+    map <unique><silent><leader>rt <Plug>RestInFormatTable
 endif
-com! RestInIndex  e ~/Dropbox/rst/index.rst
+
+
+com! RestInIndex    e ~/Dropbox/rst/index.rst
 com! RestInUpIndex  call <SID>up_index()
-com! RestInCIndex  call <SID>cindex("rst")
-com! RestInLastRest  exe "edit ".g:last_rst_file
+com! RestInCIndex   call <SID>cindex("rst")
+com! RestInLastRest exe "edit ".g:last_rst_file
 
 
-nno <script><Plug>RestInIndex   :RestInIndex<CR>
+nno <script><Plug>RestInIndex       :RestInIndex<CR>
 nno <script><Plug>RestInUpIndex     :RestInUpIndex<CR>
-nno <script><Plug>RestInCIndex     :RestInCIndex<CR>
-nno <script><Plug>RestInLastRest  :RestInLastRest<CR>
+nno <script><Plug>RestInCIndex      :RestInCIndex<CR>
+nno <script><Plug>RestInLastRest    :RestInLastRest<CR>
 
-map <silent><leader>rr <Plug>RestInIndex
-map <silent><leader>ro <Plug>RestInLastRest
-map <silent><leader>ru <Plug>RestInUpIndex
-map <silent><leader>ri <Plug>RestInCIndex
+map <unique><silent><leader>rr <Plug>RestInIndex
+map <unique><silent><leader>ro <Plug>RestInLastRest
+map <unique><silent><leader>ru <Plug>RestInUpIndex
+map <unique><silent><leader>ri <Plug>RestInCIndex
 
