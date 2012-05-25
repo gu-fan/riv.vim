@@ -20,6 +20,9 @@ class RestTable:
         return "<RestTable: %d Row %d Col>" % (self.row, self.col)
 
     def create_table(self, indent):
+        """
+            create a table based on the 2 dimension list
+        """
         # reverse the table and get the max_len of cols.
         v_tbl = zip(*self.table)
         c_max = []
@@ -73,7 +76,9 @@ class BufParse:
             |2xxxxxxx|xxxxxxaxsxasx|xxxxx|
             |3xxxxaxsaxsaxsaxxxx|xxxxx|xxxxx|
             |4xxxxxxx|xxxxx|     |
-        returns a 3 col and 4 row table
+        will be parse to a 2 dimension list.
+        [["1xxx","xxx","xxxas"],["2xxxx","xxxxx","xxxx"]....]
+        and returns a 3 col and 4 row table
         '''
         rows = []
         max_col = 0
