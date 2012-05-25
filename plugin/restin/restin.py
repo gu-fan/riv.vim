@@ -22,6 +22,7 @@ class RestTable:
     def create_table(self, indent):
         """
             create a table based on the 2 dimension list
+            return the lines of table.
         """
         # reverse the table and get the max_len of cols.
         v_tbl = zip(*self.table)
