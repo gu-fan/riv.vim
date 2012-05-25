@@ -2,7 +2,7 @@
 "    Name: rstin.vim
 "    File: rstin.vim
 "  Author: Rykka G.Forest
-"  Update: 2012-32-05/13/12
+"  Update: 2012-05-25
 " Version: 0.1
 "=============================================
 " vim:fdm=marker:
@@ -140,152 +140,6 @@ if !exists("*s:debug") "{{{
         endif
     endfun
 endif "}}}
-if !exists("*s:fmt_table") "{{{
-    fun! s:fmt_cell(cell, max_len) "{{{
-        let cell = ' '.a:cell.' '
-
-        let diff = a:max_len - s:wide_len(a:cell)
-        if diff == 0 && empty(a:cell)
-            let diff = 1
-        endif
-
-        let cell .= repeat(' ', diff)
-        return cell
-    endfun "}}}
-    fun! s:fmt_row() "{{{
-        " format 
-    endfun "}}}
-    fun! s:fmt_table() "{{{
-        " check if is table
-        " get table first to last row
-        " get a max_len cell list [3,4,5,6]
-        " format table row by row
-    endfun "}}}
-    fun! s:is_table(line) "{{{
-        if line=~'\v^\s*\|.*\|\s*$|^\s*\+([-=]+\+)+\s*$'
-            return 1
-        elseif line =~ '  '
-            " maybe content of simple
-            return 2
-        elseif line =~ '\v(\=+ =)+'
-            " title of simple
-            return 3
-        else
-            return 0
-        endif
-    endfun "}}}
-    let s:tbl_ptn = {
-                \'bgn': '\v^\s*\n\s*\+(-+\+)+\s*$'         ,
-                \'sep': '\v^\s*\+(%(-+\+)+|%(\=+\+)+)\s*$' ,
-                \'con': '\v^\s*(\|.*\|)\s*$'               ,
-                \'end': '\v^\s*\+(-+\+)+\s*\n\s*$'         ,
-                \'emp': '\v^\s*$'                          ,
-                \}
-    let s:spl_ptn = {
-                \'bgn': '\v^\s*\n\s*(\=+ =)+\s*$'        ,
-                \'sep': '\v^\s*(%(\=+ =)+|%(-+ =)+)\s*$' ,
-                \'con': '\v^\s*(\S*)\s*$'                ,
-                \'end': '\v^\s*(\=+ =)+\s*\n\s*$'        ,
-                \'emp': '\v^\s*$'                        ,
-                \}
-    fun! s:get_cell_num(line,typ) "{{{
-        if typ=="tsep"
-            let l = split(line,'+')
-            let lst = []
-            for str in l
-                call add(lst,len(str))
-            endfor
-            " [3,4]
-            return lst
-        elseif typ=="tcon"
-            let line = substitute(line
-            let l = split(line,'|')
-            let lst = []
-            for str in l
-                call add(lst,len(str))
-            endfor
-            " [3,4]
-            return lst
-        endif
-    endfun "}}}
-    fun! s:set_row(list,sep) "{{{
-        let s = "+"
-        for i in a:list
-            let s .=  repeat(a:sep,i)."+"
-        endfor
-        " '+-------+--+'
-        return s
-    endfun "}}}
-    fun! s:set_cell(cell,len) "{{{
-        let r = a:len-len(a:cell)
-        let cell = a:cell
-        if r > 0
-            let cell .= repeat(' ',r)
-        endif
-        return cell
-    endfun "}}}
-    fun! s:get_same_level(row) "{{{
-        let line = getline(a:row)
-        " if it's [|+=] , return indent, else return '' 
-        " '-' is not considered because it's may in spl list.
-        let idt = matchstr(line,'^\s*\ze[|+=]')
-        " XXX should seperate each table parse regxp
-        let [bgn,end] = [0,0]
-        
-        if line = '^\s*|'
-        endif
-        
-
-        for row in range(a:row,1,-1)
-            let line = getline(row)
-            if line =~ '^'.idt.'[+|]' || line =~ '^'.idt.'\s*[^|+ \t]' 
-                        \|| line =~'^\s*$'
-                let bgn = row
-            else
-                break
-            endif
-        endfor
-        for row in range(a:row,line('$'))
-            let line = getline(row)
-            if line =~ '^'.idt.'[+|]' || line =~ '^'.idt.'\s*[^|+ \t]' 
-                        \|| line =~'^\s*$'
-                let end = row
-            else
-                break
-            endif
-        endfor
-        call s:debug("'".idt."'"."level:". string([bgn,end]))
-        return [bgn, end]
-    endfun "}}}
-    fun! s:get_table(bgn,end) "{{{
-        let [bgn,end] = [0,0]
-        for row in range(a:bgn,a:end)
-            let line = getline(row)
-            if line =~ s:tbl_btn['bgn']
-                let bgn = row
-                break
-            endif
-        endfor
-        for row in range(bgn,a:end)
-            let line = getline(row)
-            if line =~ s:tbl_btn['end']
-                let end = row
-                break
-            endif
-        endfor
-        return [bgn,end]
-    endfun "}}}
-    fun! s:parse_table(line) "{{{
-        let line = getline(a:line)
-        for [fmt,ptn] in items(s:tbl_ptn)
-            if line =~ ptn
-                if fmt == 'bgn'
-                endif
-            endif
-        endfor
-
-    endfun "}}}
-endif "}}}
 if !exists("*s:find_lnk") "{{{
     let s:table = []
     fun! s:find_lnk(dir)
@@ -322,7 +176,6 @@ endif "}}}
 " fold "{{{
 if !exists("s:is_fold_defined")
     let s:is_fold_defined=1
-
     " valid: ! " # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \ ] ^ _ ` { | } ~
 fun! RstFoldExpr(row) "{{{
     " NOTE: if it's three row title. we should wrap the first one.
@@ -359,16 +212,27 @@ fun! RstFoldExpr(row) "{{{
     endif
 
     " Comment Items
-    let c_hlgrp = synIDattr(synID(a:row,1,1),"name") 
+    " synID  will return 0
+    " should use synstack to check
+    " which will return [194].
+    " NOTE: there is still a fold with multi empty lines in rstComment and
+    " followed with none Comment line.
+    let c_synlist = synstack(a:row,1)
+    let n_synlist = synstack(a:row+1,1)
+    let c_hlgrp = empty(c_synlist) ? "" : synIDattr(c_synlist[0],"name") 
+    let n_hlgrp = empty(n_synlist) ? "" : synIDattr(n_synlist[0],"name")
     if c_hlgrp == "rstExplicitMarkup" 
+        let n2_synlist = synstack(a:row+2,1)
+        let n2_hlgrp = empty(n2_synlist) ? "" : synIDattr(n2_synlist[0],"name")
         if synIDattr(synID(a:row,4,1),"name")=="rstComment" && 
-                    \ synIDattr(synID(a:row+1,1,1),"name")=="rstComment"
+                    \ n_hlgrp=="rstComment" &&  n2_hlgrp=="rstComment"
             return ">5"
         endif
     endif
     if c_hlgrp == "rstComment" 
-        let n_hlgrp=synIDattr(synID(a:row+1,1,1),"name")
-        if n_hlgrp != "rstComment" && !empty(n_hlgrp)
+        let p_synlist = synstack(a:row-1,1)
+        let p_hlgrp = empty(p_synlist) ? "" : synIDattr(p_synlist[0],"name")
+        if n_hlgrp != "rstComment" && p_hlgrp == "rstComment"
             return "<5"
         endif
     endif
