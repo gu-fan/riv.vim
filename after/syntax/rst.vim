@@ -1,7 +1,7 @@
 " Vim Syntax File for ReStructuredText in after/syntax
 " fix rst.vim
 " Author:   Rykka. G  <Rykka10(at)gmail.com>
-" Update:   2012-05-17
+" Update:   2012-05-30
 " first load /usr/share/vim/vim73/syntax/rst.vim
 " vim: fdm=marker:
 
@@ -76,14 +76,15 @@ syn match   rstTransition  /\v%(\_^\s*\n)@<=[=`:.'"~^_*+#-]{4,}\s*(\n\s*\_$)\@=/
 "}}}
 
 " define missing rst objects "{{{
-syn match rstEnumList `\v\c^\s*([-*+•‣⁃]|%(\d+|[a-z]|[imcxv]+)(\.|\))) `
-syn match rstDefList `\v\c%(\_^\s*\n)@<=(\w[[:alnum:] _.-]+)\ze(:.+)*\n\s+\w`
-syn match rstDefList `\v\c%(\_^\s*\n)@<=(%(    )+)(\w[[:alnum:] _.-]+)\ze(:.+)*\n\1\s+\w`
+syn match rstEnumList `\v\c^\s*([-*+•‣⁃]|%(\d+|[a-z]|[imcxv]+)(\.|\))) @=`
+syn match rstDefList `\v\c%(\_^\s*\n)@<=(\w[[:alnum:] _.-]+)\ze(:.+)*\n\s@=`
+syn match rstDefList `\v\c%(\_^\s*\n)@<=(%(    )+)(\w[[:alnum:] _.-]+)\ze(:.+)*\n\1\s@=`
 syn match rstFieldList `\v\c^\s*:[[:alnum:]_.-]+: `
 syn cluster rstLists contains=rstEnumList,rstDefList,rstFieldList
-" g:ext_ptn
-let ext_ptn = '|vim|cpp|c|py|rb'
-let ptn_rst = '\v%([~0-9a-zA-Z:./]+%(\.%(rst'.ext_ptn.')|/))\S@!'
+let g:restin_ext_ptn= exists("g:restin_ext_ptn") ? g:restin_ext_ptn : '|vim|cpp|c|py|rb|lua|pl'
+ 
+let ext_ptn = g:restin_ext_ptn
+let ptn_rst = '\v%([~0-9a-zA-Z:./-]+%(\.%(rst'.ext_ptn.')|/))\S@!'
 exe 'syn match rstRSTfile `'.ptn_rst.'`'
 syn match rstOption `\v^(-\w|--[[:alnum:]_.-]+|/\u)>`
 syn match rstQuote  `\v%(\_^\s*\n)@<=    -- .*`
