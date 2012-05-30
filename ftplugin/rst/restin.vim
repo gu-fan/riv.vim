@@ -2,7 +2,7 @@
 "    Name: rstin.vim
 "    File: rstin.vim
 "  Author: Rykka G.Forest
-"  Update: 2012-05-25
+"  Update: 2012-05-30
 " Version: 0.1
 "=============================================
 " vim:fdm=marker:
@@ -29,6 +29,7 @@ endif
 let b:undo_ftplugin = "setlocal fdm< fde< fdt< fdls< fdl<"
 let b:did_rstftplugin = 1
 let g:rst_debug = exists("g:rst_debug") ? g:rst_debug : 0
+let g:restin_ext_ptn= exists("g:restin_ext_ptn") ? g:restin_ext_ptn : '|vim|cpp|c|py|rb|lua|pl'
 
 if !exists("*s:find_ref_def") "{{{
     fun! s:find_ref_def(text) "{{{
@@ -57,8 +58,8 @@ if !exists("s:ptn_lnk") "{{{
     let s:ptn_lnk = '\v(%(file|https=|ftp|gopher)://|%(mailto|news):)([0-9a-zA-Z#&?._-~/]*)'
     " ext_ptn '|vim|cpp|c|py|rb'
     "
-    let ext_ptn = '|vim|cpp|c|py|rb'
-    let s:ptn_rst = '\v([~0-9a-zA-Z:./]+%(\.%(rst'.ext_ptn.')|/))\S@!'
+    let ext_ptn = g:restin_ext_ptn
+    let s:ptn_rst = '\v([~0-9a-zA-Z:./-]+%(\.%(rst'.ext_ptn.')|/))\S@!'
     let s:ptn_ref = '\v\[=[0-9a-zA-Z]*\]=\zs_>'
     let s:ptn_def = '\v_`\[=\zs[0-9a-zA-Z]*\ze\]=`|^\.\. (_\zs[0-9a-zA-Z]+|\[\zs[0-9a-zA-Z]+\ze\])'
     let s:ptn_grp = [s:ptn_lnk,s:ptn_rst,s:ptn_def,s:ptn_ref]
@@ -180,14 +181,16 @@ if !exists("s:is_fold_defined")
 fun! RstFoldExpr(row) "{{{
     " NOTE: if it's three row title. we should wrap the first one.
     let nline = getline(a:row+1)
-    let cline = getline(a:row)
     let nlist = matchlist(nline,'^\v([#=~.-]){4,}\s*$')
+    let cline = getline(a:row)
     let clist = matchlist(cline,'^\v([#=~.-]){4,}\s*$')
 
     " foldlevel(should+1): #:1 , =:2...
+    " index(list,item) is a bit quicker than dict[item] here
+    " 1.6x:1.7x sec at 100000 time
     let punc_list =  ['#','=','~','-','.']
     
-    " pseudo language:
+    " PSEUDO LANGUAGE:
     " if cur line fit title ptn                 // if(cur)
     "     if next line not title ptn and next-over-next line is same as cur line
     "         return  "<n"
@@ -196,32 +199,34 @@ fun! RstFoldExpr(row) "{{{
     "         return "<n"
     "     if prev line is same as next line     // already defined in if(cur).
     "         return n
-    " return "="
+    " else 
+    "     return foldlevel(prev_line)
     
     if !empty(clist)
         if empty(nlist) && getline(a:row+2) == cline
-            return ">".(index(punc_list,clist[1])+1)
+            return ">".(index(punc_list,clist[1])+2)
         endif
     elseif !empty(nlist) && cline !~ '^\s*$'
         let pline = getline(a:row-1)
         if pline =~ '^\s*$'
-            return ">".(index(punc_list,nlist[1])+1)
+            return ">".(index(punc_list,nlist[1])+2)
         elseif pline == nline
-            return (index(punc_list,nlist[1])+1)
+            return index(punc_list,nlist[1])+2
         endif
     endif
 
     " Comment Items
-    " synID  will return 0
-    " should use synstack to check
-    " which will return [194].
+    " Note: synID  will return 0
+    " so should use synstack to check which will return [194].
     " NOTE: there is still a fold with multi empty lines in rstComment and
     " followed with none Comment line.
+    " XXX: it will break the section fold.
+
     let c_synlist = synstack(a:row,1)
-    let n_synlist = synstack(a:row+1,1)
     let c_hlgrp = empty(c_synlist) ? "" : synIDattr(c_synlist[0],"name") 
-    let n_hlgrp = empty(n_synlist) ? "" : synIDattr(n_synlist[0],"name")
     if c_hlgrp == "rstExplicitMarkup" 
+        let n_synlist = synstack(a:row+1,1)
+        let n_hlgrp = empty(n_synlist) ? "" : synIDattr(n_synlist[0],"name")
         let n2_synlist = synstack(a:row+2,1)
         let n2_hlgrp = empty(n2_synlist) ? "" : synIDattr(n2_synlist[0],"name")
         if synIDattr(synID(a:row,4,1),"name")=="rstComment" && 
@@ -229,16 +234,30 @@ fun! RstFoldExpr(row) "{{{
             return ">5"
         endif
     endif
+    let p_synlist = synstack(a:row-1,1)
+    let p_hlgrp = empty(p_synlist) ? "" : synIDattr(p_synlist[0],"name")
     if c_hlgrp == "rstComment" 
-        let p_synlist = synstack(a:row-1,1)
-        let p_hlgrp = empty(p_synlist) ? "" : synIDattr(p_synlist[0],"name")
+        let n_synlist = synstack(a:row+1,1)
+        let n_hlgrp = empty(n_synlist) ? "" : synIDattr(n_synlist[0],"name")
         if n_hlgrp != "rstComment" && p_hlgrp == "rstComment"
-            return "<5"
+            return "5"
         endif
     endif
 
-    " it is slow to use "=" though
-    return "="
+    we should get the previous foldlevel before the comment part
+    if p_hlgrp == "rstComment" && c_hlgrp != "rstComment"
+        return "="
+    endif
+    
+    " NOTE: it is too slow to use "="
+    " XXX: using foldlevel will continue the same section
+    " cause it's unknow when first eval the expr and return -1
+    let p_fd = foldlevel(a:row-1)
+    if p_fd == -1
+        return "="
+    else
+        return p_fd
+    endif
     
 endfun "}}}
 fun! RstFoldText() "{{{
