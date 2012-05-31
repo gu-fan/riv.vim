@@ -2,7 +2,7 @@
 "    Name: rstin.vim
 "    File: rstin.vim
 "  Author: Rykka G.Forest
-"  Update: 2012-06-01
+"  Update: 2012-05-31
 " Version: 0.1
 "=============================================
 " vim:fdm=marker:
@@ -234,53 +234,51 @@ fun! RstFoldExpr(row) "{{{
     " NOTE: the empty lines following an comment line  will be included 
     " NOTE: for an empty line in comment. 
     "       synID  will return 0, so use synstack, which will return [194].
+    "       We should notice here as rstComment is always a top syn-item as
+    "       defined in rst.vim. so synlist[0] is OK.
     let c_synlist = synstack(a:row,1)
     let c_hlgrp = empty(c_synlist) ? "" : synIDattr(c_synlist[0],"name") 
     if c_hlgrp == "rstExplicitMarkup" 
-        let n_synlist = synstack(a:row+1,1)
-        let n_hlgrp = empty(n_synlist) ? "" : synIDattr(n_synlist[0],"name")
-        let n2_synlist = synstack(a:row+2,1)
-        let n2_hlgrp = empty(n2_synlist) ? "" : synIDattr(n2_synlist[0],"name")
-        " the 4th char in c_line is rstComment already
+        " NOTE:the 4th char in c_line is rstComment already
+        " and as the rstComment syntax is not start with '\S', we can use it
+        " for performance. but only use this with lines next to rstComment.
         if synIDattr(synID(a:row,4,1),"name")=="rstComment" && 
-                    \ n_hlgrp=="rstComment" &&  n2_hlgrp=="rstComment"
+                    \ n_line[0] !~ '\S' && getline(a:row+2)[0] !~ '\S'
             let b:rst_before_cmt_foldlevel = b:rst_prv_foldlevel
             let b:rst_prv_foldlevel = 6
             return ">6"
         endif
     endif
 
-    " The lines in the comment
     let p_synlist = synstack(a:row-1,1)
     let p_hlgrp = empty(p_synlist) ? "" : synIDattr(p_synlist[0],"name")
-    if c_hlgrp == "rstComment" 
-        let n_synlist = synstack(a:row+1,1)
-        let n_hlgrp = empty(n_synlist) ? "" : synIDattr(n_synlist[0],"name")
-        if n_hlgrp != "rstComment" && p_hlgrp == "rstComment"
+    if  p_hlgrp == "rstComment" 
+
+        " The lines in the comment
+        if c_hlgrp == "rstComment"
+        " if n_line[0] !~ '\S' && p_hlgrp == "rstComment"
             if a:row == line('$')
                 unlet! b:rst_prv_foldlevel
                 unlet! b:rst_before_cmt_foldlevel
             endif
             return "6"
-        endif
-    endif
     
-    " The line finish the comment
-    if p_hlgrp == "rstComment" && c_hlgrp != "rstComment"
-        let p2_synlist = synstack(a:row-2,1)
-        let p2_hlgrp = empty(p2_synlist) ? "" : synIDattr(p2_synlist[0],"name")
-        if p2_hlgrp == "rstComment"
-            if !exists("b:rst_before_cmt_foldlevel")  
-                let b:rst_before_cmt_foldlevel = 0
-            endif
-            let b:rst_prv_foldlevel = b:rst_before_cmt_foldlevel
-            if a:row == line('$')
-                let t = b:rst_before_cmt_foldlevel
-                unlet! b:rst_before_cmt_foldlevel
-                unlet! b:rst_prv_foldlevel
-                return t
-            else
-                return b:rst_before_cmt_foldlevel
+        " The line finish the comment
+        " We should check if it's not a 2 line comment , which has no folding.
+        elseif c_hlgrp != "rstComment"
+            if getline(a:row-2)[0] =~ '\S'
+                if !exists("b:rst_before_cmt_foldlevel")  
+                    let b:rst_before_cmt_foldlevel = 0
+                endif
+                let b:rst_prv_foldlevel = b:rst_before_cmt_foldlevel
+                if a:row == line('$')
+                    let t = b:rst_before_cmt_foldlevel
+                    unlet! b:rst_before_cmt_foldlevel
+                    unlet! b:rst_prv_foldlevel
+                    return t
+                else
+                    return b:rst_before_cmt_foldlevel
+                endif
             endif
         endif
     endif
