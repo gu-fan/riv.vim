@@ -2,7 +2,7 @@
 "    Name: rstin.vim
 "    File: rstin.vim
 "  Author: Rykka G.Forest
-"  Update: 2012-05-30
+"  Update: 2012-06-01
 " Version: 0.1
 "=============================================
 " vim:fdm=marker:
@@ -179,7 +179,7 @@ if !exists("s:is_fold_defined")
     let s:is_fold_defined=1
     " valid: ! " # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \ ] ^ _ ` { | } ~
 fun! RstFoldExpr(row) "{{{
-    " NOTE: if it's three row title. we should wrap the first one.
+    " NOTE: if it's three row title. we should wrap from the first one.
     let nline = getline(a:row+1)
     let nlist = matchlist(nline,'^\v([#=~.-]){4,}\s*$')
     let cline = getline(a:row)
@@ -193,35 +193,43 @@ fun! RstFoldExpr(row) "{{{
     " PSEUDO LANGUAGE:
     " if cur line fit title ptn                 // if(cur)
     "     if next line not title ptn and next-over-next line is same as cur line
+    "         prv_foldlevel = n
     "         return  "<n"
     " elseif next line fit title ptn and cur line not empty
     "     if prev line is empty
+    "         prv_foldlevel = n
     "         return "<n"
     "     if prev line is same as next line     // already defined in if(cur).
+    "         prv_foldlevel = n
     "         return n
     " else 
-    "     return foldlevel(prev_line)
+    "     return prv_foldlevel
     
     if !empty(clist)
         if empty(nlist) && getline(a:row+2) == cline
-            return ">".(index(punc_list,clist[1])+2)
+            let idx = index(punc_list,clist[1])+1
+            let b:rst_prv_foldlevel = idx
+            return ">".idx
         endif
     elseif !empty(nlist) && cline !~ '^\s*$'
         let pline = getline(a:row-1)
         if pline =~ '^\s*$'
-            return ">".(index(punc_list,nlist[1])+2)
+            let idx = index(punc_list,nlist[1])+1
+            let b:rst_prv_foldlevel = idx
+            return ">".idx
         elseif pline == nline
-            return index(punc_list,nlist[1])+2
+            let idx = index(punc_list,nlist[1])+1
+            let b:rst_prv_foldlevel = idx
+            return idx
         endif
     endif
 
-    " Comment Items
+    " the lines start the comment
     " Note: synID  will return 0
     " so should use synstack to check which will return [194].
     " NOTE: there is still a fold with multi empty lines in rstComment and
     " followed with none Comment line.
     " XXX: it will break the section fold.
-
     let c_synlist = synstack(a:row,1)
     let c_hlgrp = empty(c_synlist) ? "" : synIDattr(c_synlist[0],"name") 
     if c_hlgrp == "rstExplicitMarkup" 
@@ -231,32 +239,61 @@ fun! RstFoldExpr(row) "{{{
         let n2_hlgrp = empty(n2_synlist) ? "" : synIDattr(n2_synlist[0],"name")
         if synIDattr(synID(a:row,4,1),"name")=="rstComment" && 
                     \ n_hlgrp=="rstComment" &&  n2_hlgrp=="rstComment"
+            " the foldlevel of previous section before current comment
+            let b:rst_prvcmt_foldlevel = b:rst_prv_foldlevel
+            let b:rst_prv_foldlevel = 5
             return ">5"
         endif
     endif
+
+    " the lines in the comment
     let p_synlist = synstack(a:row-1,1)
     let p_hlgrp = empty(p_synlist) ? "" : synIDattr(p_synlist[0],"name")
     if c_hlgrp == "rstComment" 
         let n_synlist = synstack(a:row+1,1)
         let n_hlgrp = empty(n_synlist) ? "" : synIDattr(n_synlist[0],"name")
         if n_hlgrp != "rstComment" && p_hlgrp == "rstComment"
+            if a:row == line('$')
+                unlet b:rst_prv_foldlevel
+                unlet b:rst_prvcmt_foldlevel
+            endif
             return "5"
         endif
     endif
-
-    we should get the previous foldlevel before the comment part
+    
+    " the lines finish the comment
+    " we should get the previous foldlevel before the comment part
     if p_hlgrp == "rstComment" && c_hlgrp != "rstComment"
-        return "="
+        if !exists("b:rst_prvcmt_foldlevel")  
+            let b:rst_prvcmt_foldlevel = 0
+        endif
+        let b:rst_prv_foldlevel = b:rst_prvcmt_foldlevel
+        if a:row == line('$')
+            let t = b:rst_prvcmt_foldlevel
+            unlet b:rst_prv_foldlevel
+            unlet b:rst_prvcmt_foldlevel
+            return t
+        else
+            return b:rst_prvcmt_foldlevel
+        endif
     endif
     
     " NOTE: it is too slow to use "="
     " XXX: using foldlevel will continue the same section
     " cause it's unknow when first eval the expr and return -1
-    let p_fd = foldlevel(a:row-1)
-    if p_fd == -1
-        return "="
+    
+    if !exists("b:rst_prv_foldlevel")  
+        let b:rst_prv_foldlevel = 0
+    endif
+    " unlet it when reach last line.
+    " NOTE: fold-expr will get last line first , then start from start.
+    if a:row == line('$')
+        let t = b:rst_prv_foldlevel
+        unlet b:rst_prv_foldlevel
+        unlet b:rst_prvcmt_foldlevel
+        return t
     else
-        return p_fd
+        return b:rst_prv_foldlevel
     endif
     
 endfun "}}}
@@ -274,6 +311,14 @@ fun! RstFoldText() "{{{
     let num = printf("%4s",(v:foldend-v:foldstart))
     return line."[".num.dash."]"
 endfun "}}}
+fun! restin#testfold()
+    for i in range(1,line('$'))
+        if exists("b:rst_prv_foldlevel")
+            echo "b:" b:rst_prv_foldlevel
+        endif
+        echo RstFoldExpr(i)
+    endfor
+endfun
 endif "}}}
 
 if !exists("s:is_defined") "{{{
