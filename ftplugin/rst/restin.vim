@@ -247,7 +247,6 @@ fun! RstFoldExpr(row) "{{{
             let b:rst_before_cmt_foldlevel = b:rst_prv_foldlevel
             let b:rst_prv_foldlevel = 6
             return ">6"
-        endif
     endif
 
     let p_synlist = synstack(a:row-1,1)
