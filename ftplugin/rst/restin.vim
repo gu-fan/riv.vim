@@ -329,14 +329,14 @@ fun! restin#testfold() "{{{
     endfor
     unlet! b:rst_debug
 endfun "}}}
-endif "}}}
-fun! s:debug(msg)
+fun! s:debug(msg) "{{{
     if exists("b:rst_debug")
         echohl WarningMsg
         echom a:msg
         echohl Normal
     endif
-endfun
+endfun "}}}
+endif "}}}
 if !exists("s:is_defined") "{{{
     let s:is_defined=1
 
