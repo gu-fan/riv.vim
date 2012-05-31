@@ -238,12 +238,12 @@ fun! RstFoldExpr(row) "{{{
     "       defined in rst.vim. so synlist[0] is OK.
     let c_synlist = synstack(a:row,1)
     let c_hlgrp = empty(c_synlist) ? "" : synIDattr(c_synlist[0],"name") 
+    " NOTE:the 4th char in c_line is rstComment already
+    " and as the rstComment syntax is not start with '\S', we can use it
+    " for performance. but only use this with lines next to rstComment.
     if c_hlgrp == "rstExplicitMarkup" 
-        " NOTE:the 4th char in c_line is rstComment already
-        " and as the rstComment syntax is not start with '\S', we can use it
-        " for performance. but only use this with lines next to rstComment.
-        if synIDattr(synID(a:row,4,1),"name")=="rstComment" && 
-                    \ n_line[0] !~ '\S' && getline(a:row+2)[0] !~ '\S'
+                    \ && synIDattr(synID(a:row,4,1),"name")=="rstComment"
+                    \ && n_line !~ '^\S' && getline(a:row+2) !~ '^\S'
             let b:rst_before_cmt_foldlevel = b:rst_prv_foldlevel
             let b:rst_prv_foldlevel = 6
             return ">6"
@@ -256,7 +256,6 @@ fun! RstFoldExpr(row) "{{{
 
         " The lines in the comment
         if c_hlgrp == "rstComment"
-        " if n_line[0] !~ '\S' && p_hlgrp == "rstComment"
             if a:row == line('$')
                 unlet! b:rst_prv_foldlevel
                 unlet! b:rst_before_cmt_foldlevel
@@ -266,7 +265,10 @@ fun! RstFoldExpr(row) "{{{
         " The line finish the comment
         " We should check if it's not a 2 line comment , which has no folding.
         elseif c_hlgrp != "rstComment"
-            if getline(a:row-2)[0] =~ '\S'
+            call s:debug(a:row." finish comment")
+            call s:debug(getline(a:row-2) !~ '^\S')
+            if getline(a:row-2) !~ '^\S'
+                call s:debug(a:row." not 2 line comment")
                 if !exists("b:rst_before_cmt_foldlevel")  
                     let b:rst_before_cmt_foldlevel = 0
                 endif
