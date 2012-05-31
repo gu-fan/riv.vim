@@ -232,7 +232,8 @@ fun! RstFoldExpr(row) "{{{
     " b:rst_before_cmt_foldlevel : foldlevel of previous section before comment
     " NOTE: only fold the lines that following more than 2 lines.
     " NOTE: the empty lines following an comment line  will be included 
-    " NOTE: synID  will return 0, so use synstack, which will return [194].
+    " NOTE: for an empty line in comment. 
+    "       synID  will return 0, so use synstack, which will return [194].
     let c_synlist = synstack(a:row,1)
     let c_hlgrp = empty(c_synlist) ? "" : synIDattr(c_synlist[0],"name") 
     if c_hlgrp == "rstExplicitMarkup" 
@@ -257,8 +258,8 @@ fun! RstFoldExpr(row) "{{{
         let n_hlgrp = empty(n_synlist) ? "" : synIDattr(n_synlist[0],"name")
         if n_hlgrp != "rstComment" && p_hlgrp == "rstComment"
             if a:row == line('$')
-                unlet b:rst_prv_foldlevel
-                unlet b:rst_before_cmt_foldlevel
+                unlet! b:rst_prv_foldlevel
+                unlet! b:rst_before_cmt_foldlevel
             endif
             return "6"
         endif
@@ -266,20 +267,24 @@ fun! RstFoldExpr(row) "{{{
     
     " The line finish the comment
     if p_hlgrp == "rstComment" && c_hlgrp != "rstComment"
-        if !exists("b:rst_before_cmt_foldlevel")  
-            let b:rst_before_cmt_foldlevel = 0
-        endif
-        let b:rst_prv_foldlevel = b:rst_before_cmt_foldlevel
-        if a:row == line('$')
-            let t = b:rst_before_cmt_foldlevel
-            unlet b:rst_prv_foldlevel
-            unlet b:rst_before_cmt_foldlevel
-            return t
-        else
-            return b:rst_before_cmt_foldlevel
+        let p2_synlist = synstack(a:row-2,1)
+        let p2_hlgrp = empty(p2_synlist) ? "" : synIDattr(p2_synlist[0],"name")
+        if p2_hlgrp == "rstComment"
+            if !exists("b:rst_before_cmt_foldlevel")  
+                let b:rst_before_cmt_foldlevel = 0
+            endif
+            let b:rst_prv_foldlevel = b:rst_before_cmt_foldlevel
+            if a:row == line('$')
+                let t = b:rst_before_cmt_foldlevel
+                unlet! b:rst_before_cmt_foldlevel
+                unlet! b:rst_prv_foldlevel
+                return t
+            else
+                return b:rst_before_cmt_foldlevel
+            endif
         endif
     endif
-    
+
     " NOTE: fold-expr will eval last line first , then eval from start.
     " NOTE: it is too slow to use "="
     " XXX:  could not using foldlevel cause it's return -1
@@ -288,8 +293,8 @@ fun! RstFoldExpr(row) "{{{
     endif
     if a:row == line('$')
         let t = b:rst_prv_foldlevel
-        unlet b:rst_prv_foldlevel
-        unlet b:rst_before_cmt_foldlevel
+        unlet! b:rst_prv_foldlevel
+        unlet! b:rst_before_cmt_foldlevel
         return t
     else
         return b:rst_prv_foldlevel
@@ -297,7 +302,7 @@ fun! RstFoldExpr(row) "{{{
     
 endfun "}}}
 fun! RstFoldText() "{{{
-    " NOTE: if it's three row title . show the second one.
+    " NOTE: if it's three row title. show the content of next line.
     let line = getline(v:foldstart)
     if line =~ '^\v([#=~.-])\1{3,}\s*$'
         let line = getline(v:foldstart+1)
@@ -310,16 +315,28 @@ fun! RstFoldText() "{{{
     let num = printf("%4s",(v:foldend-v:foldstart))
     return line."[".num.dash."]"
 endfun "}}}
-fun! restin#testfold()
+fun! restin#testfold() "{{{
+    let b:rst_debug=1
+    echo "row\texpr\tb:prv\tb:cmt"
     for i in range(1,line('$'))
+        echo i."\t".RstFoldExpr(i)
         if exists("b:rst_prv_foldlevel")
-            echo "b:" b:rst_prv_foldlevel
+            echon " \t" b:rst_prv_foldlevel
         endif
-        echo RstFoldExpr(i)
+        if exists("b:rst_before_cmt_foldlevel")
+            echon " \t" b:rst_before_cmt_foldlevel
+        endif
     endfor
-endfun
+    unlet! b:rst_debug
+endfun "}}}
 endif "}}}
-
+fun! s:debug(msg)
+    if exists("b:rst_debug")
+        echohl WarningMsg
+        echom a:msg
+        echohl Normal
+    endif
+endfun
 if !exists("s:is_defined") "{{{
     let s:is_defined=1
 
@@ -335,7 +352,8 @@ if !exists("s:is_defined") "{{{
             echo "No index for current page"
         endif
     endfun "}}}
-    
+
+    " TODO: todo-list part
     " [ ] 
     " [.]  
     " [X] xxxx-xx-xx
@@ -372,8 +390,26 @@ if !exists("s:is_defined") "{{{
     fun! s:is_todo_list()
         
     endfun
+function! s:sub_list(sym) "{{{
+    let line=getline('.')
+    if a:sym != " "
+        let sym = a:sym
+    else
+        let sym = ""
+    endif
+    let m=substitute(line,'^\(\s*\)\%([*+-]\s\|\%(\d\.\)\+\s\)\=\ze.*',
+                \'\1'.sym.' ','')
+    if a:sym == " "
+        let m =substitute(m,'^\s','','')
+    endif
+    call setline(line('.'),m)
+endfunction "}}}
 endif "}}}
-
+nno <silent><buffer><leader>e1 :call <SID>sub_list('1.')<cr>
+nno <silent><buffer><leader>e2 :call <SID>sub_list('*')<cr>
+nno <silent><buffer><leader>e3 :call <SID>sub_list('+')<cr>
+nno <silent><buffer><leader>e4 :call <SID>sub_list('-')<cr>
+nno <silent><buffer><leader>e5 :call <SID>sub_list(' ')<cr>
 exe 'let g:last_rst_file="'.expand('%:p').'"'
 nno <silent><buffer><Leader>ri :call <SID>cindex("rst")<CR>
 
@@ -383,3 +419,6 @@ nno <silent><buffer><Tab> :call <SID>find_lnk("n")<CR>
 nno <silent><buffer><S-Tab> :call <SID>find_lnk("b")<CR>
 nno <silent><buffer><Kenter> :call <SID>parse_cur()<CR>
 nno <silent><buffer><2-leftmouse>  :call <SID>db_click()<CR>
+
+
+
