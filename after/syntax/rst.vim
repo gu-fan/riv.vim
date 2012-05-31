@@ -1,7 +1,7 @@
 " Vim Syntax File for ReStructuredText in after/syntax
 " fix rst.vim
 " Author:   Rykka. G  <Rykka10(at)gmail.com>
-" Update:   2012-05-30
+" Update:   2012-06-01
 " first load /usr/share/vim/vim73/syntax/rst.vim
 " vim: fdm=marker:
 
@@ -44,24 +44,6 @@ execute 'syn match rstSubstitutionDefinition contained' .
       \ ' /|' . s:ReferenceName . '|\_s\+/ nextgroup=@rstDirectives'
 "}}}
 
-" if we using syntax fold. "{{{
-" we should use several section region to contain things
-" error foldlevel
-" let i =1
-" for punc  in [ "#", "=", "~", "-", "."]
-"     exe 'syn region rstSectionR'.i.' start=@^.\+\n\('.punc.'\+\)$@ end=@^.\+\n\zs1$@ fold contains=@rstAll'
-"     let i += 2
-" endfor
-" syn cluster rstSectionRs contains=rstSectionR1,rstSectionR2,rstSectionR3,
-"             \rstSectionR4,rstSectionR5,rstSectionR6
-" syn cluster rstAll contains=rstTransition,rstComment,@rstCruft,rstLiteralBlock,
-"             \rstQuotedLiteralBlock,rstDoctestBlock,rstTable,rstSimpleTable,
-"             \@rstDirectives,rstExplicitMarkup,rstStandaloneHyperlink,
-"             \@rstSectionRs
-
-" but maybe it's faster than fold-expr.
-" r
-"}}}
 " fix section and transition "{{{
 " NOTE: use %(\_^\s*\n)@<=  to match preceding with a blank line.
 " %(\S.*\n)@<! matches no preceding non-blank line (blank or file start)
@@ -77,8 +59,9 @@ syn match   rstTransition  /\v%(\_^\s*\n)@<=[=`:.'"~^_*+#-]{4,}\s*(\n\s*\_$)\@=/
 
 " define missing rst objects "{{{
 syn match rstEnumList `\v\c^\s*([-*+•‣⁃]|%(\d+|[a-z]|[imcxv]+)(\.|\))) @=`
+syn match rstEnumList `\v\c^\s*\((%(\d+|[a-z]|[imcxv]+)\)) @=`
 syn match rstDefList `\v\c%(\_^\s*\n)@<=(\w[[:alnum:] _.-]+)\ze(:.+)*\n\s@=`
-syn match rstDefList `\v\c%(\_^\s*\n)@<=(%(    )+)(\w[[:alnum:] _.-]+)\ze(:.+)*\n\1\s@=`
+syn match rstDefList `\v\c%(\_^\s*\n)@<=(\w[[:alnum:] _.-]+)\ze(:.+)*\n\s@=`
 syn match rstFieldList `\v\c^\s*:[[:alnum:]_.-]+: `
 syn cluster rstLists contains=rstEnumList,rstDefList,rstFieldList
 let g:restin_ext_ptn= exists("g:restin_ext_ptn") ? g:restin_ext_ptn : '|vim|cpp|c|py|rb|lua|pl'
