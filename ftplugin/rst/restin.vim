@@ -2,7 +2,7 @@
 "    Name: rstin.vim
 "    File: rstin.vim
 "  Author: Rykka G.Forest
-"  Update: 2012-05-31
+"  Update: 2012-06-02
 " Version: 0.1
 "=============================================
 " vim:fdm=marker:
@@ -23,7 +23,8 @@ setl foldmethod=expr
 setl foldexpr=RstFoldExpr(v:lnum)
 setl foldtext=RstFoldText()
 
-if exists("b:did_rstftplugin")
+let g:rst_force_reload = exists("g:rst_force_reload") ? g:rst_force_reload : 0
+if exists("b:did_rstftplugin") && g:rst_force_reload == 0
     finish
 endif
 let b:undo_ftplugin = "setlocal fdm< fde< fdt< fdls< fdl<"
@@ -31,7 +32,7 @@ let b:did_rstftplugin = 1
 let g:rst_debug = exists("g:rst_debug") ? g:rst_debug : 0
 let g:restin_ext_ptn= exists("g:restin_ext_ptn") ? g:restin_ext_ptn : '|vim|cpp|c|py|rb|lua|pl'
 
-if !exists("*s:find_ref_def") "{{{
+if !exists("*s:find_ref_def") || g:rst_force_reload==1 "{{{
     fun! s:find_ref_def(text) "{{{
         let n_txt = tolower(substitute(a:text,'\s\{2,}',' ','g'))
         " Hyperlinks, footnotes, and citations 
@@ -54,17 +55,19 @@ if !exists("*s:find_ref_def") "{{{
         return [sr,sc,type]
     endfun "}}}
 endif "}}}
-if !exists("s:ptn_lnk") "{{{
-    let s:ptn_lnk = '\v(%(file|https=|ftp|gopher)://|%(mailto|news):)([0-9a-zA-Z#&?._-~/]*)'
+if !exists("s:ptn_lnk") || g:rst_force_reload==1 "{{{
+    " let s:ptn_lnk = '\v(%(file|https=|ftp|gopher)://|%(mailto|news):)([0-9a-zA-Z#&?._-~/]*)'
+    let s:ptn_lnk = '\v(%(file|https=|ftp|gopher)://|%(mailto|news):)([^[:space:]''\"<>]+[[:alnum:]/])'
+    let s:ptn_lnk2 ='\vwww[[:alnum:]_-]*\.[[:alnum:]_-]+\.[^[:space:]''\"<>]+[[:alnum:]/]'
     " ext_ptn '|vim|cpp|c|py|rb'
     "
     let ext_ptn = g:restin_ext_ptn
-    let s:ptn_rst = '\v([~0-9a-zA-Z:./-]+%(\.%(rst'.ext_ptn.')|/))\S@!'
+    let s:ptn_rst = '\v([~0-9a-zA-Z:./_-]+%(\.%(rst'.ext_ptn.')|/))\S@!'
     let s:ptn_ref = '\v\[=[0-9a-zA-Z]*\]=\zs_>'
     let s:ptn_def = '\v_`\[=\zs[0-9a-zA-Z]*\ze\]=`|^\.\. (_\zs[0-9a-zA-Z]+|\[\zs[0-9a-zA-Z]+\ze\])'
-    let s:ptn_grp = [s:ptn_lnk,s:ptn_rst,s:ptn_def,s:ptn_ref]
+    let s:ptn_grp = [s:ptn_lnk,s:ptn_rst,s:ptn_def,s:ptn_ref,s:ptn_lnk2]
 endif "}}}
-if !exists("*s:parse_cur") "{{{
+if !exists("*s:parse_cur")  || g:rst_force_reload==1 "{{{
 fun! s:parse_cur() "{{{
     let [row,col] = getpos('.')[1:2]
     let ptn = '\[\=\zs[0-9a-zA-Z]*\%'.col.'c[0-9a-zA-Z]*\ze\]\=_'
@@ -89,9 +92,33 @@ fun! s:parse_cur() "{{{
             if links[1] =~ 'file'
                 exe "edit ".expand(links[2])
             else
-                sil! exe "!firefox ". links[2]
+                " vim will expand the # and %
+                " NOTE: we should change the cmd with user defined browser
+                sil! exe "!firefox ". escape(links[2],'#%')." &"
             endif
             return 1
+        elseif idx >= col
+            return 0
+        else
+            let links = matchlist(line,ptn,idx+1)
+            let idx = match(line,ptn,idx+1)
+        endif
+    endwhile
+
+    " get link2
+    let ptn = s:ptn_lnk2
+    let links = matchlist(line,ptn)
+    let idx = match(line,ptn)
+    while !empty(links) 
+        if col>=idx && col <=idx+len(links[0])
+            if links[1] =~ 'file'
+                exe "edit ".expand(links[0])
+            else
+                sil! exe "!firefox ". links[0]
+            endif
+            return 1
+        elseif idx >= col
+            return 0
         else
             let links = matchlist(line,ptn,idx+1)
             let idx = match(line,ptn,idx+1)
@@ -118,6 +145,8 @@ fun! s:parse_cur() "{{{
             endif
             exe "edit ".file
             return 1
+        elseif idx >= col
+            return 0
         else
             "let let
             let links = matchlist(line,ptn,idx+1)
@@ -133,7 +162,7 @@ fun! s:db_click() "{{{
     endif
 endfun "}}}
 endif "}}}
-if !exists("*s:debug") "{{{
+if !exists("*s:debug")  || g:rst_force_reload==1 "{{{
     fun! s:debug(msg)
         if g:rst_debug==1
             redraw
@@ -141,13 +170,13 @@ if !exists("*s:debug") "{{{
         endif
     endfun
 endif "}}}
-if !exists("*s:find_lnk") "{{{
+if !exists("*s:find_lnk")  || g:rst_force_reload==1 "{{{
     let s:table = []
     fun! s:find_lnk(dir)
         let cr = line('.')
         let cc = col('.')
-        let smallest_r = 1000
-        let smallest_c = 1000
+        let smallest_r = 100000
+        let smallest_c = 100000
         let best = [0,0]
         let flag = a:dir=="b" ? 'Wnb' : 'Wn'
         for ptn in s:ptn_grp
@@ -175,15 +204,18 @@ if !exists("*s:find_lnk") "{{{
     endfun
 endif "}}}
 " fold "{{{
-if !exists("s:is_fold_defined")
+if !exists("s:is_fold_defined")  || g:rst_force_reload==1 
     let s:is_fold_defined=1
     " valid: ! " # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \ ] ^ _ ` { | } ~
+    let s:exp_cluster_con_ptn = '^rst\%(Comment\|\%(Ex\)\=Directive\|HyperlinkTarget\)$'
 fun! RstFoldExpr(row) "{{{
 
     " PSEUDO LANGUAGE: (section part)
-    " if cur line fit title_ptn                 // start of 3 row title
+    " if cur line fit title_ptn                 
+    "     and next line not title_ptn 
+    "     and next-over-next line is same as cur line
+    "                                           // start of 3 row title
     "                                           // fold from here
-    "     if next line not title_ptn and next-over-next line is same as cur line
     "         prv_foldlevel = n
     "         return  "<n"
     " elseif next line fit title_ptn and cur line not empty
@@ -200,104 +232,83 @@ fun! RstFoldExpr(row) "{{{
     "                                           // last line
     
     let n_line = getline(a:row+1)
-    let n_mlist = matchlist(n_line,'^\v([#=~.-]){4,}\s*$')
     let c_line = getline(a:row)
-    let c_mlist = matchlist(c_line,'^\v([#=~.-]){4,}\s*$')
+    let n_match = matchstr(n_line,'^[#=~.-]\{4,}\s*$')
+    let c_match = matchstr(c_line,'^[#=~.-]\{4,}\s*$')
+    let p_line = getline(a:row-1)
 
     " NOTE: 'foldlevel' begins with 1: #:1 , =:2 ... .:5
     " using index(list,item) is a bit quicker than dict[item] here
     " 1.6x:1.7x sec at 100000 time
     let punc_list =  ['#','=','~','-','.']
     
-    if !empty(c_mlist)
-        if empty(n_mlist) && getline(a:row+2) == c_line
-            let idx = index(punc_list,c_mlist[1])+1
+    if !empty(c_match) && empty(n_match) && getline(a:row+2) == c_line
+        let idx = index(punc_list,c_match[1])+1
+        let b:rst_prv_foldlevel = idx
+        return ">".idx
+    elseif !empty(n_match) && c_line !~ '^\s*$'
+        if p_line =~ '^\s*$'
+            let idx = index(punc_list,n_match[1])+1
             let b:rst_prv_foldlevel = idx
             return ">".idx
-        endif
-    elseif !empty(n_mlist) && c_line !~ '^\s*$'
-        let pline = getline(a:row-1)
-        if pline =~ '^\s*$'
-            let idx = index(punc_list,n_mlist[1])+1
-            let b:rst_prv_foldlevel = idx
-            return ">".idx
-        elseif pline == n_line
-            let idx = index(punc_list,n_mlist[1])+1
+        elseif p_line == n_line
+            let idx = index(punc_list,n_match[1])+1
             let b:rst_prv_foldlevel = idx
             return idx
         endif
     endif
-
-    " The line start the comment: using foldlevel 6
-    " b:rst_before_cmt_foldlevel : foldlevel of previous section before comment
-    " NOTE: only fold the lines that following more than 2 lines.
-    " NOTE: the empty lines following an comment line  will be included 
-    " NOTE: for an empty line in comment. 
-    "       synID  will return 0, so use synstack, which will return [194].
-    "       We should notice here as rstComment is always a top syn-item as
-    "       defined in rst.vim. so synlist[0] is OK.
-    let c_synlist = synstack(a:row,1)
-    let c_hlgrp = empty(c_synlist) ? "" : synIDattr(c_synlist[0],"name") 
-    " NOTE:the 4th char in c_line is rstComment already
-    " and as the rstComment syntax is not start with '\S', we can use it
-    " for performance. but only use this with lines next to rstComment.
-    if c_hlgrp == "rstExplicitMarkup" 
-                    \ && synIDattr(synID(a:row,4,1),"name")=="rstComment"
-                    \ && n_line !~ '^\S' && getline(a:row+2) !~ '^\S'
-            let b:rst_before_cmt_foldlevel = b:rst_prv_foldlevel
-            let b:rst_prv_foldlevel = 6
-            return ">6"
-    endif
-
-    let p_synlist = synstack(a:row-1,1)
-    let p_hlgrp = empty(p_synlist) ? "" : synIDattr(p_synlist[0],"name")
-    if  p_hlgrp == "rstComment" 
-
-        " The lines in the comment
-        if c_hlgrp == "rstComment"
-            if a:row == line('$')
-                unlet! b:rst_prv_foldlevel
-                unlet! b:rst_before_cmt_foldlevel
-            endif
-            return "6"
     
-        " The line finish the comment
-        " We should check if it's not a 2 line comment , which has no folding.
-        elseif c_hlgrp != "rstComment"
-            call s:debug(a:row." finish comment")
-            call s:debug(getline(a:row-2) !~ '^\S')
-            if getline(a:row-2) !~ '^\S'
-                call s:debug(a:row." not 2 line comment")
-                if !exists("b:rst_before_cmt_foldlevel")  
-                    let b:rst_before_cmt_foldlevel = 0
-                endif
-                let b:rst_prv_foldlevel = b:rst_before_cmt_foldlevel
-                if a:row == line('$')
-                    let t = b:rst_before_cmt_foldlevel
-                    unlet! b:rst_before_cmt_foldlevel
-                    unlet! b:rst_prv_foldlevel
-                    return t
-                else
-                    return b:rst_before_cmt_foldlevel
-                endif
+    "(ExplicitMarkup Fold)
+    " The line start the ExplicitMarkup 
+    " foldlevel 6
+    " b:rst_before_exp_foldlevel : foldlevel of document before ExplicitMarkup
+    " NOTE: as the line in exp_cluster_ptn syntax !~ '^\S', 
+    "       we can use it to check for performance. 
+    "       but only use it with lines next to exp_cluster_ptn.
+    " NOTE: differece between synId and synstack:
+    "       for an empty line in ExplicitMarkup's region. 
+    "       synID  will return 0, 
+    "       synstack will return the top syn item:[n].
+    "       exp_cluster_ptn is always a top syn-item as defined in rst.vim.
+    if c_line =~ '^\.\.\s.\+' 
+            \ && n_line !~ '^\S'
+            \ && synIDattr(synID(a:row,1,1),"name") =~ '^rstExplicitMarkup$'
+        let b:rst_prv_foldlevel = exists("b:rst_prv_foldlevel") ?
+                    \ b:rst_prv_foldlevel : 0
+        let b:rst_before_exp_foldlevel = b:rst_prv_foldlevel
+        let b:rst_prv_foldlevel = 6
+        return ">6"
+    endif
+    
+    " the line finish ExplicitMarkup (one blank line '\_^\s*\n\_^\S')
+    " ( ExplicitMarkup ends with '^..\s' or '\_^\s*\n\_^\S')
+    " NOTE: as we will leave one blank line. 
+    "       so no 2-line-fold issue with blank line
+    if (c_line =~ '^\s*$' && n_line =~ '^\S'
+        \ && synIDattr(get(synstack(a:row,1),0),"name") =~ s:exp_cluster_con_ptn )
+        " the line finish ExplicitMarkup (no blank line '^..\s')
+        " NOTE:  check if prev-line is NOT a blank line to avoid two times check
+        \ || ( c_line =~ '^\S' &&  p_line !~ '^\S' && p_line !~ '^\s*$'
+        \ && synIDattr(get(synstack(a:row-1,1),0),"name") =~ s:exp_cluster_con_ptn )
+            let b:rst_prv_foldlevel = exists("b:rst_before_exp_foldlevel") ?
+                        \ b:rst_before_exp_foldlevel : 0
+            let t = b:rst_prv_foldlevel
+            if a:row == line('$')
+                unlet! b:rst_before_exp_foldlevel
+                unlet! b:rst_prv_foldlevel
             endif
-        endif
+            return t
     endif
 
     " NOTE: fold-expr will eval last line first , then eval from start.
     " NOTE: it is too slow to use "="
-    " XXX:  could not using foldlevel cause it's return -1
-    if !exists("b:rst_prv_foldlevel")  
-        let b:rst_prv_foldlevel = 0
-    endif
+    " XXX:  could not using foldlevel cause it returns -1
+    let t = exists("b:rst_prv_foldlevel") ?  b:rst_prv_foldlevel : 0
     if a:row == line('$')
-        let t = b:rst_prv_foldlevel
         unlet! b:rst_prv_foldlevel
-        unlet! b:rst_before_cmt_foldlevel
-        return t
-    else
-        return b:rst_prv_foldlevel
+        unlet! b:rst_before_exp_foldlevel
     endif
+    return t
     
 endfun "}}}
 fun! RstFoldText() "{{{
@@ -314,16 +325,22 @@ fun! RstFoldText() "{{{
     let num = printf("%4s",(v:foldend-v:foldstart))
     return line."[".num.dash."]"
 endfun "}}}
-fun! restin#testfold() "{{{
+fun! restin#testfold() "{{{ should in autoload
     let b:rst_debug=1
+    let line=line('.')
     echo "row\texpr\tb:prv\tb:cmt"
     for i in range(1,line('$'))
-        echo i."\t".RstFoldExpr(i)
-        if exists("b:rst_prv_foldlevel")
-            echon " \t" b:rst_prv_foldlevel
-        endif
-        if exists("b:rst_before_cmt_foldlevel")
-            echon " \t" b:rst_before_cmt_foldlevel
+        if i>= line-10 && i <= line+10
+            echo i."\t".RstFoldExpr(i)
+            if exists("b:rst_prv_foldlevel")
+                echon " \t" b:rst_prv_foldlevel
+            endif
+            if exists("b:rst_before_exp_foldlevel")
+                echon " \t" b:rst_before_exp_foldlevel
+            endif
+            if line == i
+                echon " \t" ">> CursorLine"
+            endif
         endif
     endfor
     unlet! b:rst_debug
@@ -336,7 +353,7 @@ fun! s:debug(msg) "{{{
     endif
 endfun "}}}
 endif "}}}
-if !exists("s:is_defined") "{{{
+if !exists("s:is_defined")  || g:rst_force_reload==1 "{{{
     let s:is_defined=1
 
     fun! s:cindex(ftype) "{{{
@@ -419,5 +436,6 @@ nno <silent><buffer><S-Tab> :call <SID>find_lnk("b")<CR>
 nno <silent><buffer><Kenter> :call <SID>parse_cur()<CR>
 nno <silent><buffer><2-leftmouse>  :call <SID>db_click()<CR>
 
-
-
+" tests 
+com! -buffer ForceReload let g:rst_force_reload=1 | set ft=rst | let g:rst_force_reload=0
+com! -buffer FoldTest call restin#testfold()
