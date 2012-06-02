@@ -18,7 +18,6 @@ if exists("*GetRSTinIndent")
 endif
 
 let s:lst_ptn = '^\s*[-*+]\s\+\|^\s*\%(\d\+\|#\)\.\s\+'
-let s:wht_ptn = '^\s*'
 
 function GetRSTinIndent()
   let lnum = prevnonblank(v:lnum - 1)
@@ -30,8 +29,8 @@ function GetRSTinIndent()
   let line = getline(lnum)
     
   let pind = matchend(line,s:lst_ptn)
-  let pwht = matchend(line,s:wht_ptn)
   if pind != -1
+      let pwht = matchend(line,'^\s*')
       return pind-pwht+ind
   endif
 
