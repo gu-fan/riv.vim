@@ -3,25 +3,22 @@
 " Maintainer:       Nikolai Weibull <now@bitwi.se>
 " Latest Revision:  2012-06-03
 
-let s:keepcpo= &cpo
-set cpo&vim
-" if exists("b:did_rst_indent")
-"   finish
-" endif
-let b:did_rst_indent = 1
-setlocal indentexpr=GetRSTinIndent()
+if exists("b:did_indent")
+  finish
+endif
+let b:did_indent = 1
+
+setlocal indentexpr=GetRSTIndent()
 setlocal indentkeys=!^F,o,O
 setlocal nosmartindent
 
-" if exists("*GetRSTinIndent")
-"   finish
-" endif
+if exists("*GetRSTIndent")
+  finish
+endif
 
-" both bullet and enumerated list
-" not support multibyte '•‣⁃'
 let s:list_pattern = '\v\c^\s*%([-*+]|%(\d+|[#a-z]|[imcxv]+)[.)]|\(%(\d+|[#a-z]|[imcxv]+)\))\s+'
 
-function! GetRSTinIndent()
+function GetRSTIndent()
   let lnum = prevnonblank(v:lnum - 1)
   if lnum == 0
     return 0
@@ -29,7 +26,7 @@ function! GetRSTinIndent()
 
   let ind = indent(lnum)
   let line = getline(lnum)
-  
+
   let l_ind = matchend(line, s:list_pattern)
   if l_ind != -1
       let ind += l_ind - matchend(line, '^\s*')
@@ -51,11 +48,9 @@ function! GetRSTinIndent()
     if l_ind != -1
         let ind -= l_ind - matchend(line, '^\s*')
     elseif line =~ '^\s*\.\.'
-        let ind -= 3
+      let ind -= 3
     endif
   endif
 
   return ind
 endfunction
-let &cpo = s:keepcpo
-unlet s:keepcpo
