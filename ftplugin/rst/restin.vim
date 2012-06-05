@@ -3,7 +3,7 @@
 "    File: rstin.vim
 " Summary: ReST file plugin
 "  Author: Rykka G.Forest
-"  Update: 2012-06-03
+"  Update: 2012-06-05
 " Version: 0.5
 "=============================================
 
@@ -19,7 +19,7 @@ setl foldtext=RstFoldText()
 setl comments=fb:.. commentstring=..\ %s expandtab
 setl formatoptions+=tcroql
 let b:undo_ftplugin = "setl fdm< fde< fdt< com< cms< et< fo<"
-            \ . "| unlet! b:dyn_sec_list b:foldlevel b:fdl_before_exp"
+            \ . "| unlet! b:dyn_sec_list b:foldlevel b:fdl_before_exp b:fdl_cur_list"
 
 let g:restin_ext_ptn= exists("g:restin_ext_ptn") ? g:restin_ext_ptn : '|vim|cpp|c|py|rb|lua|pl'
 "}}}
@@ -35,20 +35,17 @@ nno <silent><buffer><Kenter> :call <SID>parse_cur()<CR>
 nno <silent><buffer><2-leftmouse>  :call <SID>db_click()<CR>
 
 no <silent><buffer><leader>ee :call <SID>list_tog_box(line('.'))<CR>
-no <silent><buffer><leader>t4 :call <SID>list_tog_typ(line('.'),"")<CR>
-no <silent><buffer><leader>t1 :call <SID>list_tog_typ(line('.'),"* ")<CR>
-no <silent><buffer><leader>t2 :call <SID>list_tog_typ(line('.'),"#. ")<CR>
-no <silent><buffer><leader>t3 :call <SID>list_tog_typ(line('.'),"(#) ")<CR>
-
-" vno <silent><buffer> > :call <SID>list_shift_idt(line('.'),"+")<CR>gv
-" vno <silent><buffer> < :call <SID>list_shift_idt(line('.'),"-")<CR>gv
-" vno <silent><buffer> <c-scrollwheeldown> :call <SID>list_shift_idt(line('.'),"+")<CR>gv
-" vno <silent><buffer> <c-scrollwheelup> :call <SID>list_shift_idt(line('.'),"-")<CR>gv
+no <silent><buffer><leader>e1 :call <SID>list_tog_typ(line('.'),"* ")<CR>
+no <silent><buffer><leader>e2 :call <SID>list_tog_typ(line('.'),"#. ")<CR>
+no <silent><buffer><leader>e3 :call <SID>list_tog_typ(line('.'),"(#) ")<CR>
+no <silent><buffer><leader>e4 :call <SID>list_tog_typ(line('.'),"")<CR>
 
 no <silent><buffer> > :call <SID>list_shift_idt("")<CR>
 no <silent><buffer> < :call <SID>list_shift_idt("-")<CR>
 no <silent><buffer> <c-scrollwheeldown> :call <SID>list_shift_idt("")<CR>
 no <silent><buffer> <c-scrollwheelup> :call <SID>list_shift_idt("-")<CR>
+        
+ino <expr><silent><buffer> <BS> restin#insert#bs_fix_indent()
 " tests 
 com! -buffer ForceReload let g:rst_force=1 | set ft=rst | let g:rst_force=0
 com! -buffer -nargs=? FoldTest call restin#testfold(<args>)
@@ -56,16 +53,17 @@ com! -buffer -nargs=? FoldTest call restin#testfold(<args>)
 if exists("*s:find_ref_def") && g:rst_force==0 | finish | endif
 "{{{ parsing cursor
 fun! s:find_ref_def(text) "{{{
+    " substitute 2+ \s to a ' '
     let n_txt = tolower(substitute(a:text,'\s\{2,}',' ','g'))
     " Hyperlinks, footnotes, and citations 
     " all share the same namespace for reference names. 
     let inline_ptn = '\c\v(_`\zs'. n_txt .'|\['.n_txt.'\])\ze`'
     let ref_ptn = '\c\v^\.\. \zs(_'. n_txt.'\ze:|\['.n_txt.'\])'
     let c_row = line('.')
-    let [sr,sc] = searchpos(ref_ptn,'wn')
+    let [sr,sc] = searchpos(ref_ptn,'wn',0,100)
     let type = 1 " ref
     if sr==c_row || sr==0
-        let [sr,sc] = searchpos(inline_ptn,'wn')
+        let [sr,sc] = searchpos(inline_ptn,'wn',0,100)
         let type = 0 " inline
         if sr == c_row
             return [0,0,0]
@@ -74,6 +72,13 @@ fun! s:find_ref_def(text) "{{{
     return [sr,sc,type]
 endfun "}}}
 
+fun! s:find_ref(text) "{{{
+    " substitute 2+ \s to a ' '
+    let n_txt = tolower(substitute(a:text,'\s\{2,}',' ','g'))
+    let inline_ptn = '\c\v(_`\zs'. n_txt .'|\['.n_txt.'\])\ze`'
+    let ref_ptn = '\c\v^\.\. \zs(_'. n_txt.'\ze:|\['.n_txt.'\])'
+    
+endfun "}}}
 let s:ptn_lnk = '\v(%(file|https=|ftp|gopher)://|%(mailto|news):)([^[:space:]''\"<>]+[[:alnum:]/])'
 let s:ptn_lnk2 ='\vwww[[:alnum:]_-]*\.[[:alnum:]_-]+\.[^[:space:]''\"<>]+[[:alnum:]/]'
 let s:ptn_rst = '\v([~0-9a-zA-Z:./_-]+%(\.%(rst'.g:restin_ext_ptn.')|/))\S@!'
@@ -85,7 +90,7 @@ fun! s:parse_cur() "{{{
     let ptn = '\[\=\zs[0-9a-zA-Z]*\%'.col.'c[0-9a-zA-Z]*\ze\]\=_'
     let line = getline(row)
     let word = matchstr(line,ptn)
-    " get ref
+    " get ref def
     if !empty(word)
         let [sr,sc,type] = s:find_ref_def(word)
         if sr != 0
@@ -94,7 +99,20 @@ fun! s:parse_cur() "{{{
             return 1
         endif
     endif
-
+    
+    " get ref
+    let ptn = s:ptn_def
+    let links = matchlist(line,ptn)
+    if !empty(word)
+        let [sr,sc,type] = s:find_ref_def(word)
+        if sr != 0
+            call setpos("'`",getpos('.'))
+            call setpos('.',[0,sr,sc,0])
+            return 1
+        endif
+    endif
+    
+    
     " get link
     let ptn = s:ptn_lnk
     let links = matchlist(line,ptn)
@@ -291,10 +309,53 @@ fun! RstFoldExpr(row) "{{{
                         \ b:fdl_before_exp : 0
             let t = b:foldlevel
             if a:row == line('$')
+                unlet! b:fdl_before_list
                 unlet! b:fdl_before_exp
                 unlet! b:foldlevel
+                unlet! b:fdl_cur_list
             endif
             return t
+        endif
+    endif
+    
+    " fold list
+    " fold level depend on indent
+    " let s:list_ptn = '^\s*%([-*+]|%(\d+|[#a-z]|[imcxv]+)[.)])\s+'
+    " let s:list_ptn2 = '^\s*\(%(\d+|[#a-z]|[imcxv]+)\)\s+'
+
+
+    if c_line =~ '\v'.s:list_ptn.'|'.s:list_ptn2
+                \ && indent(a:row) < indent(nextnonblank(a:row+1))
+        " some are 2, some are 3..
+        let t = indent(a:row)/2 + 8
+        if !exists("b:fdl_cur_list") || b:fdl_cur_list==0
+            let b:fdl_before_list = exists("b:foldlevel") ? b:foldlevel : 0
+        endif
+        let b:fdl_cur_list = 1
+        let b:foldlevel = t
+        if a:row == line('$')
+            unlet! b:fdl_before_list
+            unlet! b:foldlevel
+            unlet! b:fdl_cur_list
+            unlet! b:foldlevel
+        endif
+        return '>'.t
+        " let t = b:foldlevel
+    " elseif c_line !~  '\v'.s:list_ptn.'|'.s:list_ptn2.'|^\s*$'
+    endif
+
+    if n_line =~  '^\s*$' && (getline(a:row+2) =~ '^\S' || n_line=~'^\S')
+        if exists("b:fdl_cur_list") && b:fdl_cur_list==1
+            let t = indent(a:row) / 2 + 8
+            let b:foldlevel = exists("b:fdl_before_list") ? b:fdl_before_list : 0
+            if a:row == line('$')
+                unlet! b:fdl_before_list
+                unlet! b:fdl_before_exp
+                unlet! b:foldlevel
+                unlet! b:fdl_cur_list
+            endif
+            let b:fdl_cur_list=0
+            return '<'.t
         endif
     endif
 
@@ -303,8 +364,10 @@ fun! RstFoldExpr(row) "{{{
     " XXX:  could not using foldlevel cause it returns -1
     let t = exists("b:foldlevel") ?  b:foldlevel : 0
     if a:row == line('$')
+        unlet! b:fdl_before_list
         unlet! b:foldlevel
-        unlet! b:fdl_before_exp
+        unlet! b:fdl_cur_list
+        unlet! b:foldlevel
     endif
     return t
     
@@ -387,29 +450,27 @@ let s:fm_timestamp = "%Y-%m-%d"
 let s:todo_lvs =  [' ','o','X']
 let s:show_tms = exists("g:rst_show_tms") ? g:rst_show_tms : 1
 
-let s:enu_lst_ptn = '^\s*%([-*+•‣⁃]|%(#|\d+|[a-z]|[imcxv]+)%(\.|\)))\s+'
-let s:enu2_lst_ptn = '^\s*\(%(#|\d+|[a-z]|[imcxv]+)\)\s+'
-let s:def_lst_ptn = '^\s*\n%([[:alnum:] _.-]+)\ze%(:.*)*\n    \w'
-let s:fld_lst_ptn = '^:[[:alnum:]_.-]+: '
+let s:list_ptn = '^\s*%([-*+]|%(\d+|[#a-z]|[imcxv]+)[.)])\s+'
+let s:list_ptn2 = '^\s*\(%(\d+|[#a-z]|[imcxv]+)\)\s+'
 " it's \1 when match
-let s:lst_ptns =  '\v\c('.s:enu_lst_ptn.'|'.s:enu2_lst_ptn.')'
+let s:list_ptn_group =  '\v\c('.s:list_ptn.'|'.s:list_ptn2.')'
 " the '.' is \2 when match
-let s:box_ptn = s:lst_ptns.'\[(.)\] '
+let s:todobox_ptn = s:list_ptn_group.'\[(.)\] '
 " the rx_time is \3 when match
-let s:rx_timestamp = '\v(\d{6}|\d{4}-\d{2}-\d{2})\_s'
-let s:tms_ptn = s:box_ptn.s:rx_timestamp
+let s:timestamp_ptn = '(\d{6}|\d{4}-\d{2}-\d{2})\_s'
+let s:tms_ptn = s:todobox_ptn.s:timestamp_ptn
 
 fun! s:list_tog_box(row) "{{{
     " toggle list with s:todo_lvs ptn.
     " when idx get max, add an timestamp is show_tms is on
     let line = getline(a:row) 
-    let idx = match(line,s:lst_ptns)
+    let idx = match(line,s:list_ptn_group)
     if idx == -1
         return -1
     endif
-    let boxlist = matchlist(line,s:box_ptn,idx)
+    let boxlist = matchlist(line,s:todobox_ptn,idx)
     if empty(boxlist)
-        let line = substitute(line, s:lst_ptns, '\0[ ] ','')
+        let line = substitute(line, s:list_ptn_group, '\0[ ] ','')
         call setline(a:row,line)
     else
         let t_idx = index(s:todo_lvs,boxlist[2])
@@ -430,12 +491,12 @@ fun! s:list_tog_box(row) "{{{
             if match(line,s:tms_ptn)!=-1
                 let line = substitute(line, s:tms_ptn, '\1','')
             else
-                let line = substitute(line, s:box_ptn, '\1','')
+                let line = substitute(line, s:todobox_ptn, '\1','')
             endif
         elseif t_idx ==max_i-1
-            let line = substitute(line, s:box_ptn, '\1['.tstr.'] '.tms,'') 
+            let line = substitute(line, s:todobox_ptn, '\1['.tstr.'] '.tms,'') 
         else
-            let line = substitute(line, s:box_ptn, '\1['.tstr.'] ','')
+            let line = substitute(line, s:todobox_ptn, '\1['.tstr.'] ','')
         endif
         call setline(a:row,line)
     endif
@@ -443,35 +504,24 @@ endfun "}}}
 
 let s:list_lvs = ["*","+","-"]
 fun! s:list_shift_len(row,len) "{{{
-    let line = getline(a:row) 
-    let m_str = matchstr(line,s:lst_ptns)
+    let line = getline(a:row)
+    let m_str = matchstr(line,s:list_ptn_group)
     let l_str = matchstr(m_str,'[*+-]')
-    let idt_str = repeat(" ",abs(a:len))
     " sub all \t to ' ' to avoid wrong indenting
     let line = substitute(line,'\t',repeat(" ",&sw),'g')
-    if empty(m_str) || empty(l_str)
-        if a:len>=0
-            let line = substitute(line,'^',idt_str,'')
-        else
-            let line = substitute(line,'^'.idt_str,'','')
-        endif
+    " if l_str is empty , then we do not substitute the list_str
+    if a:len>=0
+        let line = substitute(line,'^',repeat(' ',a:len),'')
     else
+        let line = substitute(line,'^\s\{,'.abs(a:len).'}','','')
+    endif
+    if !empty(m_str) && !empty(l_str)
         let l_idx = index(s:list_lvs,l_str)
-        let max_i = 2
-        " get indent
-        if a:len>=0
-            let line = substitute(line,'^',idt_str,'')
-            " get item
-            if  l_idx < max_i
-                let l_str = s:list_lvs[l_idx+1]
-                let line = substitute(line,'[*+-]',l_str,'')
-            endif
-        else
-            let line = substitute(line,'^'.idt_str,'','')
-            if  l_idx > 0 && l_idx <= max_i
-                let l_str = s:list_lvs[l_idx-1]
-                let line = substitute(line,'[*+-]',l_str,'')
-            endif
+        let max_i = len(s:list_lvs)-1
+        if a:len>=0 && l_idx < max_i
+            let line = substitute(line,'[*+-]',s:list_lvs[l_idx+1],'')
+        elseif a:len<0 && l_idx > 0 && l_idx <= max_i
+            let line = substitute(line,'[*+-]',s:list_lvs[l_idx-1],'')
         endif
     endif
     call setline(a:row,line)
@@ -480,8 +530,7 @@ fun! s:list_shift_idt(direction) range "{{{
     " > to add indent, < to rmv indent 
     " if line is list then change bullet.
     let line = getline(a:firstline) 
-    let m_str = matchstr(line,s:lst_ptns)
-    let l_str = matchstr(m_str,'[*+-]')
+    let m_str = matchstr(line,s:list_ptn_group)
     if empty(m_str)
         let len = &shiftwidth
     else
@@ -505,7 +554,7 @@ fun! s:list_tog_typ(row,typ) "{{{
     if line=~'^\s*$'
         return -1
     endif
-    let str = matchstr(line,s:lst_ptns)
+    let str = matchstr(line,s:list_ptn_group)
     let white = matchstr(line,'^\s*')
     if empty(str)
         let line = substitute(line,white, white.a:typ,'')
