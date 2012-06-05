@@ -19,10 +19,6 @@ endif
 
 let s:list_ptn = '\v\c^\s*%([-*+]|%(\d+|[#a-z]|[imcxv]+)[.)]|\(%(\d+|[#a-z]|[imcxv]+)\))\s+'
 let s:field_list_ptn = '^\s*:[^:]\+:\s\+\ze\S.\+[^:]$'
-fun! s:check_idt_fix(row)
-    " check idt fix with ptns
-    " return the idt fix offset
-endfun
 function! GetRSTIndent(row) "{{{
     
     let pnb_num = prevnonblank(a:row - 1)

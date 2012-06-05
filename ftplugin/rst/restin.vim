@@ -19,8 +19,8 @@ setl foldtext=RstFoldText()
 setl comments=fb:.. commentstring=..\ %s expandtab
 setl formatoptions+=tcroql
 let b:undo_ftplugin = "setl fdm< fde< fdt< com< cms< et< fo<"
-            \ . "| unlet! b:dyn_sec_list b:foldlevel b:fdl_before_exp b:fdl_cur_list"
-
+            \ "| unlet! b:dyn_sec_list b:foldlevel b:fdl_before_exp b:fdl_cur_list"
+            \ "| unlet! b:fdl_before_list"
 let g:restin_ext_ptn= exists("g:restin_ext_ptn") ? g:restin_ext_ptn : '|vim|cpp|c|py|rb|lua|pl'
 "}}}
 " map and cmd {{{
@@ -71,27 +71,53 @@ fun! s:find_ref_def(text) "{{{
     endif
     return [sr,sc,type]
 endfun "}}}
-
-fun! s:find_ref(text) "{{{
+fun! s:find_ref_tar(text) "{{{
     " substitute 2+ \s to a ' '
     let n_txt = tolower(substitute(a:text,'\s\{2,}',' ','g'))
-    let inline_ptn = '\c\v(_`\zs'. n_txt .'|\['.n_txt.'\])\ze`'
-    let ref_ptn = '\c\v^\.\. \zs(_'. n_txt.'\ze:|\['.n_txt.'\])'
+    let tar_ptn = '\c\v(`\zs'. n_txt .'`_|\['.n_txt.'\]|'.n_txt.'_)\ze'
     
+    let c_row = line('.')
+    let [sr,sc] = searchpos(tar_ptn,'wn',0,100)
+    let type = 1 " ref
+    if sr==c_row || sr==0
+        let [sr,sc] = searchpos(tar_ptn,'wn',0,100)
+        let type = 0 " inline
+        if sr == c_row
+            return [0,0,0]
+        endif
+    endif
+    return [sr,sc,type]
 endfun "}}}
 let s:ptn_lnk = '\v(%(file|https=|ftp|gopher)://|%(mailto|news):)([^[:space:]''\"<>]+[[:alnum:]/])'
 let s:ptn_lnk2 ='\vwww[[:alnum:]_-]*\.[[:alnum:]_-]+\.[^[:space:]''\"<>]+[[:alnum:]/]'
 let s:ptn_rst = '\v([~0-9a-zA-Z:./_-]+%(\.%(rst'.g:restin_ext_ptn.')|/))\S@!'
 let s:ptn_ref = '\v\[=[0-9a-zA-Z]*\]=\zs_>'
+
+" ref definition patterns
+" .. _xxx :
+" .. [xxx]
+" _`xxx xxx`
 let s:ptn_def = '\v_`\[=\zs[0-9a-zA-Z]*\ze\]=`|^\.\. (_\zs[0-9a-zA-Z]+|\[\zs[0-9a-zA-Z]+\ze\])'
+" ref target patterns
+" [xxx]_  xxx_ `xxx xx`_
+let s:ptn_tar = '\v\ze%(\_s|^)%(\`[[:alnum:]. -]+`_|[[:alnum:].-_]+_|\[[[:alnum:].-_]+\]_)\ze%(\_s|$)'
+" inline link patterns
+" `xxxx  <URL>`
+" standlone link patterns
+" www.xxx-x.xxx/?xxx
+" URI
+" http://xxx.xxx.xxx file:///xxx/xxx/xx  
+" mailto:xxx@xxx.xxx 
 let s:ptn_grp = [s:ptn_lnk,s:ptn_rst,s:ptn_def,s:ptn_ref,s:ptn_lnk2]
 fun! s:parse_cur() "{{{
     let [row,col] = getpos('.')[1:2]
-    let ptn = '\[\=\zs[0-9a-zA-Z]*\%'.col.'c[0-9a-zA-Z]*\ze\]\=_'
+    let ptn = s:ptn_tar
     let line = getline(row)
     let word = matchstr(line,ptn)
+    let idx = match(line,ptn)
     " get ref def
-    if !empty(word)
+    echo col word idx
+    if !empty(word) &&  col<= idx+len(word) && col >= idx
         let [sr,sc,type] = s:find_ref_def(word)
         if sr != 0
             call setpos("'`",getpos('.'))
@@ -104,7 +130,7 @@ fun! s:parse_cur() "{{{
     let ptn = s:ptn_def
     let links = matchlist(line,ptn)
     if !empty(word)
-        let [sr,sc,type] = s:find_ref_def(word)
+        let [sr,sc,type] = s:find_ref_tar(word)
         if sr != 0
             call setpos("'`",getpos('.'))
             call setpos('.',[0,sr,sc,0])
@@ -195,8 +221,8 @@ endfun "}}}
 fun! s:find_lnk(dir) "{{{
     let cr = line('.')
     let cc = col('.')
-    let smallest_r = 100000
-    let smallest_c = 100000
+    let smallest_r = 1000
+    let smallest_c = 1000
     let best = [0,0]
     let flag = a:dir=="b" ? 'Wnb' : 'Wn'
     for ptn in s:ptn_grp
@@ -229,19 +255,24 @@ let s:exp_cluster_con_ptn =
 " NOTE: 'foldlevel' begins with 1: #:1 , =:2 ... .:5
 let s:punc_list =  ['#','=','~','-','.']
 let s:punc_str = '!"#$%&''()*+,-./:;<=>?@[\]^_`{|}~'
+let s:table_ptn = '^\s*+[-=+]\++\|^\s*|\s.\{-}\s|'
+let s:section_ptn = '^[=`:.''"~^_*+#-]\+\s*$'
 fun! RstFoldExpr(row) "{{{
     
     let b:singal = 0
     let p_line = getline(a:row-1)
     let c_line = getline(a:row)
     let n_line = getline(a:row+1)
-    let c_match = matchstr(c_line,'^[#=~.-]\{4,}\s*$')
-    let n_match = matchstr(n_line,'^[#=~.-]\{4,}\s*$')
+     
+    " we could not use multiline match here
+    let c_match = matchstr(c_line,s:section_ptn)
+    let n_match = matchstr(n_line,s:section_ptn)
 
     " using index(list,item) is a bit quicker than dict[item] here
     " 1.6x:1.7x sec at 100000 time
-    if a:row == 0 || !exists("b:dyn_sec_list")
+    if a:row == 1 || !exists("b:dyn_sec_list")
         let b:dyn_sec_list = []
+        unlet! b:fdl_before_list b:fdl_before_exp b:foldlevel b:fdl_cur_list
     endif
     if !empty(c_match) && empty(n_match) && getline(a:row+2) == c_line
         let idx = index(b:dyn_sec_list, c_match[1])+1
@@ -291,11 +322,11 @@ fun! RstFoldExpr(row) "{{{
         "       it depends on whether the first exp_markup have
         "       an blank endline or not.
         "       so we will not change it if it's 7
-        if b:foldlevel!= 7
+        if b:foldlevel!= 15
             let b:fdl_before_exp = b:foldlevel 
         endif
-        let b:foldlevel = 7
-        return ">7"
+        let b:foldlevel = 15
+        return ">15"
     endif
     
     " the line finish ExplicitMarkup (one blank line '\_^\s*\n\_^\S')
@@ -308,75 +339,55 @@ fun! RstFoldExpr(row) "{{{
             let b:foldlevel = exists("b:fdl_before_exp") ?
                         \ b:fdl_before_exp : 0
             let t = b:foldlevel
-            if a:row == line('$')
-                unlet! b:fdl_before_list
-                unlet! b:fdl_before_exp
-                unlet! b:foldlevel
-                unlet! b:fdl_cur_list
-            endif
             return t
         endif
     endif
     
-    " fold list
-    " fold level depend on indent
-    " let s:list_ptn = '^\s*%([-*+]|%(\d+|[#a-z]|[imcxv]+)[.)])\s+'
-    " let s:list_ptn2 = '^\s*\(%(\d+|[#a-z]|[imcxv]+)\)\s+'
-
-
-    if c_line =~ '\v'.s:list_ptn.'|'.s:list_ptn2
+    " fold list depend on indent
+    if c_line =~ s:list_ptn_group
                 \ && indent(a:row) < indent(nextnonblank(a:row+1))
         " some are 2, some are 3..
         let t = indent(a:row)/2 + 8
+        " don't update fdl_before if in a fdl list.
         if !exists("b:fdl_cur_list") || b:fdl_cur_list==0
             let b:fdl_before_list = exists("b:foldlevel") ? b:foldlevel : 0
         endif
         let b:fdl_cur_list = 1
         let b:foldlevel = t
-        if a:row == line('$')
-            unlet! b:fdl_before_list
-            unlet! b:foldlevel
-            unlet! b:fdl_cur_list
-            unlet! b:foldlevel
-        endif
         return '>'.t
-        " let t = b:foldlevel
-    " elseif c_line !~  '\v'.s:list_ptn.'|'.s:list_ptn2.'|^\s*$'
+    endif
+    
+    " leave a blank line or not?
+    " if (c_line =~ '^\s*$' && n_line=~'^\S' ) || (c_line=~'^\S')
+    if (c_line=~'^\S')
+        if exists("b:fdl_cur_list") && b:fdl_cur_list==1
+            let b:foldlevel = exists("b:fdl_before_list") ? b:fdl_before_list : 0
+            let t = b:foldlevel
+            let b:fdl_cur_list=0
+            return t
+        endif
     endif
 
-    if n_line =~  '^\s*$' && (getline(a:row+2) =~ '^\S' || n_line=~'^\S')
-        if exists("b:fdl_cur_list") && b:fdl_cur_list==1
-            let t = indent(a:row) / 2 + 8
-            let b:foldlevel = exists("b:fdl_before_list") ? b:fdl_before_list : 0
-            if a:row == line('$')
-                unlet! b:fdl_before_list
-                unlet! b:fdl_before_exp
-                unlet! b:foldlevel
-                unlet! b:fdl_cur_list
-            endif
-            let b:fdl_cur_list=0
-            return '<'.t
-        endif
+    " fold table
+    if c_line=~s:table_ptn
+        return 10
     endif
 
     " NOTE: fold-expr will eval last line first , then eval from start.
     " NOTE: it is too slow to use "="
     " XXX:  could not using foldlevel cause it returns -1
     let t = exists("b:foldlevel") ?  b:foldlevel : 0
-    if a:row == line('$')
-        unlet! b:fdl_before_list
-        unlet! b:foldlevel
-        unlet! b:fdl_cur_list
-        unlet! b:foldlevel
-    endif
     return t
     
 endfun "}}}
 fun! RstFoldText() "{{{
     " NOTE: if it's three row title. show the content of next line.
     let line = getline(v:foldstart)
-    if line =~ '^\v([#=~.-])\1{3,}\s*$'
+    if line =~ s:section_ptn 
         let line = getline(v:foldstart+1)
+    endif
+    if line=~s:table_ptn
+        let line = "TABLE: ".getline(v:foldstart+1)
     endif
     if len(line)<=50 
         let line = line."  ".repeat('-',50) 
@@ -389,45 +400,6 @@ fun! RstFoldText() "{{{
     endif
     let num = printf("%4s",(v:foldend-v:foldstart))
     return line."[".num.dash."]"
-endfun "}}}
-fun! restin#testfold(...) "{{{ should in autoload
-    let b:rst_debug=1
-    let line=line('.')
-    let c = 1
-    let d = 1
-    echo "row\texpr\tb:p_ln\tb:p_ex"
-    for i in range(1,line('$'))
-        let fdl = RstFoldExpr(i)
-        if i>= line-10 && i <= line+10
-            echo i."\t".fdl
-            if exists("b:foldlevel")
-                echon " \t" b:foldlevel
-            else
-                echon " \tN/A"
-            endif
-            if exists("b:fdl_before_exp")
-                echon " \t" b:fdl_before_exp
-            else
-                echon " \tN/A" 
-            endif
-            if line == i
-                echon " \t" ">> CursorLine"
-            endif
-        endif
-        if exists("b:singal") && a:0>0 && a:1>0
-            if b:singal == 1
-                echo  c "check .. " getline(i)
-                let c = c+1
-            elseif b:singal == 2
-                echo  d "check \\s " getline(i+1)
-                let d = d+1
-            endif
-        endif
-    endfor
-    echo "\\s check: " c
-    echo ".. check: "  d
-    echo "TOTAL check: " (c+d)
-    unlet! b:rst_debug
 endfun "}}}
 "}}}
 "{{{ file jump 

@@ -10,13 +10,13 @@ endif
 let s:cpo_save = &cpo
 set cpo&vim
 
-syn match   rstTodo         '\v<%(FIXME|TODO|XXX|NOTE)%(:|\_s@=)' contained
+syn match   rstTodo         '\v(<|:)%(FIXME|TODO|XXX|NOTE)%(:|\_s@=)' contained
 
 syn case ignore
 
-syn match   rstSections /\v%(\S+\s*\n)@<!\_^.*\S.*\n([=`:.'"~^_*+#-])\1+$/
-syn match   rstSections /^\v%(\S+\s*\n)@<!(([=`:.'"~^_*+#-])\2+)\n.*\S.*\n\1$/
-syn match   rstTransition  /\v%(\_^\s*\n)@<=[=`:.'"~^_*+#-]{4,}\s*(\n\s*\_$)\@=/
+syn match   rstSections /\v%(\S\s*\n)@<!\_^\s*\S.*\n([=`:.'"~^_*+#-])\1*\s*$/
+syn match   rstSections /\v%(\S\s*\n)@<!\_^(([=`:.'"~^_*+#-])\2*\s*)\n\s*\S.*\n\1$/
+syn match   rstTransition  /\v%(\_^\s*\n)@<=\_^[=`:.'"~^_*+#-]{4,}\s*(\n\s*\_$)\@=/
 
 syn cluster rstCruft                contains=rstEmphasis,rstStrongEmphasis,
       \ rstInterpretedText,rstInlineLiteral,rstSubstitutionReference,
@@ -153,7 +153,7 @@ syn match rstBibliographicField `\v^\s*:(Author|Authors|Organization|Contact|Add
 
 syn match rstBlockQuoteAttr  `\v%(\_^\s*\n)@<=\s+-- .*`
 
-syn match   rstCommentTitle '\v(^\s+|(^\.\.\s+)@<=)\u\w*(\s+\u\w*)*:' contained 
+syn match   rstCommentTitle '\v(^\s+|(^\.\.\s+)@<=):=\u\w*(\s+\u\w*)*:' contained 
             \ contains=rstTodo
 
 " TODO: Use better syncing.  I don’t know the specifics of syncing well enough,
