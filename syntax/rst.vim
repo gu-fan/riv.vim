@@ -38,7 +38,7 @@ syn region  rstQuotedLiteralBlock   matchgroup=rstDelimiter
 syn region  rstDoctestBlock         oneline display matchgroup=rstDelimiter
       \ start='^>>>\s' end='^$'
 
-syn region  rstTable                transparent start='^\n\s*+[-=+]\+' end='^$'
+syn region  rstTable                transparent start='^\s*\n\s*+[-=+]\+' end='^$'
       \ contains=rstTableLines,@rstCruft
 syn match   rstTableLines           contained display '|\|+\%(=\+\|-\+\)\='
 

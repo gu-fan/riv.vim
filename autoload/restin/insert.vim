@@ -9,14 +9,13 @@
 
 let s:list_ptn = '\v\c^\s*%([-*+]|%(\d+|[#a-z]|[imcxv]+)[.)]|\(%(\d+|[#a-z]|[imcxv]+)\))\s+'
 let s:field_list_ptn = '^\s*:[^:]\+:\s\+\ze\S.\+[^:]$'
-"
-"
+" TODO:  multi idt level
 " for multi line list.
-" with every <BS>
+"  with every <BS>
 "  first get the prev indent. (fixed)
 "  then get the prev before indent (fixed)
 "  then get the prev before prev indent (fixed)
-function! restin#insert#indent(row) "{{{
+fun! restin#insert#indent(row) "{{{
     " return GetRSTIndent(a:row)
     " have some fix for insert with GetRSTIndent.
     let pnb_num = prevnonblank(a:row - 1)
@@ -64,7 +63,6 @@ function! restin#insert#indent(row) "{{{
     if a:row > pnb_num+1
         call cursor(pnb_num,1)
         let p_line = getline(searchpos(s:list_ptn.'|^\s*\.\.\s|^\S', 'bW')[0])
-        echo p_line
         let l_ind  = matchend(p_line,'^\s*\.\.\s')
         if l_ind != -1
             return l_ind
@@ -74,10 +72,10 @@ function! restin#insert#indent(row) "{{{
             return l_ind
         endif
     endif
-
+            
     return ind
-endfunction "}}}
-fun! restin#insert#bs_fix_indent()
+endfun "}}}
+fun! restin#insert#bs_fix_indent() "{{{
     let [row,col]  = getpos('.')[1:2]
     let line = getline('.')
     if line[:col-1] =~ '^\s*$'
@@ -92,4 +90,4 @@ fun! restin#insert#bs_fix_indent()
         endif
     endif
     return "\<BS>"
-endfun
+endfun "}}}

@@ -48,7 +48,15 @@ no <silent><buffer> <c-scrollwheelup> :call <SID>list_shift_idt("-")<CR>
 ino <expr><silent><buffer> <BS> restin#insert#bs_fix_indent()
 " tests 
 com! -buffer ForceReload let g:rst_force=1 | set ft=rst | let g:rst_force=0
-com! -buffer -nargs=? FoldTest call restin#testfold(<args>)
+com! -buffer -nargs=? FoldTest call restin#test#fold(<args>)
+" au
+au! InsertLeave <buffer> call restin#table#format_pos()
+ino <expr><silent><buffer> <Enter>  restin#table#enter_or_newline()
+
+imap <buffer><expr><TAB> 
+\ pumvisible() ? "\<C-n>" :  restin#table#tab_or_next()
+imap <buffer><expr><S-TAB> 
+\ pumvisible() ? "\<C-p>" :  restin#table#tab_or_prev()
 "}}}
 if exists("*s:find_ref_def") && g:rst_force==0 | finish | endif
 "{{{ parsing cursor
@@ -255,8 +263,8 @@ let s:exp_cluster_con_ptn =
 " NOTE: 'foldlevel' begins with 1: #:1 , =:2 ... .:5
 let s:punc_list =  ['#','=','~','-','.']
 let s:punc_str = '!"#$%&''()*+,-./:;<=>?@[\]^_`{|}~'
-let s:table_ptn = '^\s*+[-=+]\++\|^\s*|\s.\{-}\s|'
-let s:section_ptn = '^[=`:.''"~^_*+#-]\+\s*$'
+let s:table_ptn = '^\v\s*\+([-=+])\1+\+|^\s*\|\s.{-}\s\|'
+let s:section_ptn = '^\v([=`:.''"~^_*+#-])\1+\s*$'
 fun! RstFoldExpr(row) "{{{
     
     let b:singal = 0
@@ -383,22 +391,24 @@ endfun "}}}
 fun! RstFoldText() "{{{
     " NOTE: if it's three row title. show the content of next line.
     let line = getline(v:foldstart)
+
     if line =~ s:section_ptn 
         let line = getline(v:foldstart+1)
     endif
     if line=~s:table_ptn
         let line = "TABLE: ".getline(v:foldstart+1)
     endif
-    if len(line)<=50 
-        let line = line."  ".repeat('-',50) 
+    let m_line = winwidth(0)-11
+    if len(line) <= m_line
+        let line = line."  ".repeat('-',m_line) 
     endif
-    let line = printf("%-50.50s",line)
-    if v:foldlevel <=3
+    let line = printf("%-".m_line.".".(m_line)."s",line)
+    if v:foldlevel <= 3
         let dash = printf("%4s",repeat("<",v:foldlevel))
     else
         let dash = printf("%4s","<<+")
     endif
-    let num = printf("%4s",(v:foldend-v:foldstart))
+    let num = printf("%5s",(v:foldend-v:foldstart))
     return line."[".num.dash."]"
 endfun "}}}
 "}}}
@@ -536,6 +546,8 @@ fun! s:list_tog_typ(row,typ) "{{{
     endif
     call setline(a:row,line)
 endfun "}}}
+"}}}
+"{{{
 "}}}
 let &cpo = s:cpo_save
 unlet s:cpo_save

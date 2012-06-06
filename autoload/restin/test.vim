@@ -1,3 +1,10 @@
+"=============================================
+"    Name: test.vim
+"    File: test.vim
+"  Author: Rykka G.Forest
+"  Update: 2012-06-06
+" Version: 0.1
+"=============================================
 
 fun! restin#test#fold(...) "{{{
     let line=line('.')

@@ -11,7 +11,7 @@ if exists("g:restin_loaded")
 endif
 let g:restin_loaded = 1
 
-fun! s:up_index()
+fun! s:up_index() "{{{
     if filereadable("../index.rst")
         e ../index.rst
     elseif filereadable("index.rst") && expand('%') != "index.rst"
@@ -19,7 +19,7 @@ fun! s:up_index()
     else
         echo "You already reached the root level."
     endif
-endfun
+endfun "}}}
 
 fun! s:cindex(ftype) "{{{
     let idx = "index.".a:ftype
@@ -34,21 +34,20 @@ fun! s:cindex(ftype) "{{{
     endif
 endfun "}}}
 
-if has("python")
-    py import sys
-    py import vim
-    py sys.path.append(vim.eval("expand('<sfile>:p:h')")  + '/restin/')
-    py from restin import *
-    com! RestFormatTable py BufParse().format_table(int(vim.eval("line('.')")))
-    nno <script><Plug>RestInFormatTable    :RestFormatTable<CR>
-    map <unique><silent><leader>rt <Plug>RestInFormatTable
-endif
 
+call restin#init()
 
 com! RestInIndex    e ~/Dropbox/rst/index.rst
 com! RestInUpIndex  call <SID>up_index()
 com! RestInCIndex   call <SID>cindex("rst")
 com! RestInLastRest exe "edit ".g:last_rst_file
+" com! RestFormatTable py BufParse().format_table(int(vim.eval("line('.')")))
+com! RestFormatTable restin#table#format()
+" com! RestAddRow      restin#table#newline()
+
+nno <script><Plug>RestInFormatTable    :RestFormatTable<CR>
+ino <script><Plug>RestInAddRow         :RestAddRow<CR>
+map <unique><silent><leader>rt <Plug>RestInFormatTable
 
 
 nno <script><Plug>RestInIndex       :RestInIndex<CR>
