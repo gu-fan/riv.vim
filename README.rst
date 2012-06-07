@@ -1,2 +1,2 @@
 for reStructruedText.
-g:RESTIN_Conf
+g:_RIV_c

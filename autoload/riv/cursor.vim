@@ -1,3 +1,12 @@
+"=============================================
+"    Name: cursor.vim
+"    File: cursor.vim
+"  Author: Rykka G.Forest
+"  Update: 2012-06-07
+" Version: 0.5
+"=============================================
+let s:cpo_save = &cpo
+set cpo-=C
 
 "{{{ parsing cursor
 fun! s:find_ref_def(text) "{{{
@@ -36,31 +45,9 @@ fun! s:find_ref_tar(text) "{{{
     endif
     return [sr,sc,type]
 endfun "}}}
-let s:ptn_lnk = '\v(%(file|https=|ftp|gopher)://|%(mailto|news):)([^[:space:]''\"<>]+[[:alnum:]/])'
-let s:ptn_lnk2 ='\vwww[[:alnum:]_-]*\.[[:alnum:]_-]+\.[^[:space:]''\"<>]+[[:alnum:]/]'
-let s:ptn_rst = '\v([~0-9a-zA-Z:./_-]+%(\.%(rst|'. g:RESTIN_Conf['ext_ptn'] .')|/))\S@!'
-" let s:ptn_rst = '\v([~0-9a-zA-Z:./_-]+%(\.%(rst)|/))\S@!'
-let s:ptn_ref = '\v\[=[0-9a-zA-Z]*\]=\zs_>'
-
-" ref definition patterns
-" .. _xxx :
-" .. [xxx]
-" _`xxx xxx`
-let s:ptn_def = '\v_`\[=\zs[0-9a-zA-Z]*\ze\]=`|^\.\. (_\zs[0-9a-zA-Z]+|\[\zs[0-9a-zA-Z]+\ze\])'
-" ref target patterns
-" [xxx]_  xxx_ `xxx xx`_
-let s:ptn_tar = '\v\ze%(\_s|^)%(\`[[:alnum:]. -]+`_|[[:alnum:].-_]+_|\[[[:alnum:].-_]+\]_)\ze%(\_s|$)'
-" inline link patterns
-" `xxxx  <URL>`
-" standlone link patterns
-" www.xxx-x.xxx/?xxx
-" URI
-" http://xxx.xxx.xxx file:///xxx/xxx/xx  
-" mailto:xxx@xxx.xxx 
-let s:ptn_grp = [s:ptn_lnk,s:ptn_rst,s:ptn_def,s:ptn_ref,s:ptn_lnk2]
-fun! s:parse_cur() "{{{
+fun! riv#cursor#parse() "{{{
     let [row,col] = getpos('.')[1:2]
-    let ptn = s:ptn_tar
+    let ptn = g:_RIV_c.ptn.link_tar
     let line = getline(row)
     let word = matchstr(line,ptn)
     let idx = match(line,ptn)
@@ -75,7 +62,7 @@ fun! s:parse_cur() "{{{
     endif
     
     " get ref
-    let ptn = s:ptn_def
+    let ptn = g:_RIV_c.ptn.link_def
     let links = matchlist(line,ptn)
     if !empty(word)
         let [sr,sc,type] = s:find_ref_tar(word)
@@ -88,7 +75,7 @@ fun! s:parse_cur() "{{{
     
     
     " get link
-    let ptn = s:ptn_lnk
+    let ptn = g:_RIV_c.ptn.lnk
     let links = matchlist(line,ptn)
     let idx = match(line,ptn)
     while !empty(links) 
@@ -110,7 +97,7 @@ fun! s:parse_cur() "{{{
     endwhile
 
     " get link2
-    let ptn = s:ptn_lnk2
+    let ptn = g:_RIV_c.ptn.lnk2
     let links = matchlist(line,ptn)
     let idx = match(line,ptn)
     while !empty(links) 
@@ -130,7 +117,7 @@ fun! s:parse_cur() "{{{
     endwhile
 
     " get defined file 
-    let ptn = s:ptn_rst
+    let ptn = g:_RIV_c.ptn.file
     let links = matchlist(line,ptn)
     let idx = match(line,ptn)
     while !empty(links) 
@@ -160,38 +147,8 @@ fun! s:parse_cur() "{{{
 
     return 0
 endfun "}}}
-fun! s:db_click() "{{{
-    if !s:parse_cur()
-        exe "normal! \<2-leftmouse>"
-    endif
-endfun "}}}
 
-fun! s:find_lnk(dir) "{{{
-    let cr = line('.')
-    let cc = col('.')
-    let smallest_r = 1000
-    let smallest_c = 1000
-    let best = [0,0]
-    let flag = a:dir=="b" ? 'Wnb' : 'Wn'
-    for ptn in s:ptn_grp
-        let [sr,sc] = searchpos(ptn,flag)
-        if sr != 0
-            let dis_r = abs(sr-cr)
-            if smallest_r > dis_r
-                let smallest_r = dis_r
-                let best = [sr,sc] 
-            elseif smallest_r == dis_r
-                let dis_c = abs(sc-cc)
-                if smallest_c > dis_c
-                    let smallest_c = dis_c
-                    let best = [sr,sc] 
-                endif
-            endif
-        endif
-    endfor
-    if best[0] != 0
-        call setpos("'`",getpos('.'))
-        call setpos('.',[0,best[0],best[1],0])
-    endif
-endfun "}}}
 "}}}
+
+let &cpo = s:cpo_save
+unlet s:cpo_save

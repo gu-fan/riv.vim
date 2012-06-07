@@ -7,45 +7,24 @@
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
-if exists("g:restin_loaded")
+if exists("g:_riv_loaded")
     finish
 endif
-let g:restin_loaded = 1
+let g:_riv_loaded = 1
 
-fun! s:up_index() "{{{
-    if filereadable("../index.rst")
-        e ../index.rst
-    elseif filereadable("index.rst") && expand('%') != "index.rst"
-        call <SID>cindex("rst")
-    else
-        echo "You already reached the root level."
-    endif
-endfun "}}}
-
-fun! s:cindex(ftype) "{{{
-    let idx = "index.".a:ftype
-    if filereadable(idx)
-        if expand('%') == idx
-            edit #
-        else
-            exe "edit ". idx
-        endif
-    else
-        echo "No index for current page"
-    endif
-endfun "}}}
 
 " TODO: a GUI setting and cache.
 fun! s:default_opt(opt_dic) "{{{
     " OPT_NAME: OPT_VAL
     for [opt,var] in items(a:opt_dic)
-        if !exists('g:restin_'.opt)
-            let g:restin_{opt} = var
+        if !exists('g:riv_'.opt)
+            let g:riv_{opt} = var
         endif
+        unlet! var
     endfor
 endfun "}}}
 fun! s:default_map(map_dic) "{{{
-    let leader = g:restin_leader_map
+    let leader = g:riv_leader_map
     " NAME: [ com , map , mode  ]
     for [name,val] in items(a:map_dic)
         let [com,map,mode] = val
@@ -57,18 +36,18 @@ fun! s:default_map(map_dic) "{{{
     endfor
 endfun "}}}
 fun! s:set_proj(proj) "{{{
-    let proj = g:restin_proj_temp
+    let proj = g:riv_proj_temp
     for [key,var] in items(a:proj)
         let proj[key] = var
     endfor
-    call insert(g:restin_project_list, proj)
+    call insert(g:riv_project_list, proj)
     return proj
 endfun "}}}
 fun! s:exe_proj(index,action) "{{{
-    if exists("g:restin_project_list[".a:index."]")
-        let proj = g:restin_project_list[a:index]
+    if exists("g:riv_project_list[".a:index."]")
+        let proj = g:riv_project_list[a:index]
     else
-        let proj = g:restin_project_list[0]
+        let proj = g:riv_project_list[0]
     endif
     if a:action == 'index'
         let path = expand(proj["path"])
@@ -84,57 +63,25 @@ fun! s:normlist(list) "{{{
     return map(a:list,'matchstr(v:val,''\w\+'')')
 endfun "}}}
 
-if !exists("g:RESTIN_Conf") "{{{
-    let g:RESTIN_Conf = {}
-    let g:RESTIN_Conf.plugin_path = expand('<sfile>:p:h')
-    let g:RESTIN_Conf.autoload_path = fnamemodify(g:RESTIN_Conf.plugin_path,":h")
-                \.'/autoload'
 
-    if has("python") "{{{
-        let g:RESTIN_Conf['py'] = "py "
-        let g:RESTIN_Conf.has_py = 2
-    elseif has("python3")
-        let g:RESTIN_Conf['py'] = "py3 "
-        let g:RESTIN_Conf.has_py = 3
-    else
-        let g:RESTIN_Conf['py'] = "echom "
-        let g:RESTIN_Conf.has_py = 0
-    endif "}}}
-    if g:RESTIN_Conf.has_py && !exists("g:RESTIN_Conf.py_imported") "{{{
-        exe g:RESTIN_Conf['py']."import sys"
-        exe g:RESTIN_Conf['py']."import vim"
-        exe g:RESTIN_Conf['py']."sys.path.append(vim.eval('g:RESTIN_Conf.autoload_path')  + '/restin/')"
-        exe g:RESTIN_Conf['py']."from restinlib.table import GetTable,Add_Row"
-        let g:RESTIN_Conf.py_imported = 1
-    endif "}}}
-
-    let g:RESTIN_Conf.tbl_ptn = '^\s*+[-=+]\++\s*$\|^\s*|\s.\{-}\s|\s*$'
-    let g:RESTIN_Conf.sep_ptn = '^\s*+[-=+]\++\s*$'
-    let g:RESTIN_Conf.con_ptn = '^\s*|\s.\{-}\s|\s*$'
-    let g:RESTIN_Conf.cel_ptn = '\v%(^|\s)\|\s\zs|^\s*$'
-    let g:RESTIN_Conf.cel0_ptn = '\v^\s*\|\s\zs'
-    let g:restin_ext_ptn= exists("g:restin_ext_ptn") ? g:restin_ext_ptn :
-                                \ ['vim','cpp','c','py','rb','lua','pl']
-
-    let g:RESTIN_Conf.ext_ptn= join(s:normlist(g:restin_ext_ptn),'|')
-
-    lockvar g:RESTIN_Conf
-endif "}}}
-
-let g:restin_proj_temp = {
-            \ 'path': '~/Documents/RestIn',
-            \ 'html_path': '~/Documents/RestIn/.html',
-            \ 'template_path' : '~/Documents/RestIn/.template' ,
-            \ 'index': 'index' }
-let g:restin_project_list = [ ] 
-let g:restin_project = !exists("g:restin_project") ? s:set_proj(g:restin_proj_temp) : 
-            \ s:set_proj(g:restin_project)
+let g:riv_proj_temp = {
+            \ 'path'          : '~/Documents/RIV',
+            \ 'html_path'     : '~/Documents/RIV/.html',
+            \ 'template_path' : '~/Documents/RIV/.template' ,
+            \ 'index'         : 'index' }
+let g:riv_project_list = [ ] 
+let g:riv_project = !exists("g:riv_project") ? s:set_proj(g:riv_proj_temp) : 
+            \ s:set_proj(g:riv_project)
 
 let s:opts = {    
     \'no_space'   : 1 ,
     \'fix_idt'    : 1 ,
-    \'leader_map' : '<leader>'
-    \'bufleader_map' : '<leader>'
+    \'leader_map' : '<leader>',
+    \'bufleader_map' : '<leader>',
+    \'ext_ptn'    : ['vim', 'cpp', 'c', 'py', 'rb', 'lua', 'pl'],
+    \'hl_code'    : ["lua","python","cpp","c","javascript","vim","sh"],
+    \'todo_levels': [' ','o','X'],
+    \'todo_timestamp': 1,
     \}
 let s:maps = {
     \'RformatTable' : ['riv#table#format()', 'rf', ''],
@@ -146,5 +93,96 @@ call s:default_opt(s:opts)
 call s:default_map(s:maps)
 
 
+if !exists("g:_RIV_c") "{{{
+    let g:_RIV_c = {'path':{},'ptn':{}}
+    let g:_RIV_c.path.plugin = expand('<sfile>:p:h')
+    let g:_RIV_c.path.autoload = fnamemodify(g:_RIV_c.path.plugin,":h")
+                \.'/autoload'
+
+    if has("python") "{{{
+        let g:_RIV_c['py'] = "py "
+        let g:_RIV_c.has_py = 2
+    elseif has("python3")
+        let g:_RIV_c['py'] = "py3 "
+        let g:_RIV_c.has_py = 3
+    else
+        let g:_RIV_c['py'] = "echom "
+        let g:_RIV_c.has_py = 0
+    endif "}}}
+    if g:_RIV_c.has_py && !exists("g:_RIV_c.py_imported") "{{{
+        try 
+            exe g:_RIV_c.py "import sys"
+            exe g:_RIV_c.py "import vim"
+            exe g:_RIV_c.py "sys.path.append(vim.eval('g:_RIV_c.path.autoload')  + '/riv/')"
+            exe g:_RIV_c.py "from rivlib.table import GetTable,Add_Row"
+            let g:_RIV_c.py_imported = 1
+        catch 
+            let g:_RIV_c.py_imported = 0
+        endtry
+    endif "}}}
+    
+    let g:_RIV_c.ptn.tbl  = '^\s*+[-=+]\++\s*$\|^\s*|\s.\{-}\s|\s*$'
+    let g:_RIV_c.ptn.tbl_sep  = '^\s*+[-=+]\++\s*$'
+    let g:_RIV_c.ptn.tbl_con  = '^\s*|\s.\{-}\s|\s*$'
+    let g:_RIV_c.ptn.cel  = '\v%(^|\s)\|\s\zs|^\s*$'
+    let g:_RIV_c.ptn.cel0 = '\v^\s*\|\s\zs'
+
+
+    let g:_RIV_c.ptn.list = '\v\c^\s*%([-*+]|%(\d+|[#a-z]|[imcxv]+)[.)]|\(%(\d+|[#a-z]|[imcxv]+)\))\s+'
+    let g:_RIV_c.ptn.field_list= '^\s*:[^:]\+:\s\+\ze\S.\+[^:]$'
+    let g:_RIV_c.ptn.list_or_exp_or_S = g:_RIV_c.ptn.list.'|^\s*\.\.\s|^\S'
+
+    let g:_RIV_c.ptn.exp = '^\.\.\_s'
+    let g:_RIV_c.ptn.s_exp = '^\s*\.\.\_s'
+    let g:_RIV_c.ptn.s_or_exp = '^\S\@!\|^\.\.\s.'
+
+    let g:_RIV_c.ptn.blank = '^\s*$'
+    let g:_RIV_c.ptn.indent = '^\s*'
+    let g:_RIV_c.ptn.S_bgn = '^\S'
+
+    let g:_RIV_c.ptn.literal_block= '[^:]::\s*$'
+
+    let g:_RIV_c.ptn.section = '^\v([=`:.''"~^_*+#-])\1+\s*$'
+
+    let g:_RIV_c.ptn.exp_cluster = '^rst\%(Comment\|\%(Ex\)\=Directive\|HyperlinkTarget\)'
+    
+
+    let g:_RIV_c.ptn.list_m1 = '\v('. g:_RIV_c.ptn.list .')'
+    let g:_RIV_c.ptn.list_box = g:_RIV_c.ptn.list_m1 . '\[(.)\] '
+    let g:_RIV_c.ptn.timestamp = '(\d{4}-\d{2}-\d{2})\_s'
+    let g:_RIV_c.ptn.list_tms = g:_RIV_c.ptn.list_box . g:_RIV_c.ptn.timestamp
+
+    let g:_RIV_c.ptn.fmt_time = "%Y-%m-%d"
+
+    let g:_RIV_c.sec_punc = '!"#$%&''()*+,-./:;<=>?@[\]^_`{|}~'
+    let g:_RIV_c.list_lvs = ["*","+","-"]
+    " URI
+    " http://xxx.xxx.xxx file:///xxx/xxx/xx  
+    " mailto:xxx@xxx.xxx 
+    let g:_RIV_c.ptn.lnk = '\v(%(file|https=|ftp|gopher)://|%(mailto|news):)([^[:space:]''\"<>]+[[:alnum:]/])'
+    " inline link patterns
+    " `xxxx  <URL>`
+    " standlone link patterns
+    " www.xxx-x.xxx/?xxx
+    let g:_RIV_c.ptn.lnk2 = '\vwww[[:alnum:]_-]*\.[[:alnum:]_-]+\.[^[:space:]''\"<>]+[[:alnum:]/]'
+
+    let g:_RIV_c.ptn.file_ext= join(s:normlist(g:riv_ext_ptn),'|')
+    let g:_RIV_c.ptn.file= '\v([~0-9a-zA-Z:./_-]+%(\.%(rst|'. g:_RIV_c.ptn.file_ext .')|/))\S@!'
+    " ref target patterns
+    " [xxx]_  xxx_ `xxx xx`_
+    let g:_RIV_c.ptn.link_tar= '\v\ze%(\_s|^)%(\`[[:alnum:]. -]+`_|[[:alnum:].-_]+_|\[[[:alnum:].-_]+\]_)\ze%(\_s|$)'
+    " ref definition patterns
+    " .. _xxx :
+    " .. [xxx]
+    " _`xxx xxx`
+    let g:_RIV_c.ptn.link_def = '\v_`\[=\zs[0-9a-zA-Z]*\ze\]=`|^\.\. (_\zs[0-9a-zA-Z]+|\[\zs[0-9a-zA-Z]+\ze\])'
+
+    let g:_RIV_c.ptn.link_grp = [g:_RIV_c.ptn.lnk,g:_RIV_c.ptn.file,g:_RIV_c.ptn.link_def,g:_RIV_c.ptn.link_tar,g:_RIV_c.ptn.lnk2]
+
+
+
+    " don't modify it anymore
+    lockvar 2 g:_RIV_c
+endif "}}}
 let &cpo = s:cpo_save
 unlet s:cpo_save

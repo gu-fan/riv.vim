@@ -63,7 +63,7 @@ let s:ReferenceName = '[[:alnum:]]\+\%([_.-][[:alnum:]]\+\)*'
 execute 'syn region rstComment contained' .
       \ ' start=/.*/'
       \ ' skip=+^$+' 
-      \ ' end=/^\s\@!/ contains=rstCommentTitle,rstTodo'
+      \ ' end=/^\s\@!/ contains=@rstCommentGroup'
 
 execute 'syn region rstFootnote contained matchgroup=rstDirective' .
       \ ' start=+\[\%(\d\+\|#\%(' . s:ReferenceName . '\)\=\|\*\)\]\_s+' .
@@ -154,8 +154,7 @@ syn match rstBibliographicField `\v^\s*:(Author|Authors|Organization|Contact|Add
 syn match rstBlockQuoteAttr  `\v%(\_^\s*\n)@<=\s+-- .*`
 
 syn match   rstCommentTitle '\v(^\s+|(^\.\.\s+)@<=):=\u\w*(\s+\u\w*)*:' contained 
-            \ contains=rstTodo
-
+syn cluster rstCommentGroup contains=rstCommentTitle,rstTodo
 " TODO: Use better syncing.  I don’t know the specifics of syncing well enough,
 " though.
 syn sync minlines=50 linebreaks=1

@@ -1,17 +1,23 @@
-" Vim Syntax File for ReStructuredText in after/syntax
-" fix rst.vim
-" Author:   Rykka. G  <Rykka10(at)gmail.com>
-" Update:   2012-06-07
-" load after /usr/share/vim/vim73/syntax/rst.vim
+"=============================================
+"    Name: rst.vim
+"    File: rst.vim
+"  Author: Rykka G.Forest
+"  Update: 2012-06-07
+" Version: 0.5
+"=============================================
+let s:cpo_save = &cpo
+set cpo-=C
 
 " my settings
-exe 'syn match rstRSTfile `\v%([~0-9a-zA-Z:./_-]+%(\.%(rst|'.
-            \ g:RESTIN_Conf['ext_ptn'] .')|/))\S@!`'
+exe 'syn match rstFileLink `\v%([~0-9a-zA-Z:./_-]+%(\.%(rst|'. 
+            \ g:_RIV_c.ptn.file_ext .')|/))\S@!`'
+
+syn cluster rstCommentGroup add=rstStandaloneHyperlink,rstFileLink
 " 
 " {{{code block
 let s:rst_hl_codes = ["lua","python","cpp","c","javascript","vim","sh"]
 let s:usr_syn_dir = ""
-for code in s:rst_hl_codes
+for code in g:riv_hl_code
     " for performance , use $VIMRUNTIME only
     let s:{code}path= fnameescape(split(globpath(join([$VIMRUNTIME,s:usr_syn_dir],','),"syntax/".code.".vim"),'\n')[0])
     if filereadable(s:{code}path)
@@ -43,10 +49,12 @@ syn match rstTodoTmsList `\v(\d{6}|\d{4}-\d{2}-\d{2})` contained
 
 hi def link rstTodoBoxList Include
 hi def link rstTodoTmsList Number
-hi def link rstRSTfile Underlined
+hi def link rstFileLink Underlined
 
 hi link rstStandaloneHyperlink          Underlined
 hi link rstFootnoteReference            Underlined
 hi link rstCitationReference            Underlined
 hi link rstHyperLinkReference           Underlined
 "}}}
+let &cpo = s:cpo_save
+unlet s:cpo_save

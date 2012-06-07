@@ -12,6 +12,7 @@ fun! riv#test#fold(...) "{{{
     let d = 1
     echo "row\texpr\tb:p_ln\tb:p_ex"
     for i in range(1,line('$'))
+        breakadd func RstFoldExpr
         let fdl = RstFoldExpr(i)
         if i>= line-10 && i <= line+10
             echo i."\t".fdl
@@ -44,5 +45,6 @@ fun! riv#test#fold(...) "{{{
     echo "TOTAL check: " (c+d)
 endfun "}}}
 fun! riv#test#insert_idt() "{{{
+    breakadd func riv#insert#indent
     echo riv#insert#indent(line('.'))
 endfun "}}}

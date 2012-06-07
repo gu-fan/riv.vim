@@ -1,7 +1,7 @@
 " Vim indent file
 " Language:         reStructuredText Documentation Format
 " Maintainer:       Nikolai Weibull <now@bitwi.se>
-"                   Rykka G.Forest <Rykka10@gmail.com>
+" Modified By:      Rykka G.Forest <Rykka10@gmail.com>
 " Latest Revision:  2012-06-05
 
 if exists("b:did_indent")
@@ -17,8 +17,6 @@ if exists("*GetRSTIndent")
     finish
 endif
 
-let s:list_ptn = '\v\c^\s*%([-*+]|%(\d+|[#a-z]|[imcxv]+)[.)]|\(%(\d+|[#a-z]|[imcxv]+)\))\s+'
-let s:field_list_ptn = '^\s*:[^:]\+:\s\+\ze\S.\+[^:]$'
 function! GetRSTIndent(row) "{{{
     
     let pnb_num = prevnonblank(a:row - 1)
@@ -30,7 +28,7 @@ function! GetRSTIndent(row) "{{{
 
     " Field List
     " 1:ind
-    let p_ind =  matchend(p_line, s:field_list_ptn)
+    let p_ind =  matchend(p_line, g:_RIV_c.ptn.field_list)
     if p_ind != -1
         return p_ind
     endif
@@ -42,15 +40,15 @@ function! GetRSTIndent(row) "{{{
     " 1/2:fix ind
     " 3: ind
     " 4: prev ind
-    let l_ind = matchend(pnb_line, s:list_ptn)
+    let l_ind = matchend(pnb_line, g:_RIV_c.ptn.list)
     if l_ind != -1 &&  a:row <= pnb_num+2 
         return (ind + l_ind - matchend(pnb_line, '^\s*'))
     elseif l_ind != -1 &&  a:row <= pnb_num+3 
         return ind
     elseif l_ind != -1 &&  a:row >= pnb_num+4 
         call cursor(pnb_num,1)
-        let p_lnum = searchpos(s:list_ptn.'|^\S', 'bW')[0]
-        let p_ind  = matchend(getline(p_lnum),s:list_ptn)
+        let p_lnum = searchpos(g:_RIV_c.ptn.list.'|^\S', 'bW')[0]
+        let p_ind  = matchend(getline(p_lnum),g:_RIV_c.ptn.list)
         if p_ind != -1
             return indent(p_lnum)
         endif

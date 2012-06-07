@@ -3,7 +3,7 @@
 
 import vim
 import re
-from restinlib.utils import wstr_len
+from rivlib.utils import wstr_len
 
 idt_ptn = re.compile(r'^\s*')
 tbl_ptn = re.compile(r'^\s*\|.*\|\s*$|^\s*\+[-=+]+\+\s*$')
