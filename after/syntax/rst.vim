@@ -1,7 +1,7 @@
 " Vim Syntax File for ReStructuredText in after/syntax
 " fix rst.vim
 " Author:   Rykka. G  <Rykka10(at)gmail.com>
-" Update:   2012-06-01
+" Update:   2012-06-07
 " load after /usr/share/vim/vim73/syntax/rst.vim
 
 " my settings
