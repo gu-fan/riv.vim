@@ -36,7 +36,7 @@ fun! riv#action#ins_enter() "{{{
     if getline('.') =~ g:_RIV_c.ptn.tbl
         let cmd  = "\<C-O>:call riv#table#newline()|"
         let cmd .= "call cursor(".(row+1).",".col.")|"
-        let cmd .= "call search(g:_RIV_c.cel0_ptn,'Wbc')\<CR>"
+        let cmd .= "call search(g:_RIV_c.ptn.cel0,'Wbc')\<CR>"
     else
         let cmd = "\<Enter>"
     endif

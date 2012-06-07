@@ -78,6 +78,7 @@ let s:opts = {
     \'fix_idt'    : 1 ,
     \'leader_map' : '<leader>',
     \'bufleader_map' : '<leader>',
+    \'buf_ins_leader' : '<c-f>',
     \'ext_ptn'    : ['vim', 'cpp', 'c', 'py', 'rb', 'lua', 'pl'],
     \'hl_code'    : ["lua","python","cpp","c","javascript","vim","sh"],
     \'todo_levels': [' ','o','X'],

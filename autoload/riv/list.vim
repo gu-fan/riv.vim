@@ -11,7 +11,7 @@ set cpo-=C
 "{{{ todo list
 
 fun! riv#list#tog_box(row) "{{{
-    " toggle list with g:riv_todo_lvs ptn.
+    " toggle list with g:riv_todo_levels ptn.
     " when idx get max, add an timestamp is show_tms is on
     let line = getline(a:row) 
     let idx = match(line,g:_RIV_c.ptn.list_m1)
@@ -23,19 +23,19 @@ fun! riv#list#tog_box(row) "{{{
         let line = substitute(line, g:_RIV_c.ptn.list_m1, '\0[ ] ','')
         call setline(a:row,line)
     else
-        let t_idx = index(g:riv_todo_lvs,boxlist[2])
-        let max_i = len(g:riv_todo_lvs)-1
+        let t_idx = index(g:riv_todo_levels,boxlist[2])
+        let max_i = len(g:riv_todo_levels)-1
         if  t_idx != -1 && t_idx < max_i-1
-            let tstr = g:riv_todo_lvs[t_idx+1]
+            let tstr = g:riv_todo_levels[t_idx+1]
         elseif t_idx == max_i-1
-            let tstr = g:riv_todo_lvs[max_i]
+            let tstr = g:riv_todo_levels[max_i]
             if exists("*strftime") && g:riv_todo_timestamp==1
                 let tms = strftime(g:_RIV_c.ptn.fmt_time)." "
             else
                 let tms = ""
             endif
         else
-            let tstr = g:riv_todo_lvs[0]
+            let tstr = g:riv_todo_levels[0]
         endif
         if t_idx == max_i
             if match(line,g:_RIV_c.ptn.list_tms)!=-1
