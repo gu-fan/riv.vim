@@ -1,2 +1,1 @@
-for reStructruedText.
-g:_RIV_c
+ReST In Vim.
