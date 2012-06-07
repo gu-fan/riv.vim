@@ -22,11 +22,15 @@ let b:undo_ftplugin = "setl fdm< fde< fdt< com< cms< et< fo<"
             \ "| unlet! b:dyn_sec_list b:foldlevel b:fdl_before_exp b:fdl_cur_list"
             \ "| unlet! b:fdl_before_list"
 let g:restin_ext_ptn= exists("g:restin_ext_ptn") ? g:restin_ext_ptn : '|vim|cpp|c|py|rb|lua|pl'
+let b:rst_table={}
 "}}}
 " map and cmd {{{
+" file jumper
 exe 'let g:last_rst_file="'.expand('%:p').'"'
 nno <silent><buffer><Leader>ri :call <SID>cindex("rst")<CR>
 
+
+" link parser
 nno <silent><buffer><CR> :call <SID>parse_cur()<CR>
 nno <silent><buffer>== :call <SID>get_same_level(line('.'))<CR>
 nno <silent><buffer><Tab> :call <SID>find_lnk("n")<CR>
@@ -34,29 +38,32 @@ nno <silent><buffer><S-Tab> :call <SID>find_lnk("b")<CR>
 nno <silent><buffer><Kenter> :call <SID>parse_cur()<CR>
 nno <silent><buffer><2-leftmouse>  :call <SID>db_click()<CR>
 
+" list  and todo
 no <silent><buffer><leader>ee :call <SID>list_tog_box(line('.'))<CR>
 no <silent><buffer><leader>e1 :call <SID>list_tog_typ(line('.'),"* ")<CR>
 no <silent><buffer><leader>e2 :call <SID>list_tog_typ(line('.'),"#. ")<CR>
 no <silent><buffer><leader>e3 :call <SID>list_tog_typ(line('.'),"(#) ")<CR>
 no <silent><buffer><leader>e4 :call <SID>list_tog_typ(line('.'),"")<CR>
 
+" indent
 no <silent><buffer> > :call <SID>list_shift_idt("")<CR>
 no <silent><buffer> < :call <SID>list_shift_idt("-")<CR>
 no <silent><buffer> <c-scrollwheeldown> :call <SID>list_shift_idt("")<CR>
 no <silent><buffer> <c-scrollwheelup> :call <SID>list_shift_idt("-")<CR>
-        
 ino <expr><silent><buffer> <BS> restin#insert#bs_fix_indent()
-" tests 
-com! -buffer ForceReload let g:rst_force=1 | set ft=rst | let g:rst_force=0
-com! -buffer -nargs=? FoldTest call restin#test#fold(<args>)
-" au
+
+" tables
 au! InsertLeave <buffer> call restin#table#format_pos()
 ino <expr><silent><buffer> <Enter>  restin#table#enter_or_newline()
 
-imap <buffer><expr><TAB> 
-\ pumvisible() ? "\<C-n>" :  restin#table#tab_or_next()
-imap <buffer><expr><S-TAB> 
-\ pumvisible() ? "\<C-p>" :  restin#table#tab_or_prev()
+ino <buffer><expr><TAB>   pumvisible() ? "\<C-n>" :  restin#table#tab_or_next()
+ino <buffer><expr><S-TAB> pumvisible() ? "\<C-p>" :  restin#table#tab_or_prev()
+
+" tests 
+com! -buffer RstReload let g:rst_force=1 | set ft=rst | let g:rst_force=0
+com! -buffer Force let g:rst_force=1 | set ft=rst | let g:rst_force=0
+com! -buffer -nargs=? RstTestFold call restin#test#fold(<args>)
+com! -buffer -nargs=? RstTestInsIndent call restin#test#insert_idt(<args>)
 "}}}
 if exists("*s:find_ref_def") && g:rst_force==0 | finish | endif
 "{{{ parsing cursor
@@ -98,7 +105,8 @@ fun! s:find_ref_tar(text) "{{{
 endfun "}}}
 let s:ptn_lnk = '\v(%(file|https=|ftp|gopher)://|%(mailto|news):)([^[:space:]''\"<>]+[[:alnum:]/])'
 let s:ptn_lnk2 ='\vwww[[:alnum:]_-]*\.[[:alnum:]_-]+\.[^[:space:]''\"<>]+[[:alnum:]/]'
-let s:ptn_rst = '\v([~0-9a-zA-Z:./_-]+%(\.%(rst'.g:restin_ext_ptn.')|/))\S@!'
+let s:ptn_rst = '\v([~0-9a-zA-Z:./_-]+%(\.%(rst|'. g:RESTIN_Conf['ext_ptn'] .')|/))\S@!'
+" let s:ptn_rst = '\v([~0-9a-zA-Z:./_-]+%(\.%(rst)|/))\S@!'
 let s:ptn_ref = '\v\[=[0-9a-zA-Z]*\]=\zs_>'
 
 " ref definition patterns
@@ -124,7 +132,6 @@ fun! s:parse_cur() "{{{
     let word = matchstr(line,ptn)
     let idx = match(line,ptn)
     " get ref def
-    echo col word idx
     if !empty(word) &&  col<= idx+len(word) && col >= idx
         let [sr,sc,type] = s:find_ref_def(word)
         if sr != 0
@@ -396,7 +403,11 @@ fun! RstFoldText() "{{{
         let line = getline(v:foldstart+1)
     endif
     if line=~s:table_ptn
-        let line = "TABLE: ".getline(v:foldstart+1)
+        if exists("b:rst_table[v:foldstart]")
+            let line = "TABLE:  ".b:rst_table[v:foldstart]
+        else
+            let line = "TABLE:  ".getline(v:foldstart+1)
+        endif
     endif
     let m_line = winwidth(0)-11
     if len(line) <= m_line

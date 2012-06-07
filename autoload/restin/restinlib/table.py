@@ -47,9 +47,9 @@ class RestTable:
         '''
         self.table = balance_tbl_col(lst)
 
-        self.row = len(lst)
+        self.row = len(self.table)
         if self.row > 0:
-            self.col = len(lst[0])
+            self.col = len(self.table[0])
         else:
             self.col = 0
 
@@ -80,8 +80,16 @@ class RestTable:
     def update(self):
         pass
 
-    def add_line(self):
-        pass
+    def add_line(self,idx):
+        ''' add a empty line in table with specified idx'''
+        if idx< self.row:
+            if self.table[idx][0] == "|+++|":
+                self.table.insert(idx+1, ["|+++|"])
+            self.table.insert(idx+1, [ " " for i in range(self.col)])
+            # self.table = balance_tbl_col(self.table)
+            
+
+        
         
     def output(self, indent=0):
         """
@@ -122,7 +130,6 @@ class RestTable:
             if line == line_sep:
                 s += 1
                 if s == 2 and len(lines)>i+1:
-                    print s,i,len(lines)
                     lines[i] = line_head
                     break
 
@@ -131,7 +138,7 @@ class RestTable:
 
 class GetTable:
     
-    def __init__(self):
+    def __init__(self,lnum=0):
         '''
         --lnum :      the lnum of table
                 default is vim.current.window.cursor[0]
@@ -140,7 +147,8 @@ class GetTable:
         
         '''
         self.buf = vim.current.buffer
-        lnum=vim.current.window.cursor[0]
+        if lnum == 0:
+            lnum=vim.current.window.cursor[0]
         bgn, end = self.get_table_range(lnum)
         self.bgn, self.end = bgn, end
         if bgn == 0 and end == 0:
@@ -220,8 +228,16 @@ class GetTable:
                     del buf[row]
             if lines:
                 buf.append(lines, end)
-                    
-            # self.buf.append(self.table.output(self.indent), self.bgn - 1)
+            vim.command("let b:rst_table['" + str(bgn) + "'] = '"+ repr(self.table) + "'")
+                           
+    def add_line(self,row="1"):
+        if self.table:
+            idx = vim.current.window.cursor[0] - self.bgn
+            # if row=="1":
+            self.table.add_line(idx)
+            # else:
+            #     self.table.add_line(idx,2)
+            self.format_table()
 
 def Add_Row(row="1"):
     lnum = vim.current.window.cursor[0]
@@ -251,7 +267,10 @@ if __name__ == "__main__":
     |          |       |                          |
     +----------+-------+--------------------------+
     """
-    GetTable().format_table()
+    buftable = GetTable(259)
+    buftable.table.add_line(3)
+    print buftable.table
+    print "\n".join(buftable.table.output())
     # GetTable().add_row()
     # string = '当当当当当当'
     # print wstr_len(string)

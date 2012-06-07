@@ -43,3 +43,6 @@ fun! restin#test#fold(...) "{{{
     echo ".. check: "  d
     echo "TOTAL check: " (c+d)
 endfun "}}}
+fun! restin#test#insert_idt() "{{{
+    echo restin#insert#indent(line('.'))
+endfun "}}}

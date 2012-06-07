@@ -5,9 +5,8 @@
 " load after /usr/share/vim/vim73/syntax/rst.vim
 
 " my settings
-let g:restin_ext_ptn= exists("g:restin_ext_ptn") ? g:restin_ext_ptn : '|vim|cpp|c|py|rb|lua|pl'
-let ptn_rst = '\v%([~0-9a-zA-Z:./_-]+%(\.%(rst'.g:restin_ext_ptn.')|/))\S@!'
-exe 'syn match rstRSTfile `'.ptn_rst.'`'
+exe 'syn match rstRSTfile `\v%([~0-9a-zA-Z:./_-]+%(\.%(rst|'.
+            \ g:RESTIN_Conf['ext_ptn'] .')|/))\S@!`'
 " 
 " {{{code block
 let s:rst_hl_codes = ["lua","python","cpp","c","javascript","vim","sh"]

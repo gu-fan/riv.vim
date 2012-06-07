@@ -57,22 +57,22 @@ fun! restin#insert#indent(row) "{{{
         return (ind + l_ind - matchend(pnb_line, '^\s*'))
     endif
     
-    " one empty without match
-    " 1: ind
-    " 2+ : check prev exp_mark
-    if a:row > pnb_num+1
+    " without match
+    " 1+: search list/exp_mark or  \S starting line to stop.
+    if a:row >= pnb_num+1
         call cursor(pnb_num,1)
-        let p_line = getline(searchpos(s:list_ptn.'|^\s*\.\.\s|^\S', 'bW')[0])
+        let p_num = searchpos(s:list_ptn.'|^\s*\.\.\s|^\S', 'bW')[0]
+        let p_line = getline(p_num)
         let l_ind  = matchend(p_line,'^\s*\.\.\s')
         if l_ind != -1
             return l_ind
         endif
-        let l_ind = match(p_line, s:list_ptn)
+        let l_ind = matchend(p_line, s:list_ptn)
         if l_ind != -1
-            return l_ind
+            return indent(p_num)
         endif
     endif
-            
+    
     return ind
 endfun "}}}
 fun! restin#insert#bs_fix_indent() "{{{
