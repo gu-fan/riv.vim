@@ -1,3 +1,17 @@
+"=============================================
+"    Name: file.vim
+"    File: file.vim
+" Summary: file operation
+"          find /match/delete/...
+"  Author: Rykka G.Forest
+"  Update: 2012-06-08
+" Version: 0.5
+"=============================================
+let s:cpo_save = &cpo
+set cpo-=C
+
+
+<`0`>
 fun! s:up_index() "{{{
     if filereadable("../index.rst")
         e ../index.rst
@@ -9,7 +23,6 @@ fun! s:up_index() "{{{
 endfun "}}}
 
 
-"{{{ file jump 
 fun! s:cindex(ftype) "{{{
     let idx = "index.".a:ftype
     if filereadable(idx)
@@ -22,4 +35,5 @@ fun! s:cindex(ftype) "{{{
         echo "No index for current page"
     endif
 endfun "}}}
-"}}}
+let &cpo = s:cpo_save
+unlet s:cpo_save

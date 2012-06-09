@@ -17,3 +17,4 @@ fun! riv#norm(str) "{{{
 endfun "}}}
 
 
+

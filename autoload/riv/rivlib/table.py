@@ -2,14 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import vim
-import re
-from rivlib.utils import wstr_len
 
-idt_ptn = re.compile(r'^\s*')
-tbl_ptn = re.compile(r'^\s*\|.*\|\s*$|^\s*\+[-=+]+\+\s*$')
-sep_ptn = re.compile(r'^\s*(?:\+([-=])\1*)+\+\s*$')
-con_ptn = re.compile(r'^\s*\|.*\|\s*$')
-cel_ptn = re.compile(r'(?<=\|)([^|]+)(?=\|)')
+from rivlib.utils import wstr_len
+from rivlib.pattern import riv_ptn
 
 
 def balance_tbl_col(lst):
@@ -155,7 +150,7 @@ class GetTable:
             self.table = None
         else:
             self.table = self.parse_range_to_table(bgn, end)
-            indent = idt_ptn.match(self.buf[lnum - 1]).end()
+            indent = riv_ptn.indent.match(self.buf[lnum - 1]).end()
             self.indent = indent
 
     def parse_range_to_table(self, start, end):
@@ -186,29 +181,29 @@ class GetTable:
         max_col = 0
         rows = []
         for i in range(start - 1, end):
-            if con_ptn.match(self.buf[i]):
-                cols = [i.group() for i in cel_ptn.finditer(self.buf[i])]
+            if riv_ptn.table_con.match(self.buf[i]):
+                cols = [i.group() for i in riv_ptn.table_cel.finditer(self.buf[i])]
                 c_len = len(cols)
                 if max_col < c_len:
                     max_col = c_len
                 rows.append(cols)
-            elif sep_ptn.match(self.buf[i]) :
+            elif riv_ptn.table_sep.match(self.buf[i]) :
                 rows.append(['|+++|'])      # A sep_str workround
         
         return RestTable(rows)
 
     def get_table_range(self, row):
-        if tbl_ptn.match(self.buf[row - 1]):
+        if riv_ptn.table_all.match(self.buf[row - 1]):
             bgn, end = [row, row]
         else:
             return [0, 0]
         for i in range(row, 0, -1):
-            if tbl_ptn.match(self.buf[i - 1]):
+            if riv_ptn.table_all.match(self.buf[i - 1]):
                 bgn = i
             else:
                 break
         for i in range(row, len(self.buf)):
-            if tbl_ptn.match(self.buf[i - 1]):
+            if riv_ptn.table_all.match(self.buf[i - 1]):
                 end = i
             else:
                 break
@@ -224,7 +219,7 @@ class GetTable:
                     buf[row] = lines[0]
                 if lines:
                     del lines[0]
-                elif tbl_ptn.match(buf[row]):
+                elif riv_ptn.table_all.match(buf[row]):
                     del buf[row]
             if lines:
                 buf.append(lines, end)
@@ -239,17 +234,6 @@ class GetTable:
             #     self.table.add_line(idx,2)
             self.format_table()
 
-def Add_Row(row="1"):
-    lnum = vim.current.window.cursor[0]
-    buf = vim.current.buffer
-    if tbl_ptn.match(vim.current.line):
-        if row == "1":
-            buf.append(['|  |'], lnum)
-        else:
-            buf.append(['|  |','+---+'],lnum)
-
-        table = GetTable()
-        table.format_table()
 
 if __name__ == "__main__":
     """

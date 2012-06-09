@@ -1,19 +1,19 @@
 "=============================================
 "    Name: action.vim
 "    File: action.vim
+" Summary: Do dirty things here.
 "  Author: Rykka G.Forest
-"  Update: 2012-06-07
+"  Update: 2012-06-08
 " Version: 0.5
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
 
 fun! riv#action#db_click() "{{{
-    if !riv#cursor#parse()
-        exe "normal! \<2-leftmouse>"
+    if !riv#link#parse()
+        exe "normal! \<2-LeftMouse>"
     endif
 endfun "}}}
-
 fun! riv#action#ins_bs() "{{{
     let [row,col]  = getpos('.')[1:2]
     let line = getline('.')
@@ -30,13 +30,12 @@ fun! riv#action#ins_bs() "{{{
     endif
     return "\<BS>"
 endfun "}}}
-
 fun! riv#action#ins_enter() "{{{
     let [row,col] = getpos('.')[1:2]
-    if getline('.') =~ g:_RIV_c.ptn.tbl
+    if getline('.') =~ g:_RIV_p.tbl
         let cmd  = "\<C-O>:call riv#table#newline()|"
         let cmd .= "call cursor(".(row+1).",".col.")|"
-        let cmd .= "call search(g:_RIV_c.ptn.cel0,'Wbc')\<CR>"
+        let cmd .= "call search(g:_RIV_p.cel0,'Wbc')\<CR>"
     else
         let cmd = "\<Enter>"
     endif

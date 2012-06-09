@@ -10,9 +10,14 @@ set cpo-=C
 
 " my settings
 exe 'syn match rstFileLink `\v%([~0-9a-zA-Z:./_-]+%(\.%(rst|'. 
-            \ g:_RIV_c.ptn.file_ext .')|/))\S@!`'
+            \ g:_RIV_p.file_ext .')|/))\S@!`'
 
-syn cluster rstCommentGroup add=rstStandaloneHyperlink,rstFileLink
+syn cluster rstCommentGroup add=@rstLinkGroup
+
+" syn cluster rstLinkGroup contains=rstStandaloneHyperlink,rstFileLink,rstHyperlinkReference,rstCitationReference,rstFootnoteReference
+" syn cluster rstCruft add=@rstLinkGroup
+" 
+" syn match rstCursor '\S*\%#[^[:space:]`>]*' contained containedin=@rstLinkGroup
 " 
 " {{{code block
 let s:rst_hl_codes = ["lua","python","cpp","c","javascript","vim","sh"]
@@ -46,10 +51,13 @@ syn match rstTodoBoxList `\[.\]` nextgroup=rstTodoTmsList contained
 syn match rstTodoTmsList `\v(\d{6}|\d{4}-\d{2}-\d{2})` contained
 "}}}
 " relink "{{{
+hi hlrstUnderline    guibg=Gray  gui=underline,italic
 
 hi def link rstTodoBoxList Include
 hi def link rstTodoTmsList Number
 hi def link rstFileLink Underlined
+
+hi link rstCursor   hlrstUnderline       
 
 hi link rstStandaloneHyperlink          Underlined
 hi link rstFootnoteReference            Underlined

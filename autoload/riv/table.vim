@@ -14,7 +14,7 @@ endfun "}}}
 
 fun! riv#table#format_pos() "{{{
     let pos = getpos('.')
-    if getline('.') =~ g:_RIV_c.ptn.tbl
+    if getline('.') =~ g:_RIV_p.tbl
         call riv#table#format()
         call setpos('.',pos)
         if foldclosed(pos[1])
@@ -24,14 +24,14 @@ fun! riv#table#format_pos() "{{{
 endfun "}}}
 
 fun! riv#table#nextcell() "{{{
-    if getline('.') =~ g:_RIV_c.ptn.tbl
-        return searchpos(g:_RIV_c.ptn.cel,'Wn')   
+    if getline('.') =~ g:_RIV_p.tbl
+        return searchpos(g:_RIV_p.cel,'Wn')   
     endif
     return [0,0]
 endfun "}}}
 fun! riv#table#prevcell() "{{{
-    if getline('.') =~ g:_RIV_c.ptn.tbl
-        return searchpos(g:_RIV_c.ptn.cel,'Wbn')   
+    if getline('.') =~ g:_RIV_p.tbl
+        return searchpos(g:_RIV_p.cel,'Wbn')   
     endif
     return [0,0]
 endfun "}}}

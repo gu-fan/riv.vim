@@ -28,7 +28,7 @@ function! GetRSTIndent(row) "{{{
 
     " Field List
     " 1:ind
-    let p_ind =  matchend(p_line, g:_RIV_c.ptn.field_list)
+    let p_ind =  matchend(p_line, g:_RIV_p.field_list)
     if p_ind != -1
         return p_ind
     endif
@@ -40,15 +40,15 @@ function! GetRSTIndent(row) "{{{
     " 1/2:fix ind
     " 3: ind
     " 4: prev ind
-    let l_ind = matchend(pnb_line, g:_RIV_c.ptn.list)
+    let l_ind = matchend(pnb_line, g:_RIV_p.list)
     if l_ind != -1 &&  a:row <= pnb_num+2 
         return (ind + l_ind - matchend(pnb_line, '^\s*'))
     elseif l_ind != -1 &&  a:row <= pnb_num+3 
         return ind
     elseif l_ind != -1 &&  a:row >= pnb_num+4 
         call cursor(pnb_num,1)
-        let p_lnum = searchpos(g:_RIV_c.ptn.list.'|^\S', 'bW')[0]
-        let p_ind  = matchend(getline(p_lnum),g:_RIV_c.ptn.list)
+        let p_lnum = searchpos(g:_RIV_p.list.'|^\S', 'bW')[0]
+        let p_ind  = matchend(getline(p_lnum),g:_RIV_p.list)
         if p_ind != -1
             return indent(p_lnum)
         endif

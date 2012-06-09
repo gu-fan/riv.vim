@@ -195,12 +195,13 @@ hi def link rstStandaloneHyperlink          Identifier
 
 hi def link rstBulletList                   Function
 hi def link rstEnumeratedList               Function
-hi def link rstDefinitionList               Function
+hi def link rstDefinitionList               Statement
 hi def link rstFieldList                    Function
 hi def link rstBibliographicField           Constant
 hi def link rstOptionList                   Statement
 
 hi def link rstBlockQuoteAttr               Exception
+
 
 let b:current_syntax = "rst"
 
