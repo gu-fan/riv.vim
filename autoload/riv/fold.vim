@@ -192,20 +192,15 @@ fun! riv#fold#text() "{{{
     if has_key(b:riv,lnum)
         if b:riv[lnum].typ == 'sect'
             let cate = "S  ". b:riv[lnum].level
-            if b:riv[lnum].row==3
-                let line = getline(lnum+1)
-            endif
         elseif b:riv[lnum].typ == 'list'
             let cate = "L ".b:riv[lnum].attr.b:riv[lnum].level
         elseif b:riv[lnum].typ == 'table'
             let col = len(split(line,'+',1))-2
             let row = len(filter(getline(lnum,v:foldend),'v:val=~''^\s*+'''))-1
             let cate = "T " . col.'x'.row
-            let line = getline(lnum+1)
         elseif b:riv[lnum].typ == 'spl_table'
             let col =   len(split(line,'\s\+',1))-2
             let cate = "ST " . col.'x'.foldnum
-            let line = getline(lnum+1)
         elseif b:riv[lnum].typ == 'exp'
             let cate = ".. "
         endif
@@ -229,9 +224,6 @@ fun! riv#fold#expr(row) "{{{
 
     if a:row == 1 
         let b:dyn_sec_list = []
-        " TODO: use bit to check status
-        "  list 0x8 exp 0x4 tbl 0x2 spl 0x1
-        let b:is_stat = 0x0
         let [b:fdl_before_list, b:fdl_before_exp,  
             \b:foldlevel,       b:is_in_list,     b:is_in_exp , 
             \b:is_in_spl_tbl,   b:fdl_before_tbl, b:is_in_tbl ] = [0,0,0,0,0,0,0,0]
@@ -247,22 +239,18 @@ fun! riv#fold#expr(row) "{{{
 
     " List : depends on indent "{{{
     " Can contain exp_markup , can not be exp_m contained.
-    " if  b:is_in_exp==0 
-    if !and(b:is_stat, 4)
-        let attr = matchstr(c_line, g:_RIV_p.list_sym) 
+    if  b:is_in_exp==0
+        let attr = matchstr(c_line, g:_RIV_p.list) 
         if !empty(attr)
-            " let b:is_in_tbl=0
-            let b:is_stat = and(b:is_stat, 12)
+            let b:is_in_tbl=0
             let nnb_num = nextnonblank(a:row+1)
             let c_idt = indent(v:lnum)
             if c_idt < indent(nnb_num)
                 " some are 2, some are 3..
                 " don't update fdl_before if in a fdl list.
-                " if b:is_in_list==0
-                if !and(b:is_stat, 8)
+                if b:is_in_list==0
                     let b:fdl_before_list =  b:foldlevel
-                    " let b:is_in_list = 1
-                    let b:is_stat = or(b:is_stat, 8)
+                    let b:is_in_list = 1
                 endif
                 let b:foldlevel = c_idt/2 + 8
                 let b:riv[a:row] = {'typ': 'list', 'fdl': b:foldlevel,
@@ -275,8 +263,7 @@ fun! riv#fold#expr(row) "{{{
     if (c_line=~g:_RIV_p.S_bgn) "{{{
         " the 
         if c_line == ".." && n_line =~ g:_RIV_p.blank
-            " let b:is_in_tbl=0
-            let b:is_stat = and(b:is_stat, 13)
+            let b:is_in_tbl=0
             return b:foldlevel
         endif
         
@@ -293,11 +280,8 @@ fun! riv#fold#expr(row) "{{{
                 let b:fdl_before_exp = b:foldlevel 
             endif
             let b:foldlevel = 15
-            " let b:is_in_exp = 1
-            " let b:is_in_tbl=0
-            " 1100
-            let b:is_stat = and(b:is_stat, 12)
-            let b:is_stat = or(b:is_stat, 4)
+            let b:is_in_exp = 1
+            let b:is_in_tbl=0
             let b:riv[a:row] = {'typ':'exp' , 'fdl': b:foldlevel}
             return ">15"
         endif "}}}
@@ -316,10 +300,9 @@ fun! riv#fold#expr(row) "{{{
                 let idx = len(b:dyn_sec_list)
             endif
             let b:foldlevel = idx
-            " let [b:is_in_list, b:is_in_exp] = [ 0, 0]
-            " let b:is_in_tbl=0
-            let b:is_stat = and(b:is_stat, 0)
-            let t = {'typ':'sect', 'row':3,'fdl': idx , 'level':idx}
+            let [b:is_in_list, b:is_in_exp] = [ 0, 0]
+            let b:is_in_tbl=0
+            let t = {'typ':'sect', 'fdl': idx , 'level':idx}
             let b:riv[a:row]   = t
             let b:riv[a:row+1] = t
             let b:riv[a:row+2] = t
@@ -334,10 +317,9 @@ fun! riv#fold#expr(row) "{{{
                     let idx = len(b:dyn_sec_list)
                 endif
                 let b:foldlevel = idx
-                " let [b:is_in_list, b:is_in_exp] = [ 0, 0]
-                " let b:is_in_tbl=0
-                let b:is_stat = and(b:is_stat, 0)
-                let t = {'typ':'sect', 'row':2,'fdl': idx , 'level':idx}
+                let [b:is_in_list, b:is_in_exp] = [ 0, 0]
+                let b:is_in_tbl=0
+                let t = {'typ':'sect', 'fdl': idx , 'level':idx}
                 let b:riv[a:row]   = t
                 let b:riv[a:row+1] = t
                 return ">".idx
@@ -351,9 +333,8 @@ fun! riv#fold#expr(row) "{{{
                     let idx = len(b:dyn_sec_list)
                 endif
                 let b:foldlevel = idx
-                " let [b:is_in_list, b:is_in_exp,b:is_in_spl_tbl] = [ 0, 0, 0]
-                let b:is_stat = and(b:is_stat, 0)
-                " let b:is_in_tbl=0
+                let [b:is_in_list, b:is_in_exp,b:is_in_spl_tbl] = [ 0, 0, 0]
+                let b:is_in_tbl=0
                 return idx
             endif
         endif "}}}
@@ -372,24 +353,18 @@ fun! riv#fold#expr(row) "{{{
     " no blank line
     " if (c_line=~g:_RIV_p.S_bgn) "{{{
 
-        " let b:is_in_tbl=0
-        let b:is_stat = and(b:is_stat, 12)
+        let b:is_in_tbl=0
         " close exp"{{{
-        " if b:is_in_exp==1
-        if !and(b:is_stat, 4)
+        if b:is_in_exp==1
             let b:foldlevel = b:fdl_before_exp
-            " let b:is_in_exp = 0
-            " 1000
-            let b:is_stat = and(b:is_stat, 8)
+            let b:is_in_exp = 0
             return b:foldlevel
         endif "}}}
         " close list {{{
-        " if b:is_in_list==1  && nnb_line!~g:_RIV_p.exp_m
-        if !and(b:is_stat, 8)  && nnb_line!~g:_RIV_p.exp_m
+        if b:is_in_list==1  && nnb_line!~g:_RIV_p.exp_m
         " clean when nnb is not exp_m to contain exp in list.
             let b:foldlevel = b:fdl_before_list
-            " let [b:is_in_list, b:is_in_exp] = [ 0, 0]
-            let b:is_stat = and(b:is_stat, 0)
+            let [b:is_in_list, b:is_in_exp] = [ 0, 0]
             return b:foldlevel
         endif "}}}
         " close section
@@ -399,20 +374,15 @@ fun! riv#fold#expr(row) "{{{
     
     " fold the table "{{{
     if  c_line=~g:_RIV_p.tbl 
-        " if b:is_in_tbl==0
-        if !and(b:is_stat, 2)
+        if b:is_in_tbl==0
             let b:fdl_before_tbl = b:foldlevel
             let b:foldlevel = 10
-            " let b:is_in_tbl=1
-            " 0010
-            let b:is_stat = or(b:is_stat, 2)
+            let b:is_in_tbl=1
             let b:riv[a:row] = {'typ': 'table', 'fdl': b:foldlevel }
             return b:foldlevel
         endif
     else
-        " let b:is_in_tbl=0
-        " 1101
-        let b:is_stat = and(b:is_stat, 13)
+        let b:is_in_tbl=0
     endif "}}}
 
 
