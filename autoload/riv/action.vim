@@ -10,7 +10,18 @@ let s:cpo_save = &cpo
 set cpo-=C
 
 fun! riv#action#db_click() "{{{
-    if !riv#link#parse()
+    " could not use map <expr>
+    " cause it's editing file here.
+    let row = line('.')
+    if foldclosed(row) != -1
+        exe "normal! zv"
+    elseif !riv#link#open2()
+        if has_key(b:riv, row)
+            if b:riv[row].typ =='sect'
+                exe "normal! zc"
+                return
+            endif
+        endif
         exe "normal! \<2-LeftMouse>"
     endif
 endfun "}}}

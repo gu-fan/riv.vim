@@ -409,5 +409,161 @@ fun! riv#fold#expr(row) "{{{
     return b:foldlevel
     
 endfun "}}}
+"   
+"   norm
+"   blank
+"   sect
+"   sects                sect
+"   norm
+"   list                 list
+"   blank
+"     list               list
+"       norm
+"   blank
+"   exp                  exp
+"      norm
+"      norm
+"   blank               
+"   norm                ^S
+"   norm
+"   blank               
+"   blank
+"   blank
+"   sect                sect
+"   sect
+"   sect                sect
+"   quote               block
+"     norm
+"     norm
+"   blank
+"   table               tbl
+"   table               tbl
+"   exp                 exp
+"   exp_i               exp
+"   blank
+"
+"
+"
+"
+
+let b:pbuf = {}
+let b:state = {'checker':[],'lastlines':[],'lastblank':0, 'matcher':[]}
+fun! riv#fold#parse()
+    " parse the buffer set state and
+    " Buffer  for line in buffer
+    " if line =~ blank      let blank = 1       
+    " if line =~ sect   let states.sect += sect  | (punc , )
+    "   if line-2 state = blank  and  line-1 = nonblank,len(line-1)<=len(line)
+    "   or if line-3 state = blank and line-2 = line ,line-1 = nonblank ,len<=...
+    " a state dict contains last status.
+    let b:state = {'sectchecker':[],'listchecker':[],'expchecker':[],'blockchecker':[],'tablechecker':[],'lastlines':[],'lastblank':0, 'matcher':[]}
+    for i in range(0,line('$'))
+        call s:check(b:state, getline(i),i)
+    endfor
+    call s:set(b:state,i)
+    
+    
+endfun
+fun! s:set(state_dic,lnum)
+    " set the buf[lnum] and it's previous line's state.
+    " also consider the g: options
+    
+
+endfun
+fun! s:state(stat)
+        let chk = get(s.sectchecker,-1,[''])
+        if chk[0] == '3sect' 
+            if chk[1] == row-1 
+                if len(chk[2]) < len(line)
+                    call remove(s.checker, -1)
+                endif
+            elseif chk[1] == row-2 && chk[2]==line
+                call add(s.matcher,  ['3sect', chk[1], line[0]])
+                call remove(s.checker, -1)
+            else
+                call remove(s.checker, -1)
+            endif
+        endif
+        let chk = get(s.checker,-1,[''])
+        if chk[0] =='_exp'
+            if line=~'^\s' && row > chk[1]+1
+                call add(s.matcher,  ['exp', chk[1], row-1 ,s.lastblank])
+                call remove(s.checker, -1)
+            endif
+        endif
+        let chk = get(s.checker,-1,[''])
+        while chk[0] == '_list' 
+            let idt=s:indent(line)
+            if  idt< chk[2] || idt==0
+                if row > chk[1]+1
+                    call add(s.matcher,  ['list', chk[1], row-1 ,chk[2]])
+                endif
+                call remove(s.checker, -1)
+            elseif empty(s.checker)
+                break
+            else
+                break
+            endif
+            let chk = get(s.checker,-1,[''])
+        endwhile
+        let chk = get(s.checker,-1,[''])
+        if chk[0] =='table'
+            if line!~g:_RIV_p.tbl
+                call add(s.matcher,  ['table', chk[1], row-1 ])
+                call remove(s.checker, -1)
+            endif
+        endif
+        let chk = get(s.checker,-1,[''])
+        if chk[0] =='_block'
+            if s:indent(line)<chk[2]
+                call add(s.matcher,  ['block', chk[1], row-1 ])
+                call remove(s.checker, -1)
+            endif
+        endif
+endfun
+fun! s:check(stat_dic,line,row) "{{{
+    " check and set the state and return the value dict.
+    let s = a:stat_dic
+    let line = a:line
+    let row = a:row
+    if line=~'^\s*$'
+        let s.lastblank = row
+        return
+    else
+        let s.lastnonblank = row
+    endif
+                
+    if line=~g:_RIV_p.section "{{{
+        " check with 3 line section
+        if s.lastblank == row-1
+            " let s.sectchecker=  ['_3sect',row,line]
+            call add(s.sectchecker,  ['3sect', row-1, line[0]])
+        elseif s.lastblank == row-2
+            " check with 2 line section
+            " if len(s.lastline) < len(line)
+            let s.sectchecker=  ['_3sect',row,line]
+            call add(s.sectchecker,  ['2sect', row-1, line[0]])
+            " endif
+            " call add(s.checker,  ['_2sect',row,line])
+        endif
+    elseif line=~g:_RIV_p.list
+        " check the list's ends
+        " ends with line indent < this
+        call add(s.listchecker,  ['_list',row,s:indent(line)])
+    elseif line=~g:_RIV_p.exp_m
+        " check the exp's ends
+        " ends with '^\S'
+        call add(s.expchecker,  ['_exp',row])
+    elseif line=~g:_RIV_p.tbl && !empty(s.tablechecker) && s.tablechecker[-1][0] !='table'
+        call add(s.tablechecker,  ['table',row])
+    elseif line=~'[^:]::\s*$'
+        " check the block's ends
+        " ends with line indent < this
+        call add(s.blockchecker,  ['_block',row,s:indent(line)])
+    endif "}}}
+endfun "}}}
+fun! s:indent(line)
+    return strdisplaywidth(strpart(a:line, 0, match(a:line,'\S')))
+endfun
 let &cpo = s:cpo_save
 unlet s:cpo_save

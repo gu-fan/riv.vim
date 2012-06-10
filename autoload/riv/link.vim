@@ -132,7 +132,85 @@ fun! s:find_ref_tar(text) "{{{
     endif
     return [sr,sc,type]
 endfun "}}}
-fun! riv#link#parse() "{{{
+fun! s:matchobject(str, ptn,...) "{{{
+    if a:0
+        let start = a:1
+    else
+        let start = 0
+    endif
+    let s = {}
+    let idx = match(a:str,a:ptn,start)
+    if idx == -1
+        return s
+    endif
+    let s.start  = idx
+    let s.groups = matchlist(a:str,a:ptn,start)
+    let s.str    = s.groups[0]
+    let s.end    = s.start + len(s.str)
+    return s
+endfun "}}}
+fun! riv#link#open2()
+    let [row,col] = getpos('.')[1:2]
+    let line = getline(row)
+    let ptn = g:_RIV_p.all_link
+    let mo = s:matchobject(line, ptn)
+    while !empty(mo)
+        if mo.end < col
+            let mo = s:matchobject(line,ptn, mo.end)
+        elseif mo.start <= col && mo.end >= col
+            break
+        elseif mo.start > col
+            return 
+        endif
+    endwhile
+    if empty(mo)
+        return
+    endif
+    if !empty(mo.groups[1])
+        let [sr,sc,type] = s:find_ref_tar(mo.str)
+        if sr != 0
+            call setpos("'`",getpos('.'))
+            call setpos('.',[0,sr,sc,0])
+            return 2
+        endif
+    elseif !empty(mo.groups[2])
+        let [sr,sc,type] = s:find_ref_def(mo.str)
+        if sr != 0
+            call setpos("'`",getpos('.'))
+            call setpos('.',[0,sr,sc,0])
+            return 1
+        endif
+    elseif !empty(mo.groups[3])
+        if !empty(mo.groups[4])
+            if mo.str =~ '^file'
+                exe "edit ".expand(mo.groups[4])
+            else
+                " vim will expand the # and % , so escape it.
+                sil! exe "!".g:riv_web_browser." ". escape(mo.groups[4],'#%')." &"
+            endif
+        else
+            sil! exe "!".g:riv_web_browser." ". escape(mo.groups[3],'#%')." &"
+        endif
+        return 3
+    elseif !empty(mo.groups[5])
+        " NOTE: link have used sub 1 and 2
+        if mo.str !~ '^[/~]'
+            let dir = expand('%:p:h')
+            let file = dir . '/' . mo.str
+            if file=~'/$'
+                if !isdirectory(file) && input("Directory Not Exists , Create One?", 1)
+                    call mkdir(file,"p",0755)
+                endif
+                let file = file."index.rst"
+            endif
+        else
+            let file = expand(mo.str)
+        endif
+        exe "edit ".file
+        return 4
+    endif
+endfun
+fun! riv#link#open() "{{{
     let [row,col] = getpos('.')[1:2]
     let ptn = g:_RIV_p.link_tar
     let line = getline(row)
@@ -149,7 +227,7 @@ fun! riv#link#parse() "{{{
     endif
     
     " get ref
-    let ptn = g:_RIV_p.link_def
+    let ptn = g:_RIV_p.link_ref
     let links = matchlist(line,ptn)
     if !empty(word)
         let [sr,sc,type] = s:find_ref_tar(word)
@@ -162,12 +240,12 @@ fun! riv#link#parse() "{{{
     
     
     " get link
-    let ptn = g:_RIV_p.link
+    let ptn = g:_RIV_p.link_uri
     let links = matchlist(line,ptn)
     let idx = match(line,ptn)
     while !empty(links) 
         if col>=idx && col <=idx+len(links[0])
-            if !empty(lines[1])
+            if !empty(links[1])
             " match the link with file:// or http:// part.
                 if links[1] =~ 'file'
                     exe "edit ".expand(links[2])
@@ -221,14 +299,14 @@ fun! riv#link#parse() "{{{
     return 0
 endfun "}}}
 " highlight
-fun! riv#link#hi_cursor() "{{{
+fun! riv#link#hi_hover() "{{{
     let [l,c] = getpos('.')[1:2]
     let line = getline(l)
     let bgn = match(line, g:_RIV_p.all_link)
     if bgn!=-1
         let end = matchend(line, g:_RIV_p.all_link)
         while bgn!=-1 
-            if c<= end && c>=bgn
+            if c<= end && c>=bgn+1
                 execute '2match' "Error".' /\%'.(l)
                             \.'l\%>'.(bgn) .'c\%<'.(end+1).'c/'
                 return

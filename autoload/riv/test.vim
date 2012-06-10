@@ -32,21 +32,37 @@ function! riv#test#timer(func,...) "{{{
 
     return rtn
 endfunction "}}}
-
+fun! riv#test#log(msg) "{{{
+    
+    let log =  "Time:". strftime("%Y-%m-%d %H:%M")
+    " write time to log.
+    let file = expand("~/Desktop/test.log")
+    if filereadable(file)
+        let lines = readfile(file)
+    else
+        let lines = []
+    endif
+    call add(lines, log)
+    if type(a:msg) == type([])
+        call extend(lines, a:msg)
+    else
+        call add(lines, a:msg)
+    endif
+    call writefile(lines, file)
+endfun "}}}
 fun! riv#test#fold(...) "{{{
     let line=line('.')
-    let c = 1
-    let d = 1
     let o_t = s:time()
     if a:0>0 && a:1==0
         for i in range(1,line('$'))
-            let fdl = riv#fold#expr_t(i)
+            let fdl = riv#fold#expr(i)
         endfor
         echo "Total time: " (s:time()-o_t)
+        let t = "1"
     else
         echo "row\texpr\tb:fdl\tb:bef_ex\tb:in_exp\tb:in_lst\tb:bef_lst"
         for i in range(1,line('$'))
-            let fdl = riv#fold#expr_t(i)
+            let fdl = riv#fold#expr(i)
             if i>= line-10 && i <= line+10
                 echo i."\t".fdl
                 if exists("b:foldlevel")
@@ -75,28 +91,21 @@ fun! riv#test#fold(...) "{{{
                     echon " \tN/A      " 
                 endif
                 if line == i
-                    echon " \t" ">> CursorLine"
+                    echon " \t" ">> cur"
                 endif
-            endif
-            if exists("b:signal") && a:0>0 && a:1>0
-                if b:signal == 1
-                    echo  c "check .. " getline(i)
-                    let c = c+1
-                elseif b:signal == 2
-                    echo  d "check \\s " getline(i+1)
-                    let d = d+1
-                endif
-                echo i ": " (s:time()-o_t)
             endif
             if a:0>0 && a:1>1
                 echo i ":" (s:time()-o_t)
             endif
         endfor
-        echo "\\s check: " c
-        echo ".. check: "  d
-        echo "TOTAL check: " (c+d)
         echo "Total time: " (s:time()-o_t)
+        let t = "2"
     endif
+
+    let log =   [" File:" . expand('%:p') . "  TestFold :".t, 
+               \ " Total time: " . string((s:time()-o_t)) 
+               \]
+    call riv#test#log(log)
 endfun "}}}
 fun! riv#test#buf()
     

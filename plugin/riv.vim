@@ -39,7 +39,15 @@ fun! s:default_opt(opt_dic) "{{{
 endfun "}}}
 fun! s:default_map(map_dic) "{{{
     for [name,action] in items(a:map_dic)
-        sil! exe "map <silent> <Plug>".name." ".action
+        sil! exe "com! ".name." ".action
+        sil! exe "map <silent> <Plug>".name." :".action."<CR>"
+    endfor
+endfun "}}}
+fun! s:menu(menu_list) "{{{
+    for [name ,short, action] in a:menu_list
+        let short  = short =~'  ' ? short : "<tab>".g:riv_buf_leader.short
+        let action = action=~'  ' ? ' :' : '  <Plug>'.action
+        exe "75 amenu RIV.".  name . short. action
     endfor
 endfun "}}}
 fun! s:set_proj(proj) "{{{
@@ -104,9 +112,9 @@ let g:riv_project = !exists("g:riv_project") ? s:set_proj(g:riv_proj_temp) :
 " 1     on
 let s:default = {}
 let s:default.opts = {
-    \'leader'               : '<leader>',
-    \'buf_leader'           : '<c-e>',
-    \'buf_ins_leader'       : '<c-e>',
+    \'leader'               : '<C-E>',
+    \'buf_leader'           : '<C-E>',
+    \'buf_ins_leader'       : '<C-E>',
     \'ext_ptn'              : ['vim', 'cpp', 'c', 'py', 'rb', 'lua', 'pl'],
     \'hl_code'              : ["lua","python","cpp","c","javascript","vim","sh"],
     \'todo_levels'          : [' ','o','X'],
@@ -116,30 +124,87 @@ let s:default.opts = {
     \'fold_show_blank_line' : 2,
     \'fold_level'           : 3,
     \'list_toggle_type'     : "*,#.,(#)",
+    \'localfile_linktype'   : 0,
+    \'web_browser'          : "firefox",
+    \'options'              : s:default,
     \}
 let s:default.maps = {
-    \'RivIndex'          : ':call <SID>exe_proj("index")<CR>',
-    \'RivLinkOpen'       : ':call riv#link#parse()<CR>',
-    \'RivLinkForward'    : ':call riv#link#finder("f")<CR>',
-    \'RivLinkBackward'   : ':call riv#link#finder("b")<CR>',
-    \'RivLinkDBClick'    : ':call riv#action#db_click("b")<CR>',
-    \'RivListShiftFor'      : ':call riv#list#shift("+")<CR>',
-    \'RivListShiftBack'  : ':call riv#list#shift("-")<CR>',
-    \'RivListTodo'       : ':call riv#list#tog_box()<CR>',
-    \'RivListType1'      : ':call riv#list#tog_typ(0)<CR>',
-    \'RivListType2'      : ':call riv#list#tog_typ(1)<CR>',
-    \'RivListType3'      : ':call riv#list#tog_typ(2)<CR>',
-    \'RivListType0'      : ':call riv#list#tog_typ(3)<CR>',
-    \'RivCreateFootnote' : ':call riv#link#create("footnote",1)<CR>',
-    \'RivTestReload'     : ':let g: rst_force=1 | set ft=rst | let g:rst_force=0<CR>',
-    \'RivTestFold'       : ':call riv#test#fold(0)<CR>',
-    \'RivTestInsert'     : ':call riv#test#insert_idt(0)<CR>',
-    \'RivTableFormat'    : ':call riv#table#format()<CR>',
+    \'RivIndex'          : 'call <SID>exe_proj("index")',
+    \'RivLinkOpen'       : 'call riv#link#open2()',
+    \'RivLinkForward'    : 'call riv#link#finder("f")',
+    \'RivLinkBackward'   : 'call riv#link#finder("b")',
+    \'RivLinkDBClick'    : 'call riv#action#db_click()',
+    \'RivListShiftFor'   : 'call riv#list#shift("+")',
+    \'RivListShiftBack'  : 'call riv#list#shift("-")',
+    \'RivListTodo'       : 'call riv#list#tog_box()',
+    \'RivListType1'      : 'call riv#list#tog_typ(0)',
+    \'RivListType2'      : 'call riv#list#tog_typ(1)',
+    \'RivListType3'      : 'call riv#list#tog_typ(2)',
+    \'RivListType0'      : 'call riv#list#tog_typ(3)',
+    \'RivCreateFootnote' : 'call riv#link#create("footnote",1)',
+    \'RivTestReload'     : 'let g:riv_force=1 | set ft=rst | let g:riv_force=0',
+    \'RivTestFold0'      : 'call riv#test#fold(0)',
+    \'RivTestFold1'      : 'call riv#test#fold(1)',
+    \'RivTestInsert'     : 'call riv#test#insert_idt(0)',
+    \'RivTableFormat'    : 'call riv#table#format()',
     \}
+
+" buf maps "{{{
+let s:default.buf_maps = {
+    \'RivLinkOpen'       : [['<CR>', '<KEnter>'],  'n',  'lo'],
+    \'RivLinkForward'    : ['<TAB>',  'n',  'lf'],
+    \'RivLinkBackward'   : ['<S-TAB>',  'n',  'lb'],
+    \'RivLinkDBClick'    : ['<2-LeftMouse>',  '',  ''],
+    \'RivListShiftFor'   : [['>', '<C-ScrollwheelDown>' ],  'mi',  'eu'],
+    \'RivListShiftBack'  : [['<', '<C-ScrollwheelUp>'],  'mi',  'ed'],
+    \'RivListTodo'       : ['',  'mi',  'ee'],
+    \'RivListType1'      : ['',  'mi',  'e1'],
+    \'RivListType2'      : ['',  'mi',  'e2'],
+    \'RivListType3'      : ['',  'mi',  'e3'],
+    \'RivListType0'      : ['',  'mi',  'e`'],
+    \'RivCreateFootnote' : ['',  'mi',  'cf'],
+    \'RivTableFormat'    : ['',  'n',   'tf'],
+    \'RivTestReload'     : ['',  'm',   'tr'],
+    \'RivTestFold0'      : ['',  'm',   't1'],
+    \'RivTestFold1'      : ['',  'm',   't2'],
+    \'RivTestInsert'     : ['',  'm',   'ti'],
+    \}
+let s:default.buf_imaps = {
+    \'<BS>'    : 'riv#action#ins_bs()',
+    \'<CR>'    : 'riv#action#ins_enter()',
+    \'<Tab>'   : 'riv#action#ins_tab()',
+    \'<S-Tab>' : 'riv#action#ins_stab()',
+    \}
+let s:default.menus = [
+    \['Index'           ,  'rr',   'RivIndex'],
+    \['--Action--'        ,  '  ',   '  '],
+    \['Link.Open'       ,  'lo',  'RivLinkOpen'],
+    \['Link.Forward'    ,  'lf',  'RivLinkForward'],
+    \['Link.Backward'   ,  'lb',  'RivLinkBackward'],
+    \['Link.DBClick'    ,  '  ',  'RivLinkDBClick'],
+    \['List.ShiftFor'   ,  'eu',   'RivListShiftFor'],
+    \['List.ShiftBack'  ,  'ed',   'RivListShiftBack'],
+    \['List.Todo'       ,  'ee',   'RivListTodo'],
+    \['List.Type1'      ,  'e1',   'RivListType1'],
+    \['List.Type2'      ,  'e2',   'RivListType2'],
+    \['List.Type3'      ,  'e3',   'RivListType3'],
+    \['List.Type0'      ,  'e`',   'RivListType0'],
+    \['Create.Footnote' ,  'cf',   'RivCreateFootnote'],
+    \['Table.Format'    ,  'tf',    'RivTableFormat'],
+    \['--Test---'        ,  '  ',    '  '],
+    \['Test.Reload'     ,  'tr',   'RivTestReload'],
+    \['Test.Fold0'      ,  't1',   'RivTestFold0'],
+    \['Test.Fold1'      ,  't2',   'RivTestFold1'],
+    \['Test.Insert'     ,  'ti',   'RivTestInsert'],
+    \]
+"}}}
 call s:default_opt(s:default.opts)
 call s:default_map(s:default.maps)
+call s:menu(s:default.menus)
+menu disable RIV.*
+menu enable RIV.Index
 
-exe "map <silent>". g:riv_leader . "rr <Plug>RivIndex"
+exe "map <silent>". g:riv_buf_leader . "rr <Plug>RivIndex"
 
 map <silent> <leader>rr <Plug>RivIndex
 if !exists("g:_RIV_c") "{{{
@@ -195,6 +260,9 @@ if !exists("g:_RIV_c") "{{{
     let g:_RIV_p.list = '\v\c^\s*%([-*+]'
                 \.'|%(\d+|[#a-z]|[imcxv]+)[.)]'
                 \.'|\(%(\d+|[#a-z]|[imcxv]+)\))\s+'
+    let g:_RIV_p.list_sym = '\v\c^\s*\zs%([-*+]'
+                \.'|%(\d+|[#a-z]|[imcxv]+)[.)]'
+                \.'|\(%(\d+|[#a-z]|[imcxv]+)\))\ze\s+'
     let g:_RIV_p.field_list= '^\s*:[^:]\+:\s\+\ze\S.\+[^:]$'
     let g:_RIV_p.list_or_exp_or_S = g:_RIV_p.list.'|^\s*\.\.\s|^\S'
 
@@ -229,36 +297,47 @@ if !exists("g:_RIV_c") "{{{
     " URI
     " http://xxx.xxx.xxx file:///xxx/xxx/xx
     " mailto:xxx@xxx.xxx
-    let g:_RIV_p.link = '\v(%(file|https=|ftp|gopher)://|%(mailto|news):)([^[:space:]''\"<>]+[[:alnum:]/])'
-                \.'|www[[:alnum:]_-]*\.[[:alnum:]_-]+\.[^[:space:]''\"<>]+[[:alnum:]/]'
-    " inline link patterns
-    " `xxxx  <URL>`
     " standlone link patterns
     " www.xxx-x.xxx/?xxx
+    let g:_RIV_p.link_uri = '\v(%(%(file|https=|ftp|gopher)://|%(mailto|news):)([^[:space:]''\"<>]+[[:alnum:]/])'
+                \.'|www[[:alnum:]_-]*\.[[:alnum:]_-]+\.[^[:space:]''\"<>]+[[:alnum:]/])'
+
+
+    " inline link patterns
+    " `xxxx  <URL>`
 
     let g:_RIV_p.file_ext= join(s:normlist(g:riv_ext_ptn),'|')
-    let g:_RIV_p.link_file = '\v([[:alnum:]~:./_-]+'
-                \.'%(\.%(rst|'. g:_RIV_p.file_ext .')|/))\S@!'
-    " ref target patterns
+    if g:riv_localfile_linktype == 1
+        let g:_RIV_p.link_file = '\v\S@<!\[([[:alnum:]~:./_-]+'
+                    \.'%(\.%(rst|'. g:_RIV_p.file_ext .')|/))\]\S@!'
+    else
+        let g:_RIV_p.link_file = '\v\S@<!([[:alnum:]~:./_-]+'
+                    \.'%(\.%(rst|'. g:_RIV_p.file_ext .')|/))\S@!'
+    endif
+    " ref reference
     " [xxx]_  xxx_ `xxx xx`_
-    let g:_RIV_p.link_tar= '\v%(\_s\zs|^)'
-                \.'%(\`[[:alnum:]. -]+`_'
+    let g:_RIV_p.link_ref = '\v%(\_s\zs|^)'
+                \.'(\`[[:alnum:]. -]+`_'
                 \.'|[[:alnum:].-_]+_'
                 \.'|\[[[:alnum:].-_]+\]_)'
                 \.'\ze%(\_s|$)'
-    " ref definition patterns
+    " ref target patterns
     " .. _xxx :
     " .. [xxx]
     " _`xxx xxx`
-    let g:_RIV_p.link_def = '\v_`\[=\zs[0-9a-zA-Z]*\ze\]=`'
-                \.'|^\.\.\s%(_\zs[[:alnum:]_.-]+\ze\s+:'
-                \.'|\[\zs[[:alnum:]]+\ze\])'
+    let g:_RIV_p.link_tar = '\v(_`\[=\zs[0-9a-zA-Z]*\ze\]=`'
+                \.'|^\.\.\s%(_\zs[[:alnum:]_.-]+\ze\s+:|\[\zs[[:alnum:]]+\ze\]))'
 
-    let g:_RIV_p.link_grp = [g:_RIV_p.link, g:_RIV_p.link_file, g:_RIV_p.link_def, g:_RIV_p.link_tar]
-
-    let g:_RIV_p.all_link = g:_RIV_p.link . '|' . g:_RIV_p.link_file
-                \ . '|' . g:_RIV_p.link_tar
-                \ . '|' . g:_RIV_p.link_def
+    let g:_RIV_p.link_grp = [g:_RIV_p.link_uri, g:_RIV_p.link_file, g:_RIV_p.link_ref, g:_RIV_p.link_tar]
+    " sub match
+    " 1 link_tar
+    " 2 link_def
+    " 3 link_uri
+    " 4 link_uri_body
+    " 5 link_file
+    "
+    let g:_RIV_p.all_link = g:_RIV_p.link_tar . '|' . g:_RIV_p.link_ref
+                 \ . '|' .  g:_RIV_p.link_uri . '|' . g:_RIV_p.link_file
 
     let g:_RIV_t = {}
     " if g:riv_fold_show_blank_line == 1

@@ -223,7 +223,6 @@ class GetTable:
                     del buf[row]
             if lines:
                 buf.append(lines, end)
-            vim.command("let b:rst_table['" + str(bgn) + "'] = '"+ repr(self.table) + "'")
                            
     def add_line(self,row="1"):
         if self.table:

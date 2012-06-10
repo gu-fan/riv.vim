@@ -7,21 +7,23 @@
 " Version: 0.5
 "=============================================
 
-let g:rst_force = exists("g:rst_force") ? g:rst_force : 0
-if exists("b:did_rstftplugin") && g:rst_force == 0 | finish | endif
+let g:riv_force = exists("g:riv_force") ? g:riv_force : 0
+if exists("b:did_rstftplugin") && g:riv_force == 0 | finish | endif
 let b:did_rstftplugin = 1
 let s:cpo_save = &cpo
 set cpo-=C
 " settings {{{
-setl foldmethod=expr foldexpr=riv#fold#expr() foldtext=riv#fold#text()
+setl foldmethod=expr foldexpr=riv#fold#expr(v:lnum) foldtext=riv#fold#text()
 setl comments=fb:.. commentstring=..\ %s expandtab
 setl formatoptions+=tcroql
 let b:undo_ftplugin = "setl fdm< fde< fdt< com< cms< et< fo<"
             \ "| unlet! b:dyn_sec_list b:foldlevel b:fdl_before_exp b:fdl_cur_list"
-            \ "| unlet! b:fdl_before_list b:rst_table"
+            \ "| unlet! b:fdl_before_list b:riv"
             \ "| mapc <buffer>"
+            \ "| menu disable RIV.*"
+            \ "| menu enable RIV.Index"
 " for table init
-let b:rst_table={}
+let b:riv={}
 "}}}
 if !exists("*s:map") "{{{
 fun! s:imap(map_dic) "{{{
@@ -54,42 +56,18 @@ fun! s:map(map_dic) "{{{
     endfor
 endfun "}}}
 endif "}}}
-"
-let s:maps = {
-    \'RivLinkOpen'       : [['<CR>', '<KEnter>'],  'n',  'lo'],
-    \'RivLinkForward'    : ['<TAB>',  'n',  'lf'],
-    \'RivLinkBackward'   : ['<S-TAB>',  'n',  'lf'],
-    \'RivLinkDBClick'    : ['<2-LeftMouse>',  '',  ''],
-    \'RivListShiftFor'   : [['>', '<C-ScrollwheelUp>' ],  'mi',  'eu'],
-    \'RivListShiftBack'  : [['<', '<C-ScrollwheelDown>'],  'mi',  'ed'],
-    \'RivListTodo'       : ['',  'mi',  'ee'],
-    \'RivListType1'      : ['',  'mi',  'e1'],
-    \'RivListType2'      : ['',  'mi',  'e2'],
-    \'RivListType3'      : ['',  'mi',  'e3'],
-    \'RivListType0'      : ['',  'mi',  'e`'],
-    \'RivCreateFootnote' : ['',  'mi',  'cf'],
-    \'RivTableFormat'    : ['',  'n',   'tf'],
-    \'RivTestReload'     : ['',  'm',   'TR'],
-    \'RivTestFold'       : ['',  'm',   'TF'],
-    \'RivTestInsert'     : ['',  'm',   'TI'],
-    \}
-let s:imaps = {
-    \'<BS>'    : 'riv#action#ins_bs()',
-    \'<CR>'    : 'riv#action#ins_enter()',
-    \'<Tab>'   : 'riv#action#ins_tab()',
-    \'<S-Tab>' : 'riv#action#ins_stab()',
-    \}
 
+call s:imap(g:riv_options.buf_imaps)
+call s:map(g:riv_options.buf_maps)
+menu enable RIV.*
 
-call s:imap(s:imaps)
-call s:map(s:maps)
 
 if exists("g:riv_auto_format_table") "{{{
     au! InsertLeave <buffer> call riv#table#format_pos()
 endif "}}}
 if exists("g:riv_hover_link_hl") "{{{
     " cursor_link_highlight
-    au! CursorMoved,CursorMovedI <buffer>  call riv#link#hi_cursor()
+    au! CursorMoved,CursorMovedI <buffer>  call riv#link#hi_hover()
     " clear the highlight before bufwin/winleave
     au! WinLeave,BufWinLeave     <buffer>  2match none
 endif "}}}

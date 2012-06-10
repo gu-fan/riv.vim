@@ -9,8 +9,7 @@ let s:cpo_save = &cpo
 set cpo-=C
 
 " my settings
-exe 'syn match rstFileLink `\v%([~0-9a-zA-Z:./_-]+%(\.%(rst|'. 
-            \ g:_RIV_p.file_ext .')|/))\S@!`'
+exe 'syn match rstFileLink `'.g:_RIV_p.link_file.'`'
 
 syn cluster rstCommentGroup add=@rstLinkGroup
 
