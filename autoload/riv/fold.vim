@@ -2,7 +2,7 @@
 "    Name: fold.vim
 "    File: fold.vim
 "  Author: Rykka G.Forest
-"  Update: 2012-06-07
+"  Update: 2012-06-10
 " Version: 0.5
 "=============================================
 let s:cpo_save = &cpo
@@ -167,38 +167,120 @@ fun! riv#fold#expr() "{{{
     return b:foldlevel
     
 endfun "}}}
-fun! riv#fold#expr_t(row) "{{{
+fun! riv#fold#text() "{{{
+    " style 1
+    " SECTION 1  .....          [ 20  ]  
+    " LIST    1  .....          [ 20  ]  
+    "
+    " style 2
+    " .....             [SECT 1   20+]  
+    " [SECT  1      12+]
+    " [TABLE <4x3>   5+]
+    " [LIST  #       6+]
+    "
+    " style 3   
+    " [S   1    12+]
+    " [T  2x3    5+]
+    " [L   *     6+]
+
+
+    " NOTE: if it's three row title. show the content of next line.
+    let lnum = v:foldstart
+    let line = getline(lnum)
+    let foldnum = (v:foldend-lnum)
+    let cate = "     "
+    if has_key(b:riv,lnum)
+        if b:riv[lnum].typ == 'sect'
+            let cate = "S  ". b:riv[lnum].level
+            if b:riv[lnum].row==3
+                let line = getline(lnum+1)
+            endif
+        elseif b:riv[lnum].typ == 'list'
+            let cate = "L ".b:riv[lnum].attr.b:riv[lnum].level
+        elseif b:riv[lnum].typ == 'table'
+            let col = len(split(line,'+',1))-2
+            let row = len(filter(getline(lnum,v:foldend),'v:val=~''^\s*+'''))-1
+            let cate = "T " . col.'x'.row
+            let line = getline(lnum+1)
+        elseif b:riv[lnum].typ == 'spl_table'
+            let col =   len(split(line,'\s\+',1))-2
+            let cate = "ST " . col.'x'.foldnum
+            let line = getline(lnum+1)
+        elseif b:riv[lnum].typ == 'exp'
+            let cate = ".. "
+        endif
+        let cate = printf('%-6s', cate)
+    endif
+    let m_line = winwidth(0)-13
+    if len(line) <= m_line
+        let line = line."  ".repeat('-',m_line) 
+    endif
+    let line = printf("%-".m_line.".".(m_line)."s",line)
+    let num = printf("%5s",foldnum."+")
+    return line."[".cate.num."]"
+endfun "}}}
+fun! riv#fold#parse() "{{{
+    exe g:_RIV_c.py "t = RivBuf().parse()[1]"
+endfun "}}}
+fun! riv#fold#expr(row) "{{{
     
     let c_line = getline(a:row)
     let n_line = getline(a:row+1)
 
     if a:row == 1 
         let b:dyn_sec_list = []
+        " TODO: use bit to check status
+        "  list 0x8 exp 0x4 tbl 0x2 spl 0x1
+        let b:is_stat = 0x0
         let [b:fdl_before_list, b:fdl_before_exp,  
-            \b:foldlevel,       b:is_in_list,       b:is_in_exp , 
-            \b:is_in_spl_tbl,   b:fdl_before_tbl] = [0,0,0,0,0,0,0]
+            \b:foldlevel,       b:is_in_list,     b:is_in_exp , 
+            \b:is_in_spl_tbl,   b:fdl_before_tbl, b:is_in_tbl ] = [0,0,0,0,0,0,0,0]
+        let b:riv = {}
     endif
     
+
+
+    " section title line
+    if has_key(b:riv,a:row)
+        return b:foldlevel
+    endif
+
     " List : depends on indent "{{{
     " Can contain exp_markup , can not be exp_m contained.
-    if c_line =~ g:_RIV_p.list && b:is_in_exp==0
-        let nnb_num = nextnonblank(a:row+1)
-        if indent(a:row) < indent(nnb_num)
-            " some are 2, some are 3..
-            " don't update fdl_before if in a fdl list.
-            if b:is_in_list==0
-                let b:fdl_before_list =  b:foldlevel
-                let b:is_in_list = 1
+    " if  b:is_in_exp==0 
+    if !and(b:is_stat, 4)
+        let attr = matchstr(c_line, g:_RIV_p.list_sym) 
+        if !empty(attr)
+            " let b:is_in_tbl=0
+            let b:is_stat = and(b:is_stat, 12)
+            let nnb_num = nextnonblank(a:row+1)
+            let c_idt = indent(v:lnum)
+            if c_idt < indent(nnb_num)
+                " some are 2, some are 3..
+                " don't update fdl_before if in a fdl list.
+                " if b:is_in_list==0
+                if !and(b:is_stat, 8)
+                    let b:fdl_before_list =  b:foldlevel
+                    " let b:is_in_list = 1
+                    let b:is_stat = or(b:is_stat, 8)
+                endif
+                let b:foldlevel = c_idt/2 + 8
+                let b:riv[a:row] = {'typ': 'list', 'fdl': b:foldlevel,
+                            \'attr': attr , 'level':(c_idt/2+1)}
+                return '>'.b:foldlevel
             endif
-            let b:foldlevel = indent(a:row)/2 + 8
-            return '>'.b:foldlevel
         endif
     endif
     "}}}
     if (c_line=~g:_RIV_p.S_bgn) "{{{
+        " the 
         if c_line == ".." && n_line =~ g:_RIV_p.blank
+            " let b:is_in_tbl=0
+            let b:is_stat = and(b:is_stat, 13)
             return b:foldlevel
         endif
+        
+
         " ExplicitMarkup "{{{
         if c_line =~ g:_RIV_p.exp_m && n_line =~ g:_RIV_p.s_bgn
                     \ && getline(a:row+2) =~ g:_RIV_p.s_bgn
@@ -211,7 +293,12 @@ fun! riv#fold#expr_t(row) "{{{
                 let b:fdl_before_exp = b:foldlevel 
             endif
             let b:foldlevel = 15
-            let b:is_in_exp = 1
+            " let b:is_in_exp = 1
+            " let b:is_in_tbl=0
+            " 1100
+            let b:is_stat = and(b:is_stat, 12)
+            let b:is_stat = or(b:is_stat, 4)
+            let b:riv[a:row] = {'typ':'exp' , 'fdl': b:foldlevel}
             return ">15"
         endif "}}}
 
@@ -229,9 +316,15 @@ fun! riv#fold#expr_t(row) "{{{
                 let idx = len(b:dyn_sec_list)
             endif
             let b:foldlevel = idx
-            let [b:is_in_list, b:is_in_exp] = [ 0, 0]
+            " let [b:is_in_list, b:is_in_exp] = [ 0, 0]
+            " let b:is_in_tbl=0
+            let b:is_stat = and(b:is_stat, 0)
+            let t = {'typ':'sect', 'row':3,'fdl': idx , 'level':idx}
+            let b:riv[a:row]   = t
+            let b:riv[a:row+1] = t
+            let b:riv[a:row+2] = t
             return ">".idx
-        elseif !empty(n_match) && c_line !~ g:_RIV_p.blank 
+        elseif !empty(n_match) && empty(c_match) && c_line !~ g:_RIV_p.blank 
             \ && len(c_line) <= len(n_line)
             let p_line = getline(a:row-1)
             if p_line =~ g:_RIV_p.blank
@@ -241,7 +334,12 @@ fun! riv#fold#expr_t(row) "{{{
                     let idx = len(b:dyn_sec_list)
                 endif
                 let b:foldlevel = idx
-                let [b:is_in_list, b:is_in_exp] = [ 0, 0]
+                " let [b:is_in_list, b:is_in_exp] = [ 0, 0]
+                " let b:is_in_tbl=0
+                let b:is_stat = and(b:is_stat, 0)
+                let t = {'typ':'sect', 'row':2,'fdl': idx , 'level':idx}
+                let b:riv[a:row]   = t
+                let b:riv[a:row+1] = t
                 return ">".idx
             elseif p_line == n_line
             "  if prev line is same as next line. 
@@ -253,7 +351,9 @@ fun! riv#fold#expr_t(row) "{{{
                     let idx = len(b:dyn_sec_list)
                 endif
                 let b:foldlevel = idx
-                let [b:is_in_list, b:is_in_exp,b:is_in_spl_tbl] = [ 0, 0, 0]
+                " let [b:is_in_list, b:is_in_exp,b:is_in_spl_tbl] = [ 0, 0, 0]
+                let b:is_stat = and(b:is_stat, 0)
+                " let b:is_in_tbl=0
                 return idx
             endif
         endif "}}}
@@ -272,17 +372,24 @@ fun! riv#fold#expr_t(row) "{{{
     " no blank line
     " if (c_line=~g:_RIV_p.S_bgn) "{{{
 
+        " let b:is_in_tbl=0
+        let b:is_stat = and(b:is_stat, 12)
         " close exp"{{{
-        if b:is_in_exp==1
+        " if b:is_in_exp==1
+        if !and(b:is_stat, 4)
             let b:foldlevel = b:fdl_before_exp
-            let b:is_in_exp = 0
+            " let b:is_in_exp = 0
+            " 1000
+            let b:is_stat = and(b:is_stat, 8)
             return b:foldlevel
         endif "}}}
         " close list {{{
-        if b:is_in_list==1  && nnb_line!~g:_RIV_p.exp_m
+        " if b:is_in_list==1  && nnb_line!~g:_RIV_p.exp_m
+        if !and(b:is_stat, 8)  && nnb_line!~g:_RIV_p.exp_m
         " clean when nnb is not exp_m to contain exp in list.
             let b:foldlevel = b:fdl_before_list
-            let [b:is_in_list, b:is_in_exp] = [ 0, 0]
+            " let [b:is_in_list, b:is_in_exp] = [ 0, 0]
+            let b:is_stat = and(b:is_stat, 0)
             return b:foldlevel
         endif "}}}
         " close section
@@ -291,9 +398,23 @@ fun! riv#fold#expr_t(row) "{{{
     endif "}}}
     
     " fold the table "{{{
-    if c_line=~g:_RIV_p.tbl
-        return 10
+    if  c_line=~g:_RIV_p.tbl 
+        " if b:is_in_tbl==0
+        if !and(b:is_stat, 2)
+            let b:fdl_before_tbl = b:foldlevel
+            let b:foldlevel = 10
+            " let b:is_in_tbl=1
+            " 0010
+            let b:is_stat = or(b:is_stat, 2)
+            let b:riv[a:row] = {'typ': 'table', 'fdl': b:foldlevel }
+            return b:foldlevel
+        endif
+    else
+        " let b:is_in_tbl=0
+        " 1101
+        let b:is_stat = and(b:is_stat, 13)
     endif "}}}
+
 
     " fold simple table  "{{{
     " for simple table . we should find the last line of the three or two
@@ -317,44 +438,6 @@ fun! riv#fold#expr_t(row) "{{{
     " XXX:  could not using foldlevel cause it returns -1
     return b:foldlevel
     
-endfun "}}}
-fun! riv#fold#text() "{{{
-    " NOTE: if it's three row title. show the content of next line.
-    let line = getline(v:foldstart)
-
-    let cate = " "
-    if line =~ g:_RIV_p.section 
-        let line = getline(v:foldstart+1)
-        let cate = "T"
-    elseif getline(v:foldstart+1) =~ g:_RIV_p.section 
-        let cate = "S"
-    endif
-    if line=~g:_RIV_p.tbl
-        if exists("b:rst_table[v:foldstart]")
-            let line = b:rst_table[v:foldstart]
-        else
-            let line = getline(v:foldstart+1)
-        endif
-        let cate = "T"
-    endif
-    if line=~g:_RIV_p.spl_tbl
-        let cate = "t"
-    endif
-    let m_line = winwidth(0)-11
-    if len(line) <= m_line
-        let line = line."  ".repeat('-',m_line) 
-    endif
-    let line = printf("%-".m_line.".".(m_line)."s",line)
-    if v:foldlevel <= 3
-        let dash = printf("%4s",repeat("<",v:foldlevel))
-    else
-        let dash = printf("%4s","<<+")
-    endif
-    let num = printf("%5s",(v:foldend-v:foldstart))
-    return line."[".cate.num.dash."]"
-endfun "}}}
-fun! riv#fold#parse() "{{{
-    exe g:_RIV_c.py "t = RivBuf().parse()[1]"
 endfun "}}}
 let &cpo = s:cpo_save
 unlet s:cpo_save
