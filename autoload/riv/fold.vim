@@ -698,7 +698,7 @@ fun! s:check(row) "{{{
     " add checker. "{{{
     let s = b:state
 
-    if line=~'[^:]::\s*$' && empty(s.e_chk)
+    if line=~'::\s*$' && empty(s.e_chk)
         let s.b_chk= {'row':row, 'indent': s:indent(line)}
     endif
     

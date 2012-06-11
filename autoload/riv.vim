@@ -275,7 +275,7 @@ if !exists("g:_RIV_c")
     let g:_RIV_p.s_bgn = '^\_s\|^$'
     let g:_RIV_p.S_bgn = '^\S'
 
-    let g:_RIV_p.literal_block= '[^:]::\s*$'
+    let g:_RIV_p.literal_block= '::\s*$'
 
     let g:_RIV_p.section = '^\v([=`:.''"~^_*+#-])\1+\s*$'
 
