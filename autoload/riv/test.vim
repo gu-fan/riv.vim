@@ -1,10 +1,15 @@
 "=============================================
 "    Name: test.vim
 "    File: test.vim
+" Summary: 
 "  Author: Rykka G.Forest
-"  Update: 2012-06-06
-" Version: 0.1
+"  Update: 2012-06-11
+" Version: 0.5
 "=============================================
+let s:cpo_save = &cpo
+set cpo-=C
+
+
 
 function! s:time() "{{{
     if has("reltime")
@@ -107,13 +112,20 @@ fun! riv#test#fold(...) "{{{
                \]
     call riv#test#log(log)
 endfun "}}}
-fun! riv#test#buf()
+fun! riv#test#buf() "{{{
     
     let o_t = s:time()
     call riv#fold#parse()
     echo "Total time: " (s:time()-o_t)
-endfun
+endfun "}}}
 fun! riv#test#insert_idt() "{{{
     " breakadd func riv#insert#indent
     echo riv#insert#indent(line('.'))
 endfun "}}}
+fun! riv#test#reload()
+    let g:riv_force=1 | set ft=rst | let g:riv_force=0
+    sil! runtime! autoload/riv/*.vim
+endfun
+
+let &cpo = s:cpo_save
+unlet s:cpo_save

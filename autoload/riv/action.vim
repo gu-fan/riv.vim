@@ -1,7 +1,7 @@
 "=============================================
 "    Name: action.vim
 "    File: action.vim
-" Summary: Do dirty things here.
+" Summary: simulate and fix some misc actions
 "  Author: Rykka G.Forest
 "  Update: 2012-06-08
 " Version: 0.5
@@ -15,9 +15,9 @@ fun! riv#action#db_click() "{{{
     let row = line('.')
     if foldclosed(row) != -1
         exe "normal! zv"
-    elseif !riv#link#open2()
-        if has_key(b:riv, row)
-            if b:riv[row].typ =='sect'
+    elseif !riv#link#open()
+        if has_key(b:fdl_dict, row)
+            if b:fdl_dict[row].type =='sect'
                 exe "normal! zc"
                 return
             endif
@@ -43,7 +43,7 @@ fun! riv#action#ins_bs() "{{{
 endfun "}}}
 fun! riv#action#ins_enter() "{{{
     let [row,col] = getpos('.')[1:2]
-    if getline('.') =~ g:_RIV_p.tbl
+    if getline('.') =~ g:_RIV_p.table
         let cmd  = "\<C-O>:call riv#table#newline()|"
         let cmd .= "call cursor(".(row+1).",".col.")|"
         let cmd .= "call search(g:_RIV_p.cel0,'Wbc')\<CR>"

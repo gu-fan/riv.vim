@@ -17,11 +17,11 @@ setl foldmethod=expr foldexpr=riv#fold#expr(v:lnum) foldtext=riv#fold#text()
 setl comments=fb:.. commentstring=..\ %s expandtab
 setl formatoptions+=tcroql
 let b:undo_ftplugin = "setl fdm< fde< fdt< com< cms< et< fo<"
-            \ "| unlet! b:dyn_sec_list b:foldlevel b:fdl_before_exp b:fdl_cur_list"
-            \ "| unlet! b:fdl_before_list b:riv"
-            \ "| mapc <buffer>"
-            \ "| menu disable RIV.*"
-            \ "| menu enable RIV.Index"
+        \ "| unlet! b:dyn_sec_list b:foldlevel b:fdl_before_exp b:fdl_cur_list"
+        \ "| unlet! b:fdl_before_list b:riv"
+        \ "| mapc <buffer>"
+        \ "| menu disable RIV.*"
+        \ "| menu enable RIV.Index"
 " for table init
 let b:riv={}
 "}}}

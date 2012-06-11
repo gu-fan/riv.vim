@@ -1,13 +1,14 @@
 "=============================================
 "    Name: list.vim
 "    File: list.vim
+" Summary: the bullet list and enum list
 "  Author: Rykka G.Forest
-" Summary: List Items
-"  Update: 2012-06-09
+"  Update: 2012-06-11
 " Version: 0.5
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
+
 
 
 fun! riv#list#tog_box(...) "{{{

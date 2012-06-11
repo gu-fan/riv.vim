@@ -9,40 +9,6 @@
 let s:cpo_save = &cpo
 set cpo-=C
 
-fun! riv#link#create(type,ask) "{{{
-    " return a link target and ref def.
-    let lines = []
-    let type = "footnote"
-    if type == "footnote"
-    " TODO: get buf last footnote.
-    " TODO: they should add at different position.
-    "       current and last.
-    "   
-    " put cursor in last line and start backward search.
-    " get the last footnote and return.
-
-        let id = riv#link#get_last_foot()[1] + 1
-        let line = getline('.') 
-
-        if line =~ g:_RIV_p.tbl
-            let tar = substitute(line,'\%' . col(".") . 'c' , ' ['.id.']_ ', '')
-        elseif line =~ '\S\@<!$'
-        " have \s before eol.
-            let tar = line."[".id."]_"
-        else
-            let tar = line." [".id."]_"
-        endif
-        if a:ask==1
-            let footnote = input("[".id."]: Your FootNote message is?\n")
-        else
-            let footnote = " $FootNote "
-        endif
-        let def = ".. [".id."] :  ".footnote
-        call setline(line('.'),tar)
-        call append(line('$'),def)
-    endif
-    " return lines
-endfun "}}}
 fun! riv#link#delte() "{{{
     " if we delete footnote. we need update all in buffer.
     if type == "footnote"
@@ -53,7 +19,6 @@ endfun "}}}
 fun! riv#link#get_foot_by_id(id) "{{{
     
 endfun "}}}
-
 fun! riv#link#get_last_foot() "{{{
     " return  [ id , row]
     let pos = getpos('.')
@@ -149,7 +114,7 @@ fun! s:matchobject(str, ptn,...) "{{{
     let s.end    = s.start + len(s.str)
     return s
 endfun "}}}
-fun! riv#link#open2()
+fun! riv#link#open() "{{{
     let [row,col] = getpos('.')[1:2]
     let line = getline(row)
     let ptn = g:_RIV_p.all_link
@@ -209,8 +174,8 @@ fun! riv#link#open2()
         exe "edit ".file
         return 4
     endif
-endfun
-fun! riv#link#open() "{{{
+endfun "}}}
+fun! riv#link#openb() "{{{
     let [row,col] = getpos('.')[1:2]
     let ptn = g:_RIV_p.link_tar
     let line = getline(row)
@@ -307,7 +272,7 @@ fun! riv#link#hi_hover() "{{{
         let end = matchend(line, g:_RIV_p.all_link)
         while bgn!=-1 
             if c<= end && c>=bgn+1
-                execute '2match' "Error".' /\%'.(l)
+                execute '2match' "rstLinkHover".' /\%'.(l)
                             \.'l\%>'.(bgn) .'c\%<'.(end+1).'c/'
                 return
             elseif bgn >= c
