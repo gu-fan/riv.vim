@@ -3,7 +3,7 @@
 "    File: after/syntax/rst.vim
 "  Author: Rykka G.Forest
 " Summary: syntax file with options.
-"  Update: 2012-06-07
+"  Update: 2012-06-12
 " Version: 0.5
 "=============================================
 let s:cpo_save = &cpo
@@ -48,11 +48,11 @@ syn match rstTodoTmsList `\v(\d{6}|\d{4}-\d{2}-\d{2})` contained
 " relink "{{{
 
 if &background == 'light'
-    hi rstFileLink    guifg=#71854D  gui=underline
-    hi rstLinkHover   guibg=#94CC7A  gui=underline
+    hi def rstFileLink    guifg=#437727  gui=underline
+    hi def rstLinkHover   guibg=#A9E597  gui=underline
 else
-    hi rstFileLink    guifg=#8EB87D  gui=underline
-    hi rstLinkHover   guibg=#425239  gui=underline
+    hi def rstFileLink    guifg=#58A261  gui=underline
+    hi def rstLinkHover   guibg=#494E2B  gui=underline
 endif
 
 hi def link rstTodoBoxList Include
