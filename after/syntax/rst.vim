@@ -49,10 +49,10 @@ syn match rstTodoTmsList `\v(\d{6}|\d{4}-\d{2}-\d{2})` contained
 
 if &background == 'light'
     hi def rstFileLink    guifg=#437727  gui=underline
-    hi def rstLinkHover   guibg=#A9E597  gui=underline
+    hi def rstLinkHover  ctermbg=gray guibg=#A9E597  gui=underline
 else
     hi def rstFileLink    guifg=#58A261  gui=underline
-    hi def rstLinkHover   guibg=#494E2B  gui=underline
+    hi def rstLinkHover  ctermbg=gray guibg=#494E2B  gui=underline
 endif
 
 hi def link rstTodoBoxList Include
