@@ -2,14 +2,12 @@
 "    Name: fold.vim
 "    File: fold.vim
 "  Author: Rykka G.Forest
-"  Update: 2012-06-12
+"  Update: 2012-06-14
 " Version: 0.5
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
 
-let s:p = g:_RIV_p
-let s:fb = g:riv_fold_blank
 
 fun! riv#fold#expr(row) "{{{
     if a:row == 1
@@ -60,28 +58,79 @@ fun! riv#fold#text() "{{{
     let num  = printf("%5s+", (v:foldend-lnum))
     return  line."[".num."]"
 endfun "}}}
-
+fun! riv#fold#update() "{{{
+    if  &filetype!='rst'
+        return
+    endif
+    if g:riv_fold_level > 0
+        normal! zx
+    else
+        call riv#fold#init()
+    endif
+endfun "}}}
+fun! riv#fold#init() "{{{
+    call s:init_stat()
+endfun "}}}
 fun! s:init_stat() "{{{
     let len = line('$')
-    let b:fdl_list = map(range(len+1),'0')
+    let b:foldlevel = g:riv_fold_level
+    if len > g:riv_auto_fold1_lines && g:riv_auto_fold_force == 1
+        let b:foldlevel = b:foldlevel >= 1 ? 1 : 0 
+    elseif len > g:riv_auto_fold2_lines && g:riv_auto_fold_force == 1
+        let b:foldlevel = b:foldlevel >= 2 ? 2 : 0 
+    endif
+    if (!exists("b:fdl_list") || len(b:fdl_list) != line('$')+1)
+        call s:parse_from_start()
+    endif
+endfun "}}}
+fun! s:parse_from_start() "{{{
+    echo "Parsing buf ..."
+    let len = line('$')
     let b:fdl_dict = {}
     let b:state = { 's_chk':[], 'l_chk':[], 'e_chk':[], 'b_chk':[], 't_chk':[],
                 \'matcher':[], 'sectmatcher':[], 
-                \'s_root': { 'parent':{}  , 'child':[] ,'sec_num':0 } ,
-                \'l_root': { 'parent':{}  , 'child':[] ,'lst_num':0 } ,
+                \'s_root': { 'parent':{}  , 'child':[] ,'sec_num':0 ,'bgn':0} ,
+                \'l_root': { 'parent':{}  , 'child':[] ,'lst_num':0 ,'bgn':0} ,
                 \}
-
-    
     " 3%
-    let b:lines= ['']+getline(0,line('$'))
+    let b:fdl_list = map(range(len+1),'0')
+    let b:lines= ['']+getline(1,line('$'))+['']         " faster than extend.
     for i in range(len+1)
     " 70%
         call s:check(i)
     endfor
+    " 20%
+    call sort(b:state.matcher,"s:sort_match")
+    call s:set_fdl_dict()
+    call s:set_sect_end()
+    call s:set_fdl_list()
+    call s:set_td_child(b:state.l_root)
+    echon "Done"
+endfun "}}}
+fun! s:parse_from(row) "{{{
+    " seems it's buggy.
+    call filter(b:fdl_dict,      'v:key < a:row')
+    call filter(b:state.matcher, 'v:val.bgn < a:row')
+    call filter(b:state.s_root.child,  'v:val.bgn < a:row')
+    call filter(b:state.l_root.child,  'v:val.bgn < a:row')
+    if line('$')+1-len(b:fdl_list) > 0
+        call extend(b:fdl_list,range(line('$')+1-len(b:fdl_list)))
+    endif
+    let b:fdl_list[a:row :] = map(b:fdl_list[a:row :],'0')
+    let b:lines= ['']+getline(1,line('$'))+['']
+    let b:state.s_chk = []
+    let b:state.l_chk = []
+    let b:state.e_chk = []
+    let b:state.b_chk = []
+    let b:state.t_chk = []
+    for i in range(a:row, line('$'))
+        call s:check(i)
+    endfor
+    " 20%
     " sort the unordered list.
     call sort(b:state.matcher,"s:sort_match")
-    " 20%
     call s:set_fdl_dict()
+    call s:set_sect_end()
     call s:set_fdl_list()
     call s:set_td_child(b:state.l_root)
 endfun "}}}
@@ -125,9 +174,13 @@ fun! s:set_fdl_dict() "{{{
                 let m.sec_num =sec_num
                 call s:add_brother(p_s_obj,m)
             elseif sec_lv < p_sec_lv 
-                let p_s_obj= p_s_obj.parent
+                if p_s_obj.bgn != 0
+                    let p_s_obj= p_s_obj.parent
+                endif
                 for i in range(p_sec_lv - sec_lv)
-                    let p_s_obj = p_s_obj.parent
+                    if p_s_obj.bgn != 0
+                        let p_s_obj = p_s_obj.parent
+                    endif
                 endfor
                 let brother = p_s_obj.child[-1]
                 let sec_num = brother.sec_num+1
@@ -139,9 +192,10 @@ fun! s:set_fdl_dict() "{{{
             let p_sec_lv = sec_lv
             let p_sec_num = sec_num
             
+            " get the text like 1.1 1.2 1.2.1
             let t_obj = m
             let t_lst = []
-            while !empty(t_obj) && exists("t_obj['sec_num']")
+            while !empty(t_obj) && t_obj.bgn != 0
                 call add(t_lst, t_obj['sec_num'])
                 let t_obj = t_obj.parent
             endwhile
@@ -169,18 +223,19 @@ fun! s:set_fdl_dict() "{{{
             elseif lst_lv == p_lst_lv  
                 call s:add_brother(p_l_obj,m)
             elseif lst_lv < p_lst_lv 
-                let p_l_obj= p_l_obj.parent
+                if p_l_obj.bgn != 0
+                    let p_l_obj= p_l_obj.parent
+                endif
                 for i in range(p_lst_lv - lst_lv)
-                    if !exists("p_l_obj.parent.child")
-                        break
+                    if p_l_obj.bgn != 0
+                        let p_l_obj = p_l_obj.parent
                     endif
-                    let p_l_obj = p_l_obj.parent
                 endfor
                 let brother = p_l_obj.child[-1]
                 call s:add_brother(brother, m)
             endif
 
-            let m.td_stat = s:get_td_stat(m.bgn)
+            let m.td_stat = riv#list#get_td_stat(b:lines[m.bgn])
 
             let p_l_obj = m
             let p_lst_lv = lst_lv
@@ -193,6 +248,7 @@ fun! s:set_fdl_dict() "{{{
             " may encounter erros
             let lst_lv = 0
             let sec_lv = sec_lv>1 ? sec_lv-1 : 0
+            let m.level = sec_lv
             let b:fdl_dict[m.bgn] = m
         elseif m.type== 'exp'
             let f = 1
@@ -213,12 +269,42 @@ fun! s:set_fdl_dict() "{{{
     endfor
     
 endfun "}}}
+fun! s:set_sect_end() "{{{
+    let stat = b:state
+    let smat = stat.sectmatcher
+    for i in range(len(smat))
+        let m = smat[i]
+        let bgn = m.bgn
+        let fdl = m.fdl
+        
+        " We should parse level by level.
+        " 1 ~2 ~3
+        " 1.1~1.2~1.3
+        " 1.1.1~1.1.2
+        let n_m = riv#fold#get_next_older(m)
+        if empty(n_m)
+            let n_m = {'bgn':line('$')+1}
+        endif
+
+        let m.end = n_m.bgn-1
+
+    endfor
+endfun "}}}
+fun! riv#fold#get_next_older(o)
+    " try to get the next item of the same level. 
+    " if not find. use it's parent's next item.
+    let n_b = s:get_next_brother(a:o)
+    let n_p = a:o.parent
+    while empty(n_b) && n_p.bgn!=0
+        let n_b = s:get_next_brother(n_p)
+        let n_p = n_p.parent
+    endwhile
+    return n_b
+endfun
 fun! s:set_fdl_list() "{{{
     let stat = b:state
     let mat = stat.matcher
 
-    let s_i = 0                 " the sect_matcher index , used to get next
-                                " section object.
     " fold_blank: 0,1,2 (default:0)
     " 0     fold one blank line at the most
     " 1     fold all but one blank line
@@ -226,40 +312,15 @@ fun! s:set_fdl_list() "{{{
     for m in mat
         let bgn = m.bgn
         let fdl = m.fdl
-        if m.type=='sect' || m.type=='trans'
-            " The sect's end is next sect's bgn
-            if m.type=='sect'
-                let s_i+=1
-            endif
-            if exists("stat.sectmatcher[s_i]") && m.type!='trans'
-                let end = stat.sectmatcher[s_i].bgn
-                if stat.sectmatcher[s_i].level <= m.level
-                    if s:fb != 2
-                        if s:fb == 1 && b:lines[end-2]=~'^\s*$'
-                            let end2 = end
-                            let end = end - 1
-                        elseif s:fb == 0
-                            let end2 = end
-                            let end = prevnonblank(end-1)+1
-                        endif
-                        let b:fdl_list[end   : end2] = map(b:fdl_list[end : end2],'fdl-1')
-                    endif
-                endif
-            else
-                let end = line('$')
-            endif
+        if exists("m.end")             
+            let end = m.end
         else
-            if exists("m.end")
-                let end = m.end
-            elseif exists("mat[i+1]")
-                let end = mat[i+1].bgn
-            else
-                let end = line('$')-1
-            endif
+            " all should have end.
+            echoe "RIV: Error of objec:" m.type m.bgn
         endif
-        if s:fb ==1 && b:lines[end] =~ '^\s*$'
+        if g:riv_fold_blank ==1 && b:lines[end] =~ '^\s*$'
             let end = end - 1
-        elseif s:fb==0 && b:lines[end] =~ '^\s*$'
+        elseif g:riv_fold_blank==0 && b:lines[end] =~ '^\s*$'
             let end = prevnonblank(end) + 1
         endif
         let b:fdl_list[bgn : bgn] = map(b:fdl_list[bgn : bgn],'">".fdl')
@@ -269,64 +330,72 @@ fun! s:set_fdl_list() "{{{
     endfor
 endfun "}}}
 
+let s:p = g:_riv_p
 fun! s:check(row) "{{{
     " check and set the state and return the value dict.
     let row = a:row
     let line = b:lines[row]
                 
-    call s:sectcheck(row)
-    call s:tablecheck(row)
-    call s:listcheck(row)
-    call s:expcheck(row)
-    call s:blockcheck(row)
+    if b:foldlevel > 0
+        call s:s_checker(row)
+    endif
 
-    if line=~'^\s*$'
-        return
+    if b:foldlevel > 2
+        call s:t_checker(row)
     endif
     
-    " add checker. "{{{
-    let s = b:state
-
-    if line=~s:p.literal_block && empty(s.e_chk)
-        let s.b_chk= {'row':row, 'indent': s:indent(line)}
-    endif
-    
-    " list can inculde multi roman char and digit.
-    if line=~ '^\s*[[:alnum:]]\+\s'
+    if line=~'^\s*$' && row != line('$')
         return
     endif
 
-    if line=~s:p.list && empty(s.e_chk)
-        call insert(s.l_chk, {'row':row,'indent': s:indent(line)},0)
+    if b:foldlevel > 1
+        call s:l_checker(row)
     endif
 
-    " \w will include '_'
+    if b:foldlevel > 2
+        call s:e_checker(row)
+        call s:b_checker(row)
+
+        call s:b_adder(row)
+    endif
+
+    if line=~'^\s*[[:alnum:]]\+\%(\s\|$\)'
+        return
+    endif
+
+    if b:foldlevel > 1 
+        call s:l_adder(row)
+    endif
+
     if line=~'^\s*[[:alnum:]]'
         return
     endif
 
-    if line=~s:p.section && line!~ '^\.\.\_s*$'
-        let s.s_chk =  {'row':row, 'attr': line[0]}
+    if b:foldlevel > 0
+        call s:s_adder(row)
     endif
 
     if line=~'^\s*\w'
         return
     endif
 
-    if line=~s:p.exp_m
-        let s.e_chk= {'row':row,'indent':0}
-    elseif line=~s:p.table && empty(s.t_chk)
-            let s.t_chk= {'row':row}
-    elseif line=~''
-        call add(s.matcher,{'type':'trans', 'bgn':row,})
-    endif "}}}
+
+    if b:foldlevel > 2
+        call s:e_adder(row)
+        call s:t_adder(row)
+        call s:tr_adder(row)
+    endif
+
+
 endfun "}}}
-fun! s:sectcheck(row) "{{{
+
+fun! s:s_checker(row) "{{{
     if empty(b:state.s_chk) | return | endif
     if a:row == b:state.s_chk.row+1
         let line = b:lines[a:row]
         let blank = '^\s*$'
-        if line !~ blank  && b:lines[a:row-2] =~ blank && b:lines[a:row+1] == b:lines[a:row-1]
+        if line !~ blank  && b:lines[a:row-2] =~ blank  && a:row!=line('$')
+            \ && b:lines[a:row+1] == b:lines[a:row-1]
             " 3 row title : blank ,section , noblank(cur) , section
             let m = {'type':'sect', 'bgn':a:row-1,'attr':b:state.s_chk.attr,
                         \'title_rows':3,'child':[],'parent':{}}
@@ -334,7 +403,8 @@ fun! s:sectcheck(row) "{{{
             call add(b:state.sectmatcher,m)
         elseif line =~ blank && b:lines[a:row-2]=~ blank && len(b:lines[a:row-1])>=4
             " transition : blank, section ,blank(cur) ,len>4
-            call add(b:state.matcher,{'type':'trans', 'bgn':a:row-1})
+            let m = {'type':'trans', 'bgn':a:row-1, 'end':a:row-1}
+            call add(b:state.matcher, m)
         elseif b:lines[a:row-2] !~ blank && b:lines[a:row-3] =~ blank
                     \ && b:lines[a:row-1] != b:lines[a:row-2]
             " 2 row title : blank , noblank , section , cur
@@ -346,14 +416,29 @@ fun! s:sectcheck(row) "{{{
         let b:state.s_chk = {}
     endif
 endfun "}}}
-fun! s:listcheck(row) "{{{
+fun! s:s_adder(row) "{{{
+    if b:lines[a:row]=~s:p.section && b:lines[a:row] !~ '^\.\.\_s*$'
+        let b:state.s_chk =  {'row': a:row, 'attr': b:lines[a:row][0]}
+        return 1
+    endif
+endfun "}}}
+fun! s:tr_adder(row) "{{{
+    if b:lines[a:row]=~''
+        call add(b:state.matcher,{'type':'trans', 'bgn':a:row,'end':a:row})
+        return 1
+    endif
+endfun "}}}
+
+fun! s:l_checker(row) "{{{
     " a list contain all lists.
     " the final order should be sorted.
     if empty(b:state.l_chk) | return | endif
+    " List can contain Explicit Markup items.
+    if !empty(b:state.e_chk) | return | endif
     let l = b:state.l_chk
     while !empty(l)
-        if ( b:lines[a:row]!~ '^\s*$' && (a:row>l[0].row && s:indent(b:lines[a:row]) <= l[0].indent )
-            \ && (b:lines[a:row]!~s:p.exp_m && b:lines[a:row+1]!~'^\s*$') )
+        if (a:row>l[0].row && s:indent(b:lines[a:row]) <= l[0].indent ) 
+                    \ && b:lines[a:row] !~ s:p.exp_m
             call add(b:state.matcher,{'type':'list', 'bgn':l[0].row, 'end': a:row-1,
             \ 'level':l[0].indent/2+1, 'parent':{}, 'child':[]})
             call remove(l , 0)
@@ -366,11 +451,19 @@ fun! s:listcheck(row) "{{{
         endif
     endwhile
 endfun "}}}
-fun! s:expcheck(row) "{{{
+fun! s:l_adder(row) "{{{
+    if !empty(b:state.e_chk) | return | endif
+    if b:lines[a:row]=~s:p.list_all
+        call insert(b:state.l_chk, 
+                    \ {'row': a:row,'indent': s:indent(b:lines[a:row])},0)
+        return 1
+    endif
+endfun "}}}
+
+fun! s:e_checker(row) "{{{
     if empty(b:state.e_chk) | return | endif
-    if ( b:lines[a:row]!~ '^\s*$' &&  b:state.e_chk.row < a:row
+    if ( b:state.e_chk.row < a:row
         \ && s:indent(b:lines[a:row]) <= b:state.e_chk.indent )
-        \ || ( b:lines[a:row]=~ '^\s*$' && b:lines[a:row-1]=~'^\.\.\_s*$')
         call add(b:state.matcher,{'type':'exp', 'bgn':b:state.e_chk.row, 'end': a:row-1})
         let b:state.e_chk={}
     elseif  a:row==line('$')
@@ -378,18 +471,44 @@ fun! s:expcheck(row) "{{{
         let b:state.e_chk={}
     endif
 endfun "}}}
-fun! s:blockcheck(row) "{{{
+fun! s:e_adder(row) "{{{
+    if b:lines[a:row]=~s:p.exp_m
+        if  (b:lines[a:row]=~'^\.\.\s*$' && a:row!=line('$') 
+                            \ && b:lines[a:row+1]=~'^\s*$')
+            call add(b:state.matcher,{'type': 'exp', 'mark': 'ignored', 
+                    \ 'bgn': a:row, 'end': a:row})
+            let b:state.e_chk={}
+        else
+            let b:state.e_chk= {'row':a:row,'indent':0}
+            return 1
+        endif
+    endif
+endfun "}}}
+
+fun! s:b_checker(row) "{{{
     if empty(b:state.b_chk) | return | endif
-    if (b:lines[a:row]!~ '^\s*$' && b:state.b_chk.row < a:row  
-        \ && s:indent(b:lines[a:row]) <= b:state.b_chk.indent )
-        call add(b:state.matcher,{'type':'block', 'bgn':b:state.b_chk.row, 'end': a:row-1})
+    if ( b:state.b_chk.row == a:row+1 && s:indent(b:lines[a:row]) <= b:state.b_chk.indent
         let b:state.b_chk={}
-    elseif  a:row==line('$')
-        call add(b:state.matcher,{'type':'block', 'bgn':b:state.b_chk.row, 'end': a:row})
+    elseif ( b:state.b_chk.row < a:row+1 
+        \ && s:indent(b:lines[a:row]) <= b:state.b_chk.indent )
+        call add(b:state.matcher,{'type':'block', 'bgn':b:state.b_chk.row+1, 'end': a:row-1})
+        let b:state.b_chk={}
+    elseif a:row==line('$') && b:state.b_chk.row < a:row
+        call add(b:state.matcher,{'type':'block', 'bgn':b:state.b_chk.row+1, 'end': a:row})
         let b:state.b_chk={}
     endif
 endfun "}}}
-fun! s:tablecheck(row) "{{{
+fun! s:b_adder(row) "{{{
+    " the block is down 2 row, to avoid clash in fdl_dict with list
+    if !empty(b:state.e_chk) | return | endif
+    if b:lines[a:row]=~s:p.literal_block && b:lines[a:row]!~s:p.exp_m 
+            \ && b:lines[a:row+1]=~ '^\s*$'
+        let b:state.b_chk= {'row': a:row+1, 'indent': s:indent(b:lines[a:row])}
+        return 1
+    endif
+endfun "}}}
+
+fun! s:t_checker(row) "{{{
     if empty(b:state.t_chk) | return | endif
     if (b:state.t_chk.row < a:row && b:lines[a:row] !~ s:p.table )
         call add(b:state.matcher,{'type':'table', 'bgn':b:state.t_chk.row, 'end':a:row-1})
@@ -399,39 +518,43 @@ fun! s:tablecheck(row) "{{{
         let b:state.t_chk={}
     endif
 endfun "}}}
-fun! s:get_children(o) "{{{
-    
+fun! s:t_adder(row) "{{{
+    if !empty(b:state.t_chk) | return | endif
+    if b:lines[a:row]=~s:p.table
+        let b:state.t_chk= {'row': a:row}
+        return 1
+    endif
 endfun "}}}
-fun! s:get_child(o,i) "{{{
-    
-endfun "}}}
-fun! s:get_parent(o) "{{{
-    
-endfun "}}}
+
 fun! s:add_child(p,o) "{{{
-    call add(a:p.child, a:o.bgn )
-    let a:o.parent = a:p.bgn
+    call add(a:p.child, a:o )
+    let a:o.parent = a:p
 endfun "}}}
 fun! s:add_brother(b,o) "{{{
     let a:o.parent = a:b.parent
-    call add(b:fdl_dict[a:o.parent].child, a:o.bgn )
+    call add(a:o.parent.child, a:o )
+endfun "}}}
+fun! s:get_prev_brother(o) "{{{
+    for i in range(len(a:o.parent.child))
+        if a:o.parent.child[i] is a:o 
+            if exists("a:o.parent.child[i-1]") && i!=0
+                return a:o.parent.child[i-1]
+            endif
+        endif
+    endfor
+    return {}
+endfun "}}}
+fun! s:get_next_brother(o) "{{{
+    for i in range(len(a:o.parent.child))
+        if a:o.parent.child[i] is a:o
+            if exists("a:o.parent.child[i+1]")
+                return a:o.parent.child[i+1]
+            endif
+        endif
+    endfor
+    return {}
 endfun "}}}
 
-let s:tdl = g:_RIV_t.todo_levels
-fun! s:get_td_stat(lnum) "{{{
-    " second submatch is todo item.
-    let m_lst = matchlist(b:lines[a:lnum], s:p.list_box)
-    if !empty(m_lst)
-        let td = m_lst[2]
-        let d =  stridx(s:tdl, td)
-        if d != -1 && (len(s:tdl)-1)!=0
-            return (d+0.0)/(len(s:tdl)-1)
-        else
-            return -1
-        endif
-    endif
-    return -1
-endfun "}}}
 fun! s:set_td_child(o) "{{{
     " Get All child's td_stat recursively
     " and update the td_child attr.
@@ -459,6 +582,7 @@ fun! s:set_td_child(o) "{{{
     endif
     return c_td
 endfun "}}}
+
 fun! s:sort_match(i1,i2) "{{{
     return a:i1.bgn - a:i2.bgn
 endfun "}}}
