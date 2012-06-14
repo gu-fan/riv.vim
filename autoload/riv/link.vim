@@ -3,7 +3,7 @@
 "    File: link.vim
 " Summary: link ref and targets.
 "  Author: Rykka G.Forest
-"  Update: 2012-06-08
+"  Update: 2012-06-15
 " Version: 0.5
 "=============================================
 let s:cpo_save = &cpo
@@ -37,54 +37,24 @@ fun! riv#link#finder(dir) "{{{
     endif
 endfun "}}}
 
-fun! s:find_ref_def(text) "{{{
-    " substitute 2+ \s to a ' '
-    let n_txt = tolower(substitute(a:text,'\s\{2,}',' ','g'))
-    " Hyperlinks, footnotes, and citations 
-    " all share the same namespace for reference names. 
-    let inline_ptn = '\c\v(_`\zs'. n_txt .'|\['.n_txt.'\])\ze`'
-    let ref_ptn = '\c\v^\.\. \zs(_'. n_txt.'\ze:|\['.n_txt.'\])'
-    let c_row = line('.')
-    let [sr,sc] = searchpos(ref_ptn,'wn',0,100)
-    let type = 1 " ref
-    if sr==c_row || sr==0
-        let [sr,sc] = searchpos(inline_ptn,'wn',0,100)
-        let type = 0 " inline
-        if sr == c_row
-            return [0,0,0]
-        endif
-    endif
-    return [sr,sc,type]
-endfun "}}}
-fun! s:find_ref_tar(text) "{{{
-    " substitute 2+ \s to a ' '
-    let tar_ptn = s:target_ptn(a:text)
-    let c_row = line('.')
-    let [sr,sc] = searchpos(tar_ptn,'wn',0,100)
-    let type = 1 " ref
-    if sr==c_row || sr==0
-        let [sr,sc] = searchpos(tar_ptn,'wn',0,100)
-        let type = 0 " inline
-        if sr == c_row
-            return [0,0,0]
-        endif
-    endif
-    return [sr,sc,type]
-endfun "}}}
 
 fun! s:normal_ptn(text) "{{{
-    return substitute(escape(a:text,'.^$*[]\'),'\s\+','\\s\\+','g')
+    let text = substitute(a:text ,'\v(^__=|_=_$)','','g')
+    let text = substitute(text ,'\v(^`|`$)','','g')
+    let text = substitute(text ,'\v(^\[|\]$)','','g')
+    let text = substitute(escape(text,'.^$*[]\'),'\s\+','\\s+','g')
+    return text
 endfun "}}}
 fun! s:target_ptn(text) "{{{
-    return '\c\(`\zs'. a:text .'`_\|\['.a:text.'\]\|'.a:text.'_\)\ze'
+    return '\v\c(_`\zs'. a:text .'`|\_^\.\.\s\zs\['.a:text.'\]|\_^\.\.\s\zs_'.a:text.')'
 endfun "}}}
 fun! s:reference_ptn(text) "{{{
-    return '\c\(`\zs'. a:text .'`_\|\['.a:text.'\]\|'.a:text.'_\)\ze'
+    return '\v\c(`'. a:text .'`_|\['.a:text.'\]_|'.a:text.'_)\ze'
 endfun "}}}
 
 fun! s:find_tar(text) "{{{
     let norm_ptn = s:normal_ptn(a:text)
-    let [c_row,c_col] = getpos('.')
+    let [c_row,c_col] = getpos('.')[1:2]
     let row = s:find_sect(norm_ptn)
     if row > 0
         return [row, c_col]
@@ -92,6 +62,14 @@ fun! s:find_tar(text) "{{{
 
     let tar_ptn = s:target_ptn(norm_ptn)
     let [a_row, a_col] = searchpos(tar_ptn, 'wn', 0 , 100)
+    return [a_row, a_col]
+endfun "}}}
+fun! s:find_ref(text) "{{{
+    let norm_ptn = s:normal_ptn(a:text)
+    let [c_row,c_col] = getpos('.')[1:2]
+
+    let ref_ptn = s:reference_ptn(norm_ptn)
+    let [a_row, a_col] = searchpos(ref_ptn, 'wnb', 0 , 100)
     return [a_row, a_col]
 endfun "}}}
 fun! s:find_sect(ptn) "{{{
@@ -125,14 +103,14 @@ fun! riv#link#open() "{{{
         return
     endif
     if !empty(mo.groups[1])
-        let [sr,sc] = s:find_ref_tar(mo.str)
+        let [sr,sc] = s:find_ref(mo.str)
         if sr != 0
             call setpos("'`",getpos('.'))
             call setpos('.',[0,sr,sc,0])
             return 2
         endif
     elseif !empty(mo.groups[2])
-        let [sr,sc] = s:find_ref_def(mo.str)
+        let [sr,sc] = s:find_tar(mo.str)
         if sr != 0
             call setpos("'`",getpos('.'))
             call setpos('.',[0,sr,sc,0])
