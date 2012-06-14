@@ -7,8 +7,19 @@ version: 0.53
 ======================================================================
 
 
+" TODO item
 
 
+
+" riv#list#toggle_todo()
+" Toggle TO-DO item
+" if not list, return 
+" if is null todo item, add box/key (and ts if ts==2)
+" else if is idx todo item , switch to next box/key (don't change ts)
+"   if next box/key is end , (change ts if ts == 1 , add ts_end if ts == 2)
+"   if next box/key is start, (remove ts if ts ==1, remove ts_end if ts == 2)
+" riv#list#del_todo
+" del todo list
 
 
 

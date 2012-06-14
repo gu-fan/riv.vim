@@ -14,14 +14,15 @@ let s:cpo_save = &cpo
 set cpo-=C
 " settings {{{
 setl foldmethod=expr foldexpr=riv#fold#expr(v:lnum) foldtext=riv#fold#text()
-setl comments=fb:.. commentstring=..\ %s expandtab
+setl comments=fb:.. commentstring=..\ %s 
 setl formatoptions+=tcroql
+setl expandtab
 let b:undo_ftplugin = "setl fdm< fde< fdt< com< cms< et< fo<"
-        \ "| unlet! b:dyn_sec_list b:foldlevel b:fdl_before_exp b:fdl_cur_list"
-        \ "| unlet! b:fdl_before_list b:riv"
-        \ "| mapc <buffer>"
-        \ "| menu disable RIV.*"
-        \ "| menu enable RIV.Index"
+            \ "| unlet! b:state b:fdl_dict b:fdl_list"
+            \ "| mapc <buffer>"
+            \ "| menu disable RIV.*"
+            \ "| menu enable RIV.Index"
+            \ "| au! RIV_BUFFER"
 " for table init
 let b:riv={}
 "}}}
@@ -59,18 +60,19 @@ endif "}}}
 
 call s:imap(g:riv_options.buf_imaps)
 call s:map(g:riv_options.buf_maps)
-menu enable RIV.*
-
-
-if exists("g:riv_auto_format_table") "{{{
-    au! InsertLeave <buffer> call riv#table#format_pos()
-endif "}}}
-if exists("g:riv_hover_link_hl") "{{{
-    " cursor_link_highlight
-    au! CursorMoved,CursorMovedI <buffer>  call riv#link#hi_hover()
-    " clear the highlight before bufwin/winleave
-    au! WinLeave,BufWinLeave     <buffer>  2match none
-endif "}}}
+call riv#show_menu()
+aug RIV_BUFFER "{{{
+    if exists("g:riv_auto_format_table") "{{{
+        au! InsertLeave <buffer> call riv#table#format_pos()
+    endif "}}}
+    if exists("g:riv_hover_link_hl") "{{{
+        " cursor_link_highlight
+        au! CursorMoved,CursorMovedI <buffer>  call riv#link#hi_hover()
+        " clear the highlight before bufwin/winleave
+        au! WinLeave,BufWinLeave     <buffer>  2match none
+        au! FileWritePost <buffer>  call riv#fold#update()
+    endif "}}}
+aug END "}}}
 
 " tests 
 "}}}

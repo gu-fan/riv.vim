@@ -27,7 +27,7 @@ fun! riv#insert#indent(row) "{{{
 
     " Field List
     " 1:ind
-    let p_ind =  matchend(p_line, g:_RIV_p.field_list)
+    let p_ind =  matchend(p_line, g:_riv_p.field_list)
     if p_ind != -1
         return p_ind
     endif
@@ -37,7 +37,7 @@ fun! riv#insert#indent(row) "{{{
     
     " list
     " <=3: ind: we want a stop at the list begin here
-    let l_ind = matchend(pnb_line, g:_RIV_p.list)
+    let l_ind = matchend(pnb_line, g:_riv_p.list_all)
     if l_ind != -1
         return ind
     endif
@@ -45,29 +45,29 @@ fun! riv#insert#indent(row) "{{{
     " literal-block
     " 1/2+:ind  
     " 2:4
-    let l_ind = matchend(pnb_line, g:_RIV_p.literal_block)
+    let l_ind = matchend(pnb_line, g:_riv_p.literal_block)
     if l_ind != -1 &&  a:row == pnb_num+2
         return 4
     endif
 
     " exp_markup
     " 1~2: ind
-    let l_ind = matchend(pnb_line, g:_RIV_p.s_exp)
+    let l_ind = matchend(pnb_line, g:_riv_p.s_exp)
     if l_ind != -1 &&  a:row <= pnb_num+2
-        return (ind + l_ind - matchend(pnb_line, g:_RIV_p.indent))
+        return (ind + l_ind - matchend(pnb_line, g:_riv_p.indent))
     endif
     
     " without match
     " 1+: search list/exp_mark or  \S starting line to stop.
     if a:row >= pnb_num+1
         call cursor(pnb_num,1)
-        let p_num = searchpos(g:_RIV_p.list_or_exp_or_S, 'bW')[0]
+        let p_num = searchpos(g:_riv_p.indent_stoper, 'bW')[0]
         let p_line = getline(p_num)
         let l_ind  = matchend(p_line,'^\s*\.\.\s')
         if l_ind != -1
             return l_ind
         endif
-        let l_ind = matchend(p_line, g:_RIV_p.list)
+        let l_ind = matchend(p_line, g:_riv_p.list_all)
         if l_ind != -1
             return indent(p_num)
         endif

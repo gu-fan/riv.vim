@@ -9,8 +9,6 @@
 let s:cpo_save = &cpo
 set cpo-=C
 
-
-
 function! s:time() "{{{
     if has("reltime")
         return str2float(reltimestr(reltime()))
@@ -122,10 +120,18 @@ fun! riv#test#insert_idt() "{{{
     " breakadd func riv#insert#indent
     echo riv#insert#indent(line('.'))
 endfun "}}}
-fun! riv#test#reload()
+fun! riv#test#reload() "{{{
     let g:riv_force=1 | set ft=rst | let g:riv_force=0
     sil! runtime! autoload/riv/*.vim
-endfun
+    let g:_riv_debug=1
+    call riv#init()
+    " unlet! g:_riv_debug
+    echo "Riv Reloaded."
+endfun "}}}
+fun! riv#test#show_obj() "{{{
+    echo b:fdl_list[line('.')]
+    echo b:fdl_dict[line('.')]
+endfun "}}}
 
 let &cpo = s:cpo_save
 unlet s:cpo_save

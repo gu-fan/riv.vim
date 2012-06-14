@@ -16,13 +16,22 @@ fun! riv#action#db_click() "{{{
     if foldclosed(row) != -1
         exe "normal! zv"
     elseif !riv#link#open()
+        " Open fold with clicking on section title.
         if has_key(b:fdl_dict, row)
             if b:fdl_dict[row].type =='sect'
                 exe "normal! zc"
                 return
             endif
         endif
-        exe "normal! \<2-LeftMouse>"
+        let line = getline(row)
+        let col = col('.')
+        if line=~ g:_riv_p.todo_all && col < matchend(line, g:_riv_p.todo_all)
+                    \ && col > matchend(line, g:_riv_p.list_all)
+            call riv#list#toggle_todo()
+        else
+            exe "normal! \<2-LeftMouse>"
+        endif
+        
     endif
 endfun "}}}
 fun! riv#action#ins_bs() "{{{
@@ -43,29 +52,28 @@ fun! riv#action#ins_bs() "{{{
 endfun "}}}
 fun! riv#action#ins_enter() "{{{
     let [row,col] = getpos('.')[1:2]
-    if getline('.') =~ g:_RIV_p.table
+    if getline('.') =~ g:_riv_p.table
         let cmd  = "\<C-O>:call riv#table#newline()|"
         let cmd .= "call cursor(".(row+1).",".col.")|"
-        let cmd .= "call search(g:_RIV_p.cel0,'Wbc')\<CR>"
+        let cmd .= "call search(g:_riv_p.cell0,'Wbc')\<CR>"
+        return cmd
     else
-        let cmd = "\<Enter>"
+        return  "\<Enter>"
     endif
-    return cmd
 endfun "}}}
 fun! riv#action#ins_tab() "{{{
-    let [row,col] = riv#table#nextcell()
-    if row==0
+    if riv#table#nextcell()[0] == 0
         return "\<Tab>"
     else
-        return "\<C-O>:call cursor(".row.",".col.")\<CR>"
+        " NOTE: Find the cell after table get formated.
+        return "\<C-O>:call cursor(riv#table#nextcell())\<CR>"
     endif
 endfun "}}}
 fun! riv#action#ins_stab() "{{{
-    let [row,col] = riv#table#prevcell()
-    if row==0
+    if riv#table#prevcell()[0] == 0
         return "\<BS>"
     else
-        return "\<C-O>:call cursor(".row.",".col.")\<CR>"
+        return "\<C-O>:call cursor(riv#table#prevcell())\<CR>"
     endif
 endfun "}}}
 

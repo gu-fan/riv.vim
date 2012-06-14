@@ -12,11 +12,10 @@ set cpo-=C
 
 fun! riv#create#link(type,ask) "{{{
     " return a link target and ref def.
-    let lines = []
     let type = "footnote"
     if type == "footnote"
-    " TODO: get buf last footnote.
-    " TODO: they should add at different position.
+    " DONE: 2012-06-10 get buf last footnote.
+    " DONE: 2012-06-10 they should add at different position.
     "       current and last.
     "   
     " put cursor in last line and start backward search.
@@ -25,7 +24,7 @@ fun! riv#create#link(type,ask) "{{{
         let id = riv#link#get_last_foot()[1] + 1
         let line = getline('.') 
 
-        if line =~ g:_RIV_p.table
+        if line =~ g:_riv_p.table
             let tar = substitute(line,'\%' . col(".") . 'c' , ' ['.id.']_ ', '')
         elseif line =~ '\S\@<!$'
         " have \s before eol.
@@ -42,7 +41,6 @@ fun! riv#create#link(type,ask) "{{{
         call setline(line('.'),tar)
         call append(line('$'),def)
     endif
-    " return lines
     
 endfun "}}}
 

@@ -73,7 +73,7 @@ execute 'syn region rstFootnote contained matchgroup=rstDirective' .
 execute 'syn region rstCitation contained matchgroup=rstDirective' .
       \ ' start=+\[' . s:ReferenceName . '\]\_s+' .
       \ ' skip=+^$+' .
-      \ ' end=+^\s\@!+ contains=@rstCruft,@NoSpell'
+      \ ' end=+^\s\@!+ contains=@s:ReferenceNamerstCruft,@NoSpell'
 
 syn region rstHyperlinkTarget contained matchgroup=rstDirective
       \ start='_\%(_\|[^:\\]*\%(\\.[^:\\]*\)*\):\_s' skip=+^$+ end=+^\s\@!+
@@ -141,6 +141,8 @@ execute 'syn match rstHyperlinkReference' .
 
 syn match   rstStandaloneHyperlink  contains=@NoSpell
       \ "\<\%(\%(\%(https\=\|file\|ftp\|gopher\)://\|\%(mailto\|news\):\)[^[:space:]'\"<>]\+\|www[[:alnum:]_-]*\.[[:alnum:]_-]\+\.[^[:space:]'\"<>]\+\)[[:alnum:]/]"
+
+
 
 " Lists in rst file
 syn match rstDefinitionList `\v^(\s*)\h[^:]*\ze%(\s:\s.*)*\n\1\s+\S`

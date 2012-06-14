@@ -19,7 +19,7 @@ def balance_tbl_col(lst):
             if row_len > col_num: col_num = row_len
 
     if col_num == 0:
-        return
+        return balanced_lst             # []
     
     for i,row in enumerate(lst):
         if isinstance(row,list):
