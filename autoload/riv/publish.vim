@@ -9,7 +9,22 @@
 let s:cpo_save = &cpo
 set cpo-=C
 
+fun! s:css()
+    
+endfun
+fun! s:to_html()
+    
+endfun
+fun! s:to_pdf()
+    
+endfun
+fun! s:to_odt()
+    
+endfun
 
-<`0`>
+fun! s:replace_with_link()
+    
+endfun
+
 let &cpo = s:cpo_save
 unlet s:cpo_save

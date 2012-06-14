@@ -130,8 +130,68 @@ fun! riv#test#reload() "{{{
 endfun "}}}
 fun! riv#test#show_obj() "{{{
     echo b:fdl_list[line('.')]
-    echo b:fdl_dict[line('.')]
+    if exists("b:obj_dict")
+        echo b:obj_dict[line('.')]
+    endif
 endfun "}}}
+
+
+fun! riv#test#list_item() "{{{
+    echo riv#list#level("   # 233" )     '-1'
+    echo riv#list#level("   * 233" )     
+    echo riv#list#level("   + 233" )     
+    echo riv#list#level("   - 233" )     
+    echo riv#list#level("   1. 233" )    
+    echo riv#list#level("   1) 233" )
+    echo riv#list#level("   (1) 233" )
+    echo riv#list#level("   A. 233" )    
+    echo riv#list#level("   A) 233" )
+    echo riv#list#level("   (A) 233" )
+    echo riv#list#level("   a. 233" )    
+    echo riv#list#level("   a) 233" )
+    echo riv#list#level("   (a) 233" )
+    echo riv#list#level("   II. 233" )    
+    echo riv#list#level("   II) 233" )
+    echo riv#list#level("   (II) 233" )
+    echo riv#list#level("   ii. 233" )    
+    echo riv#list#level("   ii) 233" )
+    echo riv#list#level("   (ii) 233" )
+    echo riv#list#level("   (I) 233" , 0)   14
+    echo riv#list#level("   (I) 233" , 1)   8
+endfun "}}}
+fun! riv#test#list_str() "{{{
+    let act = -1
+    let prev = 0
+    let idt = '     '
+    echo riv#list#act_line("   # 233"     ,act ,idt ,prev ).'|'
+    echo riv#list#act_line("   * 233"     ,act ,idt ,prev ).'|'
+    echo riv#list#act_line("   + 233"     ,act ,idt ,prev ).'|'
+    echo riv#list#act_line("   - 233"     ,act ,idt ,prev ).'|'
+    echo riv#list#act_line("   1. 233"    ,act ,idt ,prev ).'|'
+    echo riv#list#act_line("   1) 233"    ,act ,idt ,prev ).'|'
+    echo riv#list#act_line("   (1) 233"   ,act ,idt ,prev ).'|'
+    echo riv#list#act_line("   A. 233"    ,act ,idt ,prev ).'|'
+    echo riv#list#act_line("   A) 233"    ,act ,idt ,prev ).'|'
+    echo riv#list#act_line("   (A) 233"   ,act ,idt ,prev ).'|'
+    echo riv#list#act_line("   a. 233"    ,act ,idt ,prev ).'|'
+    echo riv#list#act_line("   a) 233"    ,act ,idt ,prev ).'|'
+    echo riv#list#act_line("   (a) 233"   ,act ,idt ,prev ).'|'
+    echo riv#list#act_line("   II. 233"   ,act ,idt ,prev ).'|'
+    echo riv#list#act_line("   II) 233"   ,act ,idt ,prev ).'|'
+    echo riv#list#act_line("   (II) 233"  ,act ,idt ,prev ).'|'
+    echo riv#list#act_line("   ii. 233"   ,act ,idt ,prev ).'|'
+    echo riv#list#act_line("   ii) 233"   ,act ,idt ,prev ).'|'
+    echo riv#list#act_line("   (ii) 233"  ,act ,idt ,prev ).'|'
+    echo riv#list#act_line("   (I) 233"   ,act ,idt ,prev ).'|'
+    echo riv#list#act_line("   (I) 233"   ,act ,idt ,prev ).'|'
+endfun "}}}
+fun! riv#test#list_buf()
+
+endfun
+
+" Test
+call riv#test#list_str()
+
 
 let &cpo = s:cpo_save
 unlet s:cpo_save

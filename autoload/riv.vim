@@ -125,6 +125,7 @@ let s:default.opts = {
     \'web_browser'          : "firefox",
     \'options'              : s:default,
     \'usr_syn_dir'          : "",
+    \'sect_seperator'       : "-",
     \}
 " maps "{{{
 let s:default.maps = {
@@ -133,9 +134,11 @@ let s:default.maps = {
     \'RivLinkForward'    : 'call riv#link#finder("f")',
     \'RivLinkBackward'   : 'call riv#link#finder("b")',
     \'RivLinkDBClick'    : 'call riv#action#db_click()',
-    \'RivListShiftForward' : 'call riv#list#shift("+")',
-    \'RivListShiftBack'  : 'call riv#list#shift("-")',
-    \'RivListAuto'       : 'call riv#list#auto()',
+    \'RivListShiftRight' : 'call riv#list#shift("+")',
+    \'RivListShiftLeft'  : 'call riv#list#shift("-")',
+    \'RivListNewList'    : 'call riv#list#act(0)',
+    \'RivListSubList'    : 'call riv#list#act(1)',
+    \'RivListSupList'    : 'call riv#list#act(-1)',
     \'RivTodoToggle'     : 'call riv#list#toggle_todo()',
     \'RivTodoDel'        : 'call riv#list#del_todo()',
     \'RivTodoTime'       : 'call riv#list#change_date()',
@@ -180,12 +183,13 @@ let s:default.maps = {
 " shift-enter: a new child
 " alt-enter : a new parent brother
 let s:default.buf_maps = {
-    \'RivLinkOpen'       : [['<CR>', '<KEnter>'],  'n',  'lo'],
+    \'RivLinkOpen'       : [['<CR>', '<KEnter>'],  'n',  'eo'],
+    \'RivListNewList'    : [['<C-CR>', '<C-KEnter>'],  'n',  'lo'],
     \'RivLinkForward'    : ['<TAB>',  'n',  'lf'],
     \'RivLinkBackward'   : ['<S-TAB>',  'n',  'lb'],
     \'RivLinkDBClick'    : ['<2-LeftMouse>',  '',  ''],
-    \'RivListShiftFor'   : [['>', '<C-ScrollwheelDown>' ],  'mi',  'eu'],
-    \'RivListShiftBack'  : [['<', '<C-ScrollwheelUp>'],  'mi',  'ed'],
+    \'RivListShiftRight'   : [['>', '<C-ScrollwheelDown>' ],  'mi',  'eu'],
+    \'RivListShiftLeft'  : [['<', '<C-ScrollwheelUp>'],  'mi',  'ed'],
     \'RivTodoToggle'     : ['',  'mi',  'ee'],
     \'RivTodoDel'        : ['',  'mi',  'ed'],
     \'RivTodoTime'       : ['',  'mi',  'et'],
@@ -209,6 +213,13 @@ let s:default.buf_maps = {
 let s:default.buf_imaps = {
     \'<BS>'    : 'riv#action#ins_bs()',
     \'<CR>'    : 'riv#action#ins_enter()',
+    \'<KEnter>'    : 'riv#action#ins_enter()',
+    \'<C-CR>'    : 'riv#action#ins_c_enter()',
+    \'<C-KEnter>'    : 'riv#action#ins_c_enter()',
+    \'<S-CR>'    : 'riv#action#ins_s_enter()',
+    \'<S-KEnter>'    : 'riv#action#ins_s_enter()',
+    \'<C-S-CR>'    : 'riv#action#ins_m_enter()',
+    \'<C-S-KEnter>'    : 'riv#action#ins_m_enter()',
     \'<Tab>'   : 'riv#action#ins_tab()',
     \'<S-Tab>' : 'riv#action#ins_stab()',
     \} 
@@ -221,8 +232,8 @@ let s:default.menus = [
     \['Link.Forward'    ,  'lf',  'RivLinkForward'],
     \['Link.Backward'   ,  'lb',  'RivLinkBackward'],
     \['Link.DBClick'    ,  '  ',  'RivLinkDBClick'],
-    \['List.ShiftFor'   ,  'eu',   'RivListShiftFor'],
-    \['List.ShiftBack'  ,  'ed',   'RivListShiftBack'],
+    \['List.ShiftRight' ,  'eu',   'RivListShiftRight'],
+    \['List.ShiftLeft'  ,  'ed',   'RivListShiftLeft'],
     \['List.TodoToggle' , 'ee' , 'RivTodoToggle'] ,
     \['List.TodoDel'    , 'ed' , 'RivTodoDel']    ,
     \['List.TodoTime'   , 'et' , 'RivTodoTime']   ,
@@ -329,8 +340,28 @@ if !exists("g:_riv_c")
     let g:_riv_p.enumerate_list2 = '\v\c^\s*\(%(\d+|[#a-z]|[imcxv]+)\)\s+'
     let g:_riv_p.list_all = g:_riv_p.bullet_list.'|'.g:_riv_p.enumerate_list1
                 \.'|'.g:_riv_p.enumerate_list2
-
+    
+    
     let g:_riv_p.field_list= '^\s*:[^:]\+:\s\+\ze\S.\+[^:]$'
+
+    " sub1 (indent)
+    " sub2 bullet
+    " sub3 #. \d. \d)
+    " sub4 a. z. a)
+    " sub5 ii.
+    " sub6 (#)
+    " sub7 (a)
+    " sub8 (ii)
+    " sub9 (space)
+    let g:_riv_p.list_checker =  '\v\c^\s*%('
+                    \.'([-*+])'
+                    \.'|(%(#|\d+)[.)])'
+                    \.'|([(]%(#|\d+)[)])'
+                    \.'|([a-z][.)])'
+                    \.'|([(][a-z][)])'
+                    \.'|([imcxv]+[.)])'
+                    \.'|([(][imcxv]+[)])'
+                    \.')(\s+)'
 
     " Todo Items: "{{{3
     " - [x] 2012-03-04 ~ 2012-05-06 The Todo Timestamp with start and end.
@@ -410,13 +441,13 @@ if !exists("g:_riv_c")
     let s:ref_name = '[[:alnum:]]+%([_.-][[:alnum:]]+)*'
     let s:ref_end = '%($|\s|[''")\]}>/:.,;!?\\-])'
     "  xxx_
-    let g:_riv_p.link_ref_normal = '\v<'.s:ref_name.'_'.s:ref_end
+    let g:_riv_p.link_ref_normal = '\v<'.s:ref_name.'_\ze'.s:ref_end
     " `xxx xx`_
-    let g:_riv_p.link_ref_phase  = '\v<`[^`\\]*%(\\.[^`\\]*)*`_'.s:ref_end
+    let g:_riv_p.link_ref_phase  = '\v<`[^`\\]*%(\\.[^`\\]*)*`_\ze'.s:ref_end
     "  xxx__
-    let g:_riv_p.link_ref_anoymous = '\v<'.s:ref_name.'__'.s:ref_end
+    let g:_riv_p.link_ref_anoymous = '\v<'.s:ref_name.'__\ze'.s:ref_end
     " [#]_ [*]_  [#xxx]_  [3]_    and citation [xxxx]_
-    let g:_riv_p.link_ref_footnote = '\v<\[%(\d+|#|\*|#='.s:ref_name.')\]_'.s:ref_end
+    let g:_riv_p.link_ref_footnote = '\v\[%(\d+|#|\*|#='.s:ref_name.')\]_\ze'.s:ref_end
 
     let g:_riv_p.link_reference = g:_riv_p.link_ref_normal
                 \ . '|' . g:_riv_p.link_ref_phase
@@ -461,6 +492,7 @@ if !exists("g:_riv_c")
     let g:_riv_t.sect_punc = '!"#$%&''()*+,-./:;<=>?@[\]^_`{|}~'
     let g:_riv_t.list_lvs  =  ["*","+","-"]
     let g:_riv_t.list_type = split(g:riv_list_toggle_type,',')
+    let g:_riv_t.sect_sep =  g:riv_sect_seperator[0]
     let g:_riv_t.highlight_code = s:normlist(split(g:riv_highlight_code,','))
 
     lockvar 2 g:_riv_c

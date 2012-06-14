@@ -9,24 +9,6 @@
 let s:cpo_save = &cpo
 set cpo-=C
 
-fun! riv#link#delete() "{{{
-    " if we delete footnote. we need update all in buffer?
-endfun "}}}
-fun! riv#link#get_foot_by_id(id) "{{{
-    
-endfun "}}}
-fun! riv#link#get_last_foot() "{{{
-    " return  [ id , row]
-    let pos = getpos('.')
-    call setpos('.',getpos('$'))
-    let [row,col] = searchpos(g:_riv_p.link_tar_footnote,'nWbc',0,100)
-    call setpos('.',pos)
-    if row == 0
-        return [0,0]
-    else
-        return [matchlist(getline(row), g:_riv_p.link_tar_footnote)[1],row]
-    endif
-endfun "}}}
 
 fun! riv#link#finder(dir) "{{{
     let flag = a:dir=="b" ? 'Wnb' : 'Wn'
@@ -36,7 +18,6 @@ fun! riv#link#finder(dir) "{{{
         call cursor(srow, scol)
     endif
 endfun "}}}
-
 
 fun! s:normal_ptn(text) "{{{
     let text = substitute(a:text ,'\v(^__=|_=_$)','','g')
@@ -82,7 +63,6 @@ fun! s:find_sect(ptn) "{{{
         endfor
     endif
 endfun "}}}
-
 
 
 fun! riv#link#open() "{{{
@@ -169,8 +149,6 @@ fun! riv#link#hi_hover() "{{{
     endif
     2match none
 endfun "}}}
-
-
 
 fun! s:matchobject(str, ptn,...) "{{{
     if a:0

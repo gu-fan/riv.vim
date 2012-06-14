@@ -17,22 +17,38 @@ fun! riv#action#db_click() "{{{
         exe "normal! zv"
     elseif !riv#link#open()
         " Open fold with clicking on section title.
-        if has_key(b:fdl_dict, row)
-            if b:fdl_dict[row].type =='sect'
-                exe "normal! zc"
-                return
-            endif
+        if s:is_in_sect_title(row)
+            exe "normal! zc"
+            return
         endif
         let line = getline(row)
         let col = col('.')
-        if line=~ g:_riv_p.todo_all && col < matchend(line, g:_riv_p.todo_all)
-                    \ && col > matchend(line, g:_riv_p.list_all)
+        if s:is_in_todo_item(line,col)
             call riv#list#toggle_todo()
+        elseif s:is_in_todo_time(line,col)
+            call riv#list#change_date()
         else
             exe "normal! \<2-LeftMouse>"
         endif
         
     endif
+endfun "}}}
+fun! s:is_in_sect_title(row) "{{{
+   return exists("b:obj_dict") && has_key(b:obj_dict, a:row)
+               \ && b:obj_dict[a:row].type =='sect'
+endfun "}}}
+fun! s:is_in_todo_item(line,col) "{{{
+   return  a:col < matchend(a:line, g:_riv_p.todo_all)
+            \ && a:col > matchend(a:line, g:_riv_p.list_all)
+endfun "}}}
+fun! s:is_in_todo_time(line,col) "{{{
+    if a:line=~ g:_riv_p.todo_tm_end
+        return  a:col < matchend(a:line, g:_riv_p.todo_tm_end)
+                \ && a:col > matchend(a:line, g:_riv_p.todo_tm_bgn)
+    else       
+        return  a:col < matchend(a:line, g:_riv_p.todo_tm_bgn)
+                \ && a:col > matchend(a:line, g:_riv_p.todo_all)
+   endif
 endfun "}}}
 fun! riv#action#ins_bs() "{{{
     let [row,col]  = getpos('.')[1:2]
@@ -41,7 +57,6 @@ fun! riv#action#ins_bs() "{{{
         let norm_tab = repeat(' ',&sw)
         let norm_col  = substitute(line[:col-1],'\t', norm_tab ,'g')
         let norm_col_len  = len(norm_col)
-        " we should get two indent here for list item.
         let ind = riv#insert#indent(row)
         call cursor(row,col)
         if ind < norm_col_len && (ind + &sw) > norm_col_len
@@ -61,6 +76,36 @@ fun! riv#action#ins_enter() "{{{
         return  "\<Enter>"
     endif
 endfun "}}}
+fun! riv#action#ins_c_enter() "{{{
+    let line = getline('.')
+    if line=~ '\S'
+        let cmd = "\<Esc>o"
+    else
+        let cmd = ''
+    endif
+    let cmd .= "\<C-O>:call riv#list#act(0)\<CR>\<Esc>A"
+    return cmd
+endfun "}}}
+fun! riv#action#ins_s_enter() "{{{
+    let line = getline('.')
+    if line=~ '\S'
+        let cmd = "\<Esc>o\<CR>"
+    else
+        let cmd = ''
+    endif
+    let cmd .= "\<C-O>:call riv#list#act(1)\<CR>\<Esc>A"
+    return cmd
+endfun "}}}
+fun! riv#action#ins_m_enter() "{{{
+    let line = getline('.')
+    if line=~ '\S'
+        let cmd = "\<Esc>o\<CR>"
+    else
+        let cmd = ''
+    endif
+    let cmd .= "\<C-O>:call riv#list#act(-1)\<CR>\<Esc>A"
+    return cmd
+endfun "}}}
 fun! riv#action#ins_tab() "{{{
     if riv#table#nextcell()[0] == 0
         return "\<Tab>"
@@ -71,7 +116,7 @@ fun! riv#action#ins_tab() "{{{
 endfun "}}}
 fun! riv#action#ins_stab() "{{{
     if riv#table#prevcell()[0] == 0
-        return "\<BS>"
+        return "\<S-Tab>"
     else
         return "\<C-O>:call cursor(riv#table#prevcell())\<CR>"
     endif

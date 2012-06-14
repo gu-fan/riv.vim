@@ -290,33 +290,6 @@ fun! s:todo_lv_len(grp) "{{{
     return len(g:_riv_t.todo_all_group[a:grp])
 endfun "}}}
 
-fun! riv#list#auto() "{{{
-    " TODO: auto add it with level.
-    " check with current level.
-    " if have brother. then add brother id + 1
-    " elseif have parent , then parent type +1 ,  id = 1
-    " else add a top item.
-    call riv#fold#init()
-    
-    let [lst_row,lst_col] = searchpos(g:_riv_p.list_all,'Wnb',0,100)
-    if lst_row == 0 
-        return -1
-    endif
-
-    let lst_str = matchstr(getline(lst_row),g:_riv_p.list_all)
-
-    let row = line('.')
-    let line = getline(row)
-
-    let white = matchstr(line,'^\s*')
-    let lst_line = substitute(line,white, white.lst_str,'')
-
-    if line !~ g:_riv_p.list_all
-        call setline(row,lst_line)
-    endif
-    
-endfun "}}}
-
 fun! s:get_list(row) "{{{
     " To find if a row is in  a list's arrange. 
     " this list's indent should smaller than current line (when not list).
@@ -590,6 +563,44 @@ fun! riv#list#stat(line,...) "{{{
         return [7,idt,ma[7][1 : len-2], "()", ma[8]]
     endif
 endfun "}}}
+fun! s:listnum2nr(num) "{{{
+    let has_prev_item = a:0 ? a:1 : 1
+    if a:num == ''
+        return 0
+    elseif a:num =~ '\d\+'
+        return a:num
+    elseif a:num =~ '^[A-Za-z]$' &&
+            \ ( match(a:num, '[imcxv]') == -1 || has_prev_item == 1)
+        if a:num =~ '\u'
+            return char2nr(a:num)-64
+        else
+            return char2nr(a:num)-96
+        endif
+    elseif a:num =~ '[imcxv]\+'
+        return riv#roman#to_nr(a:num)
+    endif
+endfun "}}}
+fun! s:nr2listnum(n,type) "{{{
+    if a:type=='1'
+        return ''
+    elseif a:type=='2' || a:type=='3'
+        if a:n <= 0 
+            return 1
+        endif
+        return a:n
+    elseif a:type=='4' || a:type=='5'
+        if a:n >26 
+            return 'Z'
+        elseif a:n<= 0
+            return 'A'
+        endif
+        return nr2char(a:n+64)
+    elseif a:type=='6' || a:type=='7'
+        return riv#roman#from_nr(a:n)
+    endif
+endfun "}}}
+echoe s:nr2listnum(23,5)
+echoe s:listnum2nr('cmxi')
 fun! s:next_list_num(num,...) "{{{
     let has_prev_item = a:0 ? a:1 : 1
     if a:num == ''
@@ -705,6 +716,7 @@ fun! s:list_shift_len(row,len) "{{{
         let line = substitute(line,'^\s\{,'.abs(a:len).'}','','')
     endif
     let [type , idt , num , attr, space] =  riv#list#stat(line)
+    let nr = s:listnum2nr(num)
     if type != -1
         if act == 1
             let level = s:stat2level(type, num, attr) 
@@ -713,6 +725,13 @@ fun! s:list_shift_len(row,len) "{{{
             let level = s:stat2level(type, num, attr) 
             let [type,num,attr] = s:level2stat(level-1)
         endif
+        echo num
+        if num =~ '\u'
+            let num = toupper(s:nr2listnum(nr,type))
+        else
+            let num = tolower(s:nr2listnum(nr,type))
+        endif
+        echo num
         let list_str =  s:list_str(type,idt,num,attr,space)
         let line = substitute(line, g:_riv_p.list_all , list_str, '')
     endif
