@@ -2,7 +2,7 @@
 "    Name: restin/insert.vim
 "    File: restin/insert.vim
 "  Author: Rykka G.Forest
-"  Update: 2012-06-05
+"  Update: 2012-06-14
 " Version: 0.5
 "=============================================
 let s:cpo_save = &cpo
@@ -52,7 +52,7 @@ fun! riv#insert#indent(row) "{{{
 
     " exp_markup
     " 1~2: ind
-    let l_ind = matchend(pnb_line, g:_riv_p.s_exp)
+    let l_ind = matchend(pnb_line, g:_riv_p.exp_m)
     if l_ind != -1 &&  a:row <= pnb_num+2
         return (ind + l_ind - matchend(pnb_line, g:_riv_p.indent))
     endif
