@@ -43,6 +43,11 @@ fun! riv#load_map(map_dic) "{{{
         sil! exe "map <silent> <Plug>".name." :".action."<CR>"
     endfor
 endfun "}}}
+fun! riv#set_g_map(map_dic)
+    for [name,action] in items(a:map_dic)
+        sil! exe "map <silent>  ". g:riv_leader . action."  <Plug>".name
+    endfor
+endfun
 fun! riv#load_menu(menu_list) "{{{
     for [name ,short, action] in a:menu_list
         let short  = short =~'  ' ? short : "<tab>".g:riv_buf_leader.short
@@ -56,34 +61,6 @@ fun! riv#show_menu() "{{{
         menu enable RIV.Index
     else
         menu enable RIV.*
-    endif
-endfun "}}}
-fun! s:set_proj(proj) "{{{
-    let proj = g:riv_proj_temp
-    for [key,var] in items(a:proj)
-        let proj[key] = var
-    endfor
-    call insert(g:riv_project_list, proj)
-    return proj
-endfun "}}}
-fun! s:exe_proj(action) "{{{
-    if a:0
-        let index = a:1
-    else
-        let index = 0
-    endif
-    if exists("g:riv_project_list[".index."]")
-        let proj = g:riv_project_list[index]
-    else
-        let proj = g:riv_project_list[0]
-    endif
-    if a:action == 'index'
-        let path = expand(proj["path"])
-        if !isdirectory(path)
-                \ && input("'".path."' Does not exist. \nCreate?(Y/n):","Y")=~?'Y'
-            call mkdir(path,'p')
-        endif
-        exe 'edit ' . path."/".proj["index"].'.rst'
     endif
 endfun "}}}
 "}}}
@@ -105,31 +82,37 @@ endfun "}}}
 " 1     on
 let s:default = {}
 let s:default.opts = {
-    \'leader'               : '<C-E>',
-    \'buf_leader'           : '<C-E>',
-    \'buf_ins_leader'       : '<C-E>',
-    \'file_link_ext'        : 'vim,cpp,c,py,rb,lua,pl',
-    \'highlight_code'       : "lua,python,cpp,javascript,vim,sh",
-    \'todo_levels'          :  " ,o,X",
-    \'todo_timestamp'       : 1,
-    \'todo_keywords'        : "TODO,DONE;FIXME,FIXED",
-    \'hover_link_hl'        : 1,
-    \'auto_format_table'    : 1,
-    \'fold_blank'           : 2,
-    \'fold_level'           : 3,
-    \'auto_fold_force'      : 1,
-    \'auto_fold1_lines'     : 5000,
-    \'auto_fold2_lines'     : 3000,
-    \'list_toggle_type'     : "*,#.,(#)",
-    \'localfile_linktype'   : 1,
-    \'web_browser'          : "firefox",
-    \'options'              : s:default,
-    \'usr_syn_dir'          : "",
-    \'sect_seperator'       : "-",
+    \'leader'             : '<C-E>',
+    \'buf_leader'         : '<C-E>',
+    \'buf_ins_leader'     : '<C-E>',
+    \'file_link_ext'      : 'vim,cpp,c,py,rb,lua,pl',
+    \'highlight_code'     : "lua,python,cpp,javascript,vim,sh",
+    \'todo_levels'        : " ,o,X",
+    \'todo_timestamp'     : 1,
+    \'todo_keywords'      : "TODO,DONE;FIXME,FIXED",
+    \'hover_link_hl'      : 1,
+    \'auto_format_table'  : 1,
+    \'fold_blank'         : 2,
+    \'fold_level'         : 3,
+    \'auto_fold_force'    : 1,
+    \'auto_fold1_lines'   : 5000,
+    \'auto_fold2_lines'   : 3000,
+    \'list_toggle_type'   : "*,#.,(#)",
+    \'localfile_linktype' : 1,
+    \'web_browser'        : "firefox",
+    \'options'            : s:default,
+    \'usr_syn_dir'        : "",
+    \'rst2html_args'      : "",
+    \'section_seperator'  : "-",
     \}
 " maps "{{{
 let s:default.maps = {
-    \'RivIndex'          : 'call <SID>exe_proj("index")',
+    \'RivIndex'          : 'call riv#index()',
+    \'RivAsk'            : 'call riv#ask_index()',
+    \'Riv2HtmlIndex'     : 'call riv#publish#browse()',
+    \'Riv2HtmlAndBrowse' : 'call riv#publish#file2html(1)',
+    \'Riv2HtmlFile'      : 'call riv#publish#file2html(0)',
+    \'Riv2HtmlProject'   : 'call riv#publish#proj2html()',
     \'RivLinkOpen'       : 'call riv#link#open()',
     \'RivLinkForward'    : 'call riv#link#finder("f")',
     \'RivLinkBackward'   : 'call riv#link#finder("b")',
@@ -159,6 +142,15 @@ let s:default.maps = {
     \'RivTableFormat'    : 'call riv#table#format()',
     \}
 "}}}
+"
+let s:default.g_maps = {
+    \'RivIndex'          : 'ww',
+    \'RivAsk'            : 'wa',
+    \'Riv2HtmlIndex'     : 'wi',
+    \'Riv2HtmlFile'      : 'wf',
+    \'Riv2HtmlAndBrowse' : 'wb',
+    \'Riv2HtmlProject'   : 'wp',
+    \}
 " buf maps "{{{
 
 " Sections/headings
@@ -184,11 +176,10 @@ let s:default.maps = {
 " alt-enter : a new parent brother
 let s:default.buf_maps = {
     \'RivLinkOpen'       : [['<CR>', '<KEnter>'],  'n',  'eo'],
-    \'RivListNewList'    : [['<C-CR>', '<C-KEnter>'],  'n',  'lo'],
     \'RivLinkForward'    : ['<TAB>',  'n',  'lf'],
     \'RivLinkBackward'   : ['<S-TAB>',  'n',  'lb'],
     \'RivLinkDBClick'    : ['<2-LeftMouse>',  '',  ''],
-    \'RivListShiftRight'   : [['>', '<C-ScrollwheelDown>' ],  'mi',  'eu'],
+    \'RivListShiftRight' : [['>', '<C-ScrollwheelDown>' ],  'mi',  'eu'],
     \'RivListShiftLeft'  : [['<', '<C-ScrollwheelUp>'],  'mi',  'ed'],
     \'RivTodoToggle'     : ['',  'mi',  'ee'],
     \'RivTodoDel'        : ['',  'mi',  'ed'],
@@ -197,7 +188,7 @@ let s:default.buf_maps = {
     \'RivTodoType1'      : ['', 'mi',  'e1'],
     \'RivTodoType2'      : ['', 'mi',  'e2'],
     \'RivTodoType3'      : ['', 'mi',  'e3'],
-    \'RivListAuto'      : ['',  'mi',  'la'],
+    \'RivListAuto'       : ['',  'mi',  'la'],
     \'RivListType1'      : ['',  'mi',  'l1'],
     \'RivListType2'      : ['',  'mi',  'l2'],
     \'RivListType3'      : ['',  'mi',  'l3'],
@@ -255,15 +246,42 @@ let s:default.menus = [
     \]
 "}}}
 "{{{ project options
-let g:riv_proj_temp = {
-            \ 'path'          : '~/Documents/RIV',
-            \ 'html_path'     : '~/Documents/RIV/.html',
-            \ 'template_path' : '~/Documents/RIV/.template' ,
-            \ 'index'         : 'index' }
+let g:riv_proj_temp = {}
 let g:riv_project_list = [ ]
-let g:riv_project = !exists("g:riv_project") ? s:set_proj(g:riv_proj_temp) :
-            \ s:set_proj(g:riv_project)
-"}}}
+" let g:riv_project = !exists("g:riv_project") ? s:set_proj(g:riv_proj_temp) :
+"             \ s:set_proj(g:riv_project)
+let g:riv_p_id = 0
+fun! riv#index(...) "{{{
+    let id = a:0 ? a:1 : 0
+    if exists("g:_riv_c.p[id]")
+        let path = expand(g:_riv_c.p[id].path).'/'
+        let index = g:_riv_c.p[id].index
+        let ext   = '.'.g:_riv_c.p[id].rst_ext
+        if !isdirectory(path)
+                \ && input("'".path."' Does not exist. \nCreate?(Y/n):")!~?'n'
+            call mkdir(path,'p')
+        endif
+        exe 'edit ' . path.index.ext
+        let g:riv_p_id = id
+        let b:riv_p_id = id
+    else
+        echohl ErrorMsg | echo "No such Project ID" | echohl Normal
+    endif
+endfun "}}}
+fun! riv#ask_index() "{{{
+    let id = inputlist(["Please Select One Project ID:"]+
+                \map(range(len(g:_riv_c.p)),'v:val+1. "." . g:_riv_c.p[v:val].path') )
+    if id != 0
+        call riv#index((id-1))
+    endif
+endfun "}}}
+fun! s:set_proj_conf(proj) "{{{
+    let proj = g:_riv_c.p_basic
+    for [key,var] in items(a:proj)
+        let proj[key] = var
+    endfor
+    return proj
+endfun "}}}
 "}}}
 
 fun! riv#load_conf() "{{{
@@ -274,10 +292,10 @@ if exists("g:_riv_debug") && g:_riv_debug==1
 endif
 " Constants "{{{
 if !exists("g:_riv_c")
-    let g:_riv_c = {'path':{}}
-
+    let g:_riv_c = {}
     let g:_riv_p = {}
     let g:_riv_t = {}
+    let g:_riv_c.riv_path = s:autoload_path . '/riv/'
     if has("python") "{{{
         let g:_riv_c['py'] = "py "
         let g:_riv_c.has_py = 2
@@ -292,7 +310,7 @@ if !exists("g:_riv_c")
         try
             exe g:_riv_c.py "import sys"
             exe g:_riv_c.py "import vim"
-            exe g:_riv_c.py "sys.path.append(vim.eval('s:autoload_path')  + '/riv/')"
+            exe g:_riv_c.py "sys.path.append(vim.eval('g:_riv_c.riv_path'))"
             exe g:_riv_c.py "from rivlib.table import GetTable"
             exe g:_riv_c.py "from rivlib.buffer import RivBuf"
             let g:_riv_c.py_imported = 1
@@ -300,6 +318,28 @@ if !exists("g:_riv_c")
             let g:_riv_c.py_imported = 0
         endtry
     endif "}}}
+
+    let g:_riv_c.p_basic = {
+        \'index'              : 'index',
+        \'rst_ext'            : "rst",
+        \'path'               : '~/Documents/Riv',
+        \'build_path'         : '_build',
+        \'template_path'      : '_template' ,
+        \'static_path'        : '_static' ,
+        \}
+    let g:_riv_c.p = []
+    if exists("g:riv_projects") && type(g:riv_projects) == type([])
+        for project in g:riv_projects
+            if type(project) == type({})
+                call add(g:_riv_c.p, s:set_proj_conf(project))
+            endif
+        endfor
+    elseif exists("g:riv_project") && type(g:riv_project) == type({})
+        call add(g:_riv_c.p, s:set_proj_conf(g:riv_project))
+    endif
+    if empty(g:_riv_c.p)
+        call add(g:_riv_c.p, g:_riv_c.p_basic)
+    endif
 
     " Patterns: "{{{2
     
@@ -418,17 +458,16 @@ if !exists("g:_riv_c")
 
     " File:
     let s:file_name = '[[:alnum:]~:./\\_-]+'
-    let s:file_start = '%(\_^|\s|[''"({<,;!?])'
-    let s:file_end = '%($|\s|[''")}>,;!?])'
+    let s:file_start = '%(\_^|\s)'
+    let s:file_end = '%($|\s)'
+    let g:_riv_t.file_ext_lst = s:normlist(split(g:riv_file_link_ext,','))
     if g:riv_localfile_linktype == 1
         " *.rst *.vim xxx/
-        let g:_riv_t.file_ext_lst = s:normlist(split('rst,'.g:riv_file_link_ext,','))
-        let g:_riv_p.file_ext_ptn = join(g:_riv_t.file_ext_lst,'|')
+        let g:_riv_p.file_ext_ptn = 'rst|'.join(g:_riv_t.file_ext_lst,'|')
         let g:_riv_p.link_file = '\v' . s:file_start . '\zs' . s:file_name
                     \.'%(\.%('. g:_riv_p.file_ext_ptn .')|/)\ze'. s:file_end
     elseif g:riv_localfile_linktype == 2
         " [*]  [xxx/] [*.vim]
-        let g:_riv_t.file_ext_lst = s:normlist(split(g:riv_file_link_ext,','))
         let g:_riv_p.file_ext_ptn = join(g:_riv_t.file_ext_lst,'|')
         let g:_riv_p.link_file = '\v'.s:file_start.'\zs\['. s:file_name .'\]\ze'. s:file_end
     else
@@ -443,7 +482,7 @@ if !exists("g:_riv_c")
     "  xxx_
     let g:_riv_p.link_ref_normal = '\v<'.s:ref_name.'_\ze'.s:ref_end
     " `xxx xx`_
-    let g:_riv_p.link_ref_phase  = '\v<`[^`\\]*%(\\.[^`\\]*)*`_\ze'.s:ref_end
+    let g:_riv_p.link_ref_phase  = '\v`[^`\\]*%(\\.[^`\\]*)*`_\ze'.s:ref_end
     "  xxx__
     let g:_riv_p.link_ref_anoymous = '\v<'.s:ref_name.'__\ze'.s:ref_end
     " [#]_ [*]_  [#xxx]_  [3]_    and citation [xxxx]_
@@ -492,7 +531,7 @@ if !exists("g:_riv_c")
     let g:_riv_t.sect_punc = '!"#$%&''()*+,-./:;<=>?@[\]^_`{|}~'
     let g:_riv_t.list_lvs  =  ["*","+","-"]
     let g:_riv_t.list_type = split(g:riv_list_toggle_type,',')
-    let g:_riv_t.sect_sep =  g:riv_sect_seperator[0]
+    let g:_riv_t.sect_sep =  g:riv_section_seperator[0]
     let g:_riv_t.highlight_code = s:normlist(split(g:riv_highlight_code,','))
 
     lockvar 2 g:_riv_c
@@ -505,8 +544,8 @@ fun! riv#init() "{{{
     call riv#load_map(s:default.maps)
     call riv#load_menu(s:default.menus)
     call riv#load_conf()
+    call riv#set_g_map(s:default.g_maps)
     call riv#show_menu()
-    exe 'map '. g:riv_leader . 'ww <Plug>RivIndex'
 endfun "}}}
 
 

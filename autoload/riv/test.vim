@@ -134,8 +134,20 @@ fun! riv#test#show_obj() "{{{
         echo b:obj_dict[line('.')]
     endif
 endfun "}}}
-
-
+fun! riv#test#link() "{{{
+    echo riv#publish#repl_file_link("1122334 ewe.rst 3243.*.rst 234/2.2342.rst   ")
+    echo riv#publish#repl_file_link("1122334 index.rst ")
+    echo riv#publish#repl_file_link("1122334  fejfoj/ ")
+    echo riv#publish#repl_file_link("1122334  _fejfoj/ c:ewfwe.wef.rst ")
+    echo riv#publish#repl_file_link("1122334  [_fejfoj/] ")
+    echo riv#publish#repl_file_link(" wjaoifjw index.rst index.py ")
+    echo riv#publish#repl_file_link(" wjaoifjw  ../  / /home/etc/rr.rst ")
+    echo riv#publish#repl_file_link(" wjaoifjw  ~/ee.rst  ./ /home/etc/rr.rst ")
+    
+endfun "}}}
+fun! riv#test#link2()
+    
+endfun
 fun! riv#test#list_item() "{{{
     echo riv#list#level("   # 233" )     '-1'
     echo riv#list#level("   * 233" )     
@@ -186,11 +198,14 @@ fun! riv#test#list_str() "{{{
     echo riv#list#act_line("   (I) 233"   ,act ,idt ,prev ).'|'
 endfun "}}}
 fun! riv#test#list_buf()
-
+    call riv#publish#2html()
 endfun
 
 " Test
-call riv#test#list_str()
+" call riv#test#list_str()
+" call riv#test#link()
+call riv#test#list_buf()
+map <leader>tt :call riv#test#list_buf()
 
 
 let &cpo = s:cpo_save

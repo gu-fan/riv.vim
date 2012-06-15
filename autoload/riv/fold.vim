@@ -8,9 +8,7 @@
 let s:cpo_save = &cpo
 set cpo-=C
 
-
 let s:p = g:_riv_p
-
 fun! s:init_stat() "{{{
     let len = line('$')
     let b:foldlevel = g:riv_fold_level
@@ -19,16 +17,91 @@ fun! s:init_stat() "{{{
     elseif len > g:riv_auto_fold2_lines && g:riv_auto_fold_force == 1
         let b:foldlevel = b:foldlevel >= 2 ? 2 : 0 
     endif
-    if !exists("b:fdl_list") 
+    call s:parse_from_start()
+
+    " if !exists("b:fdl_list") 
+        " call s:parse_from_start()
+        " elseif len(b:fdl_list) != line('$')+1
+        " if &modified && !exists("s:added")
+        "     call s:add_change_range(s:get_changed_range())
+        "     let s:added = 1
+        " else
+        "     call s:parse_from_start()
+        "     unlet! s:added
+        " endif
+    " endif
+endfun "}}}
+" Range "{{{
+let s:tmpfile = tempname()
+fun! s:get_changed_range() "{{{
+    sil exe 'w !diff % - > ' s:tmpfile
+    let changes = []
+    for line in readfile(s:tmpfile)
+        if line =~ '^<\|^>\|^---' || line=~ '^\d\+\%(,\d\+\)\=c'
+            continue
+        endif 
+        call add(changes , line)
+    endfor 
+    if len(changes) == 0
+        return [[0]]
+    elseif len(changes) >= 5
+        return [[-1]]
+    endif 
+    let changed_list =[]
+    for change in changes
+        if change =~ 'a\|d'
+            let [b,a ] = split(change,'a\|d')
+            let b_r = split(b,',')
+            let a_r = split(a,',')
+            let bran = b_r[-1] - b_r[0] + 1
+            let aran = a_r[-1] - a_r[0] + 1
+            let changed = [b_r[0] , (aran - bran)+1]
+            call add(changed_list, changed)
+        endif
+    endfor
+    return changed_list
+endfun "}}}
+fun! s:add_change_range(change_list) "{{{
+    if a:change_list[0][0] == 0
+        return
+    elseif a:change_list[0][0] == -1
         call s:parse_from_start()
-    elseif len(b:fdl_list) != line('$')+1
-        call s:parse_from_start()
-        " for i in range(1,line('$'))
-        "     if b:lines[i] != getline(i)
-        "         call s:parse_from_row(i)
-        "         break
-        "     endif
-        " endfor
+        return
+    endif
+    for change in a:change_list
+        call s:add_in_len(change[0],change[1])
+    endfor
+endfun "}}}
+fun! s:add_in_len(bgn,len) "{{{
+    call s:add_d_len(b:obj_dict, a:bgn, a:len)
+    call s:add_l_len(b:fdl_list, a:bgn, a:len)
+endfun "}}}
+fun! s:add_d_len(dict, bgn, len) "{{{
+    let changed = {}
+    if a:len > 0
+        let changed = filter(copy(a:dict),'v:key>a:bgn')
+        for key in reverse(sort(keys(changed),'s:sort'))
+            let changed[key+a:len] = changed[key]
+            let changed[key+a:len].bgn += a:len
+        endfor
+    elseif a:len < 0
+        let changed = filter(copy(a:dict),'v:key>(a:bgn+a:len)')
+        for key in sort(keys(changed),'s:sort')
+            let changed[key+a:len] = changed[key]
+            let changed[key+a:len].bgn += a:len
+        endfor
+    endif
+    
+    call extend(a:dict, changed)
+endfun "}}}
+fun! s:sort(i1,i2) "{{{
+    return a:i1 - a:i2
+endfun "}}}
+fun! s:add_l_len(list, bgn, len) "{{{
+    if a:len > 0 
+        call extend(a:list,map(range(a:len),'0'),a:bgn)
+    elseif a:len < 0
+        call remove(a:list,a:bgn,a:bgn-a:len)
     endif
 endfun "}}}
 fun! s:parse_from_start() "{{{
@@ -88,6 +161,8 @@ fun! s:parse_from_row(row) "{{{
     call s:set_fdl_list()
     call s:set_td_child(b:state.l_root)
 endfun "}}}
+"}}}
+" Set "{{{
 let s:sect_sep = g:_riv_t.sect_sep
 fun! s:set_fdl_dict() "{{{
     
@@ -244,13 +319,17 @@ fun! s:set_sect_end() "{{{
             let n_p = s:get_parent(n_p)
         endwhile
         if empty(n_b)
-            let n_b = {'level':0,'bgn':line('$')}
+            let n_b = {'level':0,'bgn':line('$')+1}
         endif
         
         if m.level > n_b.level && g:riv_fold_blank ==0
             let m.end = prevnonblank(n_b.bgn-1)+1
         elseif m.level > n_b.level && g:riv_fold_blank == 1
-            let m.end = n_b.bgn-2
+            if n_b.bgn != line('$')+1
+                let m.end = n_b.bgn-2
+            else
+                let m.end = line('$')
+            endif
         else
             let m.end = n_b.bgn-1
         endif
@@ -280,7 +359,8 @@ fun! s:set_fdl_list() "{{{
         endif
     endfor
 endfun "}}}
-
+"}}}
+" Check "{{{
 fun! s:check(row) "{{{
     " check and set the state and return the value dict.
     let row = a:row
@@ -458,7 +538,8 @@ fun! s:t_checker(row) "{{{
         " let b:state.t_chk={}
     endif
 endfun "}}}
-
+"}}}
+" Relation "{{{
 fun! s:add_child(p,o) "{{{
     call add(a:p.child, a:o.bgn )
     let a:o.parent = a:p.bgn
@@ -507,8 +588,8 @@ fun! riv#fold#get_next_older(o) "{{{
     endwhile
     return n_b
 endfun "}}}
-
-
+"}}}
+" Help "{{{
 fun! s:set_td_child(o) "{{{
     " Get All child's td_stat recursively
     " and update the td_child attr.
@@ -536,14 +617,12 @@ fun! s:set_td_child(o) "{{{
     endif
     return c_td
 endfun "}}}
-
 fun! s:sort_match(i1,i2) "{{{
     return a:i1.bgn - a:i2.bgn
 endfun "}}}
 fun! riv#fold#indent(line) "{{{
     return strdisplaywidth(matchstr(a:line,'^\s*'))
 endfun "}}}
-
 fun! riv#fold#expr(row) "{{{
     if a:row == 1
         call s:init_stat()
@@ -606,6 +685,6 @@ endfun "}}}
 fun! riv#fold#init() "{{{
     call s:init_stat()
 endfun "}}}
-
+"}}}
 let &cpo = s:cpo_save
 unlet s:cpo_save

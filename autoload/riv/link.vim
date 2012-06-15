@@ -9,7 +9,6 @@
 let s:cpo_save = &cpo
 set cpo-=C
 
-
 fun! riv#link#finder(dir) "{{{
     let flag = a:dir=="b" ? 'Wnb' : 'Wn'
     let [srow,scol] = searchpos(g:_riv_p.all_link,flag,0,100)
@@ -36,11 +35,10 @@ endfun "}}}
 fun! s:find_tar(text) "{{{
     let norm_ptn = s:normal_ptn(a:text)
     let [c_row,c_col] = getpos('.')[1:2]
-    let row = s:find_sect(norm_ptn)
+    let row = s:find_sect('\v\c'.norm_ptn)
     if row > 0
         return [row, c_col]
     endif
-
     let tar_ptn = s:target_ptn(norm_ptn)
     let [a_row, a_col] = searchpos(tar_ptn, 'wn', 0 , 100)
     return [a_row, a_col]
@@ -57,19 +55,19 @@ fun! s:find_sect(ptn) "{{{
 " Note:the Section Title is also targets.
     if exists("b:state.sectmatcher")
         for sect in b:state.sectmatcher
-            if getline(b:sect.bgn) =~ a:ptn
-                return b:sect.bgn
+            if getline(sect.bgn) =~ a:ptn
+                return sect.bgn
             endif
         endfor
     endif
 endfun "}}}
-
 
 fun! riv#link#open() "{{{
     let [row,col] = getpos('.')[1:2]
     let line = getline(row)
     let ptn = g:_riv_p.all_link
     let mo = s:matchobject(line, ptn)
+
     while !empty(mo)
         if mo.end < col
             let mo = s:matchobject(line,ptn, mo.end)
@@ -82,24 +80,27 @@ fun! riv#link#open() "{{{
     if empty(mo)
         return
     endif
+    let id =  exists("b:riv_p_id") ? b:riv_p_id : g:riv_p_id
     if !empty(mo.groups[1])
+        " got it's target , find it's referrence
         let [sr,sc] = s:find_ref(mo.str)
         if sr != 0
             call setpos("'`",getpos('.'))
             call setpos('.',[0,sr,sc,0])
-            return 2
+            return 1
         endif
     elseif !empty(mo.groups[2])
         let [sr,sc] = s:find_tar(mo.str)
         if sr != 0
             call setpos("'`",getpos('.'))
             call setpos('.',[0,sr,sc,0])
-            return 1
+            return 2
         endif
     elseif !empty(mo.groups[3])
-        if !empty(mo.groups[4])
+        if !empty(mo.groups[4])             " it's file://xxx
             if mo.str =~ '^file'
                 exe "edit ".expand(mo.groups[4])
+                let b:riv_p_id = id
             else
                 " vim will expand the # and % , so escape it.
                 sil! exe "!".g:riv_web_browser." ". escape(mo.groups[4],'#%')." &"
@@ -109,22 +110,32 @@ fun! riv#link#open() "{{{
         endif
         return 3
     elseif !empty(mo.groups[5])
-        " NOTE: link have used sub 1 and 2
-        if mo.str !~ '^[/~]'
-            let dir = expand('%:p:h')
-            let file = dir . '/' . mo.str
-            if file=~'/$'
-                if !isdirectory(file) && input("Directory Not Exists , Create One?", 1)
-                    call mkdir(file,"p",0755)
+        if s:is_relative(mo.str)
+            let dir = expand('%:p:h').'/'
+            let file = dir . mo.str
+            let index = g:_riv_c.p[id].index
+            let ext   = '.'.g:_riv_c.p[id].rst_ext
+            if s:is_directory(mo.str)
+                if !isdirectory(mo.str)
+                \ && input("'".mo.str."' Does not exist. \nCreate?(Y/n):")!~?'n'
+                    call mkdir(mo.str,"p")
                 endif
-                let file = file."index.rst"
+                let file = file . index . ext
             endif
         else
             let file = expand(mo.str)
         endif
         exe "edit ".file
+        let b:riv_p_id = id
         return 4
     endif
+endfun "}}}
+
+fun! s:is_relative(name) "{{{
+    return a:name !~ '^\~\|^/\|^[a-zA-Z]:'
+endfun "}}}
+fun! s:is_directory(name) "{{{
+    return a:name =~ '/$' 
 endfun "}}}
 
 " highlight
