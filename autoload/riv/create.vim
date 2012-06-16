@@ -133,7 +133,10 @@ fun! riv#create#show_sect() "{{{
         echo 'You are not in any section.'
     endif
 endfun "}}}
+fun! riv#create#scatch()
+    let id =  exists("b:riv_p_id") ? b:riv_p_id : g:riv_p_id
 
+endfun
 
 let &cpo = s:cpo_save
 unlet s:cpo_save

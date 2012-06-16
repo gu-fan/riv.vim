@@ -120,7 +120,12 @@ let s:default.opts = {
     \'web_browser'        : "firefox",
     \'options'            : s:default,
     \'usr_syn_dir'        : "",
+    \'ft_browser'         : "",
     \'rst2html_args'      : "",
+    \'rst2odt_args'       : "",
+    \'rst2xml_args'       : "",
+    \'rst2s5_args'        : "",
+    \'rst2latex_args'     : "",
     \'section_levels'     : '=-~"''`',
     \}
 " maps "{{{
@@ -163,6 +168,10 @@ let s:default.maps = {
     \'Riv2HtmlAndBrowse' : 'call riv#publish#file2html(1)',
     \'Riv2HtmlFile'      : 'call riv#publish#file2html(0)',
     \'Riv2HtmlProject'   : 'call riv#publish#proj2html()',
+    \'Riv2Odt'           : 'call riv#publish#file2("odt",1)',
+    \'Riv2S5'            : 'call riv#publish#file2("s5",0)',
+    \'Riv2Latex'         : 'call riv#publish#file2("latex",1)',
+    \'Riv2Path'          : 'call riv#publish#path()',
     \}
 "}}}
 "
@@ -211,9 +220,13 @@ let s:default.buf_maps = {
     \'RivTestObj'        : ['',  'm',   't3'],
     \'RivTestTest'       : ['',  'm',   't4'],
     \'RivTestInsert'     : ['',  'm',   'ti'],
-    \'Riv2HtmlFile'      : ['',  'm',   'wf'],
-    \'Riv2HtmlAndBrowse' : ['',  'm',   'wb'],
-    \'Riv2HtmlProject'   : ['',  'm',   'wp'],
+    \'Riv2HtmlFile'      : ['',  'm',   '2hf'],
+    \'Riv2HtmlProject'   : ['',  'm',   '2hp'],
+    \'Riv2HtmlAndBrowse' : ['',  'm',   '2hh'],
+    \'Riv2Odt'           : ['', 'm',    '2oo'],
+    \'Riv2Latex'         : ['', 'm',    '2ll'],
+    \'Riv2S5'            : ['', 'm',    '2ss'],
+    \'Riv2Path'          : ['', 'm',    '2e'],
     \}
 let s:default.buf_imaps = {
     \'<BS>'         : 'riv#action#ins_bs()',
@@ -358,7 +371,14 @@ if !exists("g:_riv_c")
     if empty(g:_riv_c.p)
         call add(g:_riv_c.p, g:_riv_c.p_basic)
     endif
-
+    
+    if empty(g:riv_ft_browser)
+        if has('win32') || has('win64')
+            let g:riv_ft_browser = 'start'
+        else
+            let g:riv_ft_browser = 'xdg-open'
+        endif
+    endif
     " Patterns: "{{{2
     
     " Basic: "{{{3

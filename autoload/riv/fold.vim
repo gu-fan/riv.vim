@@ -31,6 +31,7 @@ fun! s:init_stat() "{{{
 endfun "}}}
 " Parse "{{{
 fun! s:parse_from_start() "{{{
+    redraw
     echo "Parsing buf ..."
     let len = line('$')
     let b:state = { 'l_chk':[], 

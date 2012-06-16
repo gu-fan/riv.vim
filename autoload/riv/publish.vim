@@ -101,59 +101,42 @@ fun! s:get_rel_to_root(path) "{{{
     let r_path = substitute(r_path, '^/', '' , '')
     return r_path
 endfun "}}}
+fun! s:rst_args(ft)
+    return !exists("g:riv_rst2".a:ft."_args") ? !empty(g:riv_rst2{a:ft}_args)
+                \ ? g:riv_rst2{a:ft}_args : '' : ''
+endfun
 fun! riv#publish#2html(file,html_path,browse) "{{{
-    let id =  exists("b:riv_p_id") ? b:riv_p_id : g:riv_p_id
     let file = expand(a:file)
     let out_path = a:html_path . s:get_rel_to_root(file)
     if !isdirectory(fnamemodify(out_path,':h')) 
         call mkdir(fnamemodify(out_path,':h'),'p')
     endif
     let file_path = fnamemodify(out_path, ":r").'.html'
+
     call s:create_tmp(file)
-    call s:to_html(file_path)
+    call s:to('html',file_path,s:rst_args('html'))
     if a:browse
-        exe '!'.g:riv_web_browser . ' '. file_path . ' &'
+        call s:sys(g:riv_web_browser . ' '. file_path . ' &')
     endif
 endfun "}}}
+
+
 fun! riv#publish#copy2proj(file,html_path) abort "{{{
     let out_path = a:html_path . s:get_rel_to_root(expand(a:file))
     if !isdirectory(fnamemodify(out_path,':h')) 
         call mkdir(fnamemodify(out_path,':h'),'p')
     endif
-    call system( 'cp -f '. a:file. ' '.  fnamemodify(out_path, ':h'))
+    call s:sys( 'cp -f '. a:file. ' '.  fnamemodify(out_path, ':h'))
 endfun "}}}
-fun! riv#publish#browse() "{{{
-    let id =  exists("b:riv_p_id") ? b:riv_p_id : g:riv_p_id
-    let index = g:_riv_c.p[id].index
-    let path = s:get_html_path() . index . '.html'
-    exe '!'.g:riv_web_browser . ' '. path . ' &'
-    
-endfun "}}}
-fun! s:get_html_path() "{{{
-    let id =  exists("b:riv_p_id") ? b:riv_p_id : g:riv_p_id
 
-    let build_path = g:_riv_c.p[id].build_path
-    let root = expand(g:_riv_c.p[id].path)
-    let root = s:is_directory(root) ? root : root.'/'
-    if s:is_relative(build_path)
-        let build_path =  root.build_path
-    endif
-    let html_path = s:is_directory(build_path) ? 
-                \ build_path.'html/' : build_path.'/html/'
-    return html_path   
-endfun "}}}
 fun! riv#publish#file2html(browse) "{{{
-    let id =  exists("b:riv_p_id") ? b:riv_p_id : g:riv_p_id
-    let ext = g:_riv_c.p[id].rst_ext
-    let html_path = s:get_html_path()
-    call riv#publish#2html(expand('%:p'), html_path, a:browse)
+    call riv#publish#2html(expand('%:p'), s:get_path('html'), a:browse)
 endfun "}}}
 fun! riv#publish#proj2html() abort "{{{
     let id =  exists("b:riv_p_id") ? b:riv_p_id : g:riv_p_id
     let ext = g:_riv_c.p[id].rst_ext
-    let html_path = s:get_html_path()
-    let root = expand(g:_riv_c.p[id].path)
-    let root = s:is_directory(root) ? root : root.'/'
+    let html_path = s:get_path('html')
+    let root = s:get_root_path()
     let files = filter(split(glob(root.'**/*.'.ext)), 'v:val !~ ''_build''')
     echohl Function
     echon 'Convert: '
@@ -171,26 +154,69 @@ fun! riv#publish#proj2html() abort "{{{
     echohl Normal
 endfun "}}}
 let s:tempfile = tempname()
-fun! s:to_html(path) abort "{{{
-    if !executable('rst2html.py')
-        echohl WarningMsg
-        echo 'Could not find rst2html.py'
-        echohl Normal
-        return -1
+
+" ['s5', 'latex', 'odt', 'xml' , 'pseudoxml', 'html' ]
+fun! riv#publish#file2(ft, browse) "{{{
+    call riv#publish#2(a:ft , expand('%:p'), s:get_path(a:ft), a:browse)
+endfun "}}}
+let g:riv_ft_browser = 'xdg-open'
+fun! riv#publish#2(ft, file, path, browse) "{{{
+    let file = expand(a:file)
+    let out_path = a:path . s:get_rel_to_root(file)
+    if !isdirectory(fnamemodify(out_path,':h')) 
+        call mkdir(fnamemodify(out_path,':h'),'p')
     endif
-    let style = g:_riv_c.riv_path.'style.css '
-    let args = g:riv_rst2html_args.' '
-    call system( "rst2html.py ". args . s:tempfile. " > " . a:path )
+    let file_path = fnamemodify(out_path, ":r").'.'.a:ft
+
+    call s:create_tmp(file)
+    call s:to(a:ft,file_path,s:rst_args(a:ft))
+    if a:browse
+        call s:sys(g:riv_ft_browser . ' '. file_path . ' &')
+    endif
 endfun "}}}
 
+fun! s:to(ft,path,...) "{{{
+    let exe = 'rst2'.a:ft.'2.py'
+    if !executable(exe)
+        let exe = 'rst2'.a:ft.'.py'
+        if !executable(exe)
+            call riv#error('Could not find '.exe)
+            return -1
+        endif
+    endif
+    let args = a:0 ? a:1 : ''
+    call s:sys( exe." ". args .' '. s:tempfile. " > " . a:path )
+endfun "}}}
 
-fun! s:to_pdf()
-    
-endfun
-fun! s:to_odt()
-    
-endfun
+fun! s:get_build_path() "{{{
+    let build_path = g:_riv_c.p[s:id()].build_path
+    if s:is_relative(build_path)
+        let build_path =  s:get_root_path().build_path
+    endif
+    return s:is_directory(build_path) ?  build_path : build_path.'/'
+endfun "}}}
+fun! s:id() "{{{
+    return exists("b:riv_p_id") ? b:riv_p_id : g:riv_p_id
+endfun "}}}
+fun! s:get_path(ft) "{{{
+    return s:get_build_path().a:ft.'/'
+endfun "}}}
+fun! s:get_root_path() "{{{
+    let root = expand(g:_riv_c.p[s:id()].path)
+    return s:is_directory(root) ? root : root.'/'
+endfun "}}}
+fun! s:sys(arg) abort "{{{
+    return system(a:arg)
+endfun "}}}
 
+fun! riv#publish#browse() "{{{
+    let index = g:_riv_c.p[s:id()].index
+    let path = s:get_path('html') . index . '.html'
+    call  s:sys(g:riv_web_browser . ' '. path . ' &')
+endfun "}}}
+fun! riv#publish#path() "{{{
+    exe 'sp ' s:get_build_path()
+endfun "}}}
 fun! s:SID() "{{{
     return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$')
 endfun "}}}
