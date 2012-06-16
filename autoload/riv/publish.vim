@@ -92,8 +92,7 @@ fun! s:create_tmp(file) "{{{
     call writefile(lines, s:tempfile)       " not all system can pipe
 endfun "}}}
 fun! s:get_rel_to_root(path) "{{{
-    let id =  exists("b:riv_p_id") ? b:riv_p_id : g:riv_p_id
-    let root = expand(g:_riv_c.p[id].path)
+    let root = s:get_root_path()
     if match(a:path, root) == -1
         throw 'Riv: Not Same Path with Project'
     endif

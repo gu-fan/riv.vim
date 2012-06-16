@@ -116,7 +116,7 @@ let s:default.opts = {
     \'auto_fold1_lines'   : 5000,
     \'auto_fold2_lines'   : 3000,
     \'list_toggle_type'   : "*,1.,A.,I)",
-    \'localfile_linktype' : 1,
+    \'localfile_linktype' : 2,
     \'web_browser'        : "firefox",
     \'options'            : s:default,
     \'usr_syn_dir'        : "",
@@ -141,7 +141,7 @@ let s:default.maps = {
     \'RivListNewList'    : 'call riv#list#act(0)',
     \'RivListSubList'    : 'call riv#list#act(1)',
     \'RivListSupList'    : 'call riv#list#act(-1)',
-    \'RivListType0'      : 'call riv#list#toggle_type(0)',
+    \'RivListTypeRemove' : 'call riv#list#toggle_type(0)',
     \'RivListTypeNext'   : 'call riv#list#toggle_type(-1)',
     \'RivListTypePrev'   : 'call riv#list#toggle_type(1)',
     \'RivTodoToggle'     : 'call riv#list#toggle_todo()',
@@ -153,6 +153,8 @@ let s:default.maps = {
     \'RivTodoType3'      : 'call riv#list#todo_change_type(2)',
     \'RivTodoType4'      : 'call riv#list#todo_change_type(3)',
     \'RivCreateFootnote' : 'call riv#create#link("footnote",1)',
+    \'RivCreateScratch'  : 'call riv#create#scratch()',
+    \'RivViewScratch'    : 'call riv#create#view_scr()',
     \'RivTitle1'         : 'call riv#create#title(1)',
     \'RivTitle2'         : 'call riv#create#title(2)',
     \'RivTitle3'         : 'call riv#create#title(3)',
@@ -170,8 +172,11 @@ let s:default.maps = {
     \'Riv2HtmlProject'   : 'call riv#publish#proj2html()',
     \'Riv2Odt'           : 'call riv#publish#file2("odt",1)',
     \'Riv2S5'            : 'call riv#publish#file2("s5",0)',
+    \'Riv2Xml'           : 'call riv#publish#file2("xml",1)',
     \'Riv2Latex'         : 'call riv#publish#file2("latex",1)',
     \'Riv2Path'          : 'call riv#publish#path()',
+    \'RivDelete'         : 'call riv#create#delete()',
+    \'RivTodoHelper'     : 'call riv#create#todo_helper()',
     \}
 "}}}
 "
@@ -197,6 +202,10 @@ let s:default.buf_maps = {
     \'RivLinkPrev'       : ['<S-TAB>',  'n',  'lb'],
     \'RivListShiftRight' : [['>', '<C-ScrollwheelDown>' ],  'mi',  'eu'],
     \'RivListShiftLeft'  : [['<', '<C-ScrollwheelUp>'],  'mi',  'ed'],
+    \'RivListTypeNext'   : ['',  'mi',  'l1'],
+    \'RivListTypePrev'   : ['',  'mi',  'l2'],
+    \'RivListTypeRemove' : ['',  'mi',  'l`'],
+    \'RivCreateFootnote' : ['',  'mi',  'cf'],
     \'RivTodoToggle'     : ['',  'mi',  'ee'],
     \'RivTodoDel'        : ['',  'mi',  'ex'],
     \'RivTodoDate'       : ['',  'mi',  'ed'],
@@ -205,28 +214,29 @@ let s:default.buf_maps = {
     \'RivTodoType2'      : ['',  'mi',  'e2'],
     \'RivTodoType3'      : ['',  'mi',  'e3'],
     \'RivTodoType4'      : ['',  'mi',  'e4'],
-    \'RivListTypeNext'   : ['',  'mi',  'l1'],
-    \'RivListTypePrev'   : ['',  'mi',  'l2'],
-    \'RivListType0'      : ['',  'mi',  'l`'],
-    \'RivCreateFootnote' : ['',  'mi',  'cf'],
     \'RivTitle1'         : ['',  'mi',  's1'],
     \'RivTitle2'         : ['',  'mi',  's2'],
     \'RivTitle3'         : ['',  'mi',  's3'],
     \'RivTitle4'         : ['',  'mi',  's4'],
-    \'RivTableFormat'    : ['',  'n',   'tf'],
     \'RivTestReload'     : ['',  'm',   't`'],
     \'RivTestFold0'      : ['',  'm',   't1'],
     \'RivTestFold1'      : ['',  'm',   't2'],
     \'RivTestObj'        : ['',  'm',   't3'],
     \'RivTestTest'       : ['',  'm',   't4'],
     \'RivTestInsert'     : ['',  'm',   'ti'],
+    \'RivTableFormat'    : ['',  'n',   'tf'],
     \'Riv2HtmlFile'      : ['',  'm',   '2hf'],
     \'Riv2HtmlProject'   : ['',  'm',   '2hp'],
     \'Riv2HtmlAndBrowse' : ['',  'm',   '2hh'],
     \'Riv2Odt'           : ['', 'm',    '2oo'],
     \'Riv2Latex'         : ['', 'm',    '2ll'],
     \'Riv2S5'            : ['', 'm',    '2ss'],
+    \'Riv2Xml'           : ['', 'm',    '2xx'],
     \'Riv2Path'          : ['', 'm',    '2e'],
+    \'RivCreateScratch'  : ['', 'm',    'cc'],
+    \'RivDelete'         : ['', 'm',    'cd'],
+    \'RivViewScratch'    : ['', 'm',    'cv'],
+    \'RivTodoHelper'     : ['', 'm',    'eh'],
     \}
 let s:default.buf_imaps = {
     \'<BS>'         : 'riv#action#ins_bs()',
@@ -476,6 +486,7 @@ if !exists("g:_riv_c")
                 \'v:val[-1]'),'|')
     let g:_riv_p.todo_done_ptn = '%((\[['.g:_riv_t.todo_levels[-1].']\])'
                 \.'|('.g:_riv_t.todo_done_key.'))'
+    let g:_riv_p.todo_done_list_ptn = '\v('. g:_riv_p.list_all .')'.g:_riv_p.todo_done_ptn
 
 
     " Explicit_mark: "{{{3

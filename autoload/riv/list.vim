@@ -704,11 +704,11 @@ fun! riv#list#toggle_type(i,...) "{{{
     else
         let level = s:stat2level(type, num, attr) 
         if a:i == 0
-            let [type,num,attr] = s:level2stat(0)
+            let list_str = idt
         else
             let [type,num,attr] = s:level2stat(level+a:i)
+            let list_str = s:list_str(type,idt,num,attr,space)
         endif
-        let list_str = s:list_str(type,idt,num,attr,space)
         let line = substitute(line, g:_riv_p.list_all , list_str, '')
     endif
     call setline(row, line)

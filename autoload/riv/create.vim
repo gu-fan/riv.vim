@@ -133,10 +133,188 @@ fun! riv#create#show_sect() "{{{
         echo 'You are not in any section.'
     endif
 endfun "}}}
-fun! riv#create#scatch()
-    let id =  exists("b:riv_p_id") ? b:riv_p_id : g:riv_p_id
+fun! riv#create#scratch() "{{{
+    let id = s:id()
+    let name = strftime("%Y%d%m")
+    let ext =  g:_riv_c.p[id].rst_ext
+    let scr = s:get_root_path() . 'scratch/'.name.'.'.ext
+    exe 'sp ' scr
+    let b:riv_p_id = id
+    let rel = s:get_rel_to('scratch', scr)
+    if g:riv_localfile_linktype == 2
+        let rel = '['.fnamemodify(scr,':t:r').']'
+    endif
+    call s:append_scr_index(rel)
+endfun "}}}
+fun! s:append_scr_index(line) "{{{
+    let path = s:get_root_path().'scratch'
+    if !isdirectory(path)
+        echo
+        call mkdir(path,'p')
+    endif
+    let id = s:id()
+    let index = g:_riv_c.p[id].index
+    let ext = g:_riv_c.p[id].rst_ext
+    let file = path.'/'.index.'.'.ext
+    
+    let lines = readfile(file)
 
+    for line in lines[-5:]
+        if line == a:line
+            return
+        endif
+    endfor
+    call writefile(add(lines, a:line) , file)
+endfun "}}}
+fun! riv#create#view_scr() "{{{
+    let path = s:get_root_path().'scratch'
+    let id = s:id()
+    let index = g:_riv_c.p[id].index
+    let ext = g:_riv_c.p[id].rst_ext
+    let file = path.'/'.index.'.'.ext
+    exe 'sp '.file
+    let b:riv_p_id = id
+endfun "}}}
+fun! s:escape_file_ptn(file) "{{{
+    if g:riv_localfile_linktype == 2
+        return   '\%(^\|\s\)\zs\[' . fnamemodify(a:file, ':t:r') 
+                    \ . '\]\ze\%(\s\|$\)'
+    else
+        return   '\%(^\|\s\)\zs' . fnamemodify(a:file, ':t') . '\ze\%(\s\|$\)'
+    endif
+endfun "}}}
+fun! riv#create#delete() "{{{
+    let file = expand('%:p')
+    if input("Deleting '".file."'\n Continue? (y/N)?") !~?"y"
+        return 
+    endif
+    let id = s:id()
+    let index = g:_riv_c.p[id].index
+    let ext =  g:_riv_c.p[id].rst_ext
+    let ptn = s:escape_file_ptn(file)
+    call delete(file)
+    let index_file = expand('%:p:h').'/'.index.'.'.ext
+    exe 'edit ' index_file
+    let f_idx = filter(range(1,line('$')),'getline(v:val)=~ptn')
+    for i in f_idx
+        call setline(i, substitute(getline(i), ptn ,'','g'))
+    endfor
+    update
+    redraw
+    echo len(f_idx) ' relative link in index deleted.'
+endfun "}}}
+
+fun! s:get_rel_to(dir,path) "{{{
+    let root = s:get_root_path().a:dir.'/'
+    if match(a:path, root) == -1
+        throw 'Riv: Not Same Path with Project'
+    endif
+    let r_path = substitute(a:path, root , '' , '')
+    let r_path = substitute(r_path, '^/', '' , '')
+    return r_path
+endfun "}}}
+fun! s:get_root_path() "{{{
+    let root = expand(g:_riv_c.p[s:id()].path)
+    return s:is_directory(root) ? root : root.'/'
+endfun "}}}
+fun! s:cache_todo() "{{{
+    if exists("g:_riv_cached") && g:_riv_cached == 1
+        return
+    endif
+    let root = s:get_root_path()
+    let files = split(glob(root.'**/*.rst'))
+    let files  =filter(files, ' v:val !~ ''_build''')
+    let todos = []
+    echo 'Caching...'
+    for file in files
+        let lines = readfile(file)
+        let list  = range(len(lines))
+        call filter(list, 'lines[v:val]=~g:_riv_p.todo_all && lines[v:val] !~ g:_riv_p.todo_done_list_ptn ')
+        let list = map(list, '[v:val , lines[v:val]]')
+        let todos += [[file, list]]
+    endfor
+    echon 'Done'
+    let cache = root.'.rst_cache'
+    call filter(todos, ' !empty(v:val[1])')
+    
+    let lines = s:list2lines(todos)
+
+    call writefile(lines , cache)
+    let g:_riv_cached = 1
+endfun "}}}
+fun! s:list2lines(list)
+    let lines = []
+    for [file, todos] in a:list
+        call add(lines , "F: ".file)
+        for [lnum, item] in todos
+            call add(lines, lnum.":\t".item)
+        endfor
+    endfor
+    return lines
+endfun
+fun! s:lines2list(lines)
+    let list = []
+    let todos = []
+    for line in a:lines
+        let str=matchstr(line, '^F: \zs.*')
+        if !empty(str) "{{{
+            if !empty(todos)
+                call add(list,todos)
+            endif
+            let tds = []
+            let todos = [str, tds]
+        endif "}}}
+        let td= matchstr(line, '^\d\+:\t.*')
+        if !empty(td)
+            call add(tds , td)
+        endif
+    endfor
+    return list
+endfun
+fun! s:lines2helper(lines) "{{{
+    let list = []
+    let todos = []
+    let path =[]
+    let lines =[]
+    let g:_riv_td_path = [path, lines]
+    for line in a:lines
+        let file=matchstr(line, '^F: \zs.*')
+        if !empty(file) "{{{
+            if !empty(todos)
+                call extend(list,todos)
+            endif
+            let f = file
+            let todos = []
+        endif "}}}
+        let td= matchstr(line, '^\d\+:\t\zs.*')
+        if !empty(td)
+            let lnum= matchstr(line, '^\d\+\ze:\t.*')
+            call add(path, [f, lnum])
+            call add(lines, td)
+            call add(todos , td)
+        endif
+    endfor
+    return list
+endfun "}}}
+fun! s:load_todo() "{{{
+    call s:cache_todo()
+    return s:lines2helper(readfile(s:get_root_path().'.rst_cache'))
+    " return readfile(s:get_root_path().'.rst_cache')
+endfun "}}}
+fun! riv#create#todo()
+    return s:load_todo()
+endfun
+fun! riv#create#todo_helper()
+    let todo = riv#helper#new()
+    let todo.content_dic = s:load_todo()
+    call todo.win()
 endfun
 
+fun! s:is_directory(name) "{{{
+    return a:name =~ '/$' 
+endfun "}}}
+fun! s:id() "{{{
+    return exists("b:riv_p_id") ? b:riv_p_id : g:riv_p_id
+endfun "}}}
 let &cpo = s:cpo_save
 unlet s:cpo_save
