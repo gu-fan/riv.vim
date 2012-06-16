@@ -9,6 +9,18 @@
 let s:cpo_save = &cpo
 set cpo-=C
 
+fun! riv#link#get_last_foot() "{{{
+    " return  [ id , row]
+    let pos = getpos('.')
+    call setpos('.',getpos('$'))
+    let [row,col] = searchpos(g:_riv_p.link_tar_footnote,'nWbc',0,100)
+    call setpos('.',pos)
+    if row == 0
+        return [0,0]
+    else
+        return [matchlist(getline(row), g:_riv_p.link_tar_footnote)[1],row]
+    endif
+endfun "}}}
 fun! riv#link#finder(dir) "{{{
     let flag = a:dir=="b" ? 'Wnb' : 'Wn'
     let [srow,scol] = searchpos(g:_riv_p.all_link,flag,0,100)
@@ -71,9 +83,9 @@ fun! riv#link#open() "{{{
     while !empty(mo)
         if mo.end < col
             let mo = s:matchobject(line,ptn, mo.end)
-        elseif mo.start <= col && mo.end >= col
+        elseif mo.start+1 <= col && mo.end >= col
             break
-        elseif mo.start > col
+        elseif mo.start+1 > col
             return 
         endif
     endwhile
@@ -90,12 +102,17 @@ fun! riv#link#open() "{{{
             return 1
         endif
     elseif !empty(mo.groups[2])
-        let [sr,sc] = s:find_tar(mo.str)
-        if sr != 0
-            call setpos("'`",getpos('.'))
-            call setpos('.',[0,sr,sc,0])
-            return 2
+        let em = matchstr(mo.groups[2], '`.*\s<\zs.*\ze>`_')
+        if empty(em)
+            let [sr,sc] = s:find_tar(mo.str)
+            if sr != 0
+                call setpos("'`",getpos('.'))
+                call setpos('.',[0,sr,sc,0])
+            endif
+        else
+            sil! exe "!".g:riv_web_browser." ". escape(em,'#%')." &"
         endif
+        return 2
     elseif !empty(mo.groups[3])
         if !empty(mo.groups[4])             " it's file://xxx
             if mo.str =~ '^file'
@@ -110,6 +127,9 @@ fun! riv#link#open() "{{{
         endif
         return 3
     elseif !empty(mo.groups[5])
+        if g:riv_localfile_linktype == 2
+            let mo.str = matchstr(mo.str, '^\[\zs.*\ze\]$')
+        endif
         if s:is_relative(mo.str)
             let dir = expand('%:p:h').'/'
             let file = dir . mo.str
@@ -121,6 +141,8 @@ fun! riv#link#open() "{{{
                     call mkdir(mo.str,"p")
                 endif
                 let file = file . index . ext
+            elseif fnamemodify(file, ':e') == '' && g:riv_localfile_linktype == 2
+                let file = file . ext
             endif
         else
             let file = expand(mo.str)

@@ -22,6 +22,16 @@ fun! s:normlist(list,...) "{{{
     " return list with words
     return filter(map(a:list,'matchstr(v:val,''\w\+'')'), ' v:val!=""')
 endfun "}}}
+fun! riv#error(msg) "{{{
+    echohl ErrorMsg
+    echo a:msg
+    echohl Normal
+endfun "}}}
+fun! riv#warning(msg) "{{{
+    echohl WarningMsg
+    echo a:msg
+    echohl Normal
+endfun "}}}
 "}}}
 "{{{ Loading Functions
 " TODO: a GUI setting interface and cache.
@@ -40,14 +50,21 @@ endfun "}}}
 fun! riv#load_map(map_dic) "{{{
     for [name,action] in items(a:map_dic)
         sil! exe "com! ".name." ".action
-        sil! exe "map <silent> <Plug>".name." :".action."<CR>"
+        sil! exe "nor <silent> <Plug>".name." :".action."<CR>"
     endfor
 endfun "}}}
-fun! riv#set_g_map(map_dic)
-    for [name,action] in items(a:map_dic)
-        sil! exe "map <silent>  ". g:riv_leader . action."  <Plug>".name
+fun! riv#set_g_map(map_dic) "{{{
+    for [name,acts] in items(a:map_dic)
+        if type(acts) == type([])
+            for act in acts
+                sil! exe "map <silent>  ". g:riv_leader . act."  <Plug>".name
+            endfor
+        else
+            sil! exe "map <silent>  ". g:riv_leader . acts."  <Plug>".name
+        endif
+        unlet acts
     endfor
-endfun
+endfun "}}}
 fun! riv#load_menu(menu_list) "{{{
     for [name ,short, action] in a:menu_list
         let short  = short =~'  ' ? short : "<tab>".g:riv_buf_leader.short
@@ -89,160 +106,161 @@ let s:default.opts = {
     \'highlight_code'     : "lua,python,cpp,javascript,vim,sh",
     \'todo_levels'        : " ,o,X",
     \'todo_timestamp'     : 1,
-    \'todo_keywords'      : "TODO,DONE;FIXME,FIXED",
+    \'todo_keywords'      : "TODO,DONE;FIXME,FIXED;START,PROCESS,STOP",
     \'hover_link_hl'      : 1,
     \'auto_format_table'  : 1,
     \'fold_blank'         : 2,
     \'fold_level'         : 3,
+    \'fold_section_mark'  : "-",
     \'auto_fold_force'    : 1,
     \'auto_fold1_lines'   : 5000,
     \'auto_fold2_lines'   : 3000,
-    \'list_toggle_type'   : "*,#.,(#)",
+    \'list_toggle_type'   : "*,1.,A.,I)",
     \'localfile_linktype' : 1,
     \'web_browser'        : "firefox",
     \'options'            : s:default,
     \'usr_syn_dir'        : "",
     \'rst2html_args'      : "",
-    \'section_seperator'  : "-",
+    \'section_levels'     : '=-~"''`',
     \}
 " maps "{{{
 let s:default.maps = {
     \'RivIndex'          : 'call riv#index()',
     \'RivAsk'            : 'call riv#ask_index()',
-    \'Riv2HtmlIndex'     : 'call riv#publish#browse()',
-    \'Riv2HtmlAndBrowse' : 'call riv#publish#file2html(1)',
-    \'Riv2HtmlFile'      : 'call riv#publish#file2html(0)',
-    \'Riv2HtmlProject'   : 'call riv#publish#proj2html()',
     \'RivLinkOpen'       : 'call riv#link#open()',
-    \'RivLinkForward'    : 'call riv#link#finder("f")',
-    \'RivLinkBackward'   : 'call riv#link#finder("b")',
-    \'RivLinkDBClick'    : 'call riv#action#db_click()',
+    \'RivLinkNext'       : 'call riv#link#finder("f")',
+    \'RivLinkPrev'       : 'call riv#link#finder("b")',
+    \'RivLinkDBClick'    : 'call riv#action#db_click(1)',
     \'RivListShiftRight' : 'call riv#list#shift("+")',
     \'RivListShiftLeft'  : 'call riv#list#shift("-")',
     \'RivListNewList'    : 'call riv#list#act(0)',
     \'RivListSubList'    : 'call riv#list#act(1)',
     \'RivListSupList'    : 'call riv#list#act(-1)',
+    \'RivListType0'      : 'call riv#list#toggle_type(0)',
+    \'RivListTypeNext'   : 'call riv#list#toggle_type(-1)',
+    \'RivListTypePrev'   : 'call riv#list#toggle_type(1)',
     \'RivTodoToggle'     : 'call riv#list#toggle_todo()',
     \'RivTodoDel'        : 'call riv#list#del_todo()',
-    \'RivTodoTime'       : 'call riv#list#change_date()',
-    \'RivTodoType0'      : 'call riv#list#del_todo()',
+    \'RivTodoDate'       : 'call riv#list#change_date()',
+    \'RivTodoAsk'        : 'call riv#list#todo_ask()',
     \'RivTodoType1'      : 'call riv#list#todo_change_type(0)',
     \'RivTodoType2'      : 'call riv#list#todo_change_type(1)',
     \'RivTodoType3'      : 'call riv#list#todo_change_type(2)',
-    \'RivListType1'      : 'call riv#list#toggle_type(0)',
-    \'RivListType2'      : 'call riv#list#toggle_type(1)',
-    \'RivListType3'      : 'call riv#list#toggle_type(2)',
-    \'RivListType0'      : 'call riv#list#toggle_type(-1)',
+    \'RivTodoType4'      : 'call riv#list#todo_change_type(3)',
     \'RivCreateFootnote' : 'call riv#create#link("footnote",1)',
+    \'RivTitle1'         : 'call riv#create#title(1)',
+    \'RivTitle2'         : 'call riv#create#title(2)',
+    \'RivTitle3'         : 'call riv#create#title(3)',
+    \'RivTitle4'         : 'call riv#create#title(4)',
     \'RivTestReload'     : 'call riv#test#reload()',
     \'RivTestFold0'      : 'call riv#test#fold(0)',
     \'RivTestFold1'      : 'call riv#test#fold(1)',
+    \'RivTestTest'       : 'call riv#test#test()',
     \'RivTestInsert'     : 'call riv#test#insert_idt(0)',
     \'RivTestObj'        : 'call riv#test#show_obj()',
     \'RivTableFormat'    : 'call riv#table#format()',
+    \'Riv2HtmlIndex'     : 'call riv#publish#browse()',
+    \'Riv2HtmlAndBrowse' : 'call riv#publish#file2html(1)',
+    \'Riv2HtmlFile'      : 'call riv#publish#file2html(0)',
+    \'Riv2HtmlProject'   : 'call riv#publish#proj2html()',
     \}
 "}}}
 "
 let s:default.g_maps = {
-    \'RivIndex'          : 'ww',
-    \'RivAsk'            : 'wa',
-    \'Riv2HtmlIndex'     : 'wi',
-    \'Riv2HtmlFile'      : 'wf',
-    \'Riv2HtmlAndBrowse' : 'wb',
-    \'Riv2HtmlProject'   : 'wp',
+    \'RivIndex'          : ['ww', '<C-W><C-W>'] ,
+    \'Riv2HtmlIndex'     : ['wi', '<C-W><C-I>'] ,
+    \'RivAsk'            : ['wa', '<C-W><C-A>'] ,
+    \}
+let s:default.fold_maps = { 
+    \'RivFoldUpdate'     : ['zx', '<Space>j'],
+    \'RivFoldToggle'     : ['@=(foldclosed(".")>0?"zv":"zc")<CR>', '<Space><Space>'],
+    \'RivFoldZip'        : ['@=(foldclosed(".")>0?"zR":"zM")<CR>', '<Space>m'],
     \}
 " buf maps "{{{
-
-" Sections/headings
-" c-eh1 : sect level 1
-" c-eh2 : sect leel 2
-" c-ehj/p  prev
-" c-ehk/n  next
-" c-ehc   new section brother
-" c-ehh   new section parent brother
-" c-ehl   new section child
-" c-ehu
-" c-ehd
-"
-" c-el1
-" c-el2
-" c-elc
-" c-elh
-" c-ell
-" c-elu
-" c-eld
-" ctrl-enter: a new brother
-" shift-enter: a new child
-" alt-enter : a new parent brother
+" s => section
+" e => todo
+" l => list
+" c => create misc
+" w => html
 let s:default.buf_maps = {
-    \'RivLinkOpen'       : [['<CR>', '<KEnter>'],  'n',  'eo'],
-    \'RivLinkForward'    : ['<TAB>',  'n',  'lf'],
-    \'RivLinkBackward'   : ['<S-TAB>',  'n',  'lb'],
-    \'RivLinkDBClick'    : ['<2-LeftMouse>',  '',  ''],
+    \'RivLinkDBClick'    : [['<CR>', '<KEnter>', '<2-LeftMouse>'],  '',  ''],
+    \'RivLinkNext'       : ['<TAB>',    'n',  'lf'],
+    \'RivLinkPrev'       : ['<S-TAB>',  'n',  'lb'],
     \'RivListShiftRight' : [['>', '<C-ScrollwheelDown>' ],  'mi',  'eu'],
     \'RivListShiftLeft'  : [['<', '<C-ScrollwheelUp>'],  'mi',  'ed'],
     \'RivTodoToggle'     : ['',  'mi',  'ee'],
-    \'RivTodoDel'        : ['',  'mi',  'ed'],
-    \'RivTodoTime'       : ['',  'mi',  'et'],
-    \'RivTodoType0'      : ['', 'mi',  'e`'],
-    \'RivTodoType1'      : ['', 'mi',  'e1'],
-    \'RivTodoType2'      : ['', 'mi',  'e2'],
-    \'RivTodoType3'      : ['', 'mi',  'e3'],
-    \'RivListAuto'       : ['',  'mi',  'la'],
-    \'RivListType1'      : ['',  'mi',  'l1'],
-    \'RivListType2'      : ['',  'mi',  'l2'],
-    \'RivListType3'      : ['',  'mi',  'l3'],
+    \'RivTodoDel'        : ['',  'mi',  'ex'],
+    \'RivTodoDate'       : ['',  'mi',  'ed'],
+    \'RivTodoAsk'        : ['',  'mi',  'e`'],
+    \'RivTodoType1'      : ['',  'mi',  'e1'],
+    \'RivTodoType2'      : ['',  'mi',  'e2'],
+    \'RivTodoType3'      : ['',  'mi',  'e3'],
+    \'RivTodoType4'      : ['',  'mi',  'e4'],
+    \'RivListTypeNext'   : ['',  'mi',  'l1'],
+    \'RivListTypePrev'   : ['',  'mi',  'l2'],
     \'RivListType0'      : ['',  'mi',  'l`'],
     \'RivCreateFootnote' : ['',  'mi',  'cf'],
+    \'RivTitle1'         : ['',  'mi',  's1'],
+    \'RivTitle2'         : ['',  'mi',  's2'],
+    \'RivTitle3'         : ['',  'mi',  's3'],
+    \'RivTitle4'         : ['',  'mi',  's4'],
     \'RivTableFormat'    : ['',  'n',   'tf'],
     \'RivTestReload'     : ['',  'm',   't`'],
     \'RivTestFold0'      : ['',  'm',   't1'],
     \'RivTestFold1'      : ['',  'm',   't2'],
     \'RivTestObj'        : ['',  'm',   't3'],
+    \'RivTestTest'       : ['',  'm',   't4'],
     \'RivTestInsert'     : ['',  'm',   'ti'],
+    \'Riv2HtmlFile'      : ['',  'm',   'wf'],
+    \'Riv2HtmlAndBrowse' : ['',  'm',   'wb'],
+    \'Riv2HtmlProject'   : ['',  'm',   'wp'],
     \}
 let s:default.buf_imaps = {
-    \'<BS>'    : 'riv#action#ins_bs()',
-    \'<CR>'    : 'riv#action#ins_enter()',
-    \'<KEnter>'    : 'riv#action#ins_enter()',
-    \'<C-CR>'    : 'riv#action#ins_c_enter()',
-    \'<C-KEnter>'    : 'riv#action#ins_c_enter()',
-    \'<S-CR>'    : 'riv#action#ins_s_enter()',
-    \'<S-KEnter>'    : 'riv#action#ins_s_enter()',
-    \'<C-S-CR>'    : 'riv#action#ins_m_enter()',
-    \'<C-S-KEnter>'    : 'riv#action#ins_m_enter()',
-    \'<Tab>'   : 'riv#action#ins_tab()',
-    \'<S-Tab>' : 'riv#action#ins_stab()',
+    \'<BS>'         : 'riv#action#ins_bs()',
+    \'<CR>'         : 'riv#action#ins_enter()',
+    \'<KEnter>'     : 'riv#action#ins_enter()',
+    \'<C-CR>'       : 'riv#action#ins_c_enter()',
+    \'<C-KEnter>'   : 'riv#action#ins_c_enter()',
+    \'<S-CR>'       : 'riv#action#ins_s_enter()',
+    \'<S-KEnter>'   : 'riv#action#ins_s_enter()',
+    \'<C-S-CR>'     : 'riv#action#ins_m_enter()',
+    \'<C-S-KEnter>' : 'riv#action#ins_m_enter()',
+    \'<Tab>'        : 'riv#action#ins_tab()',
+    \'<S-Tab>'      : 'riv#action#ins_stab()',
     \} 
 "}}}
 "menus "{{{
 let s:default.menus = [
-    \['Index'           ,  'ww',   'RivIndex'],
-    \['--Action--'      ,  '  ',   '  '],
+    \['Index'           ,  'ww',  'RivIndex'],
+    \['--Action--'      ,  '  ',  '  '],
     \['Link.Open'       ,  'lo',  'RivLinkOpen'],
-    \['Link.Forward'    ,  'lf',  'RivLinkForward'],
-    \['Link.Backward'   ,  'lb',  'RivLinkBackward'],
+    \['Link.Forward'    ,  'lf',  'RivLinkNext'],
+    \['Link.Backward'   ,  'lb',  'RivLinkPrev'],
     \['Link.DBClick'    ,  '  ',  'RivLinkDBClick'],
-    \['List.ShiftRight' ,  'eu',   'RivListShiftRight'],
-    \['List.ShiftLeft'  ,  'ed',   'RivListShiftLeft'],
-    \['List.TodoToggle' , 'ee' , 'RivTodoToggle'] ,
-    \['List.TodoDel'    , 'ed' , 'RivTodoDel']    ,
-    \['List.TodoTime'   , 'et' , 'RivTodoTime']   ,
-    \['List.TodoType0'  , 'e`' , 'RivTodoType0']  ,
-    \['List.TodoType1'  , 'e1' , 'RivTodoType1']  ,
-    \['List.TodoType2'  , 'e2' , 'RivTodoType2']  ,
-    \['List.TodoType3'  , 'e3' , 'RivTodoType3']  ,
-    \['List.Type1'      ,  'l1',   'RivListType1'],
-    \['List.Type2'      ,  'l2',   'RivListType2'],
-    \['List.Type3'      ,  'l3',   'RivListType3'],
-    \['List.Type0'      ,  'l`',   'RivListType0'],
-    \['Create.Footnote' ,  'cf',   'RivCreateFootnote'],
-    \['Table.Format'    ,  'tf',   'RivTableFormat'],
-    \['--Test---'       ,  '  ',    '  '],
-    \['Test.Reload'     ,  't`',   'RivTestReload'],
-    \['Test.Fold0'      ,  't1',   'RivTestFold0'],
-    \['Test.Fold1'      ,  't2',   'RivTestFold1'],
-    \['Test.Insert'     ,  't3',   'RivTestInsert'],
+    \['List.ShiftRight' ,  'eu',  'RivListShiftRight'],
+    \['List.ShiftLeft'  ,  'ed',  'RivListShiftLeft'],
+    \['List.TodoToggle' ,  'ee',  'RivTodoToggle'] ,
+    \['List.TodoDel'    ,  'ex',  'RivTodoDel']    ,
+    \['List.TodoDate'   ,  'ed',  'RivTodoDate']   ,
+    \['List.TodoType0'  ,  'e`',  'RivTodoType0']  ,
+    \['List.TodoType1'  ,  'e1',  'RivTodoType1']  ,
+    \['List.TodoType2'  ,  'e2',  'RivTodoType2']  ,
+    \['List.TodoType3'  ,  'e3',  'RivTodoType3']  ,
+    \['List.Type1'      ,  'l1',  'RivListType1'],
+    \['List.Type2'      ,  'l2',  'RivListType2'],
+    \['List.Type3'      ,  'l3',  'RivListType3'],
+    \['List.Type0'      ,  'l`',  'RivListType0'],
+    \['Create.Footnote' ,  'cf',  'RivCreateFootnote'],
+    \['Table.Format'    ,  'tf',  'RivTableFormat'],
+    \['--Test---'       ,  '  ',   '  '],
+    \['Test.Reload'     ,  't`',  'RivTestReload'],
+    \['Test.Fold0'      ,  't1',  'RivTestFold0'],
+    \['Test.Fold1'      ,  't2',  'RivTestFold1'],
+    \['Test.Insert'     ,  't3',  'RivTestInsert'],
+    \['--Fold---'       ,  '  ',   '  '],
+    \['Fold.Update'     ,  '<space>j\ or\ zx',  'RivFoldUpdate'],
+    \['Fold.Toggle'     ,  '<space><space>',  'RivFoldToggle'],
+    \['Fold.Zip'        ,  '<space>m',  'RivFoldZip'],
     \]
 "}}}
 "{{{ project options
@@ -283,14 +301,14 @@ fun! s:set_proj_conf(proj) "{{{
     return proj
 endfun "}}}
 "}}}
-
-fun! riv#load_conf() "{{{
+"}}}
+fun! riv#load_conf() "{{{1
 if exists("g:_riv_debug") && g:_riv_debug==1
     unlet! g:_riv_c
     unlockvar g:_riv_c
     unlockvar g:_riv_p
 endif
-" Constants "{{{
+
 if !exists("g:_riv_c")
     let g:_riv_c = {}
     let g:_riv_p = {}
@@ -376,8 +394,8 @@ if !exists("g:_riv_c")
 
     " List: "{{{3
     let g:_riv_p.bullet_list = '\v^\s*[-*+]\s+'
-    let g:_riv_p.enumerate_list1 = '\v\c^\s*%(\d+|[#a-z]|[imcxv]+)[.)]\s+'
-    let g:_riv_p.enumerate_list2 = '\v\c^\s*\(%(\d+|[#a-z]|[imcxv]+)\)\s+'
+    let g:_riv_p.enumerate_list1 = '\v\c^\s*%(\d+|[#a-z]|[imlcxvd]+)[.)]\s+'
+    let g:_riv_p.enumerate_list2 = '\v\c^\s*\(%(\d+|[#a-z]|[imlcxvd]+)\)\s+'
     let g:_riv_p.list_all = g:_riv_p.bullet_list.'|'.g:_riv_p.enumerate_list1
                 \.'|'.g:_riv_p.enumerate_list2
     
@@ -399,8 +417,8 @@ if !exists("g:_riv_c")
                     \.'|([(]%(#|\d+)[)])'
                     \.'|([a-z][.)])'
                     \.'|([(][a-z][)])'
-                    \.'|([imcxv]+[.)])'
-                    \.'|([(][imcxv]+[)])'
+                    \.'|([imlcxvd]+[.)])'
+                    \.'|([(][imlcxvd]+[)])'
                     \.')(\s+)'
 
     " Todo Items: "{{{3
@@ -408,7 +426,11 @@ if !exists("g:_riv_c")
     " - TODO 2012-01-01
     " - DONE 2012-01-01 ~ 2012-01-02 
 
-    let g:_riv_t.td_keyword_groups = map(split(g:riv_todo_keywords,';'), 
+    let td_key_list  = split(g:riv_todo_keywords,';')
+    let g:_riv_t.td_ask_keywords = ["Choose one keyword group :"] +
+                \  map(range(len(td_key_list)), 
+                \ '(v:val+1).".". td_key_list[v:val]')
+    let g:_riv_t.td_keyword_groups = map(td_key_list, 
                 \ 's:normlist(split(v:val,'',''))')
     let g:_riv_p.td_keywords = '\v%('.join(s:normlist(split(g:riv_todo_keywords,'[,;]')),'|').')'
 
@@ -530,14 +552,18 @@ if !exists("g:_riv_c")
     
     let g:_riv_t.sect_punc = '!"#$%&''()*+,-./:;<=>?@[\]^_`{|}~'
     let g:_riv_t.list_lvs  =  ["*","+","-"]
+    let g:_riv_c.sect_lvs = split(g:riv_section_levels,'\zs')
+    let g:_riv_c.sect_lvs_b = split('#*+:.^','\zs')
     let g:_riv_t.list_type = split(g:riv_list_toggle_type,',')
-    let g:_riv_t.sect_sep =  g:riv_section_seperator[0]
     let g:_riv_t.highlight_code = s:normlist(split(g:riv_highlight_code,','))
 
     lockvar 2 g:_riv_c
     lockvar 2 g:_riv_p
 endif
+
 endfun "}}}
+
+
 fun! riv#init() "{{{
     " for init autoload
     call riv#load_opt(s:default.opts)

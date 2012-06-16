@@ -147,8 +147,8 @@ syn match   rstStandaloneHyperlink  contains=@NoSpell
 " Lists in rst file
 syn match rstDefinitionList `\v^(\s*)\h[^:]*\ze%(\s:\s.*)*\n\1\s+\S`
 syn match rstBulletList `\v^\s*[-*+]\ze\s+`
-syn match rstEnumeratedList `\v\c^\s*%(\d+|[#a-z]|[imcxv]+)[.)]\ze\s+`
-syn match rstEnumeratedList `\v\c^\s*\(%(\d+|[#a-z]|[imcxv]+)\)\ze\s+`
+syn match rstEnumeratedList `\v\c^\s*%(\d+|[#a-z]|[imlcxvd]+)[.)]\ze\s+`
+syn match rstEnumeratedList `\v\c^\s*\(%(\d+|[#a-z]|[imlcxvd]+)\)\ze\s+`
 syn match rstOptionList `\v^%(-\w%( \w+)=|--[[:alnum:]_-]+%(\=\w+)=|/\u)%(, %(-\w%( \w+)=|--[[:alnum:]_.-]+%(\=\w+)=|/\u))*%(  |\t)\ze\S`
 syn match rstFieldList `\v^\s*:[^:[:space:]][^:]+:\_s`
 syn match rstBibliographicField `\v^\s*:(Author|Authors|Organization|Contact|Address|Version|Status|Date|Copyright|Dedication|Abstract):\_s`

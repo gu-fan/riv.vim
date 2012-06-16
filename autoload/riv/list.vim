@@ -9,13 +9,14 @@
 let s:cpo_save = &cpo
 set cpo-=C
 
+" Todo: "{{{
+fun! riv#list#toggle_todo(...) "{{{
 " Toggle TO-DO item
 " if not list, return 
 " if is null todo item, add box/key (and ts if ts==2)
 " else if is idx todo item , switch to next box/key (don't change ts)
 "   if next box/key is end , (change ts if ts == 1 , add ts_end if ts == 2)
 "   if next box/key is start, (remove ts if ts ==1, remove ts_end if ts == 2)
-fun! riv#list#toggle_todo(...) "{{{
     let init_key = a:0  ? a:1 : 0
     let row = a:0>1 ? a:2 : line('.')
     let line = getline(row)
@@ -100,11 +101,21 @@ fun! riv#list#todo_change_type(grp,...) "{{{
         let line = s:add_todo_box(line)
         let line = s:change_todo_box(line, idx)
     else
+        if a:grp > len(g:_riv_t.td_keyword_groups)
+            call riv#warning("The keyword group is not defined.")
+            return
+        endif
         let line = s:add_todo_key(line, a:grp)
         let line = s:change_todo_key(line, a:grp, idx)
     endif
 
     call setline(row, line)
+endfun "}}}
+fun! riv#list#todo_ask() "{{{
+    let grp =  inputlist(g:_riv_t.td_ask_keywords)
+    if grp > 0 && grp <= len(g:_riv_t.td_keyword_groups)
+        call riv#list#todo_change_type(grp)
+    endif
 endfun "}}}
 
 fun! s:get_todo_id(line) "{{{
@@ -116,10 +127,9 @@ fun! s:get_todo_id(line) "{{{
         return [-1, 0]                            
     endif
     
-    " '[x] ' and 'KEYWORD '
-    if !empty(todo_match[2])            
+    if !empty(todo_match[2])            " '[x] '
         return s:get_box_id(todo_match[2][1])
-    elseif !empty(todo_match[3])
+    elseif !empty(todo_match[3])        " 'KEYWORD '
         return s:get_key_id(todo_match[3][:-2])
     endif
 endfun "}}}
@@ -183,9 +193,9 @@ fun! s:input_date() "{{{
         let g:calendar_action = "riv#list#feed_date"
         call Calendar(1)
     else
-        let year = input("Input year :",strftime("%Y"))
-        let month = input("Input month :",strftime("%m"))
-        let day = input("Input date :",strftime("%d"))
+        let year = str2nr(input("Input year :",strftime("%Y")))
+        let month = str2nr(input("Input month :",strftime("%m")))
+        let day = str2nr(input("Input date :",strftime("%d")))
         call riv#list#feed_date(day,month,year)
     endif
     " return  year-month-day
@@ -198,7 +208,7 @@ fun! riv#list#feed_date(day,month,year,...) "{{{
             quit
         endif
     endif
-    let date =  printf("%04d-%02d-%02d", a:year,a:month,a:day)
+    let date =  printf("%04.4s-%02.2s-%02.2s", a:year,a:month,a:day)
     call call(s:date_callback, add(s:date_call_args, date) )
 endfun "}}}
 fun! s:change_date(timestamp_id, buf, row, date) "{{{
@@ -289,7 +299,11 @@ endfun "}}}
 fun! s:todo_lv_len(grp) "{{{
     return len(g:_riv_t.todo_all_group[a:grp])
 endfun "}}}
+"}}}
 
+" Search Relation: "{{{
+" the searchpos and setpos version
+" it's heavy though.
 fun! s:get_list(row) "{{{
     " To find if a row is in  a list's arrange. 
     " this list's indent should smaller than current line (when not list).
@@ -307,7 +321,7 @@ fun! s:get_list(row) "{{{
             let [row,col] = searchpos(g:_riv_p.list_all.'|^\S', 'wnb',0,100)
             let s_idt = indent(row)
             while c_idt <= s_idt        " find a list have less indent
-                if getline(row) !~ g:_riv_p.list_all
+                if getline(row) =~ '^\S'
                     let row = 0
                     break         " could not find a list.
                 endif
@@ -334,7 +348,7 @@ fun! s:get_older(row) "{{{
         let s_idt = indent(row)
         while c_idt < s_idt    " find a list have 
                                " same list level           
-            if getline(row) !~ g:_riv_p.list_all
+            if getline(row) =~ '^\S'
                 let row = 0
                 break         " could not find a list.
             endif
@@ -367,7 +381,7 @@ fun! s:get_parent(row) "{{{
         let s_idt = indent(row)
         while c_idt <= s_idt  " find a list have 
                               " same list level           
-            if getline(row) !~ g:_riv_p.list_all
+            if getline(row) =~ '^\S'
                 let row = 0
                 break         " could not find a list.
             endif
@@ -396,10 +410,10 @@ fun! s:get_child(row) "{{{
         let [row,col] = searchpos(g:_riv_p.list_all.'|^\S', 'wn',0,100)
         let s_idt = indent(row)
         while c_idt < s_idt
-            if getline(row) =~ g:_riv_p.list_all
-                call add(child, row)
-            else 
+            if getline(row) =~ '^\S'
                 break
+            else 
+                call add(child, row)
             endif
             " goto next line
             exe nextnonblank(row)
@@ -413,13 +427,17 @@ fun! s:get_child(row) "{{{
 endfun "}}}
 
 " the buf obj dict version.
+" but should not rely on it.
+" cause the buffer is always changing.
 fun! s:buf_get_older(row) "{{{
     let c_row = s:get_list(a:row)
     if c_row == 0
         return 0
     else
-        call riv#fold#init()
-        let obj = b:obj_dict[c_row]
+        if !exists("b:riv_obj[c_row]")
+            return s:get_older(c_row)
+        endif
+        let obj = b:riv_obj[c_row]
         let older = riv#fold#get_prev_brother(obj)
 
         if !empty(older) && nextnonblank(older.end+1) == obj.bgn
@@ -433,8 +451,10 @@ fun! s:buf_get_parent(row) "{{{
     if c_row == 0
         return 0
     else
-        call riv#fold#init()
-        let parent = b:obj_dict[b:obj_dict[c_row].parent]
+        if !exists("b:riv_obj[c_row]")
+            return s:get_parent(c_row)
+        endif
+        let parent = b:riv_obj[b:riv_obj[c_row].parent]
         if !empty(parent) && parent.bgn != 'list_root'
             return parent.bgn
         endif
@@ -446,17 +466,27 @@ fun! s:buf_get_child(row) "{{{
     if c_row == 0
         return 0
     else
-        call riv#fold#init()
-        return  b:obj_dict[c_row].child
+        if !exists("b:riv_obj[c_row]")
+            return s:get_child(c_row)
+        endif
+        return  b:riv_obj[c_row].child
     endif
     
 endfun "}}}
-" map <leader>tt :echo <SID>buf_get_older(line('.'))<CR>
-" map <leader>ty :echo <SID>buf_get_child(line('.'))<CR>
-" map <leader>tu :echo <SID>buf_get_parent(line('.'))<CR>
+"}}}
 
-fun! s:has_prev_item(row) "{{{
-    return s:get_older(a:row) != 0
+" List Level: "{{{
+fun! s:is_roman(row) "{{{
+    let line = getline(a:row)
+    if line =~ '^\c\s*(\=[imlcxvd][).]'
+        let older = s:get_older(a:row)
+        if older==0 
+            return line =~ '^\c\s*(\=i[).]'
+        else
+            return getline(older) =~ '^\c\s*(\=[imlcxvd]\{2,}[).]'
+        endif
+    endif
+    return 0
 endfun "}}}
 fun! riv#list#act(act) "{{{
     let row = line('.')
@@ -465,35 +495,31 @@ fun! riv#list#act(act) "{{{
         let list_str = s:list_str(1 , '', '' , "*", " ") 
     else
         let line = getline(cur_list)
-        let has_prev_item = s:has_prev_item(cur_list)
-        if a:act == -1
-            let parent = s:buf_get_parent(cur_list)
-            if parent == 0
-                let idt = ''
-            else
-                let idt = repeat(' ',indent(parent))
-            endif
+        if line =~ '^\c\s*(\=[imlcxvd][).]'
+            let is_roman = s:is_roman(cur_list)
         else
-            let idt = ''
+            let is_roman = 0
         endif
-        let list_str = riv#list#act_line(line, a:act, idt, has_prev_item)
+        let idt = ''
+        if a:act == -1
+            let parent = s:get_parent(cur_list)
+            let idt = parent ? repeat(' ',indent(parent)) : ''
+        endif
+        let list_str = riv#list#line_str(line, a:act, idt, is_roman)
     endif
     let line = getline('.')
-    let len = len(line)
     if line=~ g:_riv_p.list_all
         let line = substitute(line, g:_riv_p.list_all , list_str, '')
     else
         let line = substitute(line, '^\s*', list_str, '')
     endif
-    let mv = len(line)-len
-    call cursor(row, col('.') + mv )
     call setline(row, line)
 endfun "}}}
-fun! riv#list#act_line(line, act, idt,...) "{{{
+fun! riv#list#line_str(line, act, idt,...) "{{{
     " create the next list item by line
-    let has_prev_item = a:0 ? a:1 : 1
+    let is_roman = a:0 ? a:1 : 0
     let [type , idt , num , attr, space] = 
-                \ riv#list#stat(a:line, has_prev_item)
+                \ riv#list#stat(a:line, is_roman)
     if type == -1
         return s:list_str(1 , '', '' , "*", " ") 
     endif
@@ -502,38 +528,27 @@ fun! riv#list#act_line(line, act, idt,...) "{{{
         let [type,num,attr] = s:level2stat(level+1)
 
         let idt = idt.space. repeat(' ',len(num.attr))
-        
     elseif a:act == -1
         let level = s:stat2level(type, num, attr) 
         let [type,num,attr] = s:level2stat(level-1)
         let idt = a:idt
     else
-        let num = s:next_list_num(num, has_prev_item)
+        let num = s:next_list_num(num, is_roman)
     endif
     return s:list_str(type,idt,num,attr,space)
 endfun "}}}
-" Level And Stats: "{{{
-" *  => +  => -   =>
-"       1   
-" 1. => 1) => (1) => 
-"    2         3  
-" A. => A) => (A) => 
-"    4         5  \u
-" a. => a) => (a) => 
-"    4         5
-" I. => I) => (I) => 
-"    6         7  \u
-" i. => i) => (i)
-"    6         7
+"    *   +   -            =>
+"    1.  A.  a.  I.  i.    =>
+"    1)  A)  a)  I)  i)    =>
+"   (1) (A) (a) (I) (i)
 fun! riv#list#stat(line,...) "{{{
     " return [type , idt , num , attr, space]
-    let has_prev_item = a:0 ? a:1 : 1
+    let is_roman = a:0 ? a:1 : 0
     let ma = matchlist(a:line, g:_riv_p.list_checker)
     if empty(ma)
         return [-1,0,0,0,0]
     endif
     let idt = matchstr(a:line,'^\s*')       " max 9 sub match reached.
-    " echo ma
     if !empty(ma[1])
         return [1, idt, '' , ma[1], ma[8]]
     elseif !empty(ma[2])
@@ -544,13 +559,13 @@ fun! riv#list#stat(line,...) "{{{
         return [3,idt,ma[3][1 : len-2], "()", ma[8]]
     elseif !empty(ma[4]) 
         " we should check if 'i.' have prev smaller item.
-        if ( match(ma[4], '[imcxv]') == -1 || has_prev_item == 1)
+        if ( match(ma[4], '\c[imlcxvd]') == -1 || is_roman == 0)
             return [4,idt,ma[4][0], ma[4][1], ma[8]]
         else
-            return [6,idt,ma[6][0], ma[6][1], ma[8]]
+            return [6,idt,ma[4][0], ma[4][1], ma[8]]
         endif
     elseif !empty(ma[5]) 
-        if ( match(ma[5], '[imcxv]') == -1 || has_prev_item == 1)
+        if ( match(ma[5], '\c[imlcxvd]') == -1 || is_roman == 0)
             return [5,idt,ma[5][1], "()", ma[8]]
         else
             return [7,idt,ma[5][1], "()", ma[8]]
@@ -563,52 +578,42 @@ fun! riv#list#stat(line,...) "{{{
         return [7,idt,ma[7][1 : len-2], "()", ma[8]]
     endif
 endfun "}}}
-fun! s:listnum2nr(num) "{{{
-    let has_prev_item = a:0 ? a:1 : 1
+fun! s:listnum2nr(num,...) "{{{
+    let is_roman = a:0 ? a:1 : 0
     if a:num == ''
         return 0
     elseif a:num =~ '\d\+'
         return a:num
     elseif a:num =~ '^[A-Za-z]$' &&
-            \ ( match(a:num, '[imcxv]') == -1 || has_prev_item == 1)
+            \ ( match(a:num, '\c[imlcxvd]') == -1 || is_roman == 0)
         if a:num =~ '\u'
             return char2nr(a:num)-64
         else
             return char2nr(a:num)-96
         endif
-    elseif a:num =~ '[imcxv]\+'
-        return riv#roman#to_nr(a:num)
+    elseif a:num =~ '\c[imlcxvd]\+'
+        return riv#roman#to_nr(toupper(a:num))
     endif
 endfun "}}}
 fun! s:nr2listnum(n,type) "{{{
     if a:type=='1'
         return ''
     elseif a:type=='2' || a:type=='3'
-        if a:n <= 0 
-            return 1
-        endif
-        return a:n
+        return a:n<=0 ? 1 : 0
     elseif a:type=='4' || a:type=='5'
-        if a:n >26 
-            return 'Z'
-        elseif a:n<= 0
-            return 'A'
-        endif
-        return nr2char(a:n+64)
+        return a:n > 26 ? 'Z' : a:n <= 0 ? 'A' : nr2char(a:n+64)
     elseif a:type=='6' || a:type=='7'
         return riv#roman#from_nr(a:n)
     endif
 endfun "}}}
-echoe s:nr2listnum(23,5)
-echoe s:listnum2nr('cmxi')
 fun! s:next_list_num(num,...) "{{{
-    let has_prev_item = a:0 ? a:1 : 1
+    let is_roman = a:0 ? a:1 : 0
     if a:num == ''
         return a:num
     elseif a:num =~ '\d\+'
         return a:num+1
     elseif a:num =~ '^[A-Za-z]$' &&
-            \ ( match(a:num, '[imcxv]') == -1 || has_prev_item == 1)
+            \ ( match(a:num, '\c[imlcxvd]') == -1 || is_roman == 0)
         if a:num=="z"
             return "a"
         elseif a:num=="Z"
@@ -616,8 +621,8 @@ fun! s:next_list_num(num,...) "{{{
         else
             return nr2char(char2nr(a:num)+1)
         endif
-    elseif a:num =~ '[imcxv]\+'
-        let nr =riv#roman#to_nr(a:num)
+    elseif a:num =~ '\c[imlcxvd]\+'
+        let nr =riv#roman#to_nr(toupper(a:num))
         if a:num!~ '\u\+'
             return tolower(riv#roman#from_nr(nr+1))
         else
@@ -633,41 +638,38 @@ fun! s:list_str(type,idt,num,attr, space) "{{{
     endif
 endfun "}}}
 fun! riv#list#level(line,...) "{{{
-    let has_prev_item = a:0 ? a:1 : 1
-    let [type , idt , num , attr, space] = riv#list#stat(a:line,has_prev_item)
+    let is_roman = a:0 ? a:1 : 0
+    let [type , idt , num , attr, space] = riv#list#stat(a:line,is_roman)
     if type!=-1
         return s:stat2level(type,num,attr)
     else
         return -1
     endif
-
 endfun "}}}
 let s:list_stats= [
-            \ [1, '',  '*'],  [1, '',  '+'] , [1, '',   '-'],
-            \ [2, '1', '.'],  [2, '1', ')'] , [3, '1', '()'],
-            \ [4, 'A', '.'],  [4, 'A', ')'] , [5, 'A', '()'],
-            \ [4, 'a', '.'],  [4, 'a', ')'] , [5, 'a', '()'],
-            \ [6, 'I', '.'],  [6, 'I', ')'] , [7, 'I', '()'],
-            \ [6, 'i', '.'],  [6, 'i', ')'] , [7, 'i', '()'],
-            \]
+\ [1, '',  '*'],  [1, '',  '+'] , [1, '',   '-'],
+\ [2, '1', '.'], [4, 'A', '.'], [4, 'a', '.'], [6, 'I', '.'], [6, 'i', '.'], 
+\ [2, '1', ')'], [4, 'A', ')'], [4, 'a', ')'], [6, 'I', ')'], [6, 'i', ')'], 
+\ [3, '1', '()'], [5, 'A', '()'], [5, 'a', '()'], [7, 'I', '()'], [7, 'i', '()'],
+\]
 fun! s:stat2level(type, num, attr) "{{{
     " return level
     if a:type == 1
         return stridx('*+-', a:attr)
     elseif a:type == 2
-        return stridx('.)', a:attr)  + 3
+        return stridx('.)', a:attr)*5  + 3
     elseif a:type == 3
-        return  5 
+        return  13
     else
-        let is_lower = match(a:num,'\U')+1
+        let is_lower = match(a:num,'\U')!=-1
         if a:type == 4
-            return  6 + stridx('.)', a:attr)  +  is_lower * 3
+            return  4 + stridx('.)', a:attr)*5  +  is_lower
         elseif a:type == 5
-            return  8 +  is_lower * 3
+            return  14 +  is_lower
         elseif a:type == 6
-            return  12 + stridx('.)', a:attr)  +  is_lower * 3
+            return  6 + stridx('.)', a:attr)*5  +  is_lower
         elseif a:type == 7
-            return  14 +  is_lower * 3
+            return  16 +  is_lower
         endif
     endif
     return 0
@@ -683,26 +685,33 @@ fun! s:level2stat(level) "{{{
 endfun "}}}
 "}}}
 
-fun! riv#list#toggle_type(id,...) "{{{
-    if a:0
-        let row  = a:1
+
+
+fun! riv#list#toggle_type(i,...) "{{{
+    " change current list type with level
+    let row = line('.')
+    let line = getline('.')
+    if line =~ '^\c\s*(\=[imlcxvd][).]'
+        let is_roman = s:is_roman(row)
     else
-        let row  = line('.')
+        let is_roman = 0
     endif
-    let line = getline(row) 
-    let typ = get(g:_riv_t.list_type,a:id, '')
-    if typ!=""
-        let typ.=" "
-    endif
-    let str = matchstr(line,g:_riv_p.list_all)
-    let white = matchstr(line,'^\s*')
-    if empty(str)
-        let line = substitute(line,white, white.typ,'')
+    let idt = matchstr(line, '^\s*')
+    let [type , idt , num , attr, space] = riv#list#stat(line, is_roman)
+    if type==-1
+        let list_str = s:list_str(1 , '', '' , "*", " ") 
+        let line = substitute(line, '^\s*', list_str, '')
     else
-        let line = substitute(line,escape(str,'*'),white,'')
-        let line = substitute(line,white, white.typ,'')
+        let level = s:stat2level(type, num, attr) 
+        if a:i == 0
+            let [type,num,attr] = s:level2stat(0)
+        else
+            let [type,num,attr] = s:level2stat(level+a:i)
+        endif
+        let list_str = s:list_str(type,idt,num,attr,space)
+        let line = substitute(line, g:_riv_p.list_all , list_str, '')
     endif
-    call setline(row,line)
+    call setline(row, line)
 endfun "}}}
 fun! s:list_shift_len(row,len) "{{{
     let line = getline(a:row)
@@ -725,13 +734,11 @@ fun! s:list_shift_len(row,len) "{{{
             let level = s:stat2level(type, num, attr) 
             let [type,num,attr] = s:level2stat(level-1)
         endif
-        echo num
         if num =~ '\u'
             let num = toupper(s:nr2listnum(nr,type))
         else
             let num = tolower(s:nr2listnum(nr,type))
         endif
-        echo num
         let list_str =  s:list_str(type,idt,num,attr,space)
         let line = substitute(line, g:_riv_p.list_all , list_str, '')
     endif
@@ -762,6 +769,11 @@ fun! riv#list#shift(direction) range "{{{
     endif
 endfun "}}}
 
-
+fun! s:SID() "{{{
+    return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$')
+endfun "}}}
+fun! riv#list#SID() "{{{
+    return '<SNR>'.s:SID().'_'
+endfun "}}}
 let &cpo = s:cpo_save
 unlet s:cpo_save

@@ -9,10 +9,11 @@
 let s:cpo_save = &cpo
 set cpo-=C
 
-if g:_riv_p.link_file != ''
+if g:_riv_p.link_file != '^^'
     exe 'syn match rstFileLink `'.g:_riv_p.link_file.'`'
+    syn cluster rstCruft add=rstFileLink
 endif
-
+syn cluster rstCruft add=rstStandaloneHyperlink
 syn cluster rstCommentGroup add=@rstLinkGroup
 
 " {{{code block
@@ -42,11 +43,11 @@ let b:current_syntax = "rst"
 let s:td_keywords = g:_riv_p.td_keywords
 
 exe 'syn match rstTodoBoxRegion '
-        \.'`\v\c%(^\s*%([-*+]|%(\d+|[#a-z]|[imcxv]+)[.)])\s+)@<='
+        \.'`\v\c%(^\s*%([-*+]|%(\d+|[#a-z]|[imlcxvd]+)[.)])\s+)@<='
         \.'%(\[.\]|'. s:td_keywords .')'
         \.'%(\s\d{4}-\d{2}-\d{2})='.'%(\s\~ \d{4}-\d{2}-\d{2})='
         \.'\ze%(\s|$)` transparent contains=@rstTodoBoxGroup'
-exe 'syn match rstTodoBoxRegion `\v\c%(^\s*\(%(#|\d+|[a-z]|[imcxv]+)\)\s+)@<='
+exe 'syn match rstTodoBoxRegion `\v\c%(^\s*\(%(#|\d+|[a-z]|[imlcxvd]+)\)\s+)@<='
         \.'%(\[.\]|'. s:td_keywords .')'
         \.'%(\s\d{4}-\d{2}-\d{2})='.'%(\s\~ \d{4}-\d{2}-\d{2})='
         \.'\ze%(\s|$)` transparent contains=@rstTodoBoxGroup'
@@ -60,11 +61,11 @@ syn match rstTodoTmsEnd  `\v\~ \zs\d{4}-\d{2}-\d{2}` contained
 
 let s:td_done = g:_riv_p.todo_done_ptn
 exe 'syn match rstTodoBoxRegionDone '
-        \.'`\v\c%(^\s*%([-*+]|%(\d+|[#a-z]|[imcxv]+)[.)])\s+)@<='
+        \.'`\v\c%(^\s*%([-*+]|%(\d+|[#a-z]|[imlcxvd]+)[.)])\s+)@<='
         \. s:td_done
         \.'%(\s\d{4}-\d{2}-\d{2})='.'%(\s\~ \d{4}-\d{2}-\d{2})='
         \.'\ze%(\s|$)` '
-exe 'syn match rstTodoBoxRegionDone `\v\c%(^\s*\(%(#|\d+|[a-z]|[imcxv]+)\)\s+)@<='
+exe 'syn match rstTodoBoxRegionDone `\v\c%(^\s*\(%(#|\d+|[a-z]|[imlcxvd]+)\)\s+)@<='
         \. s:td_done
         \.'%(\s\d{4}-\d{2}-\d{2})='.'%(\s\~ \d{4}-\d{2}-\d{2})='
         \.'\ze%(\s|$)` '

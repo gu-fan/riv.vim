@@ -9,7 +9,7 @@
 let s:cpo_save = &cpo
 set cpo-=C
 
-fun! riv#action#db_click() "{{{
+fun! riv#action#db_click(mouse) "{{{
     " could not use map <expr>
     " cause it's editing file here.
     let row = line('.')
@@ -28,14 +28,20 @@ fun! riv#action#db_click() "{{{
         elseif s:is_in_todo_time(line,col)
             call riv#list#change_date()
         else
-            exe "normal! \<2-LeftMouse>"
+            if a:mouse== 1
+                exe "normal! \<2-LeftMouse>"
+            else
+                exe "normal! \<Enter>"
+            endif
+
         endif
-        
     endif
 endfun "}}}
+
+
 fun! s:is_in_sect_title(row) "{{{
-   return exists("b:obj_dict") && has_key(b:obj_dict, a:row)
-               \ && b:obj_dict[a:row].type =='sect'
+   return exists("b:riv_obj") && has_key(b:riv_obj, a:row)
+               \ && b:riv_obj[a:row].type =='sect'
 endfun "}}}
 fun! s:is_in_todo_item(line,col) "{{{
    return  a:col < matchend(a:line, g:_riv_p.todo_all)

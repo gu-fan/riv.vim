@@ -17,11 +17,9 @@ fun! s:init_stat() "{{{
     elseif len > g:riv_auto_fold2_lines && g:riv_auto_fold_force == 1
         let b:foldlevel = b:foldlevel >= 2 ? 2 : 0 
     endif
-    call s:parse_from_start()
 
-    " if !exists("b:fdl_list") 
-        " call s:parse_from_start()
-        " elseif len(b:fdl_list) != line('$')+1
+    if !exists("b:fdl_list") || len(b:fdl_list) != line('$')+1 || g:_riv_debug
+        call s:parse_from_start()
         " if &modified && !exists("s:added")
         "     call s:add_change_range(s:get_changed_range())
         "     let s:added = 1
@@ -29,9 +27,64 @@ fun! s:init_stat() "{{{
         "     call s:parse_from_start()
         "     unlet! s:added
         " endif
-    " endif
+    endif
 endfun "}}}
-" Range "{{{
+" Parse "{{{
+fun! s:parse_from_start() "{{{
+    echo "Parsing buf ..."
+    let len = line('$')
+    let b:state = { 'l_chk':[], 
+                \'matcher':[], 'sectmatcher':[], 
+                \'sect_root': { 'parent': 'None'  , 'child':[] ,
+                \  'bgn': 'sect_root'} ,
+                \'list_root': { 'parent': 'None'  , 'child':[] ,
+                \ 'bgn': 'list_root'} ,
+                \  'None': { 'parent': 'None'  , 'child':[] ,
+                \ 'bgn': 'None'} ,
+                \}
+    let b:riv_obj = {'sect_root':b:state.sect_root, 
+                \ 'list_root':b:state.list_root,
+                \ 'None': b:state.None }
+    " 3%
+    let b:fdl_list = map(range(len+1),'0')
+    let b:lines= ['']+getline(1,line('$'))+['']
+    for i in range(len+1)
+    " 75%
+        call s:check(i)
+    endfor
+    " 20%
+    call sort(b:state.matcher,"s:sort_match")
+    call s:set_obj_dict()
+    call s:set_sect_end()
+    call s:set_fdl_list()
+    call s:set_td_child(b:state.list_root)
+    call garbagecollect(1)
+    echon "Done"
+endfun "}}}
+fun! s:parse_from_row(row) "{{{
+    " seems it's buggy.
+    call filter(b:riv_obj,      'v:key < a:row')
+    call filter(b:state.matcher, 'v:val.bgn < a:row')
+    call filter(b:state.sectmatcher, 'v:val.bgn < a:row')
+    call filter(b:state.sect_root.child,  'v:val < a:row')
+    call filter(b:state.list_root.child,  'v:val < a:row')
+    if line('$')+1-len(b:fdl_list) > 0
+        call extend(b:fdl_list,range(line('$')+1-len(b:fdl_list)))
+    endif
+    let  b:fdl_list[a:row : ] = map(b:fdl_list[a:row : ],'0')
+    let b:lines= ['']+getline(1,line('$'))+['']
+    let b:state.l_chk = []
+    for i in range(a:row, line('$'))
+        call s:check(i)
+    endfor
+    " 20%
+    " sort the unordered list.
+    call sort(b:state.matcher,"s:sort_match")
+    call s:set_obj_dict()
+    call s:set_sect_end()
+    call s:set_fdl_list()
+    call s:set_td_child(b:state.list_root)
+endfun "}}}
 let s:tmpfile = tempname()
 fun! s:get_changed_range() "{{{
     sil exe 'w !diff % - > ' s:tmpfile
@@ -73,7 +126,7 @@ fun! s:add_change_range(change_list) "{{{
     endfor
 endfun "}}}
 fun! s:add_in_len(bgn,len) "{{{
-    call s:add_d_len(b:obj_dict, a:bgn, a:len)
+    call s:add_d_len(b:riv_obj, a:bgn, a:len)
     call s:add_l_len(b:fdl_list, a:bgn, a:len)
 endfun "}}}
 fun! s:add_d_len(dict, bgn, len) "{{{
@@ -104,80 +157,23 @@ fun! s:add_l_len(list, bgn, len) "{{{
         call remove(a:list,a:bgn,a:bgn-a:len)
     endif
 endfun "}}}
-fun! s:parse_from_start() "{{{
-    redraw
-    echo "Parsing buf ..."
-    let len = line('$')
-    let b:state = { 'l_chk':[], 
-                \'matcher':[], 'sectmatcher':[], 
-                \'s_root': { 'parent': 'None'  , 'child':[] ,
-                \  'bgn': 'sect_root'} ,
-                \'l_root': { 'parent': 'None'  , 'child':[] ,
-                \ 'bgn': 'list_root'} ,
-                \  'None': { 'parent': 'None'  , 'child':[] ,
-                \ 'bgn': 'None'} ,
-                \}
-    let b:obj_dict = {'sect_root':b:state.s_root, 
-                \ 'list_root':b:state.l_root,
-                \ 'None': b:state.None }
-    " 3%
-    let b:fdl_list = map(range(len+1),'0')
-    let b:lines= ['']+getline(1,line('$'))+['']
-    for i in range(len+1)
-    " 75%
-        call s:check(i)
-    endfor
-    " 20%
-    call sort(b:state.matcher,"s:sort_match")
-    call s:set_fdl_dict()
-    call s:set_sect_end()
-    call s:set_fdl_list()
-    call s:set_td_child(b:state.l_root)
-    call garbagecollect(1)
-    echon "Done"
-    redraw
-endfun "}}}
-fun! s:parse_from_row(row) "{{{
-    " seems it's buggy.
-    call filter(b:obj_dict,      'v:key < a:row')
-    call filter(b:state.matcher, 'v:val.bgn < a:row')
-    call filter(b:state.sectmatcher, 'v:val.bgn < a:row')
-    call filter(b:state.s_root.child,  'v:val < a:row')
-    call filter(b:state.l_root.child,  'v:val < a:row')
-    if line('$')+1-len(b:fdl_list) > 0
-        call extend(b:fdl_list,range(line('$')+1-len(b:fdl_list)))
-    endif
-    let  b:fdl_list[a:row : ] = map(b:fdl_list[a:row : ],'0')
-    let b:lines= ['']+getline(1,line('$'))+['']
-    let b:state.l_chk = []
-    for i in range(a:row, line('$'))
-        call s:check(i)
-    endfor
-    " 20%
-    " sort the unordered list.
-    call sort(b:state.matcher,"s:sort_match")
-    call s:set_fdl_dict()
-    call s:set_sect_end()
-    call s:set_fdl_list()
-    call s:set_td_child(b:state.l_root)
-endfun "}}}
 "}}}
 " Set "{{{
-let s:sect_sep = g:_riv_t.sect_sep
-fun! s:set_fdl_dict() "{{{
+let s:sect_sep = g:riv_fold_section_mark
+fun! s:set_obj_dict() "{{{
     
     let stat = b:state
     let mat = stat.matcher
 
     let sec_punc_list = []      " the punctuation list used by section
 
-    let p_s_obj = stat.s_root   " previous section object, init with root
+    let p_s_obj = stat.sect_root   " previous section object, init with root
     let sec_lv = 0              " the section level calced by punc_list
     let p_sec_lv = sec_lv       
 
     let lst_lv = 0              " current list_level
     let p_lst_lv = 0
-    let p_l_obj = stat.l_root   " previous list object 
+    let p_l_obj = stat.list_root   " previous list object 
     let p_lst_end = line('$')   " let  root contains all level 1 list object
     for m in mat
         let f = 0
@@ -229,10 +225,10 @@ fun! s:set_fdl_dict() "{{{
             endwhile
             let m.txt = join(reverse(t_lst), s:sect_sep)
 
-            let b:obj_dict[m.bgn]   = m
-            let b:obj_dict[m.bgn+1] = m
+            let b:riv_obj[m.bgn]   = m
+            let b:riv_obj[m.bgn+1] = m
             if m['title_rows'] == 3
-                let b:obj_dict[m.bgn+2] = m
+                let b:riv_obj[m.bgn+2] = m
             endif
             " Stop Sect Part "}}}
         elseif m.type== 'list'
@@ -263,7 +259,7 @@ fun! s:set_fdl_dict() "{{{
             let p_lst_lv = lst_lv
             let p_lst_end = lst_end
                 
-            let b:obj_dict[m.bgn] = m
+            let b:riv_obj[m.bgn] = m
             " Stop List Part "}}}
         elseif m.type == 'trans'
             " stop current sect_lv
@@ -271,19 +267,19 @@ fun! s:set_fdl_dict() "{{{
             let lst_lv = 0
             let sec_lv = sec_lv>1 ? sec_lv-1 : 0
             let m.level = sec_lv
-            let b:obj_dict[m.bgn] = m
+            let b:riv_obj[m.bgn] = m
         elseif m.type== 'exp'
             let f = 1
-            let b:obj_dict[m.bgn] = m
+            let b:riv_obj[m.bgn] = m
         elseif m.type == 'block'
             let f = 1
-            let b:obj_dict[m.bgn] = m
+            let b:riv_obj[m.bgn] = m
         elseif m.type == 'table'
             let f = 1
             let m.col = len(split(b:lines[m.bgn], '+',1)) - 2
             let m.row = len(filter(b:lines[m.bgn:m.end], 
                         \'v:val=~''^\s*+''')) - 1
-            let b:obj_dict[m.bgn] = m
+            let b:riv_obj[m.bgn] = m
         endif
         
         let m.fdl = sec_lv+lst_lv+f
@@ -485,8 +481,6 @@ fun! s:l_checker(row) "{{{
     let l = b:state.l_chk
     while !empty(l)
         if (a:row>l[0].bgn && riv#fold#indent(b:lines[a:row]) <= l[0].indent ) 
-                    \ && b:lines[a:row] !~ s:p.exp_m
-
             let l[0].end = a:row-1
             call add(b:state.matcher,l[0])
             call remove(l , 0)
@@ -546,29 +540,29 @@ fun! s:add_child(p,o) "{{{
 endfun "}}}
 fun! s:add_brother(b,o) "{{{
     let a:o.parent = a:b.parent
-    call add(b:obj_dict[a:o.parent].child, a:o.bgn )
+    call add(b:riv_obj[a:o.parent].child, a:o.bgn )
 endfun "}}}
 fun! s:get_child(o,i) "{{{
-    return b:obj_dict[a:o.child[a:i]]
+    return b:riv_obj[a:o.child[a:i]]
 endfun "}}}
 fun! s:get_parent(o) "{{{
-    return b:obj_dict[a:o.parent]
+    return b:riv_obj[a:o.parent]
 endfun "}}}
 fun! riv#fold#get_prev_brother(o) "{{{
-    for i in range(len(b:obj_dict[a:o.parent].child))
-        if b:obj_dict[a:o.parent].child[i] == a:o.bgn
-            if exists("b:obj_dict[a:o.parent].child[i-1]") && i != 0
-                return b:obj_dict[b:obj_dict[a:o.parent].child[i-1]]
+    for i in range(len(b:riv_obj[a:o.parent].child))
+        if b:riv_obj[a:o.parent].child[i] == a:o.bgn
+            if exists("b:riv_obj[a:o.parent].child[i-1]") && i != 0
+                return b:riv_obj[b:riv_obj[a:o.parent].child[i-1]]
             endif
         endif
     endfor
     return {}
 endfun "}}}
 fun! riv#fold#get_next_brother(o) "{{{
-    for i in range(len(b:obj_dict[a:o.parent].child))
-        if b:obj_dict[a:o.parent].child[i] == a:o.bgn
-            if exists("b:obj_dict[a:o.parent].child[i+1]")
-                return b:obj_dict[b:obj_dict[a:o.parent].child[i+1]]
+    for i in range(len(b:riv_obj[a:o.parent].child))
+        if b:riv_obj[a:o.parent].child[i] == a:o.bgn
+            if exists("b:riv_obj[a:o.parent].child[i+1]")
+                return b:riv_obj[b:riv_obj[a:o.parent].child[i+1]]
             endif
         endif
     endfor
@@ -596,13 +590,13 @@ fun! s:set_td_child(o) "{{{
     let c_td = 0
     let len = 0
     for chd in a:o.child
-        if empty(b:obj_dict[chd].child)
-            if b:obj_dict[chd].td_stat != -1
-                let c_td += b:obj_dict[chd].td_stat
+        if empty(b:riv_obj[chd].child)
+            if b:riv_obj[chd].td_stat != -1
+                let c_td += b:riv_obj[chd].td_stat
                 let len +=1
             endif
         else
-            let d = s:set_td_child(b:obj_dict[chd])
+            let d = s:set_td_child(b:riv_obj[chd])
             if d > 0
                 let c_td += d
                 let len +=1
@@ -633,32 +627,33 @@ fun! riv#fold#text() "{{{
     let lnum = v:foldstart
     let line = b:lines[lnum]
     let cate = "    "
-    if has_key(b:obj_dict,lnum)
-        if b:obj_dict[lnum].type == 'sect'
-            let cate = " ".b:obj_dict[lnum].txt
-            if b:obj_dict[lnum].title_rows == 3
+    if has_key(b:riv_obj,lnum)
+        if b:riv_obj[lnum].type == 'sect'
+            let cate = " ".b:riv_obj[lnum].txt
+            if b:riv_obj[lnum].title_rows == 3
                 let line = b:lines[lnum+1]
             endif
-        elseif b:obj_dict[lnum].type == 'list'
-            if exists("b:obj_dict[lnum].td_child")
-                let td = 100 * b:obj_dict[lnum].td_child
+        elseif b:riv_obj[lnum].type == 'list'
+            if exists("b:riv_obj[lnum].td_child")
+                let td = 100 * b:riv_obj[lnum].td_child
                 let cate = printf(" %3.0f%%",td)
-            elseif b:obj_dict[lnum].td_stat != -1
-                let td = 100 * b:obj_dict[lnum].td_stat
+            elseif b:riv_obj[lnum].td_stat != -1
+                let td = 100 * b:riv_obj[lnum].td_stat
                 let cate = printf(" %3.0f%%",td)
             endif
-        elseif b:obj_dict[lnum].type == 'table'
-            let cate = " " . b:obj_dict[lnum].row 
-                        \  . 'x' . b:obj_dict[lnum].col." "
+        elseif b:riv_obj[lnum].type == 'table'
+            let cate = " " . b:riv_obj[lnum].row 
+                        \  . 'x' . b:riv_obj[lnum].col." "
             let line = b:lines[lnum+1]
-        elseif b:obj_dict[lnum].type == 'spl_table'
-            let cate = " " . b:obj_dict[lnum].row . '+' 
-                        \  . b:obj_dict[lnum].col . " "
-        elseif b:obj_dict[lnum].type == 'exp'
+        elseif b:riv_obj[lnum].type == 'spl_table'
+            let cate = " " . b:riv_obj[lnum].row . '+' 
+                        \  . b:riv_obj[lnum].col . " "
+        elseif b:riv_obj[lnum].type == 'exp'
             let cate = "."
-        elseif b:obj_dict[lnum].type == 'block'
+        elseif b:riv_obj[lnum].type == 'block'
             let cate = ":"
-        elseif b:obj_dict[lnum].type == 'trans'
+            let line = b:lines[lnum+1]
+        elseif b:riv_obj[lnum].type == 'trans'
             let cate = "-"
             let line = strtrans(line)
         endif

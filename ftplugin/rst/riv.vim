@@ -56,10 +56,18 @@ fun! s:map(map_dic) "{{{
         unlet! nmap
     endfor
 endfun "}}}
+fun! s:fold_map(map_dic) "{{{
+    let leader = g:riv_buf_leader
+    for [name,acts] in items(a:map_dic)
+         exe "nor <silent> <buffer> <Plug>".name." ".acts[0]
+       exe "map <silent> <buffer> ". leader . acts[1] ." ". acts[0]
+    endfor
+endfun "}}}
 endif "}}}
 
 call s:imap(g:riv_options.buf_imaps)
 call s:map(g:riv_options.buf_maps)
+call s:fold_map(g:riv_options.fold_maps)
 call riv#show_menu()
 aug RIV_BUFFER "{{{
     if exists("g:riv_auto_format_table") "{{{
