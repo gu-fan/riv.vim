@@ -3,7 +3,7 @@
 "    File: riv.vim
 " Summary: Riv autoload main
 "  Author: Rykka G.Forest
-"  Update: 2012-06-12
+"  Update: 2012-06-16
 " Version: 0.5
 "=============================================
 let s:cpo_save = &cpo
@@ -247,7 +247,7 @@ let s:default.menus = [
     \['List.TodoType2'  ,  'e2',  'RivTodoType2']  ,
     \['List.TodoType3'  ,  'e3',  'RivTodoType3']  ,
     \['List.Type1'      ,  'l1',  'RivListType1'],
-    \['List.Type2'      ,  'l2',  'RivListType2'],
+    \['List.bype2'      ,  'l2',  'RivListType2'],
     \['List.Type3'      ,  'l3',  'RivListType3'],
     \['List.Type0'      ,  'l`',  'RivListType0'],
     \['Create.Footnote' ,  'cf',  'RivCreateFootnote'],
