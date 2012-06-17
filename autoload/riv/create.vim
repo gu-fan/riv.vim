@@ -1,7 +1,7 @@
 "=============================================
 "    Name: create.vim
 "    File: riv/create.vim
-" Summary: Create miscellaneous snippet.
+" Summary: Create miscellaneous things.
 "  Author: Rykka G.Forest
 "  Update: 2012-06-11
 " Version: 0.5
@@ -9,11 +9,8 @@
 let s:cpo_save = &cpo
 set cpo-=C
 
-
-fun! riv#create#link(type,ask) "{{{
+fun! riv#create#foot() "{{{
     " return a link target and ref def.
-    let type = "footnote"
-    if type == "footnote"
     " DONE: 2012-06-10 get buf last footnote.
     " DONE: 2012-06-10 they should add at different position.
     "       current and last.
@@ -21,27 +18,177 @@ fun! riv#create#link(type,ask) "{{{
     " put cursor in last line and start backward search.
     " get the last footnote and return.
 
-        let id = riv#link#get_last_foot()[1] + 1
-        let line = getline('.') 
+    let id = riv#link#get_last_foot()[1] + 1
+    let line = getline('.') 
 
-        if line =~ g:_riv_p.table
-            let tar = substitute(line,'\%' . col(".") . 'c' , ' ['.id.']_ ', '')
-        elseif line =~ '\S\@<!$'
-        " have \s before eol.
-            let tar = line."[".id."]_"
-        else
-            let tar = line." [".id."]_"
-        endif
-        if a:ask==1
-            let footnote = input("[".id."]: Your FootNote message is?\n")
-        else
-            let footnote = " $FootNote "
-        endif
-        let def = ".. [".id."] :  ".footnote
-        call setline(line('.'),tar)
-        call append(line('$'),def)
+    if line =~ g:_riv_p.table
+        let tar = substitute(line,'\%' . col(".") . 'c' , ' ['.id.']_ ', '')
+    elseif line =~ '\S\@<!$'
+    " have \s before eol.
+        let tar = line."[".id."]_"
+    else
+        let tar = line." [".id."]_"
     endif
+    if a:ask==1
+        let footnote = input("[".id."]: Your FootNote message is?\n")
+    else
+        let footnote = " $FootNote "
+    endif
+    let def = ".. [".id."] ".footnote
+    call setline(line('.'),tar)
+    call append(line('$'),def)
     
+endfun "}}}
+
+fun! s:repl_with_link(line) "{{{
+    " We substitute the file link ptn  in line
+    "  'xxx.rst'  with 'xxx.rst_'   
+    "  '[xxx]  with  'xxx_' , not [xxx]_ , as that's the citation 
+    " return the line a list contains the link.
+    " which can be used for create link target
+    " index.rst => index.rst_
+    " .. index.rst_: index.rst
+    " [index]   => index_
+    " .. index_ : index.rst
+    let line = a:line
+    let file = matchstr(a:line, g:_riv_p.link_file)
+    let idx = matchend(a:line, g:_riv_p.link_file)
+    let links = []
+    while !empty(file)
+        if g:riv_localfile_linktype == 2
+            let file = matchstr(file, '^\[\zs.*\ze\]$')
+        endif
+        let file = s:escape(file)
+        if !s:is_relative(file)
+                let title = file
+                let path = file
+        elseif s:is_directory(file)
+            let title = file
+            let path = title . 'index.html'
+        else
+            if file =~ '\.rst$' 
+                let title = matchstr(file, '.*\ze\.rst$')
+                let path = title.'.html'
+            elseif fnamemodify(file, ':e') == '' && g:riv_localfile_linktype == 2
+                let title = file
+
+                let path = title.'.html'
+            else
+                let title = file
+                let path = file
+            endif
+        endif
+        " file is xxx
+        call add(links, [file , path])
+        let line = substitute(line, s:escape_file_ptn(file), 
+                    \s:gen_embed_link(title, path), 'g')
+        let file = matchstr(line, g:_riv_p.link_file,idx)
+        let idx = matchend(line, g:_riv_p.link_file,idx)
+    endwhile
+    return line
+endfun "}}}
+
+fun! s:is_relative(name) "{{{
+    return a:name !~ '^\~\|^/\|^[a-zA-Z]:'
+endfun "}}}
+fun! s:is_directory(name) "{{{
+    return a:name =~ '/$' 
+endfun "}}}
+fun! s:escape(txt) "{{{
+    return escape(a:txt, '~.*\[]^$')
+endfun "}}}
+
+fun! s:expand_file_link(file) "{{{
+    " all with ``
+    " when localfile_linktype = 1
+    " the name with rst and is relative will be sub to .html
+    " the rel directory will add index.html
+    " other's unchanged
+    " when localfile_linktype =2
+    " the name with [xx] and is relative will be sub to .html
+    " the rel directory with [] will add index.html
+    " other unchanged.
+    let file = a:file
+    let str = matchstr(file, '^\[\zs.*\ze\]$')
+    if g:riv_localfile_linktype == 2 && !empty(str)
+        let file = str
+    endif
+    if !s:is_relative(file)
+            let ref = '`'.file.'`_'
+            let tar = '.. _`'.file.'`: '.file
+    elseif s:is_directory(file)
+        let ref = '`'.file.'`_'
+        let tar = '.. _`'.file.'`: '.file.'index.html'
+    else
+        if file =~ '\.rst$'
+            let ref = '`'.file.'`_'
+            let tar = '.. _`'.file.'`: '. fnamemodify(file, ':r').'.html'
+        elseif fnamemodify(file, ':e') == '' && g:riv_localfile_linktype == 2
+            let ref = '`'.file.'`_'
+            let tar = '.. _`'.file.'`: '.file.'.html'
+        else
+            let ref = '`'.file.'`_'
+            let tar = '.. _`'.file.'`: '.file
+        endif
+    endif
+    return [ref, tar]
+endfun "}}}
+fun! s:expand_link(word) "{{{
+    " expand file, and let the refname expand
+    let word = a:word
+    if word=~ g:_riv_p.link_file
+        return s:expand_file_link(word)
+    else
+        if word =~ '\v^'.g:_riv_p.ref_name.'$'
+            let ref = word.'_'
+            let tar = '.. _'.word.': '.word
+        elseif word =~ g:_riv_p.link_ref_footnote
+            " footnote
+            let trim = strpart(word,  0 , len(word)-1)
+            let ref = word
+            let tar = '.. '.trim.' '.trim
+        elseif word =~ g:_riv_p.link_ref_normal
+            let trim = strpart(word,  0 , len(word)-1)
+            let ref = word
+            let tar = '.. _'.trim.': '.trim
+        elseif word =~ g:_riv_p.link_ref_anoymous
+            " anonymous link
+            let ref = word
+            let tar = '__ '.word
+        elseif word =~ g:_riv_p.link_ref_phase
+            let trim = strpart(word,  0 , len(word)-1)
+            let ref = word
+            let tar = '.. _'.trim.': '.trim
+        else
+            let ref = '`'.word.'`_'
+            let tar = '.. _`'.word.'`: '.word
+        endif
+        return [ref, tar]
+    endif
+endfun "}}}
+
+fun! riv#create#link() "{{{
+    let row = line('.')
+    let col = col('.')
+    let line = getline(row)
+    let word = matchstr(line , '\S*\%'.col.'c\S*')
+    let idx = match(line , '\S*\%'.col.'c\S*')
+    let end = matchend(line , '\S*\%'.col.'c\S*')
+    if empty(word)
+        let word=input("Input A link name:")
+        let idx =col
+        let end =col+1
+    endif
+    let [ref, tar] = s:expand_link(word)
+    if line =~ '^$'
+        let line = ref
+    else
+        let line = substitute(line , '\%'.idx. 'c' . '.\{' .(end-idx+1).'}', 
+                    \ ' '.ref.' ' , '')
+    endif
+    call setline(row , line)
+    call append(row, tar)
+    exe "normal! j$viW\<C-G>"
 endfun "}}}
 fun! riv#create#title(level) "{{{
     " Create a title of level.
@@ -88,6 +235,7 @@ fun! riv#create#title(level) "{{{
     call cursor(row+shift,col('.'))
     
 endfun "}}}
+
 fun! s:get_sect_txt() "{{{
     let row = line('.')
     if !exists('b:riv_obj')
@@ -136,8 +284,7 @@ endfun "}}}
 fun! riv#create#scratch() "{{{
     let id = s:id()
     let name = strftime("%Y%d%m")
-    let ext =  g:_riv_c.p[id].rst_ext
-    let scr = s:get_root_path() . 'scratch/'.name.'.'.ext
+    let scr = s:get_root_path() . 'scratch/'.name.'.rst'
     exe 'sp ' scr
     let b:riv_p_id = id
     let rel = s:get_rel_to('scratch', scr)
@@ -153,9 +300,7 @@ fun! s:append_scr_index(line) "{{{
         call mkdir(path,'p')
     endif
     let id = s:id()
-    let index = g:_riv_c.p[id].index
-    let ext = g:_riv_c.p[id].rst_ext
-    let file = path.'/'.index.'.'.ext
+    let file = path.'/index.rst'
     
     let lines = readfile(file)
 
@@ -168,12 +313,9 @@ fun! s:append_scr_index(line) "{{{
 endfun "}}}
 fun! riv#create#view_scr() "{{{
     let path = s:get_root_path().'scratch'
-    let id = s:id()
-    let index = g:_riv_c.p[id].index
-    let ext = g:_riv_c.p[id].rst_ext
-    let file = path.'/'.index.'.'.ext
+    let file = path.'/index.rst'
     exe 'sp '.file
-    let b:riv_p_id = id
+    let b:riv_p_id = s:id()
 endfun "}}}
 fun! s:escape_file_ptn(file) "{{{
     if g:riv_localfile_linktype == 2
@@ -188,13 +330,11 @@ fun! riv#create#delete() "{{{
     if input("Deleting '".file."'\n Continue? (y/N)?") !~?"y"
         return 
     endif
-    let id = s:id()
-    let index = g:_riv_c.p[id].index
-    let ext =  g:_riv_c.p[id].rst_ext
     let ptn = s:escape_file_ptn(file)
     call delete(file)
-    let index_file = expand('%:p:h').'/'.index.'.'.ext
+    let index_file = expand('%:p:h').'/index.rst'
     exe 'edit ' index_file
+    let b:riv_p_id = s:id()
     let f_idx = filter(range(1,line('$')),'getline(v:val)=~ptn')
     for i in f_idx
         call setline(i, substitute(getline(i), ptn ,'','g'))
@@ -205,7 +345,11 @@ fun! riv#create#delete() "{{{
 endfun "}}}
 
 fun! s:get_rel_to(dir,path) "{{{
-    let root = s:get_root_path().a:dir.'/'
+    if a:dir == 'root'
+        let root = s:get_root_path()
+    else
+        let root = s:get_root_path().a:dir.'/'
+    endif
     if match(a:path, root) == -1
         throw 'Riv: Not Same Path with Project'
     endif
@@ -213,36 +357,49 @@ fun! s:get_rel_to(dir,path) "{{{
     let r_path = substitute(r_path, '^/', '' , '')
     return r_path
 endfun "}}}
-fun! s:get_root_path() "{{{
-    let root = expand(g:_riv_c.p[s:id()].path)
-    return s:is_directory(root) ? root : root.'/'
-endfun "}}}
-fun! s:cache_todo() "{{{
-    if exists("g:_riv_cached") && g:_riv_cached == 1
+fun! s:cache_todo(force) "{{{
+    " TODO: we should cache once for the first time or manually
+    " and update them with editing buffer only.
+    let root = s:get_root_path()
+    let cache = root.'.rst_cache'
+    if filereadable(cache) && a:force==0
         return
     endif
-    let root = s:get_root_path()
     let files = split(glob(root.'**/*.rst'))
     let files  =filter(files, ' v:val !~ ''_build''')
     let todos = []
     echo 'Caching...'
+    let lines = []
     for file in files
-        let lines = readfile(file)
-        let list  = range(len(lines))
-        call filter(list, 'lines[v:val]=~g:_riv_p.todo_all && lines[v:val] !~ g:_riv_p.todo_done_list_ptn ')
-        let list = map(list, '[v:val , lines[v:val]]')
-        let todos += [[file, list]]
+        let lines += s:file2lines(readfile(file),file)
     endfor
     echon 'Done'
-    let cache = root.'.rst_cache'
-    call filter(todos, ' !empty(v:val[1])')
     
-    let lines = s:list2lines(todos)
-
     call writefile(lines , cache)
-    let g:_riv_cached = 1
 endfun "}}}
-fun! s:list2lines(list)
+fun! s:file2list(file) "{{{
+    " setup a qflist dict list
+    let lines = readfile(a:file)
+    let list  = range(len(lines))
+    call filter(list, 'lines[v:val]=~g:_riv_p.todo_all && lines[v:val] !~ g:_riv_p.todo_done_list_ptn ')
+    let dictlist = map(list, '{"filename": a:file ,"bufnr":0 , "lnum":v:val }')
+    return dictlist
+endfun "}}}
+
+fun! s:file2lines(filelines,filename) "{{{
+    let lines = a:filelines
+    let list  = range(len(lines))
+    call filter(list, 'lines[v:val]=~g:_riv_p.todo_all && lines[v:val] !~ g:_riv_p.todo_done_list_ptn ')
+    let f = s:get_rel_to('root',a:filename)
+    call map(list , 'printf("%-20s",f)." ".printf("%4d",(v:val+1))."|".lines[v:val] ')
+    return list
+endfun "}}}
+
+fun! s:get_root_path() "{{{
+    return g:_riv_c.p[s:id()]._root_path
+endfun "}}}
+
+fun! s:list2lines(list) "{{{
     let lines = []
     for [file, todos] in a:list
         call add(lines , "F: ".file)
@@ -251,8 +408,8 @@ fun! s:list2lines(list)
         endfor
     endfor
     return lines
-endfun
-fun! s:lines2list(lines)
+endfun "}}}
+fun! s:lines2list(lines) "{{{
     let list = []
     let todos = []
     for line in a:lines
@@ -270,7 +427,7 @@ fun! s:lines2list(lines)
         endif
     endfor
     return list
-endfun
+endfun "}}}
 fun! s:lines2helper(lines) "{{{
     let list = []
     let todos = []
@@ -297,18 +454,83 @@ fun! s:lines2helper(lines) "{{{
     return list
 endfun "}}}
 fun! s:load_todo() "{{{
-    call s:cache_todo()
-    return s:lines2helper(readfile(s:get_root_path().'.rst_cache'))
-    " return readfile(s:get_root_path().'.rst_cache')
+    call s:cache_todo(0)
+    " return s:lines2helper(readfile(s:get_root_path().'.rst_cache'))
+    return readfile(s:get_root_path().'.rst_cache')
 endfun "}}}
-fun! riv#create#todo()
-    return s:load_todo()
-endfun
-fun! riv#create#todo_helper()
-    let todo = riv#helper#new()
-    let todo.content_dic = s:load_todo()
-    call todo.win()
-endfun
+fun! riv#create#force_update() "{{{
+    call s:cache_todo(1)
+endfun "}}}
+fun! riv#create#update_todo() "{{{
+    " every time writing buffer.
+    " parse the buffer. find the todo item.
+    " then parse the cache , remove lines match the buffer filename
+    " add with the buffer's new todo-item
+    let file = expand('%:p')
+    if file =~ g:_riv_c.p[s:id()]._build_path
+        return
+    endif
+    let lines = s:file2lines(getline(1,line('$')), file)
+    let cache = s:get_root_path() .'.rst_cache'
+    let f = s:get_rel_to('root',file)
+    let c_lines = filter(readfile(cache), ' v:val!~''^\M''.f.'' '' ')
+    call writefile(c_lines+lines , cache)
+endfun "}}}
+fun! riv#create#enter() "{{{
+    let [all,file,lnum;rest] = matchlist(getline('.'),  '\v^(\S*)\s+(\d+)\ze|')
+    call s:todo.exit()
+    exe 'sp ' s:get_root_path().file
+    call cursor(lnum, 1)
+    normal! zv
+endfun "}}}
+let s:td_keywords = g:_riv_p.td_keywords
+fun! riv#create#syn_hi() "{{{
+    syn match rivHelperFile  '^\S*' 
+    syn match rivHelperLNum  '\s\+\d\+|'
+    exe 'syn match rivHelperTodo '
+            \.'`\v\c%(^\S*\s+\d+|)@<=\s*%([-*+]|%(\d+|[#a-z]|[imlcxvd]+)[.)])\s+'
+            \.'%(\[.\]|'. s:td_keywords .')'
+            \.'%(\s\d{4}-\d{2}-\d{2})='.'%(\s\~ \d{4}-\d{2}-\d{2})='
+            \.'\ze%(\s|$)` transparent contains=@rivTodoBoxGroup'
+
+    syn cluster rivTodoBoxGroup contains=rivTodoList,rivTodoBoxList,rivTodoTmsList,rivTodoTmsEnd
+    syn match rivTodoList `\v\c\s*%([-*+]|%(\d+|[#a-z]|[imlcxvd]+)[.)])\s+`
+                \ contained nextgroup=rivTodoBoxList
+    exe 'syn match rivTodoBoxList '
+                \.'`\v%(\[.\]|'. s:td_keywords .')`'
+                \.' nextgroup=rivTodoTmsList contained'
+    syn match rivTodoTmsList `\v\d{4}-\d{2}-\d{2}` contained nextgroup=rivTodoTmsEnd
+    syn match rivTodoTmsEnd  `\v\~ \zs\d{4}-\d{2}-\d{2}` contained
+    hi def link rivTodoList    Function
+    hi def link rivTodoBoxList Include
+    hi def link rivTodoTmsList Number
+    hi def link rivTodoTmsEnd  Number
+
+    hi link rivHelperLNum Keyword
+    hi link rivHelperFile Function
+endfun "}}}
+fun! riv#create#todo_helper() "{{{
+    " TODO: Create more actions.
+    let s:todo = riv#helper#new()
+    let s:todo.contents = s:load_todo()
+    let s:todo.maps['<Enter>'] = 'riv#create#enter'
+    let s:todo.maps['<KEnter>'] = 'riv#create#enter'
+    let s:todo.maps['<2-leftmouse>'] = 'riv#create#enter'
+    let s:todo.syntax_func  = "riv#create#syn_hi"
+    let s:todo.input=""
+    cal s:todo.win()
+endfun "}}}
+fun! riv#create#cmd_helper() "{{{
+    " showing all cmds
+    
+endfun "}}}
+
+fun! s:SID() "{{{
+    return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$')
+endfun "}}}
+fun! riv#create#SID() "{{{
+    return '<SNR>'.s:SID().'_'
+endfun "}}}
 
 fun! s:is_directory(name) "{{{
     return a:name =~ '/$' 

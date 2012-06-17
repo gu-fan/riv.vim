@@ -669,14 +669,10 @@ fun! riv#fold#text() "{{{
     return  line."[".num."]"
 endfun "}}}
 fun! riv#fold#update() "{{{
-    if  &filetype!='rst'
+    if  &filetype!='rst' || &fdm!='expr'
         return
     endif
-    if g:riv_fold_level > 0
-        normal! zx
-    else
-        call riv#fold#init()
-    endif
+    normal! zx
 endfun "}}}
 fun! riv#fold#init() "{{{
     call s:init_stat()

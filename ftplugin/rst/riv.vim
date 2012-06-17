@@ -70,15 +70,17 @@ call s:map(g:riv_options.buf_maps)
 call s:fold_map(g:riv_options.fold_maps)
 call riv#show_menu()
 aug RIV_BUFFER "{{{
+    au!
     if exists("g:riv_auto_format_table") "{{{
-        au! InsertLeave <buffer> call riv#table#format_pos()
+        au InsertLeave <buffer> call riv#table#format_pos()
     endif "}}}
     if exists("g:riv_hover_link_hl") "{{{
         " cursor_link_highlight
-        au! CursorMoved,CursorMovedI <buffer>  call riv#link#hi_hover()
+        au CursorMoved,CursorMovedI <buffer>  call riv#link#hi_hover()
         " clear the highlight before bufwin/winleave
-        au! WinLeave,BufWinLeave     <buffer>  2match none
-        au! FileWritePost <buffer>  call riv#fold#update()
+        au WinLeave,BufWinLeave     <buffer>  2match none
+        au BufWritePost <buffer>  call riv#fold#update()
+        au BufWritePost <buffer>  call riv#create#update_todo()
     endif "}}}
 aug END "}}}
 

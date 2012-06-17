@@ -38,13 +38,19 @@ fun! s:normal_ptn(text) "{{{
     return text
 endfun "}}}
 fun! s:target_ptn(text) "{{{
-    return '\v\c(_`\zs'. a:text .'`|\_^\.\.\s\zs\['.a:text.'\]|\_^\.\.\s\zs_'.a:text.')'
+    return '\v\c(_`\zs'. a:text .'`|\_^\.\.\s\zs\['.a:text.'\]|\_^\.\.\s\zs_'.a:text.':)'
 endfun "}}}
 fun! s:reference_ptn(text) "{{{
     return '\v\c(`'. a:text .'`_|\['.a:text.'\]_|'.a:text.'_)\ze'
 endfun "}}}
 
 fun! s:find_tar(text) "{{{
+
+    if a:text =~ g:_riv_p.link_ref_anoymous
+        let [a_row, a_col] = searchpos(g:_riv_p.link_tar_anonymous, 'wn', 0 , 100)
+        return [a_row, a_col]
+    endif
+
     let norm_ptn = s:normal_ptn(a:text)
     let [c_row,c_col] = getpos('.')[1:2]
     let row = s:find_sect('\v\c'.norm_ptn)
@@ -94,7 +100,7 @@ fun! riv#link#open() "{{{
     endif
     let id =  exists("b:riv_p_id") ? b:riv_p_id : g:riv_p_id
     if !empty(mo.groups[1])
-        " got it's target , find it's referrence
+        " at it's target , find it's referrence
         let [sr,sc] = s:find_ref(mo.str)
         if sr != 0
             call setpos("'`",getpos('.'))
@@ -133,14 +139,12 @@ fun! riv#link#open() "{{{
         if s:is_relative(mo.str)
             let dir = expand('%:p:h').'/'
             let file = dir . mo.str
-            let index = g:_riv_c.p[id].index
-            let ext   = '.'.g:_riv_c.p[id].rst_ext
             if s:is_directory(mo.str)
                 if !isdirectory(mo.str)
                 \ && input("'".mo.str."' Does not exist. \nCreate?(Y/n):")!~?'n'
                     call mkdir(mo.str,"p")
                 endif
-                let file = file . index . ext
+                let file = file . 'index.rst'
             elseif fnamemodify(file, ':e') == '' && g:riv_localfile_linktype == 2
                 let file = file . ext
             endif

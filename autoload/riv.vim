@@ -116,7 +116,7 @@ let s:default.opts = {
     \'auto_fold1_lines'   : 5000,
     \'auto_fold2_lines'   : 3000,
     \'list_toggle_type'   : "*,1.,A.,I)",
-    \'localfile_linktype' : 2,
+    \'localfile_linktype' : 1,
     \'web_browser'        : "firefox",
     \'options'            : s:default,
     \'usr_syn_dir'        : "",
@@ -152,8 +152,6 @@ let s:default.maps = {
     \'RivTodoType2'      : 'call riv#list#todo_change_type(1)',
     \'RivTodoType3'      : 'call riv#list#todo_change_type(2)',
     \'RivTodoType4'      : 'call riv#list#todo_change_type(3)',
-    \'RivCreateFootnote' : 'call riv#create#link("footnote",1)',
-    \'RivCreateScratch'  : 'call riv#create#scratch()',
     \'RivViewScratch'    : 'call riv#create#view_scr()',
     \'RivTitle1'         : 'call riv#create#title(1)',
     \'RivTitle2'         : 'call riv#create#title(2)',
@@ -177,6 +175,8 @@ let s:default.maps = {
     \'Riv2Path'          : 'call riv#publish#path()',
     \'RivDelete'         : 'call riv#create#delete()',
     \'RivTodoHelper'     : 'call riv#create#todo_helper()',
+    \'RivLinkCreate'     : 'call riv#create#link()',
+    \'RivScratchCreate'  : 'call riv#create#scratch()',
     \}
 "}}}
 "
@@ -184,6 +184,7 @@ let s:default.g_maps = {
     \'RivIndex'          : ['ww', '<C-W><C-W>'] ,
     \'Riv2HtmlIndex'     : ['wi', '<C-W><C-I>'] ,
     \'RivAsk'            : ['wa', '<C-W><C-A>'] ,
+    \'RivScratchCreate'  : ['ws', '<C-W><C-S>'] ,
     \}
 let s:default.fold_maps = { 
     \'RivFoldUpdate'     : ['zx', '<Space>j'],
@@ -233,9 +234,10 @@ let s:default.buf_maps = {
     \'Riv2S5'            : ['', 'm',    '2ss'],
     \'Riv2Xml'           : ['', 'm',    '2xx'],
     \'Riv2Path'          : ['', 'm',    '2e'],
-    \'RivCreateScratch'  : ['', 'm',    'cc'],
+    \'RivScratchCreate'  : ['', 'm',    'cc'],
     \'RivDelete'         : ['', 'm',    'cd'],
-    \'RivViewScratch'    : ['', 'm',    'cv'],
+    \'RivScratchView'    : ['', 'm',    'cv'],
+    \'RivLinkCreate'     : ['', 'm',    'cl'],
     \'RivTodoHelper'     : ['', 'm',    'eh'],
     \}
 let s:default.buf_imaps = {
@@ -296,13 +298,11 @@ fun! riv#index(...) "{{{
     let id = a:0 ? a:1 : 0
     if exists("g:_riv_c.p[id]")
         let path = expand(g:_riv_c.p[id].path).'/'
-        let index = g:_riv_c.p[id].index
-        let ext   = '.'.g:_riv_c.p[id].rst_ext
         if !isdirectory(path)
                 \ && input("'".path."' Does not exist. \nCreate?(Y/n):")!~?'n'
             call mkdir(path,'p')
         endif
-        exe 'edit ' . path.index.ext
+        exe 'edit ' . path.'index.rst'
         let g:riv_p_id = id
         let b:riv_p_id = id
     else
@@ -325,8 +325,11 @@ fun! s:set_proj_conf(proj) "{{{
 endfun "}}}
 "}}}
 "}}}
+"
+"
 fun! riv#load_conf() "{{{1
-if exists("g:_riv_debug") && g:_riv_debug==1
+let g:_riv_debug = exists("g:_riv_debug") ? g:_riv_debug : 0
+if g:_riv_debug==1
     unlet! g:_riv_c
     unlockvar g:_riv_c
     unlockvar g:_riv_p
@@ -337,16 +340,16 @@ if !exists("g:_riv_c")
     let g:_riv_p = {}
     let g:_riv_t = {}
     let g:_riv_c.riv_path = s:autoload_path . '/riv/'
-    if has("python") "{{{
-        let g:_riv_c['py'] = "py "
-        let g:_riv_c.has_py = 2
-    elseif has("python3")
-        let g:_riv_c['py'] = "py3 "
-        let g:_riv_c.has_py = 3
-    else
-        let g:_riv_c['py'] = "echom 'No Python: ' "
-        let g:_riv_c.has_py = 0
-    endif "}}}
+        if has("python") "{{{
+            let g:_riv_c['py'] = "py "
+            let g:_riv_c.has_py = 2
+        elseif has("python3")
+            let g:_riv_c['py'] = "py3 "
+            let g:_riv_c.has_py = 3
+        else
+            let g:_riv_c['py'] = "echom 'No Python: ' "
+            let g:_riv_c.has_py = 0
+        endif "}}}
     if g:_riv_c.has_py && !exists("g:_riv_c.py_imported") "{{{
         try
             exe g:_riv_c.py "import sys"
@@ -359,15 +362,15 @@ if !exists("g:_riv_c")
             let g:_riv_c.py_imported = 0
         endtry
     endif "}}}
-
+    
+    " Project option Setup "{{{
     let g:_riv_c.p_basic = {
-        \'index'              : 'index',
-        \'rst_ext'            : "rst",
         \'path'               : '~/Documents/Riv',
         \'build_path'         : '_build',
-        \'template_path'      : '_template' ,
-        \'static_path'        : '_static' ,
+        \'scratch_path'       : 'scratch' ,
         \}
+        " \'template_path'      : '_template' ,
+        " \'static_path'        : '_static' ,
     let g:_riv_c.p = []
     if exists("g:riv_projects") && type(g:riv_projects) == type([])
         for project in g:riv_projects
@@ -381,6 +384,27 @@ if !exists("g:_riv_c")
     if empty(g:_riv_c.p)
         call add(g:_riv_c.p, g:_riv_c.p_basic)
     endif
+
+    fun! s:is_relative(name) "{{{
+        return a:name !~ '^\~\|^/\|^[a-zA-Z]:'
+    endfun "}}}
+    fun! s:is_directory(name) "{{{
+        return a:name =~ '/$' 
+    endfun "}}}
+
+    for proj in g:_riv_c.p
+        let root = expand(proj.path)
+        let proj._root_path = s:is_directory(root) ? root : root.'/'
+        if s:is_relative(proj.build_path)
+            let b_path =  proj._root_path . proj.build_path
+            let proj._build_path =  s:is_directory(b_path) ?  b_path : b_path . '/'
+        endif
+        if s:is_relative(proj.scratch_path)
+            let s_path =  proj._root_path . proj.scratch_path
+            let proj._scratch_path =  s:is_directory(s_path) ?  s_path : s_path . '/'
+        endif
+    endfor
+    "}}}
     
     if empty(g:riv_ft_browser)
         if has('win32') || has('win64')
@@ -389,6 +413,7 @@ if !exists("g:_riv_c")
             let g:riv_ft_browser = 'xdg-open'
         endif
     endif
+
     " Patterns: "{{{2
     
     " Basic: "{{{3
@@ -398,6 +423,7 @@ if !exists("g:_riv_c")
     let g:_riv_p.S_bgn = '^\S'
 
     " Section: "{{{3
+    " Note: Most puncutation can be used, but we choose some of them.
     let g:_riv_p.section = '^\v([=`:.''"~^_*+#-])\1+\s*$'
 
 
@@ -490,6 +516,7 @@ if !exists("g:_riv_c")
 
 
     " Explicit_mark: "{{{3
+    " We only support the exp without padding space for convenience
     let g:_riv_p.exp_m = '^\.\.\%(\_s\|$\)'
 
     " Block: "{{{3
@@ -510,7 +537,7 @@ if !exists("g:_riv_c")
 
 
     " File:
-    let s:file_name = '[[:alnum:]~:./\\_-]+'
+    let s:file_name = '[[:alnum:]~./][[:alnum:]~:./\\_-]*'
     let s:file_start = '%(\_^|\s)'
     let s:file_end = '%($|\s)'
     let g:_riv_t.file_ext_lst = s:normlist(split(g:riv_file_link_ext,','))
@@ -532,6 +559,7 @@ if !exists("g:_riv_c")
     " Reference:
     let s:ref_name = '[[:alnum:]]+%([_.-][[:alnum:]]+)*'
     let s:ref_end = '%($|\s|[''")\]}>/:.,;!?\\-])'
+    let g:_riv_p.ref_name = s:ref_name
     "  xxx_
     let g:_riv_p.link_ref_normal = '\v<'.s:ref_name.'_\ze'.s:ref_end
     " `xxx xx`_
@@ -547,14 +575,14 @@ if !exists("g:_riv_c")
                 \ . '|' . g:_riv_p.link_ref_footnote
 
     " Target:
-    " .. [xxx]  or  [#xxx]  or  [1]
-    let g:_riv_p.link_tar_footnote = '\v^\.\.\s\zs\[%(\d+|#|#='.s:ref_name .')\]'
+    " .. [xxx]  or  [#xxx]  or  [1] with one space
+    let g:_riv_p.link_tar_footnote = '\v^\.\.\s\zs\[%(\d+|#|#='.s:ref_name .')\]\ze\_s'
     " _`xxx xxx`
-    let g:_riv_p.link_tar_inline = '\v%(\s|\_^)\zs_`[^:\\]+:\_s`'
+    let g:_riv_p.link_tar_inline = '\v%(\s|\_^)\zs_`[^:\\]+\ze:\_s`'
     " .. _xxx:
-    let g:_riv_p.link_tar_normal = 'v^\.\.\s\zs_[^:\\]+:\_s'
+    let g:_riv_p.link_tar_normal = 'v^\.\.\s\zs_[^:\\]+\ze:\_s'
     " .. __:   or   __
-    let g:_riv_p.link_tar_anonymous = '\v^\.\.\s__:\_s|^__\_s'
+    let g:_riv_p.link_tar_anonymous = '\v^\.\.\s__:\_s\zs|^__\_s\zs'
     " `xxx  <xxx>`
     let g:_riv_p.link_tar_embed  = '\v^%(\s|\_^)_`.+\s<\zs.+\ze>`'
 
@@ -593,7 +621,6 @@ if !exists("g:_riv_c")
 endif
 
 endfun "}}}
-
 
 fun! riv#init() "{{{
     " for init autoload

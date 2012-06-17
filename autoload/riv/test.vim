@@ -224,14 +224,39 @@ fun! riv#test#list_str() "{{{
     echo riv#list#act_line("   (I) 233   ,act ,idt ,prev ).'|'
     echo riv#list#act_line("   (I) 233   ,act ,idt ,prev ).'|'
 endfun "}}}
-fun! riv#test#list_buf() "{{{
+
+fun! riv#test#link_expand() "{{{
+    let func = riv#create#SID()."expand_to_link"
+    let func = riv#create#SID()."expand_link"
+    let arg_list  = [
+                \ "aaaa", "aaaa.rst", "aaaa.py", "[aaaa.rst]", "[aaaa]",
+                \ "[aaaa.py]", "[/efe/aaaa.py]", "aaaa/aaa/aa.rst",
+                \ "/aaaa/aaa/aa.rst", "~/aaaa/aaa/aa.rst", "../aaaa/aaa/aa.rst",
+                \]
+    let g:riv_localfile_linktype = 1
+    call riv#init()
+    call s:test_func(func, arg_list)
+    let g:riv_localfile_linktype = 2
+    call riv#init()
+    call s:test_func(func, arg_list)
 endfun "}}}
 
 fun! riv#test#test() "{{{
     " call riv#test#repl_link()
-    call riv#test#list_item()
+    " call riv#test#list_item()
+    call riv#test#link_expand()
+endfun "}}}
+fun! s:SID() "{{{
+    return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$')
+endfun "}}}
+fun! riv#test#SID() "{{{
+    return '<SNR>'.s:SID().'_'
 endfun "}}}
 
+" Testing 
+if expand('<sfile>:p') == expand('%:p') "{{{
+    call riv#test#test()
+endif "}}}
 
 let &cpo = s:cpo_save
 unlet s:cpo_save
