@@ -285,8 +285,7 @@ fun! riv#create#scratch() "{{{
     let id = s:id()
     let name = strftime("%Y%d%m")
     let scr = s:get_root_path() . 'scratch/'.name.'.rst'
-    exe 'sp ' scr
-    let b:riv_p_id = id
+    call s:split(scr)
     let rel = s:get_rel_to('scratch', scr)
     if g:riv_localfile_linktype == 2
         let rel = '['.fnamemodify(scr,':t:r').']'
@@ -313,9 +312,7 @@ fun! s:append_scr_index(line) "{{{
 endfun "}}}
 fun! riv#create#view_scr() "{{{
     let path = s:get_root_path().'scratch'
-    let file = path.'/index.rst'
-    exe 'sp '.file
-    let b:riv_p_id = s:id()
+    call s:split(path.'/index.rst')
 endfun "}}}
 fun! s:escape_file_ptn(file) "{{{
     if g:riv_localfile_linktype == 2
@@ -377,21 +374,25 @@ fun! s:cache_todo(force) "{{{
     
     call writefile(lines , cache)
 endfun "}}}
-fun! s:file2list(file) "{{{
+fun! s:file2list(filelines,filename) "{{{
     " setup a qflist dict list
-    let lines = readfile(a:file)
+    let lines = a:filelines
     let list  = range(len(lines))
     call filter(list, 'lines[v:val]=~g:_riv_p.todo_all && lines[v:val] !~ g:_riv_p.todo_done_list_ptn ')
-    let dictlist = map(list, '{"filename": a:file ,"bufnr":0 , "lnum":v:val }')
+    let dictlist = map(list,
+        \'{"filename": a:filename ,"bufnr":0 , "lnum":v:val+1 , "line":lines[v:val] }')
     return dictlist
 endfun "}}}
+fun! s:strip(line)
+    return substitute(a:line,'^\s*\(.\{-}\)\s*$','\1','')
+endfun
 
 fun! s:file2lines(filelines,filename) "{{{
     let lines = a:filelines
     let list  = range(len(lines))
-    call filter(list, 'lines[v:val]=~g:_riv_p.todo_all && lines[v:val] !~ g:_riv_p.todo_done_list_ptn ')
+    call filter(list, 'lines[v:val]=~g:_riv_p.todo_all  ')
     let f = s:get_rel_to('root',a:filename)
-    call map(list , 'printf("%-20s",f)." ".printf("%4d",(v:val+1))."|".lines[v:val] ')
+    call map(list , 'printf("%-20s %4d | ",f,(v:val+1)). s:strip(lines[v:val])')
     return list
 endfun "}}}
 
@@ -477,22 +478,36 @@ fun! riv#create#update_todo() "{{{
     call writefile(c_lines+lines , cache)
 endfun "}}}
 fun! riv#create#enter() "{{{
-    let [all,file,lnum;rest] = matchlist(getline('.'),  '\v^(\S*)\s+(\d+)\ze|')
+    let [all,file,lnum;rest] = matchlist(getline('.'),  '\v^(\S*)\s+(\d+)\ze |')
     call s:todo.exit()
-    exe 'sp ' s:get_root_path().file
+    " exe 'sp ' s:get_root_path().file
+    call s:split(s:get_root_path().file)
     call cursor(lnum, 1)
     normal! zv
+endfun "}}}
+fun! s:split(file) "{{{
+    exe 'sp ' a:file
+    let b:riv_p_id = s:id()
+endfun "}}}
+fun! s:edit(file) "{{{
+    exe 'edit ' a:file
+    let b:riv_p_id = s:id()
 endfun "}}}
 let s:td_keywords = g:_riv_p.td_keywords
 fun! riv#create#syn_hi() "{{{
     syn match rivHelperFile  '^\S*' 
-    syn match rivHelperLNum  '\s\+\d\+|'
+    syn match rivHelperLNum  '\s\+\d\+ |'
     exe 'syn match rivHelperTodo '
-            \.'`\v\c%(^\S*\s+\d+|)@<=\s*%([-*+]|%(\d+|[#a-z]|[imlcxvd]+)[.)])\s+'
+            \.'`\v\c%(^\S*\s+\d+ |)@<=\s*%([-*+]|%(\d+|[#a-z]|[imlcxvd]+)[.)])\s+'
             \.'%(\[.\]|'. s:td_keywords .')'
             \.'%(\s\d{4}-\d{2}-\d{2})='.'%(\s\~ \d{4}-\d{2}-\d{2})='
             \.'\ze%(\s|$)` transparent contains=@rivTodoBoxGroup'
 
+    exe 'syn match rivHelperTodoDone '
+            \.'`\v\c%(^\S*\s+\d+ |)@<=\s*%([-*+]|%(\d+|[#a-z]|[imlcxvd]+)[.)])\s+'
+            \. g:_riv_p.todo_done_ptn
+            \.'%(\s\d{4}-\d{2}-\d{2})='.'%(\s\~ \d{4}-\d{2}-\d{2})='
+            \.'\ze%(\s|$)` '
     syn cluster rivTodoBoxGroup contains=rivTodoList,rivTodoBoxList,rivTodoTmsList,rivTodoTmsEnd
     syn match rivTodoList `\v\c\s*%([-*+]|%(\d+|[#a-z]|[imlcxvd]+)[.)])\s+`
                 \ contained nextgroup=rivTodoBoxList
@@ -505,14 +520,20 @@ fun! riv#create#syn_hi() "{{{
     hi def link rivTodoBoxList Include
     hi def link rivTodoTmsList Number
     hi def link rivTodoTmsEnd  Number
+    hi def link rivHelperTodoDone Comment
 
-    hi link rivHelperLNum Keyword
+    hi link rivHelperLNum SpecialComment
     hi link rivHelperFile Function
 endfun "}}}
 fun! riv#create#todo_helper() "{{{
     " TODO: Create more actions.
     let s:todo = riv#helper#new()
-    let s:todo.contents = s:load_todo()
+    let All = s:load_todo()
+    let Todo = filter(copy(All),'v:val!~''\v''.g:_riv_p.todo_done_ptn ')
+    let Done = filter(copy(All),'v:val=~''\v''.g:_riv_p.todo_done_ptn ') 
+    let s:todo.contents = [All,Todo,Done]
+    let s:todo.contents_name = ['All', 'Todo', 'Done']
+
     let s:todo.maps['<Enter>'] = 'riv#create#enter'
     let s:todo.maps['<KEnter>'] = 'riv#create#enter'
     let s:todo.maps['<2-leftmouse>'] = 'riv#create#enter'
@@ -520,9 +541,25 @@ fun! riv#create#todo_helper() "{{{
     let s:todo.input=""
     cal s:todo.win()
 endfun "}}}
+fun! s:load_cmd()
+    let list = items(g:riv_options.buf_maps)
+    return map(list, 'string(v:val[0]).string(v:val[1])')
+endfun
 fun! riv#create#cmd_helper() "{{{
     " showing all cmds
     
+    let s:cmd = riv#helper#new()
+    " let s:cmd.contents = s:load_cmd()
+    let s:cmd.maps['<Enter>'] = 'riv#create#enter'
+    " let s:cmd.maps['<KEnter>'] = 'riv#create#enter'
+    " let s:cmd.maps['<2-leftmouse>'] = 'riv#create#enter'
+    " let s:cmd.syntax_func  = "riv#create#syn_hi"
+    let s:cmd.contents = [s:load_cmd(),
+                \filter(copy(s:cmd.contents[0]),'v:val=~g:_riv_p.todo_done_list_ptn '),
+                \filter(copy(s:cmd.contents[0]),'v:val!~g:_riv_p.todo_done_list_ptn '),
+                \]
+    let s:cmd.input=""
+    cal s:cmd.win()
 endfun "}}}
 
 fun! s:SID() "{{{

@@ -98,7 +98,7 @@ endfun "}}}
 " 0     off
 " 1     on
 let s:default = {}
-let s:default.opts = {
+let s:default.options = {
     \'leader'             : '<C-E>',
     \'buf_leader'         : '<C-E>',
     \'buf_ins_leader'     : '<C-E>',
@@ -177,6 +177,7 @@ let s:default.maps = {
     \'RivTodoHelper'     : 'call riv#create#todo_helper()',
     \'RivLinkCreate'     : 'call riv#create#link()',
     \'RivScratchCreate'  : 'call riv#create#scratch()',
+    \'RivScratchView'    : 'call riv#create#view_scr()',
     \}
 "}}}
 "
@@ -184,7 +185,8 @@ let s:default.g_maps = {
     \'RivIndex'          : ['ww', '<C-W><C-W>'] ,
     \'Riv2HtmlIndex'     : ['wi', '<C-W><C-I>'] ,
     \'RivAsk'            : ['wa', '<C-W><C-A>'] ,
-    \'RivScratchCreate'  : ['ws', '<C-W><C-S>'] ,
+    \'RivScratchCreate'  : ['cc', '<C-C><C-C>'] ,
+    \'RivTodoHelper'     : ['ht', '<C-h><C-t>'] ,
     \}
 let s:default.fold_maps = { 
     \'RivFoldUpdate'     : ['zx', '<Space>j'],
@@ -207,6 +209,7 @@ let s:default.buf_maps = {
     \'RivListTypePrev'   : ['',  'mi',  'l2'],
     \'RivListTypeRemove' : ['',  'mi',  'l`'],
     \'RivCreateFootnote' : ['',  'mi',  'cf'],
+    \'RivTodoHelper'     : ['',  'm',    'ew'],
     \'RivTodoToggle'     : ['',  'mi',  'ee'],
     \'RivTodoDel'        : ['',  'mi',  'ex'],
     \'RivTodoDate'       : ['',  'mi',  'ed'],
@@ -238,7 +241,6 @@ let s:default.buf_maps = {
     \'RivDelete'         : ['', 'm',    'cd'],
     \'RivScratchView'    : ['', 'm',    'cv'],
     \'RivLinkCreate'     : ['', 'm',    'cl'],
-    \'RivTodoHelper'     : ['', 'm',    'eh'],
     \}
 let s:default.buf_imaps = {
     \'<BS>'         : 'riv#action#ins_bs()',
@@ -449,6 +451,7 @@ if !exists("g:_riv_c")
 
 
     " List: "{{{3
+    
     let g:_riv_p.bullet_list = '\v^\s*[-*+]\s+'
     let g:_riv_p.enumerate_list1 = '\v\c^\s*%(\d+|[#a-z]|[imlcxvd]+)[.)]\s+'
     let g:_riv_p.enumerate_list2 = '\v\c^\s*\(%(\d+|[#a-z]|[imlcxvd]+)\)\s+'
@@ -537,7 +540,7 @@ if !exists("g:_riv_c")
 
 
     " File:
-    let s:file_name = '[[:alnum:]~./][[:alnum:]~:./\\_-]*'
+    let s:file_name = '[[:alnum:]~./][[:alnum:]~:./\\_-]+'
     let s:file_start = '%(\_^|\s)'
     let s:file_end = '%($|\s)'
     let g:_riv_t.file_ext_lst = s:normlist(split(g:riv_file_link_ext,','))
@@ -624,7 +627,7 @@ endfun "}}}
 
 fun! riv#init() "{{{
     " for init autoload
-    call riv#load_opt(s:default.opts)
+    call riv#load_opt(s:default.options)
     call riv#load_map(s:default.maps)
     call riv#load_menu(s:default.menus)
     call riv#load_conf()

@@ -228,34 +228,45 @@ fun! s:change_date(timestamp_id, buf, row, date) "{{{
     endif
     call setline(a:row, line)
 endfun "}}}
+fun! s:is_in_todo_tm_bgn(line, col)
+    return  a:col < matchend(a:line, g:_riv_p.todo_tm_bgn)
+            \ && a:col > matchend(a:line, g:_riv_p.todo_all)
+endfun
+fun! s:is_in_todo_time(line,col) "{{{
+    if a:line=~ g:_riv_p.todo_tm_end
+        if ( a:col < matchend(a:line, g:_riv_p.todo_tm_end)
+                \ && a:col > matchend(a:line, g:_riv_p.todo_tm_bgn.'\~ ') )
+            return 2
+        elseif (  a:col < matchend(a:line, g:_riv_p.todo_tm_bgn)
+                \ && a:col > matchend(a:line, g:_riv_p.todo_all))
+            return 1
+        endif
+    else
+        if a:col < matchend(a:line, g:_riv_p.todo_tm_bgn)
+                \ && a:col > matchend(a:line, g:_riv_p.todo_all)
+            return 1
+        endif
+   endif
+endfun "}}}
+
 fun! riv#list#change_date() "{{{
     let row = line('.')
     let buf = bufnr('%')
     let col = col('.')
     let line = getline(row)
-    let bgn = match(line, g:_riv_p.todo_tm_bgn )
-    if bgn == -1
+    let pos = s:is_in_todo_time(line,col)
+    if pos == 0
         echo "No timestamp to change..."
         return
     endif
-    let end = matchend(line, g:_riv_p.todo_tm_bgn )
-    let e_bgn = match(line, g:_riv_p.todo_tm_end )
-
     let s:date_callback = "s:change_date"
-    if ( col >= bgn && col <= end ) || e_bgn == -1
+    if pos == 1
         let s:date_call_args = [0, buf, row]
-    else 
-        let e_end = matchend(line, g:_riv_p.todo_tm_end)
-        if ( col >= e_bgn && col <= e_end ) 
+    elseif pos == 2 
         let s:date_call_args = [1, buf, row ]
-        else
-            echo "Put cursor on the timestamp to choose one.  "
-            return
-        endif
     endif
     
     call s:input_date()
-    
 endfun "}}}
 
 fun! s:add_todo_tm_start(line,...) "{{{

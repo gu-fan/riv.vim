@@ -49,11 +49,18 @@ fun! s:is_in_todo_item(line,col) "{{{
 endfun "}}}
 fun! s:is_in_todo_time(line,col) "{{{
     if a:line=~ g:_riv_p.todo_tm_end
-        return  a:col < matchend(a:line, g:_riv_p.todo_tm_end)
-                \ && a:col > matchend(a:line, g:_riv_p.todo_tm_bgn)
-    else       
-        return  a:col < matchend(a:line, g:_riv_p.todo_tm_bgn)
+        if ( a:col < matchend(a:line, g:_riv_p.todo_tm_end)
+                \ && a:col > matchend(a:line, g:_riv_p.todo_tm_bgn.'\~ ') )
+            return 2
+        elseif (  a:col < matchend(a:line, g:_riv_p.todo_tm_bgn)
+                \ && a:col > matchend(a:line, g:_riv_p.todo_all))
+            return 1
+        endif
+    else
+        if a:col < matchend(a:line, g:_riv_p.todo_tm_bgn)
                 \ && a:col > matchend(a:line, g:_riv_p.todo_all)
+            return 1
+        endif
    endif
 endfun "}}}
 fun! riv#action#ins_bs() "{{{
