@@ -319,7 +319,7 @@ fun! riv#ask_index() "{{{
     endif
 endfun "}}}
 fun! s:set_proj_conf(proj) "{{{
-    let proj = g:_riv_c.p_basic
+    let proj = copy(g:_riv_c.p_basic)
     for [key,var] in items(a:proj)
         let proj[key] = var
     endfor
@@ -327,7 +327,6 @@ fun! s:set_proj_conf(proj) "{{{
 endfun "}}}
 "}}}
 "}}}
-"
 "
 fun! riv#load_conf() "{{{1
 let g:_riv_debug = exists("g:_riv_debug") ? g:_riv_debug : 0
@@ -400,9 +399,15 @@ if !exists("g:_riv_c")
         if s:is_relative(proj.build_path)
             let b_path =  proj._root_path . proj.build_path
             let proj._build_path =  s:is_directory(b_path) ?  b_path : b_path . '/'
+        else
+            let b_path =   expand(proj.build_path)
+            let proj._build_path =  s:is_directory(b_path) ?  b_path : b_path . '/'
         endif
         if s:is_relative(proj.scratch_path)
             let s_path =  proj._root_path . proj.scratch_path
+            let proj._scratch_path =  s:is_directory(s_path) ?  s_path : s_path . '/'
+        else
+            let s_path =   expand(proj.scratch_path)
             let proj._scratch_path =  s:is_directory(s_path) ?  s_path : s_path . '/'
         endif
     endfor
@@ -486,7 +491,7 @@ if !exists("g:_riv_c")
     " - DONE 2012-01-01 ~ 2012-01-02 
 
     let td_key_list  = split(g:riv_todo_keywords,';')
-    let g:_riv_t.td_ask_keywords = ["Choose one keyword group :"] +
+    let g:_riv_t.td_ask_keywords = ["0.[ ],[X]"] +
                 \  map(range(len(td_key_list)), 
                 \ '(v:val+1).".". td_key_list[v:val]')
     let g:_riv_t.td_keyword_groups = map(td_key_list, 

@@ -33,7 +33,6 @@ fun! riv#action#db_click(mouse) "{{{
             else
                 exe "normal! \<Enter>"
             endif
-
         endif
     endif
 endfun "}}}

@@ -471,9 +471,13 @@ fun! riv#create#update_todo() "{{{
     if file =~ g:_riv_c.p[s:id()]._build_path
         return
     endif
-    let lines = s:file2lines(getline(1,line('$')), file)
-    let cache = s:get_root_path() .'.rst_cache'
-    let f = s:get_rel_to('root',file)
+    try
+        let lines = s:file2lines(getline(1,line('$')), file)
+        let cache = s:get_root_path() .'.rst_cache'
+        let f = s:get_rel_to('root',file)
+    catch /Riv: Not Same Path with Project/
+        return
+    endtry
     let c_lines = filter(readfile(cache), ' v:val!~''^\M''.f.'' '' ')
     call writefile(c_lines+lines , cache)
 endfun "}}}
@@ -541,10 +545,10 @@ fun! riv#create#todo_helper() "{{{
     let s:todo.input=""
     cal s:todo.win()
 endfun "}}}
-fun! s:load_cmd()
+fun! s:load_cmd() "{{{
     let list = items(g:riv_options.buf_maps)
     return map(list, 'string(v:val[0]).string(v:val[1])')
-endfun
+endfun "}}}
 fun! riv#create#cmd_helper() "{{{
     " showing all cmds
     

@@ -26,7 +26,7 @@ fun! riv#list#toggle_todo(...) "{{{
         if init_key == 0 
             let line = s:add_todo_box(line)
         else
-            let line = s:add_todo_key(line, 0)
+            let line = s:add_todo_key(line, 0, 0)
         endif
         if g:riv_todo_timestamp == 2
             let line = s:add_todo_tm_start(line)
@@ -86,9 +86,13 @@ fun! riv#list#del_todo(...) "{{{
 endfun "}}}
 fun! riv#list#todo_change_type(grp,...) "{{{
     let row = a:0 ? a:1 : line('.')
+
     let line = getline(row)
     let [type,idx] = s:get_todo_id(line)
-    if type == -2 | return | endif
+    if type == -2
+        let list_str = s:list_str(1 , '', '' , "*", " ") 
+        let line = substitute(line, '^\s*', list_str, '')
+    endif
     let max_i = s:todo_lv_len(a:grp)-1
     if idx > max_i 
         let idx = max_i
@@ -105,15 +109,13 @@ fun! riv#list#todo_change_type(grp,...) "{{{
             call riv#warning("The keyword group is not defined.")
             return
         endif
-        let line = s:add_todo_key(line, a:grp)
-        let line = s:change_todo_key(line, a:grp, idx)
+        let line = s:add_todo_key(line, a:grp, idx)
     endif
-
     call setline(row, line)
 endfun "}}}
 fun! riv#list#todo_ask() "{{{
     let grp =  inputlist(g:_riv_t.td_ask_keywords)
-    if grp > 0 && grp <= len(g:_riv_t.td_keyword_groups)
+    if  grp <= len(g:_riv_t.td_keyword_groups)
         call riv#list#todo_change_type(grp)
     endif
 endfun "}}}
@@ -172,8 +174,8 @@ endfun "}}}
 fun! s:add_todo_box(line) "{{{
    return substitute(a:line, g:_riv_p.list_all, '\0[ ] ','')
 endfun "}}}
-fun! s:add_todo_key(line,grp) "{{{
-   return substitute(a:line, g:_riv_p.list_all, '\0'.g:_riv_t.todo_all_group[a:grp][0].' ','')
+fun! s:add_todo_key(line,grp,id) "{{{
+   return substitute(a:line, g:_riv_p.list_all, '\0'.g:_riv_t.todo_all_group[a:grp][a:id].' ','')
 endfun "}}}
 fun! s:change_todo_box(line,id) "{{{
     let str = g:_riv_t.todo_levels[a:id]
@@ -228,26 +230,6 @@ fun! s:change_date(timestamp_id, buf, row, date) "{{{
     endif
     call setline(a:row, line)
 endfun "}}}
-fun! s:is_in_todo_tm_bgn(line, col)
-    return  a:col < matchend(a:line, g:_riv_p.todo_tm_bgn)
-            \ && a:col > matchend(a:line, g:_riv_p.todo_all)
-endfun
-fun! s:is_in_todo_time(line,col) "{{{
-    if a:line=~ g:_riv_p.todo_tm_end
-        if ( a:col < matchend(a:line, g:_riv_p.todo_tm_end)
-                \ && a:col > matchend(a:line, g:_riv_p.todo_tm_bgn.'\~ ') )
-            return 2
-        elseif (  a:col < matchend(a:line, g:_riv_p.todo_tm_bgn)
-                \ && a:col > matchend(a:line, g:_riv_p.todo_all))
-            return 1
-        endif
-    else
-        if a:col < matchend(a:line, g:_riv_p.todo_tm_bgn)
-                \ && a:col > matchend(a:line, g:_riv_p.todo_all)
-            return 1
-        endif
-   endif
-endfun "}}}
 
 fun! riv#list#change_date() "{{{
     let row = line('.')
@@ -269,6 +251,22 @@ fun! riv#list#change_date() "{{{
     call s:input_date()
 endfun "}}}
 
+fun! s:is_in_todo_time(line,col) "{{{
+    if a:line=~ g:_riv_p.todo_tm_end
+        if ( a:col < matchend(a:line, g:_riv_p.todo_tm_end)
+                \ && a:col > matchend(a:line, g:_riv_p.todo_tm_bgn.'\~ ') )
+            return 2
+        elseif (  a:col < matchend(a:line, g:_riv_p.todo_tm_bgn)
+                \ && a:col > matchend(a:line, g:_riv_p.todo_all))
+            return 1
+        endif
+    else
+        if a:col < matchend(a:line, g:_riv_p.todo_tm_bgn)
+                \ && a:col > matchend(a:line, g:_riv_p.todo_all)
+            return 1
+        endif
+   endif
+endfun "}}}
 fun! s:add_todo_tm_start(line,...) "{{{
     let tms = a:0 ? a:1 : strftime(g:_riv_t.time_fmt)
     " substitute bgn if exists
