@@ -529,6 +529,12 @@ fun! riv#create#syn_hi() "{{{
     hi link rivHelperLNum SpecialComment
     hi link rivHelperFile Function
 endfun "}}}
+fun! riv#create#tab() "{{{
+    " call s:helper.tab()
+    echom string(s:todo.c_id)
+    let s:todo.c_id = s:todo.c_id == len(s:todo.contents)-1 ? 0 : s:todo.c_id + 1
+    call s:todo.render()
+endfun "}}}
 fun! riv#create#todo_helper() "{{{
     " TODO: Create more actions.
     let s:todo = riv#helper#new()
@@ -537,10 +543,12 @@ fun! riv#create#todo_helper() "{{{
     let Done = filter(copy(All),'v:val=~''\v''.g:_riv_p.todo_done_ptn ') 
     let s:todo.contents = [All,Todo,Done]
     let s:todo.contents_name = ['All', 'Todo', 'Done']
+    let s:todo.content_title = "Todo Helper"
 
     let s:todo.maps['<Enter>'] = 'riv#create#enter'
     let s:todo.maps['<KEnter>'] = 'riv#create#enter'
     let s:todo.maps['<2-leftmouse>'] = 'riv#create#enter'
+    " let s:todo.maps['<Tab>'] = 'riv#create#tab'
     let s:todo.syntax_func  = "riv#create#syn_hi"
     let s:todo.input=""
     cal s:todo.win()

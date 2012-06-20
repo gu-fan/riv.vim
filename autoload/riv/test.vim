@@ -244,7 +244,7 @@ endfun "}}}
 fun! riv#test#test() "{{{
     " call riv#test#repl_link()
     " call riv#test#list_item()
-    call riv#test#link_expand()
+    " call riv#test#link_expand()
 endfun "}}}
 fun! s:SID() "{{{
     return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$')

@@ -99,27 +99,25 @@ endfun "}}}
 " 1     on
 let s:default = {}
 let s:default.options = {
+    \'default'            : s:default,
     \'leader'             : '<C-E>',
     \'buf_leader'         : '<C-E>',
     \'buf_ins_leader'     : '<C-E>',
     \'file_link_ext'      : 'vim,cpp,c,py,rb,lua,pl',
+    \'localfile_linktype' : 1,
     \'highlight_code'     : "lua,python,cpp,javascript,vim,sh",
+    \'hover_link_hl'      : 1,
+    \'usr_syn_dir'        : "",
     \'todo_levels'        : " ,o,X",
     \'todo_timestamp'     : 1,
     \'todo_keywords'      : "TODO,DONE;FIXME,FIXED;START,PROCESS,STOP",
-    \'hover_link_hl'      : 1,
-    \'auto_format_table'  : 1,
     \'fold_blank'         : 2,
     \'fold_level'         : 3,
     \'fold_section_mark'  : "-",
     \'auto_fold_force'    : 1,
     \'auto_fold1_lines'   : 5000,
     \'auto_fold2_lines'   : 3000,
-    \'list_toggle_type'   : "*,1.,A.,I)",
-    \'localfile_linktype' : 1,
     \'web_browser'        : "firefox",
-    \'options'            : s:default,
-    \'usr_syn_dir'        : "",
     \'ft_browser'         : "",
     \'rst2html_args'      : "",
     \'rst2odt_args'       : "",
@@ -127,6 +125,8 @@ let s:default.options = {
     \'rst2s5_args'        : "",
     \'rst2latex_args'     : "",
     \'section_levels'     : '=-~"''`',
+    \'fuzzy_help'         : 0,
+    \'auto_format_table'  : 1,
     \}
 " maps "{{{
 let s:default.maps = {
@@ -621,7 +621,6 @@ if !exists("g:_riv_c")
     let g:_riv_t.list_lvs  =  ["*","+","-"]
     let g:_riv_c.sect_lvs = split(g:riv_section_levels,'\zs')
     let g:_riv_c.sect_lvs_b = split('#*+:.^','\zs')
-    let g:_riv_t.list_type = split(g:riv_list_toggle_type,',')
     let g:_riv_t.highlight_code = s:normlist(split(g:riv_highlight_code,','))
 
     lockvar 2 g:_riv_c

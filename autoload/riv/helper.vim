@@ -9,70 +9,72 @@
 let s:cpo_save = &cpo
 set cpo-=C
 
-if !exists("g:riv_fuzzy_help")
-    let g:riv_fuzzy_help = 0
-endif
-let g:_riv_h ={}
-
-
-let g:_riv_h.map = {
-    \  '<Enter>' : 'riv#helper#enter', 
-    \  '<KEnter>' : 'riv#helper#enter', 
-    \  'q' : 'riv#helper#exit'  , 
-    \  '<Esc>' : 'riv#helper#exit'  ,
-    \}
-let s:helper = { 'name' : '_Helper_', 'title': 'Riv Helper',
-            \}
 fun! riv#helper#enter()  "{{{
     call s:helper.exit()
-    " if !empty(self.clist)
-    "     let [file, lnum] = g:_riv_td_path[0][self.clist[row-1]]
-    "     exe 'sp ' file
-    "     call cursor(lnum+1, 1)
-    " endif
 endfun "}}}
 fun! riv#helper#exit() "{{{
     call s:helper.exit()
     wincmd p
 endfun "}}}
-let s:helper.maps = g:_riv_h.map
+fun! riv#helper#tab() "{{{
+    call s:helper.tab()
+    call s:helper.render()
+endfun "}}}
+fun! riv#helper#run() "{{{
+    call s:helper.run()
+endfun "}}}
+
+" init "{{{
+let s:helper = { 'name' : '_Helper_', 
+            \}
+let s:helper.maps = {
+    \  '<Enter>'  : 'riv#helper#enter',
+    \  '<KEnter>' : 'riv#helper#enter',
+    \  'q'        : 'riv#helper#exit'  ,
+    \  '<Esc>'    : 'riv#helper#exit'  ,
+    \  '<Tab>'    : 'riv#helper#tab'  ,
+    \  '<S-Tab>'  : 'riv#helper#tab'  ,
+    \  '/'        : 'riv#helper#run'  ,
+    \}
 let s:helper.contents = [[]]
+let s:helper.content_title = "Helper"
 let s:helper.lines = []
 let s:helper.clist = []
 let s:helper.input = ""
+let s:helper.syntax_func = ""
+let s:helper.c_id = 0
+"}}}
 fun! s:helper.win(...) dict "{{{
+    call self.new()
+    call self.set()
+    call self.run()
+endfun "}}}
+fun! s:helper.new() dict "{{{
     if !s:get_buf(self.name)
         exec 'noa keepa bot 5new  +setl\ nobl '.self.name
     endif
-    call self.map()
-    call self.set()
+endfun "}}}
+fun! s:helper.run() dict "{{{
     call self.render()
-
     let self.running = 1
     while self.running
-        call s:helper.action()
+        let n = getchar()
+        let c = nr2char(n)
+        if c =~ '\w\|[ \\''`_,.!?@#$%^&*()<>:"[\]+=_|{}-]'
+            let self.input .= c
+        elseif n=="\<BS>"
+            let self.input = self.input[:-2]
+        elseif c=="\<C-W>"
+            let self.input = join(split(self.input)[:-2])
+        elseif c=="\<C-U>"
+            let self.input = ""
+        elseif c=="\<Tab>" || c=="\<S-Tab>"
+            call self.tab()
+        else
+            let self.running = 0
+        endif
+        call self.render()
     endwhile
-endfun "}}}
-let s:helper.c_id = 0
-fun! s:helper.action() "{{{
-    let n = getchar()
-    let c = nr2char(n)
-    if c =~ '\w\|[ \\''`_,.!?@#$%^&*()<>:"[\]+-=_|{}/]'
-        let self.input .= c
-    elseif n=="\<BS>"
-        let self.input = self.input[:-2]
-    elseif c=="\<C-W>"
-        let self.input = join(split(self.input)[:-2])
-    elseif c=="\<C-U>"
-        let self.input = ""
-    elseif c=="\<Tab>"
-        let self.c_id = self.c_id == len(self.contents)-1 ? 0 : self.c_id + 1
-        " let self.contents = sel
-        " let self.input = ""
-    else
-        let self.running = 0
-    endif
-    call self.render()
 endfun "}}}
 fun! s:helper.map() dict "{{{
     abcl <buffer>
@@ -86,7 +88,6 @@ fun! s:helper.map() dict "{{{
     " exe 'nn <buffer><silent> <ESC> :cal function('.string(self.exit).')<CR>'
     " exe 'nn <buffer><silent> H :function {'.string(self.exit).'}<CR>'
 endfun "}}}
-let s:helper.syntax_func = ""
 fun! s:helper.set() "{{{
 	setl noswf nonu nowrap nolist nospell nocuc wfh
 	setl fdc=0 fdl=99 tw=0 bt=nofile bh=unload
@@ -98,7 +99,8 @@ fun! s:helper.set() "{{{
 	en
     call call(self.syntax_func,[])
 
-    " au! CursorMoved,CursorMovedI <buffer>  call s:helper.hi()
+    call self.map()
+
 endfun "}}}
 fun! s:helper.hi() dict "{{{
     " let [row,col] = getpos('.')[1:2]
@@ -114,14 +116,23 @@ fun! s:helper.exit() dict "{{{
 	    noa close! 
     endtry
 endfun "}}}
+fun! s:helper.tab() dict "{{{
+    let self.c_id = self.c_id == len(self.contents)-1 ? 0 : self.c_id + 1
+endfun "}}}
 fun! s:helper.render() dict "{{{
     cal s:helper.content()
     cal s:helper.stats()
     cal s:helper.prompt()
 endfun "}}}
 fun! s:helper.stats() dict "{{{
-    let &l:stl = "%3*Helper%* ".self.contents_name[self.c_id]
-                \."%=Matching Numbers : %2*". len(self.clist)."%*"
+    let chooser = ""
+    for name in self.contents_name 
+        let chooser .= name == self.contents_name[self.c_id] ? "%4*[".name."]%*" : " ".name." "
+    endfor
+    let title = self.content_title
+
+    let &l:stl = "%1*".self.content_title .":%* ". chooser
+                \."%=Matching Numbers : ". len(self.clist).""
 endfun "}}}
 fun! s:helper.prompt() dict "{{{
     redraw | echohl Comment | echo ">>" | echohl Normal | echon self.input
