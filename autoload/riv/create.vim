@@ -554,7 +554,7 @@ fun! riv#create#todo_helper() "{{{
     cal s:todo.win()
 endfun "}}}
 fun! s:load_cmd() "{{{
-    let list = items(g:riv_options.buf_maps)
+    let list = items(g:riv_default.buf_maps)
     return map(list, 'string(v:val[0]).string(v:val[1])')
 endfun "}}}
 fun! riv#create#cmd_helper() "{{{

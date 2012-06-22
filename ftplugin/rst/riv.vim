@@ -65,9 +65,9 @@ fun! s:fold_map(map_dic) "{{{
 endfun "}}}
 endif "}}}
 
-call s:imap(g:riv_options.buf_imaps)
-call s:map(g:riv_options.buf_maps)
-call s:fold_map(g:riv_options.fold_maps)
+call s:imap(g:riv_default.buf_imaps)
+call s:map(g:riv_default.buf_maps)
+call s:fold_map(g:riv_default.fold_maps)
 call riv#show_menu()
 aug RIV_BUFFER "{{{
     au!

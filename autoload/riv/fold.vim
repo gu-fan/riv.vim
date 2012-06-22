@@ -657,16 +657,18 @@ fun! riv#fold#text() "{{{
             let line = strtrans(line)
         endif
     endif
-    let max_len = winwidth(0)-20
+    let max_len = winwidth(0)-60
     " Fix east_asia_char display width in fold text
     let dis_len = strdisplaywidth(line)
     if dis_len > max_len
         " XXX we should find the screen idx of the wide str.
         " and want to get it in place.
-        " WORKAROUND: truncate the string with half max_len.
-        let line = strpart(line, 0, max_len/2)
+        " WORKAROUND: truncate the string with max_len, 
+        "             add balance for EastAsiaChar.
+        let line = strpart(line, 0, byteidx(line, max_len-(strlen(line)-dis_len)))
+        let dis_len = strdisplaywidth(line)
     endif
-    let line = line."  ".repeat('-',max_len-(dis_len))
+    let line = line."  ".repeat('-', max_len-dis_len)
     if g:riv_fold_text_align == 'left'
         return printf("%-5s|%s  %4s+ ",cate,line,(v:foldend-lnum))
     else

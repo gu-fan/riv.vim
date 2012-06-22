@@ -5,71 +5,94 @@ Intro
 :Date:   2012-06-19T01:15:53
 :version: 0.62a
 
-Riv is short for 'ReST in Vim'.
-in which ReST is short for reStructuredText_ .
+**Riv** is short for 'ReST in Vim'.
+in which **ReST** is short for reStructuredText_ .
 
-It is a plugin for writing and managing ReST Documents.
+It is a vim plugin for writing and managing ReST Documents.
 
 .. _reStructuredText: http://docutils.sourceforge.net/rst.html
 
-It is for people who either want to manage files in wiki style project,
-or writing documents with more html syntax support(than other markup language like markdown or mediawiki).
+It is for people either want to manage documents in a personal wiki ,
+or writing documents with more html syntax support (than other markup language).
 
-* Features include:
+And you may need to see the `markup syntax of ReST documents`__ first.
+
+__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#enumerated-lists
+
+Features
+========
+
     
-  + Folding : fold it with it's section, lists, and explicit mark, table, 
-    literal-quotes...
-  + Sections: Fold section and indicating it's section-number. 
-    Also click on the section reference will bring you to the section title.
-  + Lists : bullet and enumerated list can be create both auto numbered 
-    and auto leveled.
-  + Links : Clicking on links will execute default behavior for the link.
-  + Table: Auto Format Table. (Currently require vim compiled with python.)
-  + Projects: You can manage your rest documents in a folder with a wiki style way.
-  + Local File: Provide two kinds of link pattern to choose to link a local file
-    in the rst documents 
-  + Miscs : create links , sections and other stuffs easier with short command.
+* Folding : Fold ReST file with sections, lists, and explicit mark, table, 
+  literal-quotes...
+* Sections: Section levels are auto recongized.
+  The section number will be showing when folded.
+  Clicking on the section reference will bring you to the section title.
+* Lists : Auto Numbered and auto leveled for bullet and enumerated list
+* Links : Clicking on links will executing it's default behavior 
+  (open browser/edit file/jump to internal target)
+* Table : Auto Format Table. 
+  (Currently require vim compiled with python.)
 
-  + Highlighting: fixed default syntax file to match the ReST syntax.
-  + Highlighting for Lists , which is not included in default rst syntax file.
-  + Highlighting for code blocks, And you can choose the code to highlights
-  + Indents: fixed default indent file to match the ReST syntax.
+* Project: You can manage your ReST documents with a wiki style way.
+* Local File: As ReST haven't define a pattern for local files currently.
+  **RIV**  provides two kinds of patterns to determine the local file
+  in the rst documents.
 
-  + Todos : you can add todo items , and it's datestamp , 
-    also edit them easily. (highlights in vim only) 
-  + Helpers: A little window to search things in project.
+  - 'xxx.rst xxx.py xxx.cpp' , directory is 'xxx/'.
+     and you can add other extensions with `g:riv_file_link_ext`
+  - '[xxx] [xxx.vim]' , directory is '[xxx/]'
 
-    - Todo Helper: you can check your All/Todo/Done items in current project.
-    - TODO : CMD Helper: You can use CMDS and view it's details , it's a detailed version
-      of menus.
-    - TODO : OPT Helper: You can easily set your options, 
-      and option will be cached. 
+* Scratch: The scratches (auto named by date) , can be accessed quickly.
+* Miscs : Create sections, lists, links , 
+  and other stuffs easier with short command.
 
-  + Scratch: a place to hold the scratches (auto named by date) of the project 
-  + Convert: some wrapper to convert rst files to html/xml/latex/odt/... 
-    and browse them.  Local Link file also converted.
-    (You should have docutils package installed)
+* Highlighting: Fixed default syntax file to match the ReST syntax.
 
-  + Recommened packages: 
-    
-    - Syntastic: for syntax checking of rst files.
-    - Galaxy: My colorscheme generator, provide better (maybe!) highlights for the
-      Eye Candy.
+  +  Lists Highlighting added.
+  +  Code Block syntax highlighting added. ( `.. code:: python` )
+     You can use `g:riv_highlight_code` to choose 
+     which type of code to highlight.
+* Indent: Fixed default indent file to match the ReST syntax.
+
+* Todos : you can add todo items , and it's datestamp , 
+  also edit them easily.
+* Helpers: A little window to search things in project.
+
+  + Todo Helper: you can check your All/Todo/Done items in current project.
+* Convert: some wrapper to convert rst files to html/xml/latex/odt/... 
+  and browse them.  Local Link file also converted.
+  (You should have docutils package installed)
+
+
 
 
 Install
 -------
+* Using Vundle_  (Recommend)
 
-* TODO : add install instruction 
-* TODO : add example vimrc
+  Add this line to your vimrc::
+ 
+    Bundle 'Rykka/riv.vim'
+
+.. _Vundle: www.github.com/gmarik/vundle
 
 
-ToDo List
+* Using the zip file. 
+  Just download the zipped file and extract to your `.vim` folder .
+
+:NOTE: Make sure the your .vim folder in option 'runtimepath' 
+       is before the $VIMRUNTIME. 
+       Otherwise the syntax/indent files for rst file will using the vim built-in one.
+
+* Recommened packages: 
+    
+  + Syntastic_  for syntax checking of rst files.
+
+.. _Syntastic: https://github.com/scrooloose/syntastic
+
+Todo
 ---------
 
-* TODO : Add todo things here.
-* TODO : Doc: add section deatils.
-* TODO : Convert: Add highlights for todo items in html file.
-* FIXED 2012-06-21 ~ 2012-06-21 : Windows: obj_dic seems unreachable.
-  (haven't clean the folder)
+* TODO add section deatils.
 
