@@ -40,8 +40,11 @@ Features
     
 
 * Links : Clicking on links will executing it's default behavior 
+
   (open browser/edit file/jump to internal target)
+
 * Table : Auto Format Table. 
+
   (Currently require vim compiled with python. And Grid Table only.)
 
 +-----------------+-----------------------------------------------------------+
@@ -60,13 +63,13 @@ Features
 
   + Local File: As ReST haven't define a pattern for local files currently.
     **Riv.vim**  provides two kinds of patterns to determine the local file
-    in the rst documents.
+    in the rst documents. 
   
     1. 'xxx.rst' 'xxx.py' 'xxx.cpp' , directory is 'xxx/' .
        and you can add other extensions with `g:riv_file_link_ext`
     2. '[xxx] [xxx.vim]' , directory is '[xxx/]'
 
-  - When Convert to html, all local file link will be converted to an embedded link.
+  + When Convert to html, all local file link will be converted to an embedded link.
 
     e.g. `xxx.rst <xxx.html>`_ `xxx.py <xxx.py>`_
 
@@ -86,7 +89,15 @@ Features
 * Highlighting: Fixed default syntax file to match the ReST syntax.
 
   +  Lists Highlighting added.
-  +  Code Block syntax highlighting added. ( `.. code:: python` )
+  +  Code Block syntax highlighting added.::
+     
+     .. code:: python 
+        
+        # this is python highlighting
+        # github does not support syntax highlighting for rst file yet.
+        x = [0 for i in range(100)]
+    
+
      You can use `g:riv_highlight_code` to choose 
      which type of code to highlight.
 * Indent: Fixed default indent file to match the ReST syntax.
