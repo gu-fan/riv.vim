@@ -3,7 +3,7 @@ Intro
 
 :Author: Rykka G.Forest
 :Date:   2012-06-19T01:15:53
-:Version: 0.62a
+:Version: 0.63 
 :Github: https://github.com/Rykka/riv.vim
 
 **Riv** is a vim plugin for managing and writing ReST Documents.
