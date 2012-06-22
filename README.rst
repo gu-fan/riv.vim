@@ -89,17 +89,18 @@ Features
 * Highlighting: Fixed default syntax file to match the ReST syntax.
 
   +  Lists Highlighting added.
-  +  Code Block syntax highlighting added.::
+  +  Code Block syntax highlighting added.
+
+     You can use `g:riv_highlight_code` to choose 
+     which type of code to highlight.
      
-     .. code:: python 
+    .. code:: python
 
         # this is python highlighting
         # github does not support syntax highlighting for rst file yet.
         x = [0 for i in range(100)]
     
 
-     You can use `g:riv_highlight_code` to choose 
-     which type of code to highlight.
 * Indent: Fixed default indent file to match the ReST syntax.
 
 
