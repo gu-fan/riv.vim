@@ -6,7 +6,7 @@ Intro
 :Version: 0.63 
 :Github: https://github.com/Rykka/riv.vim
 
-**Riv** is a vim plugin for managing and writing ReST Documents.
+**RIV** is a vim plugin for managing and writing ReST Documents.
 
 It is short for 'ReST in Vim'.
 in which **ReST** is short for reStructuredText_ .
