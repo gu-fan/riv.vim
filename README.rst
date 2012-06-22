@@ -12,7 +12,7 @@ It is a vim plugin for managing and writing ReST Documents.
 
 .. _reStructuredText: http://docutils.sourceforge.net/rst.html
 
-It is for people either want to manage documents in a personal wiki ,
+It is for people either want to manage documents in a personal wiki,
 or writing documents with more html syntax support (than other markup language).
 
 And you may need to see the `markup syntax of ReST documents`__ first.
@@ -25,7 +25,9 @@ Features
 * Folding : Fold ReST file with sections, lists, and explicit mark, table, 
   literal-quotes...
 * Sections: Section levels are auto recongized.
+
   The section number will be showing when folded.
+
   Clicking on the section reference will bring you to the section title.
   
   Example: Features_ link will bring you to the `Feature` Section
