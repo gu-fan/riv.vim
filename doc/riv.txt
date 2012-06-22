@@ -6,20 +6,19 @@ RIV
 version: 0.53
 ======================================================================
 
+**Riv** is a vim plugin for managing and writing ReST Documents.
 
-" TODO item
+It is short for 'ReST in Vim'.
+in which **ReST** is short for reStructuredText_ .
 
+.. _reStructuredText: http://docutils.sourceforge.net/rst.html
 
+It is for people either want to manage documents in a personal wiki,
+or writing documents with more html syntax support (than other markup language).
 
-" riv#list#toggle_todo()
-" Toggle TO-DO item
-" if not list, return 
-" if is null todo item, add box/key (and ts if ts==2)
-" else if is idx todo item , switch to next box/key (don't change ts)
-"   if next box/key is end , (change ts if ts == 1 , add ts_end if ts == 2)
-"   if next box/key is start, (remove ts if ts ==1, remove ts_end if ts == 2)
-" riv#list#del_todo
-" del todo list
+And you may need to see the `markup syntax of ReST documents`__ first.
+
+__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html
 
 
 
@@ -27,8 +26,6 @@ version: 0.53
 CHANGELOG                                           *riv-changelog*
 
 
-
-0.53~
 
 
 
