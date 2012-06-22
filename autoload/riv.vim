@@ -128,6 +128,7 @@ let s:default.options = {
     \'fuzzy_help'         : 0,
     \'auto_format_table'  : 1,
     \'fold_text_align'    : 'right',
+    \'ins_super_tab'      : 1,
     \}
 " maps "{{{
 let s:default.maps = {

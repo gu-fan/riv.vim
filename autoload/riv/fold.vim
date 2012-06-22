@@ -636,11 +636,9 @@ fun! riv#fold#text() "{{{
             endif
         elseif b:riv_obj[lnum].type == 'list'
             if exists("b:riv_obj[lnum].td_child")
-                let td = 100 * b:riv_obj[lnum].td_child
-                let cate = printf(" %3.0f%%",td)
+                let cate = printf(" %3.0f%%", 100 * b:riv_obj[lnum].td_child)
             elseif b:riv_obj[lnum].td_stat != -1
-                let td = 100 * b:riv_obj[lnum].td_stat
-                let cate = printf(" %3.0f%%",td)
+                let cate = printf(" %3.0f%%", 100 * b:riv_obj[lnum].td_stat)
             endif
         elseif b:riv_obj[lnum].type == 'table'
             let cate = " " . b:riv_obj[lnum].row 
@@ -663,7 +661,7 @@ fun! riv#fold#text() "{{{
     " Fix east_asia_char display width in fold text
     let dis_len = strdisplaywidth(line)
     if dis_len > max_len
-        " XXX we should find the right length of the wide str.
+        " XXX we should find the screen idx of the wide str.
         " and want to get it in place.
         " WORKAROUND: truncate the string with half max_len.
         let line = strpart(line, 0, max_len/2)
