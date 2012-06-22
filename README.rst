@@ -124,6 +124,7 @@ Install
 
 :NOTE: Make sure the your .vim folder in option 'runtimepath' 
        is before the $VIMRUNTIME. 
+
        Otherwise the syntax/indent files for rst file will using the vim built-in one.
 
 * Recommened packages: 
