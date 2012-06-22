@@ -92,7 +92,7 @@ Features
   +  Code Block syntax highlighting added.::
      
      .. code:: python 
-        
+
         # this is python highlighting
         # github does not support syntax highlighting for rst file yet.
         x = [0 for i in range(100)]
