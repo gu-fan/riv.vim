@@ -69,7 +69,7 @@ Features
 
   To Create a table , just insert '\| xxx \|' and press '<Enter>' in insert mode.
 
-  When folded, the rows and columns will be shown.
+  When folded, the numbers of rows and columns will be shown.
 
 +-----------------+-----------------------------------------------------------+
 | The Grid Table  |  Will be Auto Formatted after Leave Insert Mode           |
@@ -116,7 +116,7 @@ Features
   Datestamps are supported.
 
   When a todo item folded. 
-  The statistics of it's progress include child items will be shown.
+  The statistics of it's progress include child items will be shown in percentage.
 
   + [ ] this is a todo item of todo-box style.
   + Double Click on it or use '<C-E>ee' to switch the todo/done status.
@@ -149,9 +149,11 @@ Features
 
   `:RivTitle1` `<C-E>s1` ...  `:RivTitle4` `<C-E>s4` 
 
-  :NOTE: Although you can define a section title with most punctuations, 
-         *Riv.vim* use following punctuations for titles **=-~"'`** , you
-         can change it with 'g:riv_section_levels'
+  :NOTE: Although you can define a section title with most punctuations. 
+
+         *Riv.vim* use following punctuations for titles: 
+
+         **=-~"'`** , you can change it with 'g:riv_section_levels'
 
   + Create Lists:
 
