@@ -65,7 +65,7 @@ Features
   Auto Format Table. 
   (Currently require vim compiled with python. And Grid Table only.)
 
-  To Create a table , just insert '\| xxx \|'
+  To Create a table , just insert '\| xxx \|' and press '<Enter>' in insert mode.
 
 +-----------------+-----------------------------------------------------------+
 | The Grid Table  |  Will be Auto Formatted after Leave Insert Mode           |
