@@ -127,6 +127,7 @@ let s:default.options = {
     \'section_levels'     : '=-~"''`',
     \'fuzzy_help'         : 0,
     \'auto_format_table'  : 1,
+    \'fold_text_align'    : 'right',
     \}
 " maps "{{{
 let s:default.maps = {

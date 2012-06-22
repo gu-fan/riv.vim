@@ -659,14 +659,22 @@ fun! riv#fold#text() "{{{
             let line = strtrans(line)
         endif
     endif
-    let max_len = winwidth(0)-12
-    if len(line) <= max_len
-        let line = line."  ".repeat('-',max_len) 
+    let max_len = winwidth(0)-20
+    " Fix east_asia_char display width in fold text
+    let dis_len = strdisplaywidth(line)
+    if dis_len > max_len
+        " XXX we should find the right length of the wide str.
+        " and want to get it in place.
+        " WORKAROUND: truncate the string with half max_len.
+        let line = strpart(line, 0, max_len/2)
     endif
-    let line = printf("%-4s| %s", cate, line)
-    let line = printf("%-".max_len.".".(max_len)."s", line)
-    let num  = printf("%5s+", (v:foldend-lnum))
-    return  line."[".num."]"
+    let line = line."  ".repeat('-',max_len-(dis_len))
+    if g:riv_fold_text_align == 'left'
+        return printf("%-5s|%s  %4s+ ",cate,line,(v:foldend-lnum))
+    else
+        return printf("%s|%-4s  %4s+ ",line,cate,(v:foldend-lnum))
+    endif
+
 endfun "}}}
 fun! riv#fold#update() "{{{
     if  &filetype!='rst' || &fdm!='expr'

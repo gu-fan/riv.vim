@@ -70,5 +70,6 @@ ToDo List
 * TODO : Add todo things here.
 * TODO : Doc: add section deatils.
 * TODO : Convert: Add highlights for todo items in html file.
-* TODO : Windows: obj_dic seems unreachable.
+* FIXED 2012-06-21 ~ 2012-06-21 : Windows: obj_dic seems unreachable.
+  (haven't clean the folder)
 
