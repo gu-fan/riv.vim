@@ -2,7 +2,7 @@
 "    Name: fold.vim
 "    File: fold.vim
 "  Author: Rykka G.Forest
-"  Update: 2012-06-14
+"  Update: 2012-06-23
 " Version: 0.5
 "=============================================
 let s:cpo_save = &cpo
@@ -657,7 +657,7 @@ fun! riv#fold#text() "{{{
             let line = strtrans(line)
         endif
     endif
-    let max_len = winwidth(0)-60
+    let max_len = winwidth(0)-20
     " Fix east_asia_char display width in fold text
     let dis_len = strdisplaywidth(line)
     if dis_len > max_len
