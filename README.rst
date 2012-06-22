@@ -138,8 +138,8 @@ Features
 
     `:RivTodoHelper` or '<C-E>ht'
 
-    Inside the window , you can use '/' to search , '<Enter>' to jump to. '<Esc>/q'
-    to quit.
+    Inside the window , you can use '/' to search ,'<Tab>' to switch content,
+    '<Enter>' to jump to. '<Esc>/q' to quit.
   
 * Miscs : 
   
