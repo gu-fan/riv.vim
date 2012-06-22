@@ -40,20 +40,7 @@ Features
 * Links : Clicking on links will executing it's default behavior 
   (open browser/edit file/jump to internal target)
 * Table : Auto Format Table. 
-  (Currently require vim compiled with python. And Grid Table only.)::
-
-    +-----------------+-----------------------------------------------------------+
-    | The Grid Table  |  Will be Auto Formatted after Leave Insert Mode           |
-    +=================+===========================================================+
-    | In Insert Mode  | - <Enter> in column to add a new line of column           |
-    |                 | - Line 2                                                  |
-    +-----------------+-----------------------------------------------------------+
-    |                 | <Enter> in seperator to add a new row                     |
-    +-----------------+-----------------------------------------------------------+
-    |                 | <Tab> and <S-Tab> in table will switch to next/prev cell  |
-    +-----------------+-----------------------------------------------------------+
-
-..
+  (Currently require vim compiled with python. And Grid Table only.)
 
 +-----------------+-----------------------------------------------------------+
 | The Grid Table  |  Will be Auto Formatted after Leave Insert Mode           |
