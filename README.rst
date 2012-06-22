@@ -3,7 +3,8 @@ Intro
 
 :Author: Rykka G.Forest
 :Date:   2012-06-19T01:15:53
-:version: 0.62a
+:Version: 0.62a
+:Github: https://github.com/Rykka/riv.vim
 
 **Riv** is short for 'ReST in Vim'.
 in which **ReST** is short for reStructuredText_ .
@@ -77,11 +78,11 @@ Features
     e.g. `xxx.rst <xxx.html>`_ `xxx.py <xxx.py>`_
 
 
-* Scratch: The scratches (auto named by date) , can be accessed quickly.
-  You can either use it as diary or a place to hold thoughts.
+* Scratch: The scratches which is auto named by date,
+  is a place for writing diary or hold idea and thoughts.
 
-    `:RivScratchCreate` `<C-E>cc`
-    `:RivScratchView` `<C-E>cv`
+  `:RivScratchCreate` `<C-E>cc`
+  `:RivScratchView` `<C-E>cv`
 
 * Todos : you can add todo items , and it's datestamp, also edit them easily.
 
@@ -146,6 +147,7 @@ Features
             # github does not support syntax highlighting for rst file yet.
             x = [0 for i in range(100)]
     
+  +  The current links are highlighted.
 
 * Indent: Fixed default indent file to match the ReST syntax.
 
@@ -174,6 +176,13 @@ Install
     (require python docutils package )
 
 .. _Syntastic: https://github.com/scrooloose/syntastic
+
+
+Issues
+------
+
+* Currently it's a development version. 
+  Please Post issues at https://github.com/Rykka/riv.vim/issues
 
 Todo
 ---------
