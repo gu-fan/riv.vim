@@ -32,7 +32,7 @@ Features
 
   Clicking on the section reference will bring you to the section title.
   
-  Example: Features_ link will bring you to the `Feature` Section
+  Example: Features_ link will bring you to the `Feature` Section (in vim)
 
 * Lists : Auto Numbered and auto leveled for bullet and enumerated list.
 
