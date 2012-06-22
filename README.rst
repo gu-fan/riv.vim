@@ -34,11 +34,18 @@ Features
   
   Example: Features_ link will bring you to the `Feature` Section
 
-* Lists : Auto Numbered and auto leveled for bullet and enumerated list.::
+* Lists : Auto Numbered and auto leveled for bullet and enumerated list.
 
    The Sequence of the list level is:
    
-   * + - 1. A. a. I. i. 1) A) a) I) i) (1) (A) (a) (I) (i)
+   '* + - 1. A. a. I. i. 1) A) a) I) i) (1) (A) (a) (I) (i)'
+
+   In Insert Mode: 
+
+   + insert a new list of current list level: `<C-ENTER>`
+   + insert a new list of child list level: `<S-ENTER>`
+   + insert a new list of parent list level: `<C-S-ENTER>`
+    
 
 * Links : Clicking on links will executing it's default behavior 
 
