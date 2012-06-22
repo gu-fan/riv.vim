@@ -28,6 +28,8 @@ Features
   Fold ReST file with sections, lists, and explicit mark, table, 
   literal-quotes...
 
+  And some infos about these items will be shown.
+
 * Sections: 
   
   Section levels are auto recongized.
@@ -108,7 +110,11 @@ Features
 
 * Todos : 
   
-  You can add todo items , and it's datestamp.
+  Todo items are bullet/enumerated lists with todo-box or todo-keywords.
+  Datestamps are supported.
+
+  When a todo item folded. 
+  The statistics of it's progress include child items will be shown.
 
   + [ ] this is a todo item of todo-box style.
   + Double Click on it or use '<C-E>ee' to switch the todo/done status.
