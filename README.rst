@@ -8,7 +8,7 @@ Intro
 **Riv** is short for 'ReST in Vim'.
 in which **ReST** is short for reStructuredText_ .
 
-It is a vim plugin for writing and managing ReST Documents.
+It is a vim plugin for managing and writing ReST Documents.
 
 .. _reStructuredText: http://docutils.sourceforge.net/rst.html
 
@@ -17,11 +17,10 @@ or writing documents with more html syntax support (than other markup language).
 
 And you may need to see the `markup syntax of ReST documents`__ first.
 
-__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#enumerated-lists
+__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html
 
 Features
 ========
-
     
 * Folding : Fold ReST file with sections, lists, and explicit mark, table, 
   literal-quotes...
@@ -32,14 +31,20 @@ Features
 * Links : Clicking on links will executing it's default behavior 
   (open browser/edit file/jump to internal target)
 * Table : Auto Format Table. 
-  (Currently require vim compiled with python.)
+  (Currently require vim compiled with python. And Grid Table only.)::
+
+    +-----------------+-----------+
+    | The Grid Table  | column 2  |
+    +=================+===========+
+    | row 2           |           |
+    +-----------------+-----------+
 
 * Project: You can manage your ReST documents with a wiki style way.
 * Local File: As ReST haven't define a pattern for local files currently.
-  **RIV**  provides two kinds of patterns to determine the local file
+  **Riv.vim**  provides two kinds of patterns to determine the local file
   in the rst documents.
 
-  - 'xxx.rst xxx.py xxx.cpp' , directory is 'xxx/'.
+  - 'xxx.rst' 'xxx.py' 'xxx.cpp' , directory is 'xxx/' .
      and you can add other extensions with `g:riv_file_link_ext`
   - '[xxx] [xxx.vim]' , directory is '[xxx/]'
 
@@ -62,10 +67,7 @@ Features
   + Todo Helper: you can check your All/Todo/Done items in current project.
 * Convert: some wrapper to convert rst files to html/xml/latex/odt/... 
   and browse them.  Local Link file also converted.
-  (You should have docutils package installed)
-
-
-
+  (require python docutils package )
 
 Install
 -------
@@ -88,6 +90,7 @@ Install
 * Recommened packages: 
     
   + Syntastic_  for syntax checking of rst files.
+    (require python docutils package )
 
 .. _Syntastic: https://github.com/scrooloose/syntastic
 
