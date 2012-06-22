@@ -182,10 +182,11 @@ Features
 
 * Highlighting: 
   
-  Improved and fixed default syntax file.
+  Improved and fixed default syntax file. 
+  Also Include:
 
-  +  Lists Highlighting added.
-  +  Code Block syntax highlighting added.
+  +  Lists Highlightings 
+  +  Code Block syntax highlighting 
 
      You can use `g:riv_highlight_code` to choose 
      which type of code to highlight.::
@@ -196,7 +197,7 @@ Features
             # github does not support syntax highlighting for rst file yet.
             x = [0 for i in range(100)]
     
-  +  The current links are highlighted.
+  +  The links under cursor are highlighted.
 
 * Indent: 
   
