@@ -222,7 +222,7 @@ Install
 Issues
 ------
 
-* Currently it's a development version. 
+* Currently it's a developing version. 
   Please Post issues at https://github.com/Rykka/riv.vim/issues
 
 Todo
