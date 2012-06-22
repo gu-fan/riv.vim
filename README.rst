@@ -78,6 +78,7 @@ Features
     2. '[xxx] [xxx.vim]' , directory is '[xxx/]'
 
   - When Convert to html, all local file link will be converted to an embedded link.
+    e.g. `xxx.rst <xxx.html>`
 
 * Scratch: The scratches (auto named by date) , can be accessed quickly.
   You can either use it as diary or a place to hold thoughts.
