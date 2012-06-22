@@ -6,10 +6,10 @@ Intro
 :Version: 0.62a
 :Github: https://github.com/Rykka/riv.vim
 
-**Riv** is short for 'ReST in Vim'.
-in which **ReST** is short for reStructuredText_ .
+**Riv** is a vim plugin for managing and writing ReST Documents.
 
-It is a vim plugin for managing and writing ReST Documents.
+It is short for 'ReST in Vim'.
+in which **ReST** is short for reStructuredText_ .
 
 .. _reStructuredText: http://docutils.sourceforge.net/rst.html
 
@@ -19,6 +19,7 @@ or writing documents with more html syntax support (than other markup language).
 And you may need to see the `markup syntax of ReST documents`__ first.
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html
+
 
 Features
 --------
@@ -32,7 +33,6 @@ Features
   Clicking on the section reference will bring you to the section title.
   
   Example: Features_ link will bring you to the `Feature` Section
-
 
 * Lists : Auto Numbered and auto leveled for bullet and enumerated list.::
 
@@ -50,6 +50,8 @@ Features
 
   (Currently require vim compiled with python. And Grid Table only.)
 
+  To Create a table , just insert '\| xxx \|'
+
 +-----------------+-----------------------------------------------------------+
 | The Grid Table  |  Will be Auto Formatted after Leave Insert Mode           |
 +=================+===========================================================+
@@ -60,8 +62,6 @@ Features
 +-----------------+-----------------------------------------------------------+
 |                 | <Tab> and <S-Tab> in table will switch to next/prev cell  |
 +-----------------+-----------------------------------------------------------+
-    
-    To Create a table , just insert '\|  \|  \|'
 
 * Project: You can manage your ReST documents with a wiki style way.
 
