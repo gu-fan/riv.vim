@@ -39,6 +39,16 @@ Features
     | row 2           |           |
     +-----------------+-----------+
 
+..
+
+    +-----------------+-----------+
+    | The Grid Table  | column 2  |
+    +=================+===========+
+    | row 2           |           |
+    +-----------------+-----------+
+
+
+
 * Project: You can manage your ReST documents with a wiki style way.
 * Local File: As ReST haven't define a pattern for local files currently.
   **Riv.vim**  provides two kinds of patterns to determine the local file
