@@ -20,13 +20,17 @@ And you may need to see the `markup syntax of ReST documents`__ first.
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html
 
-
 Features
 --------
     
-* Folding : Fold ReST file with sections, lists, and explicit mark, table, 
+* Folding : 
+  
+  Fold ReST file with sections, lists, and explicit mark, table, 
   literal-quotes...
-* Sections: Section levels are auto recongized.
+
+* Sections: 
+  
+  Section levels are auto recongized.
 
   The section number will be showing when folded.
 
@@ -34,27 +38,31 @@ Features
   
   Example: Features_ link will bring you to the `Feature` Section (in vim)
 
-* Lists : Auto Numbered and auto leveled for bullet and enumerated list.
+* Lists :
 
-   The Sequence of the list level is:
+  Auto Numbered and auto leveled for bullet and enumerated list.
+
+  The Sequence of the list level is:
    
-   '* + - 1. A. a. I. i. 1) A) a) I) i) (1) (A) (a) (I) (i)'
+  '* + - 1. A. a. I. i. 1) A) a) I) i) (1) (A) (a) (I) (i)'
 
-   In Insert Mode: 
+  In Insert Mode: 
 
-   + insert a new list of current list level: `<C-ENTER>`
-   + insert a new list of child list level: `<S-ENTER>`
-   + insert a new list of parent list level: `<C-S-ENTER>`
+  + insert a new list of current list level: `<C-ENTER>`
+  + insert a new list of child list level: `<S-ENTER>`
+  + insert a new list of parent list level: `<C-S-ENTER>`
     
 
-* Links : Clicking on links will executing it's default behavior 
-
+* Links : 
+  
+  Clicking on links will executing it's default behavior 
   (open browser/edit file/jump to internal target)
 
   <Tab>/<S-Tab> in Normal mode will jump to next/prev link.
 
-* Table : Auto Format Table. 
-
+* Table : 
+  
+  Auto Format Table. 
   (Currently require vim compiled with python. And Grid Table only.)
 
   To Create a table , just insert '\| xxx \|'
@@ -70,9 +78,14 @@ Features
 |                 | <Tab> and <S-Tab> in table will switch to next/prev cell  |
 +-----------------+-----------------------------------------------------------+
 
-* Project: You can manage your ReST documents with a wiki style way.
+* Project: 
+  
+  You can manage your ReST documents with a wiki style way.
 
-  + Local File: As ReST haven't define a pattern for local files currently.
+  + Local File: 
+
+    As ReST haven't define a pattern for local files currently.
+
     **Riv.vim**  provides two kinds of patterns to determine the local file
     in the rst documents. 
   
@@ -85,17 +98,22 @@ Features
     e.g. `xxx.rst <xxx.html>`_ `xxx.py <xxx.py>`_
 
 
-* Scratch: The scratches which is auto named by date,
-  is a place for writing diary or hold idea and thoughts.
+* Scratch: 
+  
+  The scratches which is auto named by date,
+  it is a place for writing diary or hold idea and thoughts.
 
   `:RivScratchCreate` `<C-E>cc`
   `:RivScratchView` `<C-E>cv`
 
-* Todos : you can add todo items , and it's datestamp, also edit them easily.
+* Todos : 
+  
+  You can add todo items , and it's datestamp.
 
   + [ ] this is a todo item of todo-box style.
   + Double Click on it or use '<C-E>ee' to switch the todo/done status.
   + [ ] 2012-06-23 this is a todo item with datestamp
+  + Double Click on datestamp to change it's date.
   + [X] 2012-06-23 ~ 2012-06-23 a todo item of done.
   + DONE 2012-06-13 ~ 2012-06-23 a todo item of TODO/DONE keyword.
   + FIXED a todo item of FIXME/FIXED keyword.
@@ -104,14 +122,20 @@ Features
   + `RivTodoType1` `<C-E>e1`... `RivTodoType4` `<C-E>e4` to change the keyword group. 
   + `RivTodoAsk` `<C-E>e`` will show an keyword group list to choose.
 
-* Helpers: A smalle window to show something of the project.
+* Helpers: 
+  
+  A window to show something of the project.
 
-  + Todo Helper: You can check and jump to your All/Todo/Done todo items of the project.
+  + Todo Helper: Check and jump to your All/Todo/Done todo items of the project.
 
     `:RivTodoHelper` or '<C-E>ht'
+
+    Inside the window , you can use '/' to search , '<Enter>' to jump to. '<Esc>/q'
+    to quit.
   
-* Miscs : Create sections, lists, links , 
-  and other stuffs easier with short command.
+* Miscs : 
+  
+  Create sections, lists, links , and other stuffs.
 
   + Create Section Title:
 
@@ -131,16 +155,24 @@ Features
 
   `:RivLinkCreate` `<C-E>cl`
 
+  + Delete Rst File:
 
-* Convert: some wrapper to convert rst files to html/xml/latex/odt/... 
-  and browse it.
+  `:RivDelete` `<C-E>cd`
+
+* Convert: 
+  
+  some wrapper to convert rst files to html/xml/latex/odt/... 
   (require python docutils package )
 
-    `Riv2HtmlFile`  `<C-E>2hf`
-    `Riv2HtmlProject` `<C-E>2hp`
-    `Riv2Odt` `<C-E>2oo`  ... `Riv2Xml` `<C-E>2xx`
+  + `Riv2HtmlFile`  `<C-E>2hf`
+  + `Riv2HtmlAndBrowse`  `<C-E>2hh`
+  + `Riv2HtmlProject` `<C-E>2hp`
+  + `Riv2Odt` `<C-E>2oo`  ... `Riv2Xml` `<C-E>2xx`
+  + Open the build path: `Riv2Path` `<C-E>2e`
 
-* Highlighting: Fixed default syntax file to match the ReST syntax.
+* Highlighting: 
+  
+  Improved and fixed default syntax file.
 
   +  Lists Highlighting added.
   +  Code Block syntax highlighting added.
@@ -156,7 +188,9 @@ Features
     
   +  The current links are highlighted.
 
-* Indent: Fixed default indent file to match the ReST syntax.
+* Indent: 
+  
+  Improved and fixed default indent file.
 
 Install
 -------
