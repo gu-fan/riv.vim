@@ -45,8 +45,8 @@ Features
     +-----------------+-----------------------------------------------------------+
     | The Grid Table  |  Will be Auto Formatted after Leave Insert Mode           |
     +=================+===========================================================+
-    | In Insert Mode  | <Enter> in column to add a new line of column             |
-    |                 |                                                           |
+    | In Insert Mode  | - <Enter> in column to add a new line of column           |
+    |                 | - Line 2                                                  |
     +-----------------+-----------------------------------------------------------+
     |                 | <Enter> in seperator to add a new row                     |
     +-----------------+-----------------------------------------------------------+
@@ -58,8 +58,8 @@ Features
 +-----------------+-----------------------------------------------------------+
 | The Grid Table  |  Will be Auto Formatted after Leave Insert Mode           |
 +=================+===========================================================+
-| In Insert Mode  | <Enter> in column to add a new line of column             |
-|                 |                                                           |
+| In Insert Mode  | - <Enter> in column to add a new line of column           |
+|                 | - Line 2                                                  |
 +-----------------+-----------------------------------------------------------+
 |                 | <Enter> in seperator to add a new row                     |
 +-----------------+-----------------------------------------------------------+
