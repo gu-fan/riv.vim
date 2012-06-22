@@ -69,6 +69,8 @@ Features
 
   To Create a table , just insert '\| xxx \|' and press '<Enter>' in insert mode.
 
+  When folded, the rows and columns will be shown.
+
 +-----------------+-----------------------------------------------------------+
 | The Grid Table  |  Will be Auto Formatted after Leave Insert Mode           |
 +=================+===========================================================+
