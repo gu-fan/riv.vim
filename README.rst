@@ -32,16 +32,18 @@ Features
   
   Example: Features_ link will bring you to the `Feature` Section
 
+
 * Lists : Auto Numbered and auto leveled for bullet and enumerated list.::
 
    The Sequence of the list level is:
    
    * + - 1. A. a. I. i. 1) A) a) I) i) (1) (A) (a) (I) (i)
-    
 
 * Links : Clicking on links will executing it's default behavior 
 
   (open browser/edit file/jump to internal target)
+
+  <Tab>/<S-Tab> in Normal mode will jump to next/prev link.
 
 * Table : Auto Format Table. 
 
@@ -57,7 +59,8 @@ Features
 +-----------------+-----------------------------------------------------------+
 |                 | <Tab> and <S-Tab> in table will switch to next/prev cell  |
 +-----------------+-----------------------------------------------------------+
-
+    
+    To Create a table , just insert '\|  \|  \|'
 
 * Project: You can manage your ReST documents with a wiki style way.
 
@@ -77,14 +80,57 @@ Features
 * Scratch: The scratches (auto named by date) , can be accessed quickly.
   You can either use it as diary or a place to hold thoughts.
 
-* Todos : you can add todo items , and it's datestamp , 
-  also edit them easily.
+    `:RivScratchCreate` `<C-E>cc`
+    `:RivScratchView` `<C-E>cv`
+
+* Todos : you can add todo items , and it's datestamp, also edit them easily.
+
+  + [ ] this is a todo item of todo-box style.
+  + Double Click on it or use '<C-E>ee' to switch the todo/done status.
+  + [ ] 2012-06-23 this is a todo item with datestamp
+  + [X] 2012-06-23 ~ 2012-06-23 a todo item of done.
+  + DONE 2012-06-13 ~ 2012-06-23 a todo item of TODO/DONE keyword.
+  + FIXED a todo item of FIXME/FIXED keyword.
+  + You can add your own keyword group for todo items with 'g:riv_todo_keywords'
+  + You can set the todo item timestamp style with 'g:riv_todo_timestamp'
+  + `RivTodoType1` `<C-E>e1`... `RivTodoType4` `<C-E>e4` to change the keyword group. 
+  + `RivTodoAsk` `<C-E>e`` will show an keyword group list to choose.
+
 * Helpers: A smalle window to show something of the project.
 
-  + Todo Helper: you can check your All/Todo/Done items in current project.
+  + Todo Helper: You can check and jump to your All/Todo/Done todo items of the project.
 
+    `:RivTodoHelper` or '<C-E>ht'
+  
 * Miscs : Create sections, lists, links , 
   and other stuffs easier with short command.
+
+  + Create Section Title:
+
+  `:RivTitle1` `<C-E>s1` ...  `:RivTitle4` `<C-E>s4` 
+
+  :NOTE: Although you can define a section title with most punctuations, 
+         *Riv.vim* use following punctuations for titles **=-~"'`** , you
+         can change it with 'g:riv_section_levels'
+
+  + Create Lists:
+
+  `:RivListTypeNext` `<C-E>l1`
+  `:RivListTyePrev` `<C-E>l2`
+  `:RivListTypeRemove` `<C-E>l``
+
+  + Create Links:
+
+  `:RivLinkCreate` `<C-E>cl`
+
+
+* Convert: some wrapper to convert rst files to html/xml/latex/odt/... 
+  and browse it.
+  (require python docutils package )
+
+    `Riv2HtmlFile`  `<C-E>2hf`
+    `Riv2HtmlProject` `<C-E>2hp`
+    `Riv2Odt` `<C-E>2oo`  ... `Riv2Xml` `<C-E>2xx`
 
 * Highlighting: Fixed default syntax file to match the ReST syntax.
 
@@ -102,11 +148,6 @@ Features
     
 
 * Indent: Fixed default indent file to match the ReST syntax.
-
-
-* Convert: some wrapper to convert rst files to html/xml/latex/odt/... 
-  and browse it.
-  (require python docutils package )
 
 Install
 -------
