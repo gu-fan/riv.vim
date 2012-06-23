@@ -2,7 +2,7 @@ Riv Instruction
 ===============
 
 :Author: Rykka G.Forest
-:Date:   2012-06-23T18:47:58
+:Date:   2012-06-23 18:47:58
 :Version: 0.64 
 :Github: https://github.com/Rykka/riv.vim
 
