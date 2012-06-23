@@ -375,12 +375,14 @@ File
 
 As reStructuredText haven't define a pattern for local files currently.
 
-**Riv**  provides two kinds of patterns to determine the local file
+**Riv**  provides two kinds of style to determine the local file
 in the rst documents. 
 
-* You can switch with ``g:riv_localfile_linktype``
+The ``bare extension style`` and ``square bracket style``
 
-  + when set to 1:
+* You can switch the style with ``g:riv_localfile_linktype``
+
+  + when set to 1, use bare extension style:
 
     words like ``xxx.rst`` ``xxx.py`` ``xxx.cpp`` will be detected as file link.
 
@@ -398,7 +400,7 @@ in the rst documents.
     which default is ``vim,cpp,c,py,rb,lua,pl`` ,
     meaning these files will be recongized.
 
-  + when set to 2: 
+  + when set to 2, square bracket style: 
     
     words like ``[xxx]`` ``[xxx.vim]`` will be detected as file link. 
 
@@ -411,7 +413,7 @@ in the rst documents.
     will be considered as external directory links, 
     and link to the directory.
 
-  + when set to 0 , no local file link.
+  + when set to 0, no local file link.
   + default is 1.
 
 * When Publish to html, all local file link will be converted to an embedded link.
