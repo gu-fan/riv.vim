@@ -521,10 +521,12 @@ Some wrapper to convert rst files to html/xml/latex/odt/...
 * ``Riv2HtmlProject`` ``<C-E>2hp``
 
 Convert to the file and browse.
+
 * ``Riv2Odt`` ``<C-E>2oo``  
 * ``Riv2Xml`` ``<C-E>2xx``
 * ``Riv2S5`` ``<C-E>2ss``
 * ``Riv2Latex`` ``<C-E>2ll``
+
 The browser is set with ``g:riv_ft_browser``. 
 default is (unix:'xdg-open', windows:'start')
 
