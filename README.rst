@@ -416,14 +416,14 @@ The ``bare extension style`` and ``square bracket style``
   + when set to 0, no local file link.
   + default is 1.
 
-* When Publish to html, all local file link will be converted to an embedded link.
+* When Publish to html, all detected local file link will be converted to an embedded link.
 
     e.g. `xxx.rst <xxx.html>`_ `xxx.py <xxx.py>`_
 
 * To delete a local file in project.
 
   ``:RivDelete`` ``<C-E>df``
-  it will delete all reference to this file in current level's index.rst .
+  it will also delete all reference to this file in ``index.rst`` of the directory.
 
 Scratch
 ~~~~~~~
@@ -446,9 +446,7 @@ Writing todo lists in reStructuredText documents .
 Todo items are bullet/enumerated lists with todo-box or todo-keywords.
 Datestamps are supported.
 
-The statistics of it's progress include child items will be shown in percentage.
-When a todo item is folded. 
-
+The statistics of the progress (include child items) will be shown When folded. 
 
 A todo-box item:
 
@@ -488,8 +486,9 @@ Keyword groups:
   default is ``TODO,DONE;FIXME,FIXED;START,PROCESS,STOP``,
 
 * ``RivTodoType1`` ``<C-E>e1``... ``RivTodoType4`` ``<C-E>e4`` 
-  to change the keyword group. 
-* ``RivTodoAsk`` ``<C-E>e`` will show an keyword group list to choose.
+  to add or change the todo item by group. 
+* ``RivTodoAsk`` ``<C-E>e``` will show an keyword group list to choose.
+* ``RivTodoDel`` ``<C-E>ex`` will delete the todo item
 
 Helpers
 ~~~~~~~

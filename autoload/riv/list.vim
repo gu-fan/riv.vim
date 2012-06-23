@@ -115,7 +115,7 @@ fun! riv#list#todo_change_type(grp,...) "{{{
 endfun "}}}
 fun! riv#list#todo_ask() "{{{
     let grp =  inputlist(g:_riv_t.td_ask_keywords)
-    if  grp <= len(g:_riv_t.td_keyword_groups)
+    if  grp > 0 && grp <= len(g:_riv_t.td_keyword_groups)
         call riv#list#todo_change_type(grp)
     endif
 endfun "}}}

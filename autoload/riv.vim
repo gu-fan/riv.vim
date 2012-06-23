@@ -515,7 +515,7 @@ if !exists("g:_riv_c")
     " - DONE 2012-01-01 ~ 2012-01-02 
 
     let td_key_list  = split(g:riv_todo_keywords,';')
-    let g:_riv_t.td_ask_keywords = ["0.[ ],[X]"] +
+    let g:_riv_t.td_ask_keywords = ["Choosing a keyword group:"] +
                 \  map(range(len(td_key_list)), 
                 \ '(v:val+1).".". td_key_list[v:val]')
     let g:_riv_t.td_keyword_groups = map(td_key_list, 
