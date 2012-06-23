@@ -9,7 +9,7 @@
 let s:cpo_save = &cpo
 set cpo-=C
 
-if g:_riv_p.link_file != '^^'
+if g:riv_localfile_linktype != 0
     exe 'syn match rstFileLink `'.g:_riv_p.link_file.'`'
     syn cluster rstCruft add=rstFileLink
 endif
@@ -75,10 +75,8 @@ exe 'syn match rstTodoBoxRegionDone `\v\c%(^\s*\(%(#|\d+|[a-z]|[imlcxvd]+)\)\s+)
 
 if &background == 'light'
     hi def rstFileLink    guifg=#437727  gui=underline
-    hi def rstLinkHover  ctermbg=gray guibg=#A9E597  gui=underline
 else
     hi def rstFileLink    guifg=#58A261  gui=underline
-    hi def rstLinkHover  ctermbg=gray guibg=#494E2B  gui=underline
 endif
 
 hi def link rstTodoBoxList Include

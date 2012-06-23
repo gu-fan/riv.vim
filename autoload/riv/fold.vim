@@ -320,7 +320,11 @@ fun! s:set_sect_end() "{{{
         endif
         
         if m.level > n_b.level && g:riv_fold_blank ==0
-            let m.end = prevnonblank(n_b.bgn-1)+1
+            if n_b.bgn != line('$')+1
+                let m.end = prevnonblank(n_b.bgn-1)+1
+            else
+                let m.end = line('$')
+            endif
         elseif m.level > n_b.level && g:riv_fold_blank == 1
             if n_b.bgn != line('$')+1
                 let m.end = n_b.bgn-2
@@ -344,7 +348,7 @@ fun! s:set_fdl_list() "{{{
     for m in mat
         let bgn = m.bgn
         let fdl = m.fdl
-        let end = m.end             " all should have end now
+        let end = m.end
         if g:riv_fold_blank ==1 && b:lines[end] =~ '^\s*$'
             let end = end - 1
         elseif g:riv_fold_blank==0 && b:lines[end] =~ '^\s*$'
@@ -363,9 +367,11 @@ fun! s:check(row) "{{{
     let row = a:row
     let line = b:lines[row]
                 
-    if b:foldlevel > 0
-        call s:s_checker(row)
+    if b:foldlevel < 0
+        return
     endif
+
+    call s:s_checker(row)
 
     if b:foldlevel > 2
         call s:t_checker(row)
@@ -408,7 +414,7 @@ fun! s:check(row) "{{{
                     \ 'level': idt/2+1,
                     \},0)
         return 1
-    elseif b:foldlevel > 0 && line=~s:p.section 
+    elseif line=~s:p.section 
                 \ && line !~ '^\.\.\_s*$'
         let b:state.s_chk =  {'type': 'sect' , 'bgn': a:row, 'attr': line[0]}
         return 1
@@ -514,7 +520,7 @@ fun! s:b_checker(row) "{{{
         let b:state.b_chk.end = a:row-1
         call add(b:state.matcher, b:state.b_chk)
         call remove(b:state, 'b_chk')
-    elseif a:row==line('$') && b:state.b_chk.row < a:row
+    elseif a:row==line('$') && b:state.b_chk.bgn < a:row
         let b:state.b_chk.end = a:row
         call add(b:state.matcher, b:state.b_chk)
         call remove(b:state, 'b_chk')
@@ -530,7 +536,6 @@ fun! s:t_checker(row) "{{{
         let b:state.t_chk.end = a:row
         call add(b:state.matcher, b:state.t_chk)
         call remove(b:state, 't_chk')
-        " let b:state.t_chk={}
     endif
 endfun "}}}
 "}}}
@@ -626,13 +631,13 @@ fun! riv#fold#expr(row) "{{{
 endfun "}}}
 fun! riv#fold#text() "{{{
     let lnum = v:foldstart
-    let line = b:lines[lnum]
+    let line = getline(lnum)
     let cate = "    "
     if has_key(b:riv_obj,lnum)
         if b:riv_obj[lnum].type == 'sect'
             let cate = " ".b:riv_obj[lnum].txt
             if b:riv_obj[lnum].title_rows == 3
-                let line = b:lines[lnum+1]
+                let line = getline(lnum+1)
             endif
         elseif b:riv_obj[lnum].type == 'list'
             if exists("b:riv_obj[lnum].td_child")
@@ -643,7 +648,7 @@ fun! riv#fold#text() "{{{
         elseif b:riv_obj[lnum].type == 'table'
             let cate = " " . b:riv_obj[lnum].row 
                         \  . 'x' . b:riv_obj[lnum].col." "
-            let line = b:lines[lnum+1]
+            let line = getline(lnum+1)
         elseif b:riv_obj[lnum].type == 'spl_table'
             let cate = " " . b:riv_obj[lnum].row . '+' 
                         \  . b:riv_obj[lnum].col . " "
@@ -651,7 +656,7 @@ fun! riv#fold#text() "{{{
             let cate = "."
         elseif b:riv_obj[lnum].type == 'block'
             let cate = ":"
-            let line = b:lines[lnum+1]
+            let line = getline(lnum+1)
         elseif b:riv_obj[lnum].type == 'trans'
             let cate = "-"
             let line = strtrans(line)

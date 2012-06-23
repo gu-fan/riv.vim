@@ -173,7 +173,7 @@ fun! riv#link#hi_hover() "{{{
         let end = matchend(line, g:_riv_p.all_link)
         while bgn!=-1 
             if c<= end && c>=bgn+1
-                execute '2match' "rstLinkHover".' /\%'.(l)
+                execute '2match' "DiffText".' /\%'.(l)
                             \.'l\%>'.(bgn) .'c\%<'.(end+1).'c/'
                 return
             elseif bgn >= c

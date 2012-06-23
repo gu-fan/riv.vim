@@ -57,10 +57,10 @@ fun! riv#set_g_map(map_dic) "{{{
     for [name,acts] in items(a:map_dic)
         if type(acts) == type([])
             for act in acts
-                sil! exe "map <silent>  ". g:riv_leader . act."  <Plug>".name
+                sil! exe "map <silent>  ". g:riv_global_leader . act."  <Plug>".name
             endfor
         else
-            sil! exe "map <silent>  ". g:riv_leader . acts."  <Plug>".name
+            sil! exe "map <silent>  ". g:riv_global_leader . acts."  <Plug>".name
         endif
         unlet acts
     endfor
@@ -69,15 +69,15 @@ fun! riv#load_menu(menu_list) "{{{
     for [name ,short, action] in a:menu_list
         let short  = short =~'  ' ? short : "<tab>".g:riv_buf_leader.short
         let action = action=~'  ' ? ' :' : '  <Plug>'.action
-        exe "75 amenu RIV.".  name . short. action
+        exe "75 amenu Riv.".  name . short. action
     endfor
 endfun "}}}
 fun! riv#show_menu() "{{{
     if !exists("b:current_syntax") || b:current_syntax != 'rst'
-        menu disable RIV.*
-        menu enable RIV.Index
+        menu disable Riv.*
+        menu enable Riv.Index
     else
-        menu enable RIV.*
+        menu enable Riv.*
     endif
 endfun "}}}
 "}}}
@@ -100,7 +100,7 @@ endfun "}}}
 let s:default = {}
 let s:default.options = {
     \'default'            : s:default,
-    \'leader'             : '<C-E>',
+    \'global_leader'      : '<C-E>',
     \'buf_leader'         : '<C-E>',
     \'buf_ins_leader'     : '<C-E>',
     \'file_link_ext'      : 'vim,cpp,c,py,rb,lua,pl',
@@ -144,8 +144,8 @@ let s:default.maps = {
     \'RivListSubList'    : 'call riv#list#act(1)',
     \'RivListSupList'    : 'call riv#list#act(-1)',
     \'RivListTypeRemove' : 'call riv#list#toggle_type(0)',
-    \'RivListTypeNext'   : 'call riv#list#toggle_type(-1)',
-    \'RivListTypePrev'   : 'call riv#list#toggle_type(1)',
+    \'RivListTypeNext'   : 'call riv#list#toggle_type(1)',
+    \'RivListTypePrev'   : 'call riv#list#toggle_type(-1)',
     \'RivTodoToggle'     : 'call riv#list#toggle_todo()',
     \'RivTodoDel'        : 'call riv#list#del_todo()',
     \'RivTodoDate'       : 'call riv#list#change_date()',
@@ -159,11 +159,12 @@ let s:default.maps = {
     \'RivTitle2'         : 'call riv#create#title(2)',
     \'RivTitle3'         : 'call riv#create#title(3)',
     \'RivTitle4'         : 'call riv#create#title(4)',
+    \'RivTitle5'         : 'call riv#create#title(5)',
+    \'RivTitle6'         : 'call riv#create#title(6)',
     \'RivTestReload'     : 'call riv#test#reload()',
     \'RivTestFold0'      : 'call riv#test#fold(0)',
     \'RivTestFold1'      : 'call riv#test#fold(1)',
     \'RivTestTest'       : 'call riv#test#test()',
-    \'RivTestInsert'     : 'call riv#test#insert_idt(0)',
     \'RivTestObj'        : 'call riv#test#show_obj()',
     \'RivTableFormat'    : 'call riv#table#format()',
     \'Riv2HtmlIndex'     : 'call riv#publish#browse()',
@@ -174,10 +175,13 @@ let s:default.maps = {
     \'Riv2S5'            : 'call riv#publish#file2("s5",0)',
     \'Riv2Xml'           : 'call riv#publish#file2("xml",1)',
     \'Riv2Latex'         : 'call riv#publish#file2("latex",1)',
-    \'Riv2Path'          : 'call riv#publish#path()',
+    \'Riv2BuildPath'     : 'call riv#publish#path()',
     \'RivDelete'         : 'call riv#create#delete()',
     \'RivTodoHelper'     : 'call riv#create#todo_helper()',
-    \'RivLinkCreate'     : 'call riv#create#link()',
+    \'RivCreateLink'     : 'call riv#create#link()',
+    \'RivCreateFoot'     : 'call riv#create#foot()',
+    \'RivCreateDate'     : 'call riv#create#date()',
+    \'RivCreateTime'     : 'call riv#create#date(1)',
     \'RivScratchCreate'  : 'call riv#create#scratch()',
     \'RivScratchView'    : 'call riv#create#view_scr()',
     \}
@@ -193,25 +197,26 @@ let s:default.g_maps = {
 let s:default.fold_maps = { 
     \'RivFoldUpdate'     : ['zx', '<Space>j'],
     \'RivFoldToggle'     : ['@=(foldclosed(".")>0?"zv":"zc")<CR>', '<Space><Space>'],
-    \'RivFoldZip'        : ['@=(foldclosed(".")>0?"zR":"zM")<CR>', '<Space>m'],
+    \'RivFoldAll'        : ['@=(foldclosed(".")>0?"zR":"zM")<CR>', '<Space>m'],
     \}
 " buf maps "{{{
 " s => section
 " e => todo
 " l => list
-" c => create misc
-" w => html
+" i => create misc
+" c => scratch
+" 2 => convert
 let s:default.buf_maps = {
     \'RivLinkDBClick'    : [['<CR>', '<KEnter>', '<2-LeftMouse>'],  '',  ''],
-    \'RivLinkNext'       : ['<TAB>',    'n',  'lf'],
-    \'RivLinkPrev'       : ['<S-TAB>',  'n',  'lb'],
-    \'RivListShiftRight' : [['>', '<C-ScrollwheelDown>' ],  'mi',  'eu'],
-    \'RivListShiftLeft'  : [['<', '<C-ScrollwheelUp>'],  'mi',  'ed'],
+    \'RivLinkOpen'       : ['',  'n',  'ko'],
+    \'RivLinkNext'       : ['<TAB>',    'n',  'kn'],
+    \'RivLinkPrev'       : ['<S-TAB>',  'n',  'kp'],
+    \'RivListShiftRight' : [['>', '<C-ScrollwheelDown>' ],  'mi',  'lu'],
+    \'RivListShiftLeft'  : [['<', '<C-ScrollwheelUp>'],  'mi',  'ld'],
     \'RivListTypeNext'   : ['',  'mi',  'l1'],
     \'RivListTypePrev'   : ['',  'mi',  'l2'],
     \'RivListTypeRemove' : ['',  'mi',  'l`'],
-    \'RivCreateFootnote' : ['',  'mi',  'cf'],
-    \'RivTodoHelper'     : ['',  'm',    'ew'],
+    \'RivTodoHelper'     : ['',  'm' ,  'ht'],
     \'RivTodoToggle'     : ['',  'mi',  'ee'],
     \'RivTodoDel'        : ['',  'mi',  'ex'],
     \'RivTodoDate'       : ['',  'mi',  'ed'],
@@ -224,13 +229,9 @@ let s:default.buf_maps = {
     \'RivTitle2'         : ['',  'mi',  's2'],
     \'RivTitle3'         : ['',  'mi',  's3'],
     \'RivTitle4'         : ['',  'mi',  's4'],
-    \'RivTestReload'     : ['',  'm',   't`'],
-    \'RivTestFold0'      : ['',  'm',   't1'],
-    \'RivTestFold1'      : ['',  'm',   't2'],
-    \'RivTestObj'        : ['',  'm',   't3'],
-    \'RivTestTest'       : ['',  'm',   't4'],
-    \'RivTestInsert'     : ['',  'm',   'ti'],
-    \'RivTableFormat'    : ['',  'n',   'tf'],
+    \'RivTitle5'         : ['',  'mi',  's5'],
+    \'RivTitle6'         : ['',  'mi',  's6'],
+    \'RivTableFormat'    : ['',  'n',   'ft'],
     \'Riv2HtmlFile'      : ['',  'm',   '2hf'],
     \'Riv2HtmlProject'   : ['',  'm',   '2hp'],
     \'Riv2HtmlAndBrowse' : ['',  'm',   '2hh'],
@@ -238,65 +239,88 @@ let s:default.buf_maps = {
     \'Riv2Latex'         : ['', 'm',    '2ll'],
     \'Riv2S5'            : ['', 'm',    '2ss'],
     \'Riv2Xml'           : ['', 'm',    '2xx'],
-    \'Riv2Path'          : ['', 'm',    '2e'],
-    \'RivScratchCreate'  : ['', 'm',    'cc'],
-    \'RivDelete'         : ['', 'm',    'cd'],
+    \'Riv2BuildPath'     : ['', 'm',    '2b'],
     \'RivScratchView'    : ['', 'm',    'cv'],
-    \'RivLinkCreate'     : ['', 'm',    'cl'],
+    \'RivScratchCreate'  : ['', 'm',    'cc'],
+    \'RivDeleteFile'     : ['', 'm',    'df'],
+    \'RivCreateLink'     : ['', 'mi',   'il'],
+    \'RivCreateDate'     : ['', 'mi',   'id'],
+    \'RivCreateFoot'     : ['', 'mi',   'if'],
+    \'RivCreateTime'     : ['', 'mi',   'it'],
+    \'RivTestReload'     : ['',  'm',   't`'],
+    \'RivTestFold0'      : ['',  'm',   't1'],
+    \'RivTestFold1'      : ['',  'm',   't2'],
+    \'RivTestObj'        : ['',  'm',   't3'],
+    \'RivTestTest'       : ['',  'm',   't4'],
+    \'RivTestInsert'     : ['',  'm',   'ti'],
     \}
 let s:default.buf_imaps = {
-    \'<BS>'         : 'riv#action#ins_bs()',
-    \'<CR>'         : 'riv#action#ins_enter()',
-    \'<KEnter>'     : 'riv#action#ins_enter()',
-    \'<C-CR>'       : 'riv#action#ins_c_enter()',
-    \'<C-KEnter>'   : 'riv#action#ins_c_enter()',
-    \'<S-CR>'       : 'riv#action#ins_s_enter()',
-    \'<S-KEnter>'   : 'riv#action#ins_s_enter()',
-    \'<C-S-CR>'     : 'riv#action#ins_m_enter()',
-    \'<C-S-KEnter>' : 'riv#action#ins_m_enter()',
-    \'<Tab>'        : 'riv#action#ins_tab()',
-    \'<S-Tab>'      : 'riv#action#ins_stab()',
+    \'<BS>'         : 'riv#action#ins_bs()'      ,
+    \'<CR>'         : 'riv#action#ins_enter()'   ,
+    \'<KEnter>'     : 'riv#action#ins_enter()'   ,
+    \'<C-CR>'       : 'riv#action#ins_c_enter()' ,
+    \'<C-KEnter>'   : 'riv#action#ins_c_enter()' ,
+    \'<S-CR>'       : 'riv#action#ins_s_enter()' ,
+    \'<S-KEnter>'   : 'riv#action#ins_s_enter()' ,
+    \'<C-S-CR>'     : 'riv#action#ins_m_enter()' ,
+    \'<C-S-KEnter>' : 'riv#action#ins_m_enter()' ,
+    \'<Tab>'        : 'riv#action#ins_tab()'     ,
+    \'<S-Tab>'      : 'riv#action#ins_stab()'    ,
     \} 
 "}}}
 "menus "{{{
 let s:default.menus = [
-    \['Index'           ,  'ww',  'RivIndex'],
-    \['--Action--'      ,  '  ',  '  '],
-    \['Link.Open'       ,  'lo',  'RivLinkOpen'],
-    \['Link.Forward'    ,  'lf',  'RivLinkNext'],
-    \['Link.Backward'   ,  'lb',  'RivLinkPrev'],
-    \['Link.DBClick'    ,  '  ',  'RivLinkDBClick'],
-    \['List.ShiftRight' ,  'eu',  'RivListShiftRight'],
-    \['List.ShiftLeft'  ,  'ed',  'RivListShiftLeft'],
-    \['List.TodoToggle' ,  'ee',  'RivTodoToggle'] ,
-    \['List.TodoDel'    ,  'ex',  'RivTodoDel']    ,
-    \['List.TodoDate'   ,  'ed',  'RivTodoDate']   ,
-    \['List.TodoType0'  ,  'e`',  'RivTodoType0']  ,
-    \['List.TodoType1'  ,  'e1',  'RivTodoType1']  ,
-    \['List.TodoType2'  ,  'e2',  'RivTodoType2']  ,
-    \['List.TodoType3'  ,  'e3',  'RivTodoType3']  ,
-    \['List.Type1'      ,  'l1',  'RivListType1'],
-    \['List.bype2'      ,  'l2',  'RivListType2'],
-    \['List.Type3'      ,  'l3',  'RivListType3'],
-    \['List.Type0'      ,  'l`',  'RivListType0'],
-    \['Create.Footnote' ,  'cf',  'RivCreateFootnote'],
-    \['Table.Format'    ,  'tf',  'RivTableFormat'],
-    \['--Test---'       ,  '  ',   '  '],
-    \['Test.Reload'     ,  't`',  'RivTestReload'],
-    \['Test.Fold0'      ,  't1',  'RivTestFold0'],
-    \['Test.Fold1'      ,  't2',  'RivTestFold1'],
-    \['Test.Insert'     ,  't3',  'RivTestInsert'],
-    \['--Fold---'       ,  '  ',   '  '],
-    \['Fold.Update'     ,  '<space>j\ or\ zx',  'RivFoldUpdate'],
-    \['Fold.Toggle'     ,  '<space><space>',  'RivFoldToggle'],
-    \['Fold.Zip'        ,  '<space>m',  'RivFoldZip'],
+    \['Index'                , 'ww'               , 'RivIndex'          ] ,
+    \['Ask'                  , 'wa'               , 'RivAsk'            ] ,
+    \['Helper.Todo'          , 'th'               , 'RivTodoHelper'     ] ,
+    \['--Action--'           , '  '               , '  '                ] ,
+    \['Title.level1'         , 's1'               , 'RivTitle1'         ] ,
+    \['Title.level2'         , 's2'               , 'RivTitle2'         ] ,
+    \['Title.level3'         , 's3'               , 'RivTitle3'         ] ,
+    \['Title.level4'         , 's4'               , 'RivTitle4'         ] ,
+    \['Title.level5'         , 's5'               , 'RivTitle5'         ] ,
+    \['Title.level6'         , 's6'               , 'RivTitle6'         ] ,
+    \['Link.Open'            , 'ko\ or\ <Enter>'  , 'RivLinkOpen'       ] ,
+    \['Link.Next'            , 'kn\ or\ \<Tab>'    , 'RivLinkNext'       ] ,
+    \['Link.Prev'            , 'kp\ or\ <S-Tab>'  , 'RivLinkPrev'       ] ,
+    \['List.ShiftRight'      , 'lu\ or\ >'         , 'RivListShiftRight' ] ,
+    \['List.ShiftLeft'       , 'ld\ or\ <'         , 'RivListShiftLeft'  ] ,
+    \['List.NextType'        , 'l1'               , 'RivListTypeNext'   ] ,
+    \['List.PrevType'        , 'l2'               , 'RivListTypePrev'   ] ,
+    \['List.RemoveType'      , 'l`'               , 'RivListTypeRemove' ] ,
+    \['Todo.Toggle'          , 'ee'               , 'RivTodoToggle'     ] ,
+    \['Todo.Del'             , 'ex'               , 'RivTodoDel'        ] ,
+    \['Todo.Date'            , 'ed'               , 'RivTodoDate'       ] ,
+    \['Todo.Type0'           , 'e`'               , 'RivTodoType0'      ] ,
+    \['Todo.Type1'           , 'e1'               , 'RivTodoType1'      ] ,
+    \['Todo.Type2'           , 'e2'               , 'RivTodoType2'      ] ,
+    \['Todo.Type3'           , 'e3'               , 'RivTodoType3'      ] ,
+    \['Create.Footnote'      , 'if'               , 'RivCreateFoot'     ] ,
+    \['Create.Link'          , 'il'               , 'RivCreateLink'     ] ,
+    \['Create.Date'          , 'id'               , 'RivCreateDate'     ] ,
+    \['Create.Time'          , 'it'               , 'RivCreateTime'     ] ,
+    \['Table.Format'         , 'ft'               , 'RivTableFormat'    ] ,
+    \['Convert.Path'         , '2b'               , 'Riv2BuildPath'     ] ,
+    \['Convert.Html.index'   , '2hf'              , 'Riv2HtmlIndex'     ] ,
+    \['Convert.Html.File'    , '2hf'              , 'Riv2HtmlFile'      ] ,
+    \['Convert.Html.Browse'  , '2hh'              , 'Riv2HtmlAndBrowse' ] ,
+    \['Convert.Html.project' , '2hp'              , 'Riv2HtmlProject'   ] ,
+    \['Convert.Odt'          , '2oo'              , 'Riv2Odt'           ] ,
+    \['Convert.Latex'        , '2ll'              , 'Riv2Latex'         ] ,
+    \['Convert.S5'           , '2ss'              , 'Riv2S5'            ] ,
+    \['Convert.Xml'          , '2xx'              , 'Riv2Xml'           ] ,
+    \['Scratch.Create'       , 'cc'               , 'RivScratchCreate'  ] ,
+    \['Scratch.View'         , 'cv'               , 'RivScratchView'    ] ,
+    \['Delete.File'          , 'df'               , 'RivDelete'         ] ,
+    \['--Fold---'            , '  '               , '  '                ] ,
+    \['Folding.Update'          , '<space>j\ or\ zx' , 'RivFoldUpdate'     ] ,
+    \['Folding.Toggle'          , '<space><space>'   , 'RivFoldToggle'     ] ,
+    \['Folding.All'             , '<space>m'         , 'RivFoldAll'        ] ,
     \]
 "}}}
 "{{{ project options
 let g:riv_proj_temp = {}
 let g:riv_project_list = [ ]
-" let g:riv_project = !exists("g:riv_project") ? s:set_proj(g:riv_proj_temp) :
-"             \ s:set_proj(g:riv_project)
 let g:riv_p_id = 0
 fun! riv#index(...) "{{{
     let id = a:0 ? a:1 : 0
@@ -329,7 +353,7 @@ fun! s:set_proj_conf(proj) "{{{
 endfun "}}}
 "}}}
 "}}}
-"
+
 fun! riv#load_conf() "{{{1
 let g:_riv_debug = exists("g:_riv_debug") ? g:_riv_debug : 0
 if g:_riv_debug==1
@@ -372,8 +396,6 @@ if !exists("g:_riv_c")
         \'build_path'         : '_build',
         \'scratch_path'       : 'scratch' ,
         \}
-        " \'template_path'      : '_template' ,
-        " \'static_path'        : '_static' ,
     let g:_riv_c.p = []
     if exists("g:riv_projects") && type(g:riv_projects) == type([])
         for project in g:riv_projects
@@ -630,7 +652,6 @@ if !exists("g:_riv_c")
 endif
 
 endfun "}}}
-
 fun! riv#init() "{{{
     " for init autoload
     call riv#load_opt(s:default.options)
@@ -640,7 +661,6 @@ fun! riv#init() "{{{
     call riv#set_g_map(s:default.g_maps)
     call riv#show_menu()
 endfun "}}}
-
 
 let &cpo = s:cpo_save
 unlet s:cpo_save

@@ -118,6 +118,8 @@ fun! riv#action#ins_m_enter() "{{{
     let cmd .= "\<C-O>:call riv#list#act(-1)\<CR>\<Esc>A"
     return cmd
 endfun "}}}
+
+
 fun! riv#action#ins_tab() "{{{
     if riv#table#nextcell()[0] == 0
         if g:riv_ins_super_tab == 1 && pumvisible()

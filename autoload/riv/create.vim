@@ -29,11 +29,8 @@ fun! riv#create#foot() "{{{
     else
         let tar = line." [".id."]_"
     endif
-    if a:ask==1
-        let footnote = input("[".id."]: Your FootNote message is?\n")
-    else
-        let footnote = " $FootNote "
-    endif
+    let footnote = input("[".id."]: Your footnote message is?\n")
+    if empty(footnote) | return | endif
     let def = ".. [".id."] ".footnote
     call setline(line('.'),tar)
     call append(line('$'),def)
@@ -176,6 +173,9 @@ fun! riv#create#link() "{{{
     let end = matchend(line , '\S*\%'.col.'c\S*')
     if empty(word)
         let word=input("Input A link name:")
+        if empty(word)
+            return
+        endif
         let idx =col
         let end =col+1
     endif
@@ -187,8 +187,8 @@ fun! riv#create#link() "{{{
                     \ ' '.ref.' ' , '')
     endif
     call setline(row , line)
-    call append(row, tar)
-    exe "normal! j$viW\<C-G>"
+    call append(row, ["",tar])
+    exe "normal! jj$viW\<C-G>"
 endfun "}}}
 fun! riv#create#title(level) "{{{
     " Create a title of level.
@@ -283,8 +283,7 @@ fun! riv#create#show_sect() "{{{
 endfun "}}}
 fun! riv#create#scratch() "{{{
     let id = s:id()
-    let name = strftime("%Y%d%m")
-    let scr = s:get_root_path() . 'scratch/'.name.'.rst'
+    let scr = g:_riv_c.p[s:id()]._scratch_path . strftime("%Y-%m-%d") . '.rst'
     call s:split(scr)
     let rel = s:get_rel_to('scratch', scr)
     if g:riv_localfile_linktype == 2
@@ -329,9 +328,10 @@ fun! riv#create#delete() "{{{
     endif
     let ptn = s:escape_file_ptn(file)
     call delete(file)
-    let index_file = expand('%:p:h').'/index.rst'
-    exe 'edit ' index_file
+
+    exe 'edit ' expand('%:p:h').'/index.rst'
     let b:riv_p_id = s:id()
+
     let f_idx = filter(range(1,line('$')),'getline(v:val)=~ptn')
     for i in f_idx
         call setline(i, substitute(getline(i), ptn ,'','g'))
@@ -573,6 +573,16 @@ fun! riv#create#cmd_helper() "{{{
     let s:cmd.input=""
     cal s:cmd.win()
 endfun "}}}
+
+
+fun! riv#create#date(...)
+    if a:0 && a:1 == 1
+        exe "normal! a" . strftime('%Y-%m-%d %H:%M:%S') . "\<ESC>"
+    else
+        exe "normal! a" . strftime('%Y-%m-%d') . "\<ESC>"
+    endif
+endfun
+
 
 fun! s:SID() "{{{
     return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$')
