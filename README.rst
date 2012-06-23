@@ -46,6 +46,8 @@ These features are for the Riv Project.
 
 .. image::  http://i.minus.com/jCFTijpr6oqYt.jpg
 
+* To Start: see `Instruction Details`_
+
 Install
 -------
 * Using Vundle_  (Recommend)
