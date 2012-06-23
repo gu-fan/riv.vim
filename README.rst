@@ -382,8 +382,17 @@ in the rst documents.
 
   + when set to 1:
 
-    words like 'xxx.rst' 'xxx.py' 'xxx.cpp' will be detected as file link.
-    directory like 'xxx/' will link to 'xxx/index.rst'
+    words like ``xxx.rst`` ``xxx.py`` ``xxx.cpp`` will be detected as file link.
+
+    words like ``xxx/`` will be considered as directory , 
+    and link to ``xxx/index.rst``
+
+    words like ``/xxxx/xxx.rst`` ``~/xxx/xxx.rst`` 
+    will be considered as external file links
+
+    words like ``/xxxx/xxx/`` ``~/xxx/xxx/`` 
+    will be considered as external directory links, 
+    and link to the directory.
 
     You can add other extensions with ``g:riv_file_link_ext``.
     which default is ``vim,cpp,c,py,rb,lua,pl`` ,
@@ -391,8 +400,16 @@ in the rst documents.
 
   + when set to 2: 
     
-    words like '[xxx]' '[xxx.vim]' will be detected as file link. 
-    directory like '[xxx/]' will link to 'xxx/index.rst'
+    words like ``[xxx]`` ``[xxx.vim]`` will be detected as file link. 
+
+    words like ``[xxx/]' will link to ``xxx/index.rst``
+
+    words like ``[/xxxx/xxx.rst]`` ``[~/xxx/xxx.rst]`` 
+    will be considered as external file links
+
+    words like ``[/xxxx/xxx/]`` ``[~/xxx/xxx/]`` 
+    will be considered as external directory links, 
+    and link to the directory.
 
   + when set to 0 , no local file link.
   + default is 1.
