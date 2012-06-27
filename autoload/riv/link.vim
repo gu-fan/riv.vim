@@ -140,13 +140,10 @@ fun! riv#link#open() "{{{
         if s:is_relative(mo.str)
             let dir = expand('%:p:h').'/'
             let file = dir . mo.str
-            echom "S" mo.str 
-            echom "F" file 
-            echom "D" dir
-            if s:is_directory(mo.str)
-                if !isdirectory(mo.str)
-                \ && input("'".mo.str."' Does not exist. \nCreate?(Y/n):")!~?'n'
-                    call mkdir(fnamemodify(mo.str, ':h'), "p")
+            if s:is_directory(file)
+                if !isdirectory(file)
+                \ && input("'".file."' Does not exist. \nCreate?(Y/n):")!~?'n'
+                    call mkdir(fnamemodify(file, ':h'), "p")
                 endif
                 let file = file . 'index.rst'
             elseif fnamemodify(file, ':e') == '' && g:riv_localfile_linktype == 2
