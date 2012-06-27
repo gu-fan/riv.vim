@@ -344,6 +344,8 @@ Improved syntax file.
           python ``pygments`` package must installed for ``docutils`` 
           parsing syntax highlighting.
 
+          see http://docutils.sourceforge.net/sandbox/code-block-directive/tools/pygments-enhanced-front-ends/
+
 *  The links under cursor are highlighted. 
    Disable it by set ``g:riv_hover_link_hl`` to 0
 
