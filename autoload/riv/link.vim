@@ -142,7 +142,7 @@ fun! riv#link#open() "{{{
             if s:is_directory(mo.str)
                 if !isdirectory(mo.str)
                 \ && input("'".mo.str."' Does not exist. \nCreate?(Y/n):")!~?'n'
-                    call mkdir(mo.str,"p")
+                    call mkdir(fnamemodify(mo.str, ':h'), "p")
                 endif
                 let file = file . 'index.rst'
             elseif fnamemodify(file, ':e') == '' && g:riv_localfile_linktype == 2
@@ -151,6 +151,7 @@ fun! riv#link#open() "{{{
         else
             let file = expand(mo.str)
         endif
+        update
         exe "edit ".file
         let b:riv_p_id = id
         return 4

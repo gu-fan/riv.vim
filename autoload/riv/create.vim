@@ -575,13 +575,13 @@ fun! riv#create#cmd_helper() "{{{
 endfun "}}}
 
 
-fun! riv#create#date(...)
+fun! riv#create#date(...) "{{{
     if a:0 && a:1 == 1
         exe "normal! a" . strftime('%Y-%m-%d %H:%M:%S') . "\<ESC>"
     else
         exe "normal! a" . strftime('%Y-%m-%d') . "\<ESC>"
     endif
-endfun
+endfun "}}}
 
 
 fun! s:SID() "{{{

@@ -325,10 +325,10 @@ let g:riv_p_id = 0
 fun! riv#index(...) "{{{
     let id = a:0 ? a:1 : 0
     if exists("g:_riv_c.p[id]")
-        let path = expand(g:_riv_c.p[id].path).'/'
+        let path = g:_riv_c.p[id]._root_path
         if !isdirectory(path)
                 \ && input("'".path."' Does not exist. \nCreate?(Y/n):")!~?'n'
-            call mkdir(path,'p')
+            call mkdir(fnamemodify(path, ':h') ,'p')
         endif
         exe 'edit ' . path.'index.rst'
         let g:riv_p_id = id

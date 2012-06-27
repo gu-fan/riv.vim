@@ -9,10 +9,10 @@ Riv Instruction
 **Riv** is a vim plugin for managing and writing reStructuredText_ Documents.
 Short for 'reStructuredText in Vim'. 
 
-.. _reStructuredText: http://docutils.sourceforge.net/rst.html
-
 It is for people either want to manage documents in a wiki way,
 or writing reStructuredText documents.
+
+.. _reStructuredText: http://docutils.sourceforge.net/rst.html
 
 
 Features
@@ -340,6 +340,10 @@ Improved syntax file.
    You can use ``g:riv_highlight_code`` to set which type of code to highlight.
    default is ``lua,python,cpp,javascript,vim,sh``
 
+   :NOTE: To enable highlighting in converted file, 
+          python ``pygments`` package must installed for ``docutils`` 
+          parsing syntax highlighting.
+
 *  The links under cursor are highlighted. 
    Disable it by set ``g:riv_hover_link_hl`` to 0
 
@@ -362,7 +366,7 @@ Manage your reStructuredText documents in a wiki way.
     let project1 = { 'path': '~/Dropbox/rst',}
     let g:riv_projects = [project1]
 
-    " You could add multi project either.
+    " You could add multiple projects as well 
     let project2 = { 'path': '~/Dropbox/rst2',}
     let g:riv_projects = [project1, project2]
 
@@ -389,7 +393,7 @@ The ``bare extension style`` and ``square bracket style``
     words like ``xxx/`` will be considered as directory , 
     and link to ``xxx/index.rst``
 
-    words like ``/xxxx/xxx.rst`` ``~/xxx/xxx.rst`` 
+    words like ``/xxxx/xxx.rst`` ``~/xxx/xxx.rst`` ``c:/xxx.rst``
     will be considered as external file links
 
     words like ``/xxxx/xxx/`` ``~/xxx/xxx/`` 
@@ -406,7 +410,7 @@ The ``bare extension style`` and ``square bracket style``
 
     words like ``[xxx/]' will link to ``xxx/index.rst``
 
-    words like ``[/xxxx/xxx.rst]`` ``[~/xxx/xxx.rst]`` 
+    words like ``[/xxxx/xxx.rst]`` ``[~/xxx/xxx.rst]``  ``[c:/xxx/xxx.rst]``
     will be considered as external file links
 
     words like ``[/xxxx/xxx/]`` ``[~/xxx/xxx/]`` 
