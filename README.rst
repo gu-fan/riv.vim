@@ -153,8 +153,8 @@ Folding will be updated after you write buffer to file.
 Pressing ``<Enter>`` or double clicking on folded lines will open that fold.
 
 * Update Folding: use ``zx`` or ``<C-E><Space>j``
-* Toggle Folding: use ``<C-E><Space><Space>`` 
-* Toggle all Folding: use ``<C-E><Space>m``
+* Toggle Folding: use ``za`` or ``<C-E><Space><Space>`` 
+* Toggle all Folding: use ``zA`` or ``<C-E><Space>m``
 
 To show the blank lines in the end of a folding, use ``g:riv_fold_blank``.
 

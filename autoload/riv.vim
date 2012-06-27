@@ -313,9 +313,9 @@ let s:default.menus = [
     \['Scratch.View'         , 'cv'               , 'RivScratchView'    ] ,
     \['Delete.File'          , 'df'               , 'RivDelete'         ] ,
     \['--Fold---'            , '  '               , '  '                ] ,
-    \['Folding.Update'          , '<space>j\ or\ zx' , 'RivFoldUpdate'     ] ,
-    \['Folding.Toggle'          , '<space><space>'   , 'RivFoldToggle'     ] ,
-    \['Folding.All'             , '<space>m'         , 'RivFoldAll'        ] ,
+    \['Folding.Update'       , '<Space>j\ or\ zx' , 'RivFoldUpdate'     ] ,
+    \['Folding.Toggle'       , '<Space><Space>\ or\ za'   , 'RivFoldToggle'     ] ,
+    \['Folding.All'          , '<Space>m\ or\ zA' , 'RivFoldAll'        ] ,
     \]
 "}}}
 "{{{ project options
