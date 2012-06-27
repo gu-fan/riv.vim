@@ -469,7 +469,8 @@ fun! riv#create#update_todo() "{{{
     " then parse the cache , remove lines match the buffer filename
     " add with the buffer's new todo-item
     let file = expand('%:p')
-    if file =~ g:_riv_c.p[s:id()]._build_path
+    " windows use '\' as directory delimiter
+    if file =~ escape(g:_riv_c.p[s:id()]._build_path,'\')
         return
     endif
     try
@@ -479,7 +480,7 @@ fun! riv#create#update_todo() "{{{
     catch /Riv: Not Same Path with Project/
         return
     endtry
-    let c_lines = filter(readfile(cache), ' v:val!~''^\M''.f.'' '' ')
+    let c_lines = filter(readfile(cache), ' v:val!~escape(f,''\'')')
     call writefile(c_lines+lines , cache)
 endfun "}}}
 fun! riv#create#enter() "{{{
