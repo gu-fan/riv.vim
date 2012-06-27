@@ -3,7 +3,7 @@
 "    File: publish.vim
 " Summary: publish to html/pdf.
 "  Author: Rykka G.Forest
-"  Update: 2012-06-09
+"  Update: 2012-06-27
 " Version: 0.5
 "=============================================
 let s:cpo_save = &cpo
@@ -195,7 +195,8 @@ fun! s:convert_to(ft,path,...) "{{{
 endfun "}}}
 
 fun! s:get_path_of(ft) "{{{
-    return g:_riv_c.p[s:id()]._build_path . a:ft . '/'
+    let slash = has('win32') || has('win64') ? '\' : '/'
+    return g:_riv_c.p[s:id()]._build_path . a:ft . slash
 endfun "}}}
 fun! s:get_root_path() "{{{
     return g:_riv_c.p[s:id()]._root_path

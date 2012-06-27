@@ -3,7 +3,7 @@
 "    File: riv.vim
 " Summary: Riv autoload main
 "  Author: Rykka G.Forest
-"  Update: 2012-06-16
+"  Update: 2012-06-27
 " Version: 0.5
 "=============================================
 let s:cpo_save = &cpo
@@ -419,20 +419,21 @@ if !exists("g:_riv_c")
 
     for proj in g:_riv_c.p
         let root = expand(proj.path)
-        let proj._root_path = s:is_directory(root) ? root : root.'/'
+        let slash = has('win32') || has('win64') ? '\' : '/'
+        let proj._root_path = s:is_directory(root) ? root : root . slash
         if s:is_relative(proj.build_path)
             let b_path =  proj._root_path . proj.build_path
-            let proj._build_path =  s:is_directory(b_path) ?  b_path : b_path . '/'
+            let proj._build_path =  s:is_directory(b_path) ?  b_path : b_path . slash
         else
             let b_path =   expand(proj.build_path)
-            let proj._build_path =  s:is_directory(b_path) ?  b_path : b_path . '/'
+            let proj._build_path =  s:is_directory(b_path) ?  b_path : b_path . slash
         endif
         if s:is_relative(proj.scratch_path)
             let s_path =  proj._root_path . proj.scratch_path
-            let proj._scratch_path =  s:is_directory(s_path) ?  s_path : s_path . '/'
+            let proj._scratch_path =  s:is_directory(s_path) ?  s_path : s_path . slash
         else
             let s_path =   expand(proj.scratch_path)
-            let proj._scratch_path =  s:is_directory(s_path) ?  s_path : s_path . '/'
+            let proj._scratch_path =  s:is_directory(s_path) ?  s_path : s_path . slash
         endif
     endfor
     "}}}

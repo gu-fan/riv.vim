@@ -3,7 +3,7 @@
 "    File: riv/create.vim
 " Summary: Create miscellaneous things.
 "  Author: Rykka G.Forest
-"  Update: 2012-06-11
+"  Update: 2012-06-27
 " Version: 0.5
 "=============================================
 let s:cpo_save = &cpo
@@ -345,7 +345,8 @@ fun! s:get_rel_to(dir,path) "{{{
     if a:dir == 'root'
         let root = s:get_root_path()
     else
-        let root = s:get_root_path().a:dir.'/'
+        let slash = has('win32') || has('win64') ? '\' : '/'
+        let root = s:get_root_path().a:dir . slash
     endif
     if match(a:path, root) == -1
         throw 'Riv: Not Same Path with Project'
