@@ -3,7 +3,7 @@
 "    File: rstin.vim
 " Summary: ReST file plugin
 "  Author: Rykka G.Forest
-"  Update: 2012-06-09
+"  Update: 2012-06-28
 " Version: 0.5
 "=============================================
 
@@ -70,7 +70,6 @@ call s:map(g:riv_default.buf_maps)
 call s:fold_map(g:riv_default.fold_maps)
 call riv#show_menu()
 aug RIV_BUFFER "{{{
-    au!
     if exists("g:riv_auto_format_table") "{{{
         au InsertLeave <buffer> call riv#table#format_pos()
     endif "}}}

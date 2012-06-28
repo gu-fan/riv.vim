@@ -2,7 +2,7 @@ Riv Instruction
 ===============
 
 :Author: Rykka G.Forest
-:Date:   2012-06-23 18:47:58
+:Date:   2012-06-27 16:44:41
 :Version: 0.64 
 :Github: https://github.com/Rykka/riv.vim
 
@@ -105,7 +105,12 @@ Things todo in this version.
     (nothing wrong, just indent it with the list.)
   + DONE 2012-06-23  Fold : the fold text should showing correct line while editing.
   + FIXED 2012-06-24 Fold : wrong end of section when fold_blank is 0.
-    
+
+* 0.65:
+
+  + DONE 2012-06-27 take care of the slash of directory in windows .
+  + TODO correct cursor position when creating todo items.
+
 
 Next 
 ~~~~~
