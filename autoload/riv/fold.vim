@@ -2,7 +2,7 @@
 "    Name: fold.vim
 "    File: fold.vim
 "  Author: Rykka G.Forest
-"  Update: 2012-06-23
+"  Update: 2012-06-28
 " Version: 0.5
 "=============================================
 let s:cpo_save = &cpo
@@ -623,6 +623,8 @@ endfun "}}}
 fun! riv#fold#indent(line) "{{{
     return strdisplaywidth(matchstr(a:line,'^\s*'))
 endfun "}}}
+"}}}
+" Main "{{{
 fun! riv#fold#expr(row) "{{{
     if a:row == 1
         call s:init_stat()
@@ -653,12 +655,12 @@ fun! riv#fold#text() "{{{
             let cate = " " . b:riv_obj[lnum].row . '+' 
                         \  . b:riv_obj[lnum].col . " "
         elseif b:riv_obj[lnum].type == 'exp'
-            let cate = "."
+            let cate = " .."
         elseif b:riv_obj[lnum].type == 'block'
-            let cate = ":"
+            let cate = " ::"
             let line = getline(lnum+1)
         elseif b:riv_obj[lnum].type == 'trans'
-            let cate = "-"
+            let cate = " --"
             let line = strtrans(line)
         endif
     endif
