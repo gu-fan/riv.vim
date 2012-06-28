@@ -78,9 +78,10 @@ aug RIV_BUFFER "{{{
         au CursorMoved,CursorMovedI <buffer>  call riv#link#hi_hover()
         " clear the highlight before bufwin/winleave
         au WinLeave,BufWinLeave     <buffer>  2match none
-        au BufWritePost <buffer>  call riv#fold#update()
-        au BufWritePost <buffer>  call riv#create#update_todo()
     endif "}}}
+    au BufWritePost <buffer>  call riv#fold#update()
+    au BufWritePost <buffer>  call riv#create#update_todo()
+    au BufWritePre  <buffer>  call riv#create#auto_mkdir()
 aug END "}}}
 
 " tests 

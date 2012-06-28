@@ -500,7 +500,7 @@ The path of building files by default is under `_build` in your project director
 ======================================================================
 CHANGELOG                              *riv-changelog*
 
-Things todo in next versions.~
+Next.~
 
 * Helper: An option Helper and option cache.
   let people use it even without touching `.vimrc` .
@@ -509,7 +509,14 @@ Things todo in next versions.~
 * Scratch: show Scratch sign in Calendar.
 * Publish: support the reStructuredText document not in a project.
 
-Things todo in this version.~
+This.~
+
+* 0.65:
+
+  + DONE 2012-06-27 take care of the slash of directory in windows .
+  + TODO correct cursor position when creating todo items.
+
+Prev.~
 
 * 0.64:
 
@@ -523,11 +530,23 @@ Things todo in this version.~
   + FIXED 2012-06-24 Misc : highlight for hover link change to DiffText
   + FIXED 2012-06-24 Misc : create link now will add an empty line.
 
-Things done in prev versions.~
+* ~ 0.63:
 
-* 0.63:
-
-  + DONE published.
+  + DONE 2012-06-20 fix fold line with east_asia char
+  + DONE 2012-06-20 multi col/row table
+  + DONE 2012-05-19 Format Table , use python?
+  + FIXED 2012-05-15 intened list item should be highlighted.
+  + DONE  2012-05-16 more .ext file to recongnize
+  + DONE  2012-05-16 More section title format.
+  + FIXED 2012-05-17 deflist wrong indent but still highlighted
+  + FIXED 2012-05-19 section title  3 row , wrong highlighted
+  + FIXED 2012-05-25 wrong comment fold region include normal text.
+  + DONE  2012-06-01 highlight syn directives (code code-block code-name highlights)
+  + FIXED 2012-06-01  the enum list's indentation is wrong. 
+          (Note: it's right sometimes, and only recongnize num follow '.')
+          (wrong with indented enum list)
+  + DONE  2012-06-01 Doc Section index Buffer? same as the contents directive
+  + FIXED 2012-06-02 wrong highlight of literal block. one blank line need after '::'
 
 ======================================================================
 vim:ft=help:tw=76

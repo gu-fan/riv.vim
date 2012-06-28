@@ -129,6 +129,8 @@ let s:default.options = {
     \'auto_format_table'  : 1,
     \'fold_text_align'    : 'right',
     \'ins_super_tab'      : 1,
+    \'month_names'        : 'January,February,March,April,May,June,July,'
+                          \.'August,September,October,November,December',
     \}
 " maps "{{{
 let s:default.maps = {
@@ -178,6 +180,7 @@ let s:default.maps = {
     \'Riv2BuildPath'     : 'call riv#publish#path()',
     \'RivDelete'         : 'call riv#create#delete()',
     \'RivTodoHelper'     : 'call riv#create#todo_helper()',
+    \'RivTodoUpdateCache': 'call riv#create#force_update()',
     \'RivCreateLink'     : 'call riv#create#link()',
     \'RivCreateFoot'     : 'call riv#create#foot()',
     \'RivCreateDate'     : 'call riv#create#date()',
@@ -217,6 +220,7 @@ let s:default.buf_maps = {
     \'RivListTypePrev'   : ['',  'mi',  'l2'],
     \'RivListTypeRemove' : ['',  'mi',  'l`'],
     \'RivTodoHelper'     : ['',  'm' ,  'ht'],
+    \'RivTodoUpdateCache': ['',  'm' ,  'uc'],
     \'RivTodoToggle'     : ['',  'mi',  'ee'],
     \'RivTodoDel'        : ['',  'mi',  'ex'],
     \'RivTodoDate'       : ['',  'mi',  'ed'],
@@ -235,18 +239,18 @@ let s:default.buf_maps = {
     \'Riv2HtmlFile'      : ['',  'm',   '2hf'],
     \'Riv2HtmlProject'   : ['',  'm',   '2hp'],
     \'Riv2HtmlAndBrowse' : ['',  'm',   '2hh'],
-    \'Riv2Odt'           : ['', 'm',    '2oo'],
-    \'Riv2Latex'         : ['', 'm',    '2ll'],
-    \'Riv2S5'            : ['', 'm',    '2ss'],
-    \'Riv2Xml'           : ['', 'm',    '2xx'],
-    \'Riv2BuildPath'     : ['', 'm',    '2b'],
-    \'RivScratchView'    : ['', 'm',    'cv'],
-    \'RivScratchCreate'  : ['', 'm',    'cc'],
-    \'RivDeleteFile'     : ['', 'm',    'df'],
-    \'RivCreateLink'     : ['', 'mi',   'il'],
-    \'RivCreateDate'     : ['', 'mi',   'id'],
-    \'RivCreateFoot'     : ['', 'mi',   'if'],
-    \'RivCreateTime'     : ['', 'mi',   'it'],
+    \'Riv2Odt'           : ['',  'm',   '2oo'],
+    \'Riv2Latex'         : ['',  'm',   '2ll'],
+    \'Riv2S5'            : ['',  'm',   '2ss'],
+    \'Riv2Xml'           : ['',  'm',   '2xx'],
+    \'Riv2BuildPath'     : ['',  'm',   '2b'],
+    \'RivScratchView'    : ['',  'm',   'cv'],
+    \'RivScratchCreate'  : ['',  'm',   'cc'],
+    \'RivDeleteFile'     : ['',  'm',   'df'],
+    \'RivCreateLink'     : ['',  'mi',  'il'],
+    \'RivCreateDate'     : ['',  'mi',  'id'],
+    \'RivCreateFoot'     : ['',  'mi',  'if'],
+    \'RivCreateTime'     : ['',  'mi',  'it'],
     \'RivTestReload'     : ['',  'm',   't`'],
     \'RivTestFold0'      : ['',  'm',   't1'],
     \'RivTestFold1'      : ['',  'm',   't2'],
@@ -270,52 +274,56 @@ let s:default.buf_imaps = {
 "}}}
 "menus "{{{
 let s:default.menus = [
-    \['Index'                , 'ww'               , 'RivIndex'          ] ,
-    \['Ask'                  , 'wa'               , 'RivAsk'            ] ,
-    \['Helper.Todo'          , 'th'               , 'RivTodoHelper'     ] ,
-    \['--Action--'           , '  '               , '  '                ] ,
-    \['Title.level1'         , 's1'               , 'RivTitle1'         ] ,
-    \['Title.level2'         , 's2'               , 'RivTitle2'         ] ,
-    \['Title.level3'         , 's3'               , 'RivTitle3'         ] ,
-    \['Title.level4'         , 's4'               , 'RivTitle4'         ] ,
-    \['Title.level5'         , 's5'               , 'RivTitle5'         ] ,
-    \['Title.level6'         , 's6'               , 'RivTitle6'         ] ,
-    \['Link.Open'            , 'ko\ or\ <Enter>'  , 'RivLinkOpen'       ] ,
-    \['Link.Next'            , 'kn\ or\ \<Tab>'    , 'RivLinkNext'       ] ,
-    \['Link.Prev'            , 'kp\ or\ <S-Tab>'  , 'RivLinkPrev'       ] ,
-    \['List.ShiftRight'      , 'lu\ or\ >'         , 'RivListShiftRight' ] ,
-    \['List.ShiftLeft'       , 'ld\ or\ <'         , 'RivListShiftLeft'  ] ,
-    \['List.NextType'        , 'l1'               , 'RivListTypeNext'   ] ,
-    \['List.PrevType'        , 'l2'               , 'RivListTypePrev'   ] ,
-    \['List.RemoveType'      , 'l`'               , 'RivListTypeRemove' ] ,
-    \['Todo.Toggle'          , 'ee'               , 'RivTodoToggle'     ] ,
-    \['Todo.Del'             , 'ex'               , 'RivTodoDel'        ] ,
-    \['Todo.Date'            , 'ed'               , 'RivTodoDate'       ] ,
-    \['Todo.Type0'           , 'e`'               , 'RivTodoType0'      ] ,
-    \['Todo.Type1'           , 'e1'               , 'RivTodoType1'      ] ,
-    \['Todo.Type2'           , 'e2'               , 'RivTodoType2'      ] ,
-    \['Todo.Type3'           , 'e3'               , 'RivTodoType3'      ] ,
-    \['Create.Footnote'      , 'if'               , 'RivCreateFoot'     ] ,
-    \['Create.Link'          , 'il'               , 'RivCreateLink'     ] ,
-    \['Create.Date'          , 'id'               , 'RivCreateDate'     ] ,
-    \['Create.Time'          , 'it'               , 'RivCreateTime'     ] ,
-    \['Table.Format'         , 'ft'               , 'RivTableFormat'    ] ,
-    \['Convert.Path'         , '2b'               , 'Riv2BuildPath'     ] ,
-    \['Convert.Html.index'   , '2hf'              , 'Riv2HtmlIndex'     ] ,
-    \['Convert.Html.File'    , '2hf'              , 'Riv2HtmlFile'      ] ,
-    \['Convert.Html.Browse'  , '2hh'              , 'Riv2HtmlAndBrowse' ] ,
-    \['Convert.Html.project' , '2hp'              , 'Riv2HtmlProject'   ] ,
-    \['Convert.Odt'          , '2oo'              , 'Riv2Odt'           ] ,
-    \['Convert.Latex'        , '2ll'              , 'Riv2Latex'         ] ,
-    \['Convert.S5'           , '2ss'              , 'Riv2S5'            ] ,
-    \['Convert.Xml'          , '2xx'              , 'Riv2Xml'           ] ,
-    \['Scratch.Create'       , 'cc'               , 'RivScratchCreate'  ] ,
-    \['Scratch.View'         , 'cv'               , 'RivScratchView'    ] ,
-    \['Delete.File'          , 'df'               , 'RivDelete'         ] ,
-    \['--Fold---'            , '  '               , '  '                ] ,
-    \['Folding.Update'       , '<Space>j\ or\ zx' , 'RivFoldUpdate'     ] ,
-    \['Folding.Toggle'       , '<Space><Space>\ or\ za'   , 'RivFoldToggle'     ] ,
-    \['Folding.All'          , '<Space>m\ or\ zA' , 'RivFoldAll'        ] ,
+    \['Index'                             , 'ww'                     , 'RivIndex'          ]   ,
+    \['Choose\ Index'                     , 'wa'                     , 'RivAsk'            ]   ,
+    \['Helper.Todo\ Helper'               , 'th'                     , 'RivTodoHelper'     ]   ,
+    \['Helper.Update\ Todo\ Cache'        , 'uc'                     , 'RivTodoUpdateCache']   ,
+    \['--Action--'                        , '  '                     , '  '                ]   ,
+    \['Title.Create\ level1\ Title'       , 's1'                     , 'RivTitle1'         ]   ,
+    \['Title.Create\ level2\ Title'       , 's2'                     , 'RivTitle2'         ]   ,
+    \['Title.Create\ level3\ Title'       , 's3'                     , 'RivTitle3'         ]   ,
+    \['Title.Create\ level4\ Title'       , 's4'                     , 'RivTitle4'         ]   ,
+    \['Title.Create\ level5\ Title'       , 's5'                     , 'RivTitle5'         ]   ,
+    \['Title.Create\ level6\ Title'       , 's6'                     , 'RivTitle6'         ]   ,
+    \['Link.Open\ Link'                   , 'ko\ or\ <Enter>'        , 'RivLinkOpen'       ]   ,
+    \['Link.Next\ Link'                   , 'kn\ or\ \<Tab>'         , 'RivLinkNext'       ]   ,
+    \['Link.Previous\ Link'               , 'kp\ or\ <S-Tab>'        , 'RivLinkPrev'       ]   ,
+    \['Link.-------'                      , '  '                     , '  '                ]   ,
+    \['Link.Create\ Link'                 , 'il'                     , 'RivCreateLink'     ]   ,
+    \['Link.Create\ Footnote'             , 'if'                     , 'RivCreateFoot'     ]   ,
+    \['List.Shift\ Right'                 , 'lu\ or\ >'              , 'RivListShiftRight' ]   ,
+    \['List.Shift\ Left'                  , 'ld\ or\ <'              , 'RivListShiftLeft'  ]   ,
+    \['List.Next\ Type'                   , 'l1'                     , 'RivListTypeNext'   ]   ,
+    \['List.Previous\ Type'               , 'l2'                     , 'RivListTypePrev'   ]   ,
+    \['List.Remove\ List\ Symbol'         , 'l`'                     , 'RivListTypeRemove' ]   ,
+    \['Todo.Toggle\ Todo'                 , 'ee'                     , 'RivTodoToggle'     ]   ,
+    \['Todo.Del\ Todo'                    , 'ex'                     , 'RivTodoDel'        ]   ,
+    \['Todo.Change\ Date'                 , 'ed'                     , 'RivTodoDate'       ]   ,
+    \['Todo.Todo\ Type0'                  , 'e`'                     , 'RivTodoType0'      ]   ,
+    \['Todo.Todo\ Type1'                  , 'e1'                     , 'RivTodoType1'      ]   ,
+    \['Todo.Todo\ Type2'                  , 'e2'                     , 'RivTodoType2'      ]   ,
+    \['Todo.Todo\ Type3'                  , 'e3'                     , 'RivTodoType3'      ]   ,
+    \['Create.Datestamp'                  , 'id'                     , 'RivCreateDate'     ]   ,
+    \['Create.Timestamp'                  , 'it'                     , 'RivCreateTime'     ]   ,
+    \['--Convert---'                      , '  '                     , '  '                ]   ,
+    \['Convert.Open\ Build\ Path'         , '2b'                     , 'Riv2BuildPath'     ]   ,
+    \['Convert.to\ Html.Browse\ Current'  , '2hh'                    , 'Riv2HtmlAndBrowse' ]   ,
+    \['Convert.to\ Html.Convert\ Current' , '2hf'                    , 'Riv2HtmlFile'      ]   ,
+    \['Convert.to\ Html.Browse\ index'    , '2hf'                    , 'Riv2HtmlIndex'     ]   ,
+    \['Convert.to\ Html.Convert\ Project' , '2hp'                    , 'Riv2HtmlProject'   ]   ,
+    \['Convert.to\ Odt'                   , '2oo'                    , 'Riv2Odt'           ]   ,
+    \['Convert.to\ Latex'                 , '2ll'                    , 'Riv2Latex'         ]   ,
+    \['Convert.to\ S5'                    , '2ss'                    , 'Riv2S5'            ]   ,
+    \['Convert.to\ Xml'                   , '2xx'                    , 'Riv2Xml'           ]   ,
+    \['Scratch.Create\ Scratch'           , 'cc'                     , 'RivScratchCreate'  ]   ,
+    \['Scratch.View\ Index'               , 'cv'                     , 'RivScratchView'    ]   ,
+    \['Delete.Delete\ Current'            , 'df'                     , 'RivDelete'         ]   ,
+    \['--Format---'                       , '  '                     , '  '                ]   ,
+    \['Table.Format'                      , 'ft'                     , 'RivTableFormat'    ]   ,
+    \['--Fold---'                         , '  '                     , '  '                ]   ,
+    \['Folding.Update'                    , '<Space>j\ or\ zx'       , 'RivFoldUpdate'     ]   ,
+    \['Folding.Toggle'                    , '<Space><Space>\ or\ za' , 'RivFoldToggle'     ]   ,
+    \['Folding.All'                       , '<Space>m\ or\ zA'       , 'RivFoldAll'        ]   ,
     \]
 "}}}
 "{{{ project options
@@ -326,10 +334,6 @@ fun! riv#index(...) "{{{
     let id = a:0 ? a:1 : 0
     if exists("g:_riv_c.p[id]")
         let path = g:_riv_c.p[id]._root_path
-        if !isdirectory(path)
-                \ && input("'".path."' Does not exist. \nCreate?(Y/n):")!~?'n'
-            call mkdir(fnamemodify(path, ':h') ,'p')
-        endif
         exe 'edit ' . path.'index.rst'
         let g:riv_p_id = id
         let b:riv_p_id = id
@@ -438,13 +442,13 @@ if !exists("g:_riv_c")
     endfor
     "}}}
     
-    if empty(g:riv_ft_browser)
+    if empty(g:riv_ft_browser) "{{{
         if has('win32') || has('win64')
             let g:riv_ft_browser = 'start'
         else
             let g:riv_ft_browser = 'xdg-open'
         endif
-    endif
+    endif "}}}
 
     " Patterns: "{{{2
     
@@ -570,18 +574,22 @@ if !exists("g:_riv_c")
 
 
     " File:
-    let s:file_name = '[[:alnum:]~./][[:alnum:]~:./\\_-]+'
-    let s:file_start = '%(\_^|\s)'
     let s:file_end = '%($|\s)'
     let g:_riv_t.file_ext_lst = s:normlist(split(g:riv_file_link_ext,','))
     if g:riv_localfile_linktype == 1
         " *.rst *.vim xxx/
+        let s:file_name = '[[:alnum:]~./][[:alnum:]~:./\\_-]*'
+        let s:file_start = '%(\_^|\s)'
         let g:_riv_p.file_ext_ptn = 'rst|'.join(g:_riv_t.file_ext_lst,'|')
         let g:_riv_p.link_file = '\v' . s:file_start . '\zs' . s:file_name
                     \.'%(\.%('. g:_riv_p.file_ext_ptn .')|/)\ze'. s:file_end
     elseif g:riv_localfile_linktype == 2
         " [*]  [xxx/] [*.vim]
         let g:_riv_p.file_ext_ptn = join(g:_riv_t.file_ext_lst,'|')
+        " we should make sure it's not citation, footnote (with preceding '..')
+        " and not a todo box. (a single char)
+        let s:file_name = '[[:alnum:]~./][[:alnum:]~:./\\_-]+'
+        let s:file_start = '%(\_^|(\_^\.\.)@<!\s)'
         let g:_riv_p.link_file = '\v'.s:file_start.'\zs\['. s:file_name .'\]\ze'. s:file_end
     else
         " NONE
@@ -647,6 +655,7 @@ if !exists("g:_riv_c")
     let g:_riv_c.sect_lvs = split(g:riv_section_levels,'\zs')
     let g:_riv_c.sect_lvs_b = split('#*+:.^','\zs')
     let g:_riv_t.highlight_code = s:normlist(split(g:riv_highlight_code,','))
+    let g:_riv_t.month_names = split(g:riv_month_names,',')
 
     lockvar 2 g:_riv_c
     lockvar 2 g:_riv_p

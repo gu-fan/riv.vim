@@ -90,10 +90,10 @@ Issues
 Todo
 ---------
 
-This
-~~~~~
+Prev
+~~~~
 
-Things todo in this version.
+See Changelog in doc/riv.txt
 
 * 0.64:
 
@@ -106,10 +106,17 @@ Things todo in this version.
   + DONE 2012-06-23  Fold : the fold text should showing correct line while editing.
   + FIXED 2012-06-24 Fold : wrong end of section when fold_blank is 0.
 
+
+This
+~~~~~
+
+Things todo in this version.
+
 * 0.65:
 
   + DONE 2012-06-27 take care of the slash of directory in windows .
-  + TODO correct cursor position when creating todo items.
+  + FIXME correct cursor position when creating todo items.
+  + DONE 2012-06-28 format the scratch index, sort with year/month/day 
 
 
 Next 
@@ -124,9 +131,8 @@ Things todo in next versions.
 * Scratch: show Scratch sign in Calendar.
 * Publish: support the reStructuredText document not in a project.
 
-
 Instruction Details
--------------------
+===================
 
 * How to use?
 
@@ -147,7 +153,7 @@ Instruction Details
 
 
 Folding 
-~~~~~~~~
+--------
 
 Fold reStructuredText file with sections, lists, and blocks automatically.
 
@@ -201,7 +207,7 @@ To set an initial folding level for a file . you can use ``modeline``::
     ..  vim: fdl=0 fdm=manual :
 
 Sections 
-~~~~~~~~~
+---------
 
 Section levels and numbers are auto detected.
 
@@ -230,7 +236,7 @@ Clicking on the section reference will bring you to the section title.
        **=-~"'`** , you can change it with ``g:riv_section_levels``
 
 Lists
-~~~~~
+-----
 
 Auto numbered and auto leveled bullet and enumerated list.
 
@@ -282,7 +288,7 @@ The Sequence of the list level is:
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#bullet-lists
 
 Links
-~~~~~
+-----
 
   
 Clicking on links will executing it's default behavior 
@@ -304,7 +310,7 @@ Clicking on links will executing it's default behavior
     And append the footnote target to the end of file.
 
 Table
-~~~~~
+-----
   
 Auto Format Table (Grid Table Only).
 (Currently require vim compiled with python. )
@@ -329,7 +335,7 @@ To create a table , just insert ``| xxx |`` and press ``<Enter>``.
 +-----------------+-----------------------------------------------------------+
 
 Highlighting
-~~~~~~~~~~~~
+------------
 
 Improved syntax file. 
 
@@ -355,7 +361,7 @@ Improved syntax file.
    Disable it by set ``g:riv_hover_link_hl`` to 0
 
 Indent
-~~~~~~
+------
 
 Improved indent file.
 
@@ -363,7 +369,7 @@ In Insert mode , when starting a newline or press ``<BS>`` (BackSpace key).
 the cursor will be put at the calculated position.
 
 Project
-~~~~~~~
+-------
 
 Manage your reStructuredText documents in a wiki way.
 
@@ -381,7 +387,7 @@ Manage your reStructuredText documents in a wiki way.
 * Use ``:RivAsk`` ``<C-E>wa`` to choose one project to open.
 
 File
-~~~~
+----
 
 
 As reStructuredText haven't define a pattern for local files currently.
@@ -437,20 +443,34 @@ The ``bare extension style`` and ``square bracket style``
   it will also delete all reference to this file in ``index.rst`` of the directory.
 
 Scratch
-~~~~~~~
+-------
   
-The scratches is created auto named by date,
+The scratches is created auto named by date, 
 It is a place for writing diary or hold idea and thoughts.
 
-Scratches will be put in 'scratch' folder in project directory.
+Scratches will be put in scratch folder in project directory.
+You can change it with 'scratch_path' of project setting ,default is 'scratch'::
+    
+    " Use another directory
+    let project1.scratch_path = 'diary'
+    " Use absolute path, then no todo helper and no converting for it.
+    let project1.scratch_path = '~/Documents/diary'
 
 * ``:RivScratchCreate`` ``<C-E>cc``
   Create or jump to the scratch of today.
+
 * ``:RivScratchView`` ``<C-E>cv``
   View Scratch index.
 
+  The index is auto created. You can change the month name using 
+  ``g:riv_month_names``. 
+
+  default is:
+
+      ``January,February,March,April,May,June,July,August,September,October,November,December``
+
 Todos
-~~~~~
+-----
 
 Writing todo lists in reStructuredText documents .
 
@@ -502,7 +522,7 @@ Keyword groups:
 * ``RivTodoDel`` ``<C-E>ex`` will delete the todo item
 
 Helpers
-~~~~~~~
+-------
 
 A window to show something of the project.
 
@@ -517,7 +537,7 @@ A window to show something of the project.
 * Set ``g:riv_fuzzy_help`` to 1 to enable fuzzy searching in helper.
 
 Publish
-~~~~~~~
+-------
 
 Some wrapper to convert rst files to html/xml/latex/odt/... 
 (require python docutils package )

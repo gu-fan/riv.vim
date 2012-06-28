@@ -141,13 +141,9 @@ fun! riv#link#open() "{{{
             let dir = expand('%:p:h').'/'
             let file = dir . mo.str
             if s:is_directory(file)
-                if !isdirectory(file)
-                \ && input("'".file."' Does not exist. \nCreate?(Y/n):")!~?'n'
-                    call mkdir(fnamemodify(file, ':h'), "p")
-                endif
                 let file = file . 'index.rst'
-            elseif fnamemodify(file, ':e') == '' && g:riv_localfile_linktype == 2
-                let file = file . ext
+            elseif g:riv_localfile_linktype == 2 && fnamemodify(file, ':e') == ''
+                let file = file . '.rst'
             endif
         else
             let file = expand(mo.str)

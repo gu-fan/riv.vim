@@ -282,36 +282,66 @@ fun! riv#create#show_sect() "{{{
     endif
 endfun "}}}
 fun! riv#create#scratch() "{{{
-    let id = s:id()
     let scr = g:_riv_c.p[s:id()]._scratch_path . strftime("%Y-%m-%d") . '.rst'
     call s:split(scr)
-    let rel = s:get_rel_to('scratch', scr)
-    if g:riv_localfile_linktype == 2
-        let rel = '['.fnamemodify(scr,':t:r').']'
-    endif
-    call s:append_scr_index(rel)
 endfun "}}}
-fun! s:append_scr_index(line) "{{{
-    let path = s:get_root_path().'scratch'
-    if !isdirectory(path)
-        echo
-        call mkdir(path,'p')
-    endif
-    let id = s:id()
-    let file = path.'/index.rst'
-    
-    let lines = readfile(file)
+let s:months = g:_riv_t.month_names
+fun! s:format_src_index()
+    " category scratch by month and format it 4 items a line
+    let path = g:_riv_c.p[s:id()]._scratch_path
+    let files = split(glob(path.'*.rst'),'\n')
+    "
+    let dates = filter(map(copy(files), 'fnamemodify(v:val,'':t:r'')'),'v:val=~''[[:digit:]_-]\+'' ')
 
-    for line in lines[-5:]
-        if line == a:line
-            return
+    " create a years dictionary contains year dict, 
+    " which contains month dict, which contains days list
+    let years = {}
+    for date in dates
+        let [_,year,month,day;rest] = matchlist(date, '\(\d\{4}\)-\(\d\{2}\)-\(\d\{2}\)')
+        if !has_key(years, year)
+            let years[year] = {}
         endif
+        if !has_key(years[year], month)
+            let years[year][month] = []
+        endif
+        call add(years[year][month], date)
     endfor
-    call writefile(add(lines, a:line) , file)
-endfun "}}}
+    
+    let lines = []
+    for year in keys(years)
+        call add(lines, "Year ".year)
+        call add(lines, "=========")
+        for month in keys(years[year])
+            call add(lines, "")
+            call add(lines, s:months[month-1])
+            call add(lines, repeat('-', strwidth(s:months[month-1])))
+            let line_lst = [] 
+            for day in years[year][month]
+                if g:riv_localfile_linktype ==2 
+                    let f = printf("[%s]",day)
+                else
+                    let f = printf("%s.rst",day)
+                endif
+                call add(line_lst, f)
+                if len(line_lst) == 4
+                    call add(lines, join(line_lst,"    "))
+                    let line_lst = [] 
+                endif
+            endfor
+            call add(lines, join(line_lst,"    "))
+        endfor
+        call add(lines, "")
+    endfor
+
+    let file = path.'index.rst'
+    call writefile(lines , file)
+endfun
+
 fun! riv#create#view_scr() "{{{
-    let path = s:get_root_path().'scratch'
-    call s:split(path.'/index.rst')
+    call s:format_src_index()
+    let path = g:_riv_c.p[s:id()]._scratch_path
+ 
+    call s:split(path.'index.rst')
 endfun "}}}
 fun! s:escape_file_ptn(file) "{{{
     if g:riv_localfile_linktype == 2
@@ -480,7 +510,11 @@ fun! riv#create#update_todo() "{{{
     catch /Riv: Not Same Path with Project/
         return
     endtry
-    let c_lines = filter(readfile(cache), ' v:val!~escape(f,''\'')')
+    if filereadable(cache)
+        let c_lines = filter(readfile(cache), ' v:val!~escape(f,''\'')')
+    else
+        let c_lines = []
+    endif
     call writefile(c_lines+lines , cache)
 endfun "}}}
 fun! riv#create#enter() "{{{
@@ -582,6 +616,12 @@ fun! riv#create#date(...) "{{{
         exe "normal! a" . strftime('%Y-%m-%d %H:%M:%S') . "\<ESC>"
     else
         exe "normal! a" . strftime('%Y-%m-%d') . "\<ESC>"
+    endif
+endfun "}}}
+fun! riv#create#auto_mkdir() "{{{
+    let dir = expand('%:p:h')
+    if !isdirectory(dir)
+        call mkdir(dir,'p')
     endif
 endfun "}}}
 
