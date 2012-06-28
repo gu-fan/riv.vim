@@ -91,7 +91,7 @@ endfun "}}}
 fun! riv#action#ins_c_enter() "{{{
     let line = getline('.')
     if line=~ '\S'
-        let cmd = "\<Esc>o"
+        let cmd = "\<CR>"
     else
         let cmd = ''
     endif
@@ -101,7 +101,7 @@ endfun "}}}
 fun! riv#action#ins_s_enter() "{{{
     let line = getline('.')
     if line=~ '\S'
-        let cmd = "\<Esc>o\<CR>"
+        let cmd = "\<CR>\<CR>"
     else
         let cmd = ''
     endif
@@ -111,7 +111,7 @@ endfun "}}}
 fun! riv#action#ins_m_enter() "{{{
     let line = getline('.')
     if line=~ '\S'
-        let cmd = "\<Esc>o\<CR>"
+        let cmd = "\<CR>\<CR>"
     else
         let cmd = ''
     endif

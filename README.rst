@@ -2,8 +2,8 @@ Riv Instruction
 ===============
 
 :Author: Rykka G.Forest
-:Date:   2012-06-27 16:44:41
-:Version: 0.64 
+:Date:   2012-06-28 19:28:26
+:Version: 0.65 
 :Github: https://github.com/Rykka/riv.vim
 
 **Riv** is a vim plugin for managing and writing reStructuredText_ Documents.
@@ -115,9 +115,8 @@ Things todo in this version.
 * 0.65:
 
   + DONE 2012-06-27 take care of the slash of directory in windows .
-  + FIXME correct cursor position when creating todo items.
+  + FIXED 2012-06-28 correct cursor position when creating todo items and list items.
   + DONE 2012-06-28 format the scratch index, sort with year/month/day 
-
 
 Next 
 ~~~~~
@@ -140,7 +139,8 @@ Instruction Details
   these settings will be automatically on. 
   (make sure ``filetype on`` in your vimrc)
 
-  To manage documents in a wiki way, see Project_.
+  To manage documents in a wiki way, you should set a project,
+  see Project_.
 
 * About the mapping
 
@@ -203,8 +203,10 @@ So there are some options about it.
   default is 3000.
 
 To set an initial folding level for a file . you can use ``modeline``::
+    
 
-    ..  vim: fdl=0 fdm=manual :
+    ..  vim: fdl=0 :
+        This means all fold will be folded when opening files
 
 Sections 
 ---------
@@ -562,6 +564,7 @@ The browser is set with ``g:riv_ft_browser``.
 default is (unix:'xdg-open', windows:'start')
 
 The path of building files by default is under ``_build`` in your project directory.
+
 * Open the build path: `Riv2BuildPath` `<C-E>2b`
 * To change the path. Set it in your vimrc::
     

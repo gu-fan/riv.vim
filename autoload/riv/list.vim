@@ -10,18 +10,23 @@ let s:cpo_save = &cpo
 set cpo-=C
 
 " Todo: "{{{
-fun! riv#list#toggle_todo(...) "{{{
+fun! riv#list#toggle_todo() "{{{
 " Toggle TO-DO item
 " if not list, return 
-" if is null todo item, add box/key (and ts if ts==2)
-" else if is idx todo item , switch to next box/key (don't change ts)
-"   if next box/key is end , (change ts if ts == 1 , add ts_end if ts == 2)
-"   if next box/key is start, (remove ts if ts ==1, remove ts_end if ts == 2)
+" if is null todo item, add box/key (and timestamp if ts==2)
+" else if is idx todo item , switch to next box/key (don't change timestamp)
+"   if next box/key is end , (change timestamp if ts == 1 , add ts_end if ts == 2)
+"   if next box/key is start, (remove timestamp if ts ==1, remove ts_end if ts == 2)
     let init_key = a:0  ? a:1 : 0
-    let row = a:0>1 ? a:2 : line('.')
+    let [row, col] = [line('.'), col('.')]
     let line = getline(row)
     let [type,idx] = s:get_todo_id(line)
-    if type == -2 | return | endif
+    if type == -2 
+        echo "It's not a List, stopped..."
+        return 
+    endif
+    let prv_td_end = s:get_td_end(line)
+    let prv_len = strwidth(line)
     if type == -1 
         if init_key == 0 
             let line = s:add_todo_box(line)
@@ -73,31 +78,56 @@ fun! riv#list#toggle_todo(...) "{{{
     endif
 
     call setline(row, line)
+    let mod_len = strwidth(line)
+    let mod_td_end = prv_td_end + mod_len - prv_len
+    if col >= prv_td_end
+        let sft = mod_td_end - prv_td_end
+        call cursor(row, col + sft )
+    elseif col <= prv_td_end && col >= mod_td_end
+        call cursor(row, mod_td_end )
+    endif
 endfun "}}}
 fun! riv#list#del_todo(...) "{{{
-    let row = a:0 ? a:1 : line('.')
+    let [row, col] = [line('.'), col('.')]
     let line = getline(row)
+    let prv_td_end = s:get_td_end(line)
+    let prv_len = strwidth(line)
     if line =~ g:_riv_p.todo_all
         let line = s:rmv_todo_tm_end(line)
         let line = s:rmv_todo_tm_start(line)
         let line = s:rmv_todo_item(line)
         call setline(row,line)
+        let mod_len = strwidth(line)
+        let mod_td_end = prv_td_end + mod_len - prv_len
+        if col >= prv_td_end
+            let sft = mod_td_end - prv_td_end
+            call cursor(row, col + sft )
+        elseif col <= prv_td_end && col >= mod_td_end
+            call cursor(row, mod_td_end )
+        endif
     endif
 endfun "}}}
-fun! riv#list#todo_change_type(grp,...) "{{{
-    let row = a:0 ? a:1 : line('.')
+fun! riv#list#todo_change_type(grp) "{{{
+    " change current line's todo type
+    " if it's not a list , add a list item
+    let [row, col] = [line('.'), col('.')]
 
     let line = getline(row)
     let [type,idx] = s:get_todo_id(line)
+    " record the todo item end idx to consider how to move cursor
+    let prv_td_end = s:get_td_end(line)
+    let prv_len = strwidth(line)
     if type == -2
         let list_str = s:list_str(1 , '', '' , "*", " ") 
         let line = substitute(line, '^\s*', list_str, '')
-    endif
-    let max_i = s:todo_lv_len(a:grp)-1
-    if idx > max_i 
-        let idx = max_i
-    elseif idx < 0
-        let idx = 0
+    elseif type == -1
+        " change idx of previous group to current grp
+        let max_i = s:todo_lv_len(a:grp)-1
+        if idx > max_i 
+            let idx = max_i
+        elseif idx < 0
+            let idx = 0
+        endif
     endif
 
     let line = s:rmv_todo_item(line)
@@ -111,8 +141,19 @@ fun! riv#list#todo_change_type(grp,...) "{{{
         endif
         let line = s:add_todo_key(line, a:grp, idx)
     endif
+    
+    
     call setline(row, line)
+    let mod_len = strwidth(line)
+    let mod_td_end = prv_td_end + mod_len - prv_len
+    if col >= prv_td_end
+        let sft = mod_td_end - prv_td_end
+        call cursor(row, col + sft )
+    elseif col <= prv_td_end && col >= mod_td_end
+        call cursor(row, mod_td_end )
+    endif
 endfun "}}}
+
 fun! riv#list#todo_ask() "{{{
     let grp =  inputlist(g:_riv_t.td_ask_keywords)
     if  grp > 0 && grp <= len(g:_riv_t.td_keyword_groups)
@@ -120,6 +161,18 @@ fun! riv#list#todo_ask() "{{{
     endif
 endfun "}}}
 
+fun! s:get_td_end(line) "{{{
+    let grps = [g:_riv_p.todo_tm_end, g:_riv_p.todo_tm_bgn, 
+               \g:_riv_p.todo_all,    g:_riv_p.list_all,
+               \'^\s*']
+    let i = 0
+    let td_end = -1
+    while td_end == -1
+        let td_end = matchend(a:line, grps[i])
+        let i += 1
+    endwhile
+    return td_end
+endfun "}}}
 fun! s:get_todo_id(line) "{{{
     let idx  = match(a:line, g:_riv_p.list_all)
     if idx == -1 | return [-2, 0]  |  endif          " not an list
@@ -368,7 +421,7 @@ fun! s:get_older(row) "{{{
         endwhile
         call setpos('.',save_pos)
         if s_idt == c_idt
-            return row
+            return getline(row) =~ '^\S' ? 0 : row
         else
             return 0
         endif
@@ -694,11 +747,9 @@ fun! s:level2stat(level) "{{{
 endfun "}}}
 "}}}
 
-
-
-fun! riv#list#toggle_type(i,...) "{{{
-    " change current list type with level
-    let row = line('.')
+fun! riv#list#toggle_type(i) "{{{
+    " Change current list type with different level type
+    let [row, col]= [line('.'), col('.')]
     let line = getline('.')
     if line =~ '^\c\s*(\=[imlcxvd][).]'
         let is_roman = s:is_roman(row)
@@ -707,10 +758,13 @@ fun! riv#list#toggle_type(i,...) "{{{
     endif
     let idt = matchstr(line, '^\s*')
     let [type , idt , num , attr, space] = riv#list#stat(line, is_roman)
+    let prv_len = strwidth(line)
     if type==-1
+        let prv_ls_end = matchend(line, '^\s*')
         let list_str = s:list_str(1 , '', '' , "*", " ") 
         let line = substitute(line, '^\s*', list_str, '')
     else
+        let prv_ls_end = matchend(line, g:_riv_p.list_all)
         let level = s:stat2level(type, num, attr) 
         if a:i == 0
             let list_str = idt
@@ -721,6 +775,14 @@ fun! riv#list#toggle_type(i,...) "{{{
         let line = substitute(line, g:_riv_p.list_all , list_str, '')
     endif
     call setline(row, line)
+    let mod_len = strwidth(line)
+    let mod_ls_end = prv_ls_end + mod_len - prv_len
+    if col >= prv_ls_end
+        let sft = mod_ls_end - prv_ls_end
+        call cursor(row, col + sft )
+    elseif col <= prv_ls_end && col >= mod_ls_end
+        call cursor(row, mod_ls_end )
+    endif
 endfun "}}}
 fun! s:list_shift_len(row,len) "{{{
     let line = getline(a:row)

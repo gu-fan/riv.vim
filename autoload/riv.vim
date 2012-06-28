@@ -81,22 +81,7 @@ fun! riv#show_menu() "{{{
     endif
 endfun "}}}
 "}}}
-"{{{ Options
-" Options:
-" fold_blank: 0,1,2 (default:2)
-" 0     fold one blank line at the most and leave the rest.
-" 1     fold all but leave one blank line
-" 2     fold all blank line
-
-" fold_level: 0,1,2,3          (defualt:3)
-" 0     no folding
-" 1     section
-" 2     section and list
-" 3     section and list and explicit_mark and table and quote. (All)
-
-" auto_format_table: 0,1        (default:1)
-" 0     off
-" 1     on
+"{{{ Options:
 let s:default = {}
 let s:default.options = {
     \'default'            : s:default,
@@ -189,7 +174,7 @@ let s:default.maps = {
     \'RivScratchView'    : 'call riv#create#view_scr()',
     \}
 "}}}
-"
+
 let s:default.g_maps = {
     \'RivIndex'          : ['ww', '<C-W><C-W>'] ,
     \'Riv2HtmlIndex'     : ['wi', '<C-W><C-I>'] ,
@@ -216,9 +201,9 @@ let s:default.buf_maps = {
     \'RivLinkPrev'       : ['<S-TAB>',  'n',  'kp'],
     \'RivListShiftRight' : [['>', '<C-ScrollwheelDown>' ],  'mi',  'lu'],
     \'RivListShiftLeft'  : [['<', '<C-ScrollwheelUp>'],  'mi',  'ld'],
-    \'RivListTypeNext'   : ['',  'mi',  'l1'],
-    \'RivListTypePrev'   : ['',  'mi',  'l2'],
-    \'RivListTypeRemove' : ['',  'mi',  'l`'],
+    \'RivListTypeNext'   : ['',  'mi',  'l2'],
+    \'RivListTypePrev'   : ['',  'mi',  'l1'],
+    \'RivListTypeRemove' : ['',  'mi',  'lx'],
     \'RivTodoHelper'     : ['',  'm' ,  'ht'],
     \'RivTodoUpdateCache': ['',  'm' ,  'uc'],
     \'RivTodoToggle'     : ['',  'mi',  'ee'],
@@ -293,9 +278,9 @@ let s:default.menus = [
     \['Link.Create\ Footnote'             , 'if'                     , 'RivCreateFoot'     ]   ,
     \['List.Shift\ Right'                 , 'lu\ or\ >'              , 'RivListShiftRight' ]   ,
     \['List.Shift\ Left'                  , 'ld\ or\ <'              , 'RivListShiftLeft'  ]   ,
-    \['List.Next\ Type'                   , 'l1'                     , 'RivListTypeNext'   ]   ,
-    \['List.Previous\ Type'               , 'l2'                     , 'RivListTypePrev'   ]   ,
-    \['List.Remove\ List\ Symbol'         , 'l`'                     , 'RivListTypeRemove' ]   ,
+    \['List.Previous\ Type'               , 'l1'                     , 'RivListTypePrev'   ]   ,
+    \['List.Next\ Type'                   , 'l2'                     , 'RivListTypeNext'   ]   ,
+    \['List.Remove\ List\ Symbol'         , 'lx'                     , 'RivListTypeRemove' ]   ,
     \['Todo.Toggle\ Todo'                 , 'ee'                     , 'RivTodoToggle'     ]   ,
     \['Todo.Del\ Todo'                    , 'ex'                     , 'RivTodoDel'        ]   ,
     \['Todo.Change\ Date'                 , 'ed'                     , 'RivTodoDate'       ]   ,

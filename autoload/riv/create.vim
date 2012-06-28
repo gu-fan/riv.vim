@@ -286,7 +286,7 @@ fun! riv#create#scratch() "{{{
     call s:split(scr)
 endfun "}}}
 let s:months = g:_riv_t.month_names
-fun! s:format_src_index()
+fun! s:format_src_index() "{{{
     " category scratch by month and format it 4 items a line
     let path = g:_riv_c.p[s:id()]._scratch_path
     let files = split(glob(path.'*.rst'),'\n')
@@ -335,7 +335,7 @@ fun! s:format_src_index()
 
     let file = path.'index.rst'
     call writefile(lines , file)
-endfun
+endfun "}}}
 
 fun! riv#create#view_scr() "{{{
     call s:format_src_index()
@@ -375,6 +375,7 @@ fun! s:get_rel_to(dir,path) "{{{
     if a:dir == 'root'
         let root = s:get_root_path()
     else
+        " use fnamemodify ':gs?\\?/?' ?
         let slash = has('win32') || has('win64') ? '\' : '/'
         let root = s:get_root_path().a:dir . slash
     endif
@@ -414,9 +415,9 @@ fun! s:file2list(filelines,filename) "{{{
         \'{"filename": a:filename ,"bufnr":0 , "lnum":v:val+1 , "line":lines[v:val] }')
     return dictlist
 endfun "}}}
-fun! s:strip(line)
+fun! s:strip(line) "{{{
     return substitute(a:line,'^\s*\(.\{-}\)\s*$','\1','')
-endfun
+endfun "}}}
 
 fun! s:file2lines(filelines,filename) "{{{
     let lines = a:filelines
