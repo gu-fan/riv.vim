@@ -279,7 +279,7 @@ The Sequence of the list level is:
     Change current list item symbol to next type
   + ``:RivListTyePrev`` ``<C-E>l2``
     Change current list item symbol to prev type
-  + ``:RivListTypeRemove`` ``<C-E>l```
+  + ``:RivListTypeRemove`` ``<C-E>lx``
     Delete current list item symbol
 
 :NOTE: To contain a second paragraph (or blocks) in a list , you should make the left edge 
@@ -474,69 +474,83 @@ You can change it with 'scratch_path' of project setting ,default is 'scratch'::
 Todos
 -----
 
-Writing todo lists in reStructuredText documents .
+Writing todo lists in reStructuredText documents.
+It's not the reStructuredText syntax. So no highlighting when converted.
 
 Todo items are bullet/enumerated lists with todo-box or todo-keywords.
 Datestamps are supported.
 
-The statistics of the progress (include child items) will be shown When folded. 
+The statistics of the progress (include child items) will be shown when folded. 
 
-A todo-box item:
+* A Todo item:
 
-* [ ] this is a todo item of todo-box style.
-* Double Click  or ``<Enter>`` in the box or use ``<C-E>ee`` 
-  to switch the todo/done status.
+  + [ ] This is a todo item of initial state.
+  + [o] This is a todo item that's in progress.
+  + [X] This is a todo item that's finished.
 
-Datestamps:
+* Datestamps:
 
-* [X] 2012-06-23 This is a todo item with finish datestamp
-* [ ] 2012-06-23 This is a todo item with start datestamp
-* [X] 2012-06-23 ~ 2012-06-23  A todo item with both start and finish datestamp. 
+  + You can set the todo item timestamp style with 'g:riv_todo_timestamp'
+  
+    - when set to 2 , will init with a start datestamp.
+      and when it's done , will add a finish datestamp.
 
-* You can set the todo item timestamp style with 'g:riv_todo_timestamp'
+      1. [ ] 2012-06-23 This is a todo item with start datestamp
+      2. [X] 2012-06-23 ~ 2012-06-23  A todo item with both start and finish datestamp. 
+  
+    - when set to 1 , no init datestamp ,
+      will add a finish datestamp when it's done.
 
-  + when set to 2 , will init with a start datestamp.
-    and when it's done , will add a finish datestamp.
-  + when set to 1 , no init datestamp ,
-    will add a finish datestamp when it's done.
-  + when set to 0 , no datestamp
+      1. [X] 2012-06-23 This is a todo item with finish datestamp, 
 
-* Double Click or ``<Enter>`` on datestamp to change date. 
+    - when set to 0 , no datestamp
+  
+* Keyword groups:
+    
+  + FIXED A todo item of FIXME/FIXED keyword.
+  + DONE 2012-06-13 ~ 2012-06-23 A todo item of TODO/DONE keyword.
+  + You can define your own keyword group for todo items with ``g:riv_todo_keywords``
+  
+    each keyword is seperated by ',' , each group is seperated by ';'
+  
+    default is ``TODO,DONE;FIXME,FIXED;START,PROCESS,STOP``,
 
-  If you have Calendar installed , it will use calendar to choose date.
+* Actions:
 
-* Use ``RivCreateDate`` ``<C-E>id`` to insert a datestamp of today.
-* Use ``RivCreateTime`` ``<C-E>it`` to insert a timestamp of current time. 
+  + Double Click or ``<Enter>`` in the box or use ``:RivTodoToggle`` or ``<C-E>ee`` 
+    to switch the todo/done status.
+  + Double Click or ``<Enter>`` or ``:RivTodoDate`` on a datestamp to change date. 
+  
+    If you have Calendar_ installed , it will use it to choose date.
+  
+  + Use ``:RivTodoType1`` ``<C-E>e1``... ``:RivTodoType4`` ``<C-E>e4`` 
+    to add or change the todo item by group. 
+  + Use ``:RivTodoAsk`` ``<C-E>e``` will show an keyword group list to choose.
+  + Use ``:RivTodoDel`` ``<C-E>ex`` will delete the todo item
 
-Keyword groups:
-
-* FIXED A todo item of FIXME/FIXED keyword.
-* DONE 2012-06-13 ~ 2012-06-23 A todo item of TODO/DONE keyword.
-* You can add your own keyword group for todo items with ``g:riv_todo_keywords``
-
-  each group is seperated by ';' , each keyword is seperated by ','
-
-  default is ``TODO,DONE;FIXME,FIXED;START,PROCESS,STOP``,
-
-* ``RivTodoType1`` ``<C-E>e1``... ``RivTodoType4`` ``<C-E>e4`` 
-  to add or change the todo item by group. 
-* ``RivTodoAsk`` ``<C-E>e``` will show an keyword group list to choose.
-* ``RivTodoDel`` ``<C-E>ex`` will delete the todo item
-
+  + Use ``:RivCreateDate`` ``<C-E>id`` to insert a datestamp of today anywhere.
+  + Use ``:RivCreateTime`` ``<C-E>it`` to insert a timestamp of current time anywhere. 
+  + Use ``:RivTodoHelper`` or ``<C-E>ht`` to open a `Todo Helper`_
+  
 Helpers
 -------
 
 A window to show something of the project.
 
-* Todo Helper: Check and jump to your All/Todo/Done todo items of the project.
+* _`Todo Helper`: A helper to manage todo items of current project.
 
   + ``:RivTodoHelper`` or ``<C-E>ht``
-    Open Todo Helper
+    Open to view all todo-items.
 
-  Inside the window , use '/' to search ,'<Tab>' to switch content,
-  '<Enter>' to jump to. '<Esc>/q' to quit.
+    - ``/`` to search todo item mating input word.
+      default is in search mode.
+      
+      Set ``g:riv_fuzzy_help`` to 1 to enable fuzzy searching in helper.
 
-* Set ``g:riv_fuzzy_help`` to 1 to enable fuzzy searching in helper.
+    - ``<Tab>`` to switch content, 
+      there are 'All/Todo/Done' contents for Todo Helper.
+    - ``<Enter>`` to jump to the todo item.
+    - ``<Esc>`` or ``q`` to quit the window
 
 Publish
 -------
@@ -544,21 +558,21 @@ Publish
 Some wrapper to convert rst files to html/xml/latex/odt/... 
 (require python docutils package )
 
-* ``Riv2HtmlFile``  ``<C-E>2hf``
+* ``:Riv2HtmlFile``  ``<C-E>2hf``
   convert to html file.
-* ``Riv2HtmlAndBrowse``  ``<C-E>2hh``
+* ``:Riv2HtmlAndBrowse``  ``<C-E>2hh``
   convert to html file and browse. 
   default is 'firefox'
 
   The browser is set with ``g:riv_web_browser``
-* ``Riv2HtmlProject`` ``<C-E>2hp``
+* ``:Riv2HtmlProject`` ``<C-E>2hp``
 
 Convert to the file and browse.
 
-* ``Riv2Odt`` ``<C-E>2oo``  
-* ``Riv2Xml`` ``<C-E>2xx``
-* ``Riv2S5`` ``<C-E>2ss``
-* ``Riv2Latex`` ``<C-E>2ll``
+* ``:Riv2Odt`` ``<C-E>2oo``  
+* ``:Riv2Xml`` ``<C-E>2xx``
+* ``:Riv2S5`` ``<C-E>2ss``
+* ``:Riv2Latex`` ``<C-E>2ll``
 
 The browser is set with ``g:riv_ft_browser``. 
 default is (unix:'xdg-open', windows:'start')
