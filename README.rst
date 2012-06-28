@@ -36,7 +36,7 @@ These features are for the Riv Project.
 :Todos_:    Writing todo lists in reStructuredText documents .
 :Helpers_:  A help window for showing and doing something.
 
-  :Todo Helper: Managing todo items of project.
+  + `Todo Helper`_: Managing todo items of project.
 
 :Publish_:  some wrapper to convert rst files to html/xml/latex/odt/... 
             (require python docutils package )
