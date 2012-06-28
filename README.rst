@@ -130,6 +130,9 @@ Things todo in next versions.
 * Scratch: show Scratch sign in Calendar.
 * Publish: support the reStructuredText document not in a project.
 
+
+----
+
 Instruction Details
 ===================
 
@@ -447,7 +450,7 @@ The ``bare extension style`` and ``square bracket style``
 Scratch
 -------
   
-The scratches is created auto named by date, 
+The scratches is created auto named by date in '%Y-%m-%d' format.
 It is a place for writing diary or hold idea and thoughts.
 
 Scratches will be put in scratch folder in project directory.
@@ -537,19 +540,20 @@ Helpers
 
 A window to show something of the project.
 
-* _`Todo Helper`: A helper to manage todo items of current project.
+* _`Todo Helper` : A helper to manage todo items of current project.
 
   + ``:RivTodoHelper`` or ``<C-E>ht``
     Open to view all todo-items.
+    Default is in search mode.
 
-    - ``/`` to search todo item mating input word.
-      default is in search mode.
+    - ``/`` to search todo item matching inputing, ``<Enter>`` or ``<Esc>`` to quit
+      search mode.
       
       Set ``g:riv_fuzzy_help`` to 1 to enable fuzzy searching in helper.
 
     - ``<Tab>`` to switch content, 
       there are 'All/Todo/Done' contents for Todo Helper.
-    - ``<Enter>`` to jump to the todo item.
+    - ``<Enter>`` or Double Click to jump to the todo item.
     - ``<Esc>`` or ``q`` to quit the window
 
 Publish
