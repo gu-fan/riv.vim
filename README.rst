@@ -22,7 +22,7 @@ Screenshot
 
 .. image::  http://i.minus.com/jqyQGm8G9gO9h.jpg
 
-**Folding_ infos**
+**The Folding_ infos**
 
 .. image::  http://i.minus.com/jcSDuRnaDoLnq.jpg
 
