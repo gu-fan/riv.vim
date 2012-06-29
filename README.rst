@@ -237,48 +237,100 @@ Lists
 
 Auto numbered and auto leveled bullet and enumerated list.
 
-The Sequence of the list level is:
+* Auto Level:
 
-    ``* + - 1. A. a. I. i. 1) A) a) I) i) (1) (A) (a) (I) (i)``
+  When you shift the list or add child/parent list , 
+  the type of list item will be changed automatically.
 
-* Editing Lists:
+  The changing sequence is as follows:  
 
-  Normal and Visual:
-
-  + ``>`` or ``<C-ScrollWheelDown>`` 
-    Add Indentation, And add a level for list.
-
-    if the first item is a list , the indentation is based on the list item.
-    otherwise the indentation is based on ``'shiftwidth'``.
-
-  + ``<`` or ``<C-ScrollWheelUp>`` 
-    Remove Indentation, And remove a level for list.
-
-  Insert Mode Only: 
+  ``* + - 1. A. a. I. i. 1) A) a) I) i) (1) (A) (a) (I) (i)``
   
-  + ``<CR>\<KEnter>`` (enter key and keypad enter key)
-    Insert the content of this list.
+  You can use any of them as a list item, but the shifting sequence is hard coded.
 
-    To insert content in new line of this list item. add a blank line before it.
+  This means when you shift right or add a child list with a ``-`` list item, 
+  it will auto change to ``1.``
 
-  + ``<C-CR>\<C-KEnter>`` 
-    Insert a new list of current list level
-  + ``<S-CR>\<S-KEnter>`` 
-    Insert a new list of current child list level
-  + ``<C-S-CR>\<C-S-KEnter>`` 
-    Insert a new list of current parent list level
+  And if you shift left or add a parent list item with a ``a.`` list item , 
+  it will auto change to ``A.``
+
+* Auto Number:
+
+  When you adding a new list or shifting an list, 
+  these list items will be auto numbered.
+
+* Actions:
+
+  + Shifting:
+    Normal and Visual Mode:
+
+    - Shift right: ``>`` or ``<C-ScrollWheelDown>`` 
   
-  Normal and Insert:
+      Add Indentation, And add a level for list.
   
-  + ``:RivListTypeNext`` ``<C-E>l1``
-    Change current list item symbol to next type
-  + ``:RivListTyePrev`` ``<C-E>l2``
-    Change current list item symbol to prev type
-  + ``:RivListTypeRemove`` ``<C-E>lx``
-    Delete current list item symbol
+      if the first item is a list , the indentation is based on the list item.
+      otherwise the indentation is based on ``'shiftwidth'``.
+  
+    - Shift left: ``<`` or ``<C-ScrollWheelUp>`` 
+      Remove Indentation, And remove a level for list.
 
-:NOTE: To contain a second paragraph (or blocks) in a list , you should make the left edge 
-       lines up with the main paragraph.
+    Insert Mode Only: 
+  
+    - ``<Tab>`` when cursor is before an end of a list item.
+      will shift right.
+    
+    - ``<S-Tab>`` when cursor is before an end of a list item.
+      will shift left.
+
+  + New List:
+  
+    Insert Mode Only: 
+
+    - ``<CR>\<KEnter>`` (enter key and keypad enter key)
+      Insert the content of this list.
+  
+      To insert content in new line of this list item. add a blank line before it.
+  
+    - ``<C-CR>\<C-KEnter>`` 
+      Insert a new list of current list level
+    - ``<S-CR>\<S-KEnter>`` 
+      Insert a new list of current child list level
+    - ``<C-S-CR>\<C-S-KEnter>`` 
+      Insert a new list of current parent list level
+  
+  + Change List type:
+
+    Normal and Insert Mode:
+    
+    - ``:RivListTypeNext`` ``<C-E>l1``
+      Change current list item symbol to next type
+    - ``:RivListTyePrev`` ``<C-E>l2``
+      Change current list item symbol to prev type
+    - ``:RivListTypeRemove`` ``<C-E>lx``
+      Delete current list item symbol
+
+:NOTE: A reStructredText syntax hint.
+
+       To contain a sublist or second paragraph or blocks in a list , 
+       you should make a new blank line ,
+       and make the the item lines up with the main list content's left edge.::
+
+        * parent list
+
+          second paragraph
+
+          + sub list
+
+           - WRONG! this list is not line up with conten's left edge, 
+             so it's in a block quote
+             
+              - WRONG! this list is in a block quote too.
+
+          + sub list2
+            - TOO WRONG! 
+              it's not a sub list of prev list , it's just a line in the content. 
+
+            - RIGHT! this one is sub list of sub list2.
 
        See `reStructuredText Bullet Lists`__
 
