@@ -91,8 +91,8 @@ Install
 Issues
 ------
 
-* Currently it's a developing version. So things may change quickly.
-  keep up-to-date.
+* Currently it's a developing version. 
+  So things may change quickly.Keep up-to-date.
 
 * Both bug reports and feature request are welcome. 
   Please Post issues at https://github.com/Rykka/riv.vim/issues
