@@ -41,6 +41,8 @@ These features are for all reStructuredText files.
 :Indent_:   Improved indentation 
 :Insert_:   Improvment of some mapping in insert mode.
 :Highlighting_: Improved syntax file. 
+:Publish_:  some wrapper to convert rst files to html/xml/latex/odt/... 
+            (require python docutils package )
 
 These features are for the Riv Project. 
 
@@ -52,8 +54,6 @@ These features are for the Riv Project.
 
   + `Todo Helper`_: Managing todo items of project.
 
-:Publish_:  some wrapper to convert rst files to html/xml/latex/odt/... 
-            (require python docutils package )
 
 
 * To Install: see `Install`_
@@ -470,6 +470,64 @@ Also most shortcut can be used in insert mode. like ``<C-E>ee`` ``<C-E>s1`` ...
   otherwise ``<BS>``
 
 
+Publish
+~~~~~~~
+
+Some wrapper to convert rst files to html/xml/latex/odt/... 
+(require python docutils_  package )
+
+:NOTE: When converting, It will first try ``rst2xxxx2.py`` , then try ``rst2xxxx.py``
+       You should install the package of python 2 version .
+       Otherwise errors will occour.
+
+* Actions:
+
+  + ``:Riv2HtmlFile``  ``<C-E>2hf``
+    convert to html file.
+  
+  + ``:Riv2HtmlAndBrowse``  ``<C-E>2hh``
+    convert to html file and browse. 
+    default is 'firefox'
+  
+    The browser is set with ``g:riv_web_browser``
+  
+  + ``:Riv2HtmlProject`` ``<C-E>2hp`` converting whole project into html.
+    And will ask you to copy all the file with extension in ``g:riv_file_link_ext`` 
+  
+  + ``:Riv2Odt`` ``<C-E>2oo`` convert to odt file and browse by ft browser
+  
+    The browser is set with ``g:riv_ft_browser``. 
+    default is (unix:'xdg-open', windows:'start')
+  
+  + ``:Riv2Xml`` ``<C-E>2xx`` convert to xml file and browse by web browser
+  + ``:Riv2S5`` ``<C-E>2ss`` convert to s5 file and browse by web browser
+  + ``:Riv2Latex`` ``<C-E>2ll`` convert to latex file and edit by gvim
+  
+* Options:
+
+  + For the files that are in a project. 
+    The path of converted files by default is under ``_build`` in your project directory.
+  
+    - To change the path. Set it in your vimrc::
+        
+        " Assume you have a project name project 1
+        let project1.build_path = '~/Documents/Riv_Build'
+    
+    - Open the build path: ``:Riv2BuildPath`` ``<C-E>2b``
+  
+  + For the files that not in a project.  
+    ``g:riv_temp_path`` is used to determine the output path
+  
+    - When it's empty , the converted file is put under the same directory of file ,
+    - Otherwise the converted file is put in the ``g:riv_temp_path``,
+      make sure it's an absolute path.
+    - Also no local file link will be converted.
+
+
+
+.. _docutils: http://docutils.sourceforge.net/
+.. _pygments: http://pygments.org/
+
 For Riv
 -------
 
@@ -664,60 +722,3 @@ A window to show something of the project.
     - ``<Enter>`` or Double Click to jump to the todo item.
     - ``<Esc>`` or ``q`` to quit the window
 
-Publish
-~~~~~~~
-
-Some wrapper to convert rst files to html/xml/latex/odt/... 
-(require python docutils_  package )
-
-:NOTE: When converting, It will first try ``rst2xxxx2.py`` , then try ``rst2xxxx.py``
-       You should install the package of python 2 version .
-       Otherwise errors will occour.
-
-* Actions:
-
-  + ``:Riv2HtmlFile``  ``<C-E>2hf``
-    convert to html file.
-  
-  + ``:Riv2HtmlAndBrowse``  ``<C-E>2hh``
-    convert to html file and browse. 
-    default is 'firefox'
-  
-    The browser is set with ``g:riv_web_browser``
-  
-  + ``:Riv2HtmlProject`` ``<C-E>2hp`` converting whole project into html.
-    And will ask you to copy all the file with extension in ``g:riv_file_link_ext`` 
-  
-  + ``:Riv2Odt`` ``<C-E>2oo`` convert to odt file and browse by ft browser
-  
-    The browser is set with ``g:riv_ft_browser``. 
-    default is (unix:'xdg-open', windows:'start')
-  
-  + ``:Riv2Xml`` ``<C-E>2xx`` convert to xml file and browse by web browser
-  + ``:Riv2S5`` ``<C-E>2ss`` convert to s5 file and browse by web browser
-  + ``:Riv2Latex`` ``<C-E>2ll`` convert to latex file and edit by gvim
-  
-* Options:
-
-  + For the files that are in a project. 
-    The path of converted files by default is under ``_build`` in your project directory.
-  
-    - To change the path. Set it in your vimrc::
-        
-        " Assume you have a project name project 1
-        let project1.build_path = '~/Documents/Riv_Build'
-    
-    - Open the build path: ``:Riv2BuildPath`` ``<C-E>2b``
-  
-  + For the files that not in a project.  
-    ``g:riv_temp_path`` is used to determine the output path
-  
-    - When it's empty , the converted file is put under the same directory of file ,
-    - Otherwise the converted file is put in the ``g:riv_temp_path``,
-      make sure it's an absolute path.
-    - Also no local file link will be converted.
-
-
-
-.. _docutils: http://docutils.sourceforge.net/
-.. _pygments: http://pygments.org/
