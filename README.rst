@@ -1,14 +1,5 @@
 Intro
 =====
-.. note::
-    ::
-
-            __________  .__  ____   ____  
-            \______   \ |__| \   \ /   /     
-             |       _/ |  |  \   Y   /      
-             |    |   \ |  |   \     /       
-             |____|_  / |__|    \___/          
-                    \/                    
 
 :Author: Rykka G.Forest
 :Date:   2012-06-29 10:38:56
@@ -23,6 +14,9 @@ or writing documents in a neat way.
 
 .. _reStructuredText: http://docutils.sourceforge.net/rst.html
 
+test_
+
+.. _test: doc/riv.rst
 
 Screenshot
 ----------
