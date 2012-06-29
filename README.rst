@@ -128,7 +128,10 @@ Things todo in this version.
   :Indent_:  DONE 2012-06-29 fix indent of field list. 
              the line + 2 should line up with it's begining .
   :Insert_:  DONE 2012-06-29 ``<Tab>`` and ``<S-Tab>`` 
-             before list item will now shift the list. 9229651de15005970990df57afba06d1b54e9bc9
+             before list item will now shift the list. 
+             9229651d_ 
+
+.. _9229651d: commits/9229651de15005970990df57afba06d1b54e9bc9
 
 Next 
 ~~~~~
