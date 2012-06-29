@@ -214,17 +214,18 @@ endfun "}}}
 " List Level: "{{{
 fun! s:is_roman(row) "{{{
     let line = getline(a:row)
-    if line =~ '^\c\s*(\=[imlcxvd][).]'
+    if line =~ '^\c\s*(\=[imlcxvd][).]\s'
         let older = s:get_older(a:row)
         if older==0 
             " if no older , then 'i' is roman
-            return line =~ '^\c\s*(\=i[).]'
+            return line =~ '^\c\s*(\=i[).]\s'
         else
-            " if has older , then 'rr' is roman
-            return getline(older) =~ '^\c\s*(\=[imlcxvd]\{2,}[).]'
+            " if has older , then when older is 'rr' is roman
+            return getline(older) =~ '^\c\s*(\=[imlcxvd]\{2,}[).]\s'
         endif
+    else
+        return line =~ '^\c\s*(\=[imlcxvd]\{2,}[).]\s'
     endif
-    return 0
 endfun "}}}
 fun! riv#list#new(act) "{{{
     " change the list type of current line with act: '1' , '0' ,'-1'
@@ -477,7 +478,6 @@ fun! s:list_shift_len(row,len) "{{{
         let line = substitute(line,'^\s\{,'.abs(a:len).'}','','')
     endif
     
-    " change the type
     let is_roman = s:is_roman(a:row)
     let [type , idt , num , attr, space] =  riv#list#stat(line, is_roman)
     let nr = s:listnum2nr(num, is_roman)
@@ -485,26 +485,10 @@ fun! s:list_shift_len(row,len) "{{{
         if act == 1
             let level = s:stat2level(type, num, attr) 
             let [type,num,attr] = s:level2stat(level+1)
-            " from bullet list to enumerated list
-            if type > 1 && nr == 0
-                " for multi line action,
-                " last line have been changed. but current have not.
-                " so we find prev list and check if it's indent is same as 
-                " current to change
-                let older = s:get_list(a:row-1)
-                if older && indent(older) == indent(a:row) + a:len 
-                    let [_, _, o_nr, _, _ ] = riv#list#stat(getline(older), 
-                                \s:is_roman(older))
-                    let nr = o_nr + 1
-                else
-                    let nr = 1
-                endif
-            endif
         elseif act == -1
             let level = s:stat2level(type, num, attr) 
             let [type,num,attr] = s:level2stat(level-1)
         endif
-
 
         if num =~ '\u'
             let num = toupper(s:nr2listnum(nr,type))
@@ -515,6 +499,35 @@ fun! s:list_shift_len(row,len) "{{{
         let line = substitute(line, g:_riv_p.list_b_e , list_str, '')
     endif
     call setline(a:row,line)
+
+    if type != -1
+        call s:fix_nr(a:row)
+    endif
+endfun "}}}
+fun! s:fix_nr(row) "{{{
+    " nr are based on previous list item
+    let older = s:get_older(a:row)
+    if older 
+        let is_roman = s:is_roman(older)
+        let line = getline(older)
+        let [type , idt , num , attr, space] = riv#list#stat(line, is_roman)
+        let onr = s:listnum2nr(num, is_roman)
+        let nr = onr + 1
+    else
+        let line = getline(a:row)
+        let is_roman = s:is_roman(a:row)
+        let [type , idt , num , attr, space] = riv#list#stat(line, is_roman)
+        let nr = s:listnum2nr(num, is_roman)
+    endif
+    if num =~ '\u'
+        let num = toupper(s:nr2listnum(nr,type))
+    else
+        let num = tolower(s:nr2listnum(nr,type))
+    endif
+    let list_str =  s:list_str(type,idt,num,attr,space)
+    let line = substitute(line, g:_riv_p.list_b_e , list_str, '')
+    call setline(a:row,line)
+
 endfun "}}}
 fun! riv#list#shift(direction) range "{{{
     " direction "+" or "-"
