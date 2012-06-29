@@ -20,11 +20,11 @@ Features
  
 These features are for all reStructuredText files.
 
-:Folding_:  Fold document by documents structures (Section/List/Block).
 :Sections_: Section level and section number auto detected. 
 :Lists_:    Auto Numbered and auto leveled bullet and enumerated list.
 :Links_:    Jumping with links.
 :Table_:    Auto formatted table.
+:Folding_:  Fold document by documents structures (Section/List/Block).
 :Indent_:   Improved indentation 
 :Insert_:   Improvment of some mapping in insert mode.
 :Highlighting_: Improved syntax file. 
@@ -121,19 +121,20 @@ Things todo in this version.
 
 * 0.66: 
 
-  :Todo_:   DONE 2012-06-29 add field list for todo items.
-  :Indent_: correct ``<BS>`` indentation to reach the begin of field list.
-  :Indent_: DONE 2012-06-29 the indentation in directives should act the same as in comments.
-
+  :Todos_:  DONE 2012-06-29 add field list for todo items.
+  :Indent_: DONE 2012-06-29 the indentation in directives should return 0 after 
+            2 blank lines
+  :Todos_:  FIXME the calculation of child todo items
+  :Indent_: FIXME ``<BS>`` indentation to reach the begin of field list.
 
 Next 
 ~~~~~
 
 Things todo in next versions.
 
-:Links_:   The standalone web link with ``/`` will be considered as local file.
+:Links_:   The standalone web link with ``/`` is detected as local file.
 :File_:    A template or snippet or shortcut for adding ``./`` and ``../`` and files.
-           Maybe a sphinx doc ref and the content directive as well.
+           Maybe a sphinx doc ref as well.
 :Documents_: Document part: options / commands.
 :Documents_: Seperate instruction and intro. help use instruction.rst 
 :Publish_: An option to enable highlighting todo items.
@@ -143,10 +144,14 @@ Things todo in next versions.
 :Publish_: Support the reStructuredText document not in a project.
 :Helpers_: A command helper?
 :Links_:   Link tags?
-:Todo_:    Todo item priorities?
+:Todos_:    Todo item priorities?
 :Table_:   Support simple table format?
+:Table_:   Support column span?
+:Table_:   A vim table parser for compatible?
 :Table_:   A shortcut or command to create table with row * col.
 :Sections_: Adjust section level.
+:Sections_: Shortcut to add sections like the content directive?
+:Folding_: A buf parser write in python?
 
 .. _Documents: 
 
@@ -186,62 +191,6 @@ For reStructuredText
 --------------------
 
 These features are for all reStructuredText files.
-
-Folding 
-~~~~~~~~
-
-Fold reStructuredText file with sections, lists, and blocks automatically.
-
-When folded, some info of the item will be shown at the foldline.
-
-Folding will be updated after you write buffer to file.
-
-Pressing ``<Enter>`` or double clicking on folded lines will open that fold.
-
-* Update Folding: use ``zx`` or ``<C-E><Space>j``
-* Toggle Folding: use ``za`` or ``<C-E><Space><Space>`` 
-* Toggle all Folding: use ``zA`` or ``<C-E><Space>m``
-
-To show the blank lines in the end of a folding, use ``g:riv_fold_blank``.
-
- + when set to 2 , will fold all blank lines.
- + when set to 1 , will fold all blank lines,
-   but showing one blank line if there are some.
- + when set to 0 , will fold one blank line , 
-   but will showing the rest.
- + default is 2
-
-For large files. calculate folding may cost time. 
-So there are some options about it.
-
-* ``g:riv_fold_level`` set which structures to be fold. 
-
-  + when set to 3 , means 'sections,lists and blocks'.
-  + when set to 2 , means 'sections and lists'
-  + when set to 1 , means 'sections'
-  + when set to 0 , means 'None'
-  + default is 3.
-
-* ``g:riv_auto_fold_force``, enable reducing fold level when editing large files.
-
-  + when set to 1 , means 'On'.
-  + default is 1.
-
-* ``g:riv_auto_fold1_lines``, the minimum lines file containing,
-  to force set fold_level to section only.
-
-  default is 5000.
-
-* ``g:riv_auto_fold2_lines``, the minimum lines file containing,
-  to force set fold_level to section and list only.
-
-  default is 3000.
-
-To set an initial folding level for a file . you can use ``modeline``::
-    
-
-    ..  vim: fdl=0 :
-        This means all fold will be folded when opening files
 
 Sections 
 ~~~~~~~~~
@@ -370,6 +319,62 @@ To create a table , just insert ``| xxx |`` and press ``<Enter>``.
 +-----------------+-----------------------------------------------------------+
 | Cells           | <Tab> and <S-Tab> in table will switch to next/prev cell  |
 +-----------------+-----------------------------------------------------------+
+
+Folding 
+~~~~~~~~
+
+Fold reStructuredText file with sections, lists, and blocks automatically.
+
+When folded, some info of the item will be shown at the foldline.
+
+Folding will be updated after you write buffer to file.
+
+Pressing ``<Enter>`` or double clicking on folded lines will open that fold.
+
+* Update Folding: use ``zx`` or ``<C-E><Space>j``
+* Toggle Folding: use ``za`` or ``<C-E><Space><Space>`` 
+* Toggle all Folding: use ``zA`` or ``<C-E><Space>m``
+
+To show the blank lines in the end of a folding, use ``g:riv_fold_blank``.
+
+ + when set to 2 , will fold all blank lines.
+ + when set to 1 , will fold all blank lines,
+   but showing one blank line if there are some.
+ + when set to 0 , will fold one blank line , 
+   but will showing the rest.
+ + default is 2
+
+For large files. calculate folding may cost time. 
+So there are some options about it.
+
+* ``g:riv_fold_level`` set which structures to be fold. 
+
+  + when set to 3 , means 'sections,lists and blocks'.
+  + when set to 2 , means 'sections and lists'
+  + when set to 1 , means 'sections'
+  + when set to 0 , means 'None'
+  + default is 3.
+
+* ``g:riv_auto_fold_force``, enable reducing fold level when editing large files.
+
+  + when set to 1 , means 'On'.
+  + default is 1.
+
+* ``g:riv_auto_fold1_lines``, the minimum lines file containing,
+  to force set fold_level to section only.
+
+  default is 5000.
+
+* ``g:riv_auto_fold2_lines``, the minimum lines file containing,
+  to force set fold_level to section and list only.
+
+  default is 3000.
+
+To set an initial folding level for a file . you can use ``modeline``::
+    
+
+    ..  vim: fdl=0 :
+        This means all fold will be folded when opening files
 
 Highlighting
 ~~~~~~~~~~~~
@@ -576,6 +581,7 @@ The statistics of the todo progress (include child items) will be shown when fol
       1. [X] 2012-06-23 This is a todo item with finish datestamp, 
 
     - when set to 0 , no datestamp
+    - Default is 1
   
 * Keyword groups:
     
