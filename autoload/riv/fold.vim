@@ -2,7 +2,7 @@
 "    Name: fold.vim
 "    File: fold.vim
 "  Author: Rykka G.Forest
-"  Update: 2012-06-28
+"  Update: 2012-06-29
 " Version: 0.5
 "=============================================
 let s:cpo_save = &cpo
@@ -643,9 +643,9 @@ fun! riv#fold#text() "{{{
             endif
         elseif b:riv_obj[lnum].type == 'list'
             if exists("b:riv_obj[lnum].td_child")
-                let cate = printf(" %3.0f%%", 100 * b:riv_obj[lnum].td_child)
+                let cate = printf(" %-.0f%%", 100 * b:riv_obj[lnum].td_child)
             elseif b:riv_obj[lnum].td_stat != -1
-                let cate = printf(" %3.0f%%", 100 * b:riv_obj[lnum].td_stat)
+                let cate = printf(" %-.0f%%", 100 * b:riv_obj[lnum].td_stat)
             endif
         elseif b:riv_obj[lnum].type == 'table'
             let cate = " " . b:riv_obj[lnum].row 
