@@ -67,9 +67,9 @@ function! GetRSTIndent(row) "{{{
     endif
     
     " one empty without match
-    " 1: ind
-    " 2+ : check prev exp_mark
-    " 3+ : 0
+    " 1~2: ind
+    " 3 : check prev exp_mark or list
+    " 4+ : 0
     if a:row > pnb_num+3
         return 0
     elseif  a:row > pnb_num+2
