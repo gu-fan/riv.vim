@@ -132,7 +132,7 @@ Next
 Things todo in next versions.
 
 :Todos_:   The calculation of child todo items
-:Indent_:  ``<BS>`` indentation to reach the begin of field list.
+:Indent_:  fix indent of field list. the line + 2 should line up with it's begining .
 :Links_:   The standalone web link with ``/`` is detected as local file.
 :File_:    A template or snippet or shortcut for adding ``./`` and ``../`` and files.
            Maybe a sphinx doc ref as well.
@@ -333,7 +333,7 @@ also the number of folded lines will be shown.
 
 * The sections_ will show it's section number
 * The lists_ will show todos_ progress : 
-  :math:`( 0 + 50 + 100+ 0 + 0 + 50 ) / 6 \thickapprox 33`
+  ( 0 + 50 + 100+ 0 + 0 + 50 ) / 6 ≈ 33
 
   + [ ]  a todo box of start. 0%
   + [o]  a todo box of in progress. 50%
