@@ -127,7 +127,8 @@ Things todo in this version.
   :Publish_: DONE 2012-06-29 Support the reStructuredText document not in a project.
   :Indent_:  DONE 2012-06-29 fix indent of field list. 
              the line + 2 should line up with it's begining .
-  :Insert_:  DONE 2012-06-29 ``<Tab>`` and ``<S-Tab>`` before list item will now shift the list. 
+  :Insert_:  DONE 2012-06-29 ``<Tab>`` and ``<S-Tab>`` 
+             before list item will now shift the list. 9229651d
 
 Next 
 ~~~~~
