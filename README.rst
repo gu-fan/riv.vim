@@ -129,11 +129,13 @@ Things todo in this version.
              the line + 2 should line up with it's begining .
   :Insert_:  DONE 2012-06-29 9229651d_ ``<Tab>`` and ``<S-Tab>`` 
              before list item will now shift the list. 
-  :Lists_:   DONE 2012-06-30 bullet list will auto numbered when change to
+  :Lists_:   DONE 2012-06-30 2b81464f_ bullet list will auto numbered when change to
              enumerated list.
 
 .. _9229651d: 
    https://github.com/Rykka/riv.vim/commit/9229651de15005970990df57afba06d1b54e9bc9
+.. _2b81464f:
+   https://github.com/Rykka/riv.vim/commit/2b81464fa2479f8aced799d9117a5081d9e780dc
 
 Next 
 ~~~~~
