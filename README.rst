@@ -353,7 +353,7 @@ Fold reStructuredText file with sections, lists, and blocks automatically.
   + Toggle Folding: use ``za`` or ``<C-E><Space><Space>`` 
   + Toggle all Folding: use ``zA`` or ``<C-E><Space>m``
 
-* Extra Infos
+* Extra Infos:
   When folded, some extra info of the item will be shown at the foldline.
   also the number of folded lines will be shown. See screenshot_
 
@@ -361,12 +361,12 @@ Fold reStructuredText file with sections, lists, and blocks automatically.
   + The lists_ will show todos_ progress : 
     ( 0 + 50 + 100+ 0 + 0 + 50 ) / 6 ≈ 33
   
-    - [ ]  a todo box of start. 0%
-    - [o]  a todo box of in progress. 50%
-    - [X] 2012-06-29  a todo box of finish. 100%
-    - TODO a todo/done keyword group of start. 0%
-    - FIXME a fixme/fixed keyword group of start. 0%
-    - PROCESS a start/process/stop keyword group of progress. 50%
+   - [ ]  a todo box of start. 0%
+   - [o]  a todo box of in progress. 50%
+   - [X] 2012-06-29  a todo box of finish. 100%
+   - TODO a todo/done keyword group of start. 0%
+   - FIXME a fixme/fixed keyword group of start. 0%
+   - PROCESS a start/process/stop keyword group of progress. 50%
   
   + The table_ will show it's rows and columns.
   
@@ -400,15 +400,15 @@ Fold reStructuredText file with sections, lists, and blocks automatically.
     - ``g:riv_fold_level`` set which structures to be fold. 
     
       1. when set to 3 , means 'sections,lists and blocks'.
-      1. when set to 2 , means 'sections and lists'
-      1. when set to 1 , means 'sections'
-      1. when set to 0 , means 'None'
-      1. default is 3.
+      2. when set to 2 , means 'sections and lists'
+      3. when set to 1 , means 'sections'
+      4. when set to 0 , means 'None'
+      5. default is 3.
     
     - ``g:riv_auto_fold_force``, enable reducing fold level when editing large files.
     
       1. when set to 1 , means 'On'.
-      1. default is 1.
+      2. default is 1.
     
     - ``g:riv_auto_fold1_lines``, the minimum lines file containing,
       to force set fold_level to section only.
