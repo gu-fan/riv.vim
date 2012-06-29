@@ -14,9 +14,6 @@ or writing documents in a neat way.
 
 .. _reStructuredText: http://docutils.sourceforge.net/rst.html
 
-test_
-
-.. _test: riv.vim/doc/riv.rst#sections
 
 Screenshot
 ----------
