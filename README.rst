@@ -16,7 +16,7 @@ or writing documents in a neat way.
 
 test_
 
-.. _test: doc/riv.rst
+.. _test: riv.vim/doc/riv.rst#sections
 
 Screenshot
 ----------
