@@ -371,13 +371,13 @@ fun! riv#create#delete() "{{{
     echo len(f_idx) ' relative link in index deleted.'
 endfun "}}}
 
+let s:slash = has('win32') || has('win64') ? '\' : '/'
 fun! s:get_rel_to(dir,path) "{{{
     if a:dir == 'root'
         let root = s:get_root_path()
     else
         " use fnamemodify ':gs?\\?/?' ?
-        let slash = has('win32') || has('win64') ? '\' : '/'
-        let root = s:get_root_path().a:dir . slash
+        let root = s:get_root_path().a:dir . s:slash
     endif
     if match(a:path, root) == -1
         throw 'Riv: Not Same Path with Project'

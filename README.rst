@@ -24,7 +24,7 @@ These features are for all reStructuredText files.
 :Lists_:    Auto Numbered and auto leveled bullet and enumerated list.
 :Links_:    Jumping with links.
 :Table_:    Auto formatted table.
-:Folding_:  Fold document by documents structures (Section/List/Block).
+:Folding_:  Fold document by document structures (Section/List/Block).
 :Indent_:   Improved indentation 
 :Insert_:   Improvment of some mapping in insert mode.
 :Highlighting_: Improved syntax file. 
@@ -41,7 +41,6 @@ These features are for the Riv Project.
 
 :Publish_:  some wrapper to convert rst files to html/xml/latex/odt/... 
             (require python docutils package )
-
 
 * Take a glance
 
@@ -116,6 +115,7 @@ Things todo in this version.
             2 blank lines
   :Todos_:  FIXME the calculation of child todo items
   :Indent_: FIXME ``<BS>`` indentation to reach the begin of field list.
+  :Publish_: DONE 2012-06-29 Support the reStructuredText document not in a project.
 
 Next 
 ~~~~~
@@ -126,24 +126,25 @@ Things todo in next versions.
 :File_:    A template or snippet or shortcut for adding ``./`` and ``../`` and files.
            Maybe a sphinx doc ref as well.
 :Documents_: Document part: options / commands.
+:Documents_: Sreencast and screenshot of intro.
 :Documents_: Seperate instruction and intro. help use instruction.rst 
+:Documents_: Add Specification/Intro of reStructuredText.
 :Publish_: An option to enable highlighting todo items.
 :Helpers_: An option Helper and option cache. 
            Let people use it even without touching ``.vimrc`` .
 :Scratch_: Show Scratch sign in Calendar.
-:Publish_: Support the reStructuredText document not in a project.
 :Helpers_: A command helper?
-:Links_:   Link tags?
-:Todos_:    Todo item priorities?
+:Links_:   Link tags infile ?
+:Todos_:   Todo item priorities?
 :Table_:   Support simple table format?
 :Table_:   Support column span?
 :Table_:   A vim table parser for compatible?
 :Table_:   A shortcut or command to create table with row * col.
 :Sections_: Adjust section level.
 :Sections_: Shortcut to add sections like the content directive?
-:Folding_: A buf parser write in python?
+:Folding_: A buf parser write in python for performance?
 
-.. _Documents: 
+.. _Documents: `Riv Instruction`_
 
 ----
 
@@ -516,12 +517,12 @@ The scratches is created auto named by date in '%Y-%m-%d' format.
 It is a place for writing diary or hold idea and thoughts.
 
 Scratches will be put in scratch folder in project directory.
-You can change it with 'scratch_path' of project setting ,default is 'scratch'::
+You can change it with 'scratch_path' of project setting ,default is 'Scratch'::
     
     " Use another directory
-    let project1.scratch_path = 'diary'
+    let project1.scratch_path = 'Diary'
     " Use absolute path, then no todo helper and no converting for it.
-    let project1.scratch_path = '~/Documents/diary'
+    let project1.scratch_path = '~/Documents/Diary'
 
 * ``:RivScratchCreate`` ``<C-E>cc``
   Create or jump to the scratch of today.
@@ -627,31 +628,52 @@ Publish
 Some wrapper to convert rst files to html/xml/latex/odt/... 
 (require python docutils package )
 
+:NOTE: When converting, It will first try ``rst2xxxx2.py`` , then try ``rst2xxxx.py``
+
+       You should install the package of python2 version .
+
+       Otherwise errors will occour.
+
 * ``:Riv2HtmlFile``  ``<C-E>2hf``
   convert to html file.
+
 * ``:Riv2HtmlAndBrowse``  ``<C-E>2hh``
   convert to html file and browse. 
   default is 'firefox'
 
   The browser is set with ``g:riv_web_browser``
+
 * ``:Riv2HtmlProject`` ``<C-E>2hp`` converting whole project into html.
-  And all the file with extension in ``g:riv_file_link_ext`` will be copied there too.
+  And will ask you to copy all the file with extension in ``g:riv_file_link_ext`` 
 
 Convert to the file and browse.
 
-* ``:Riv2Odt`` ``<C-E>2oo`` convert to odt file and browse
-* ``:Riv2Xml`` ``<C-E>2xx`` convert to xml file and browse
-* ``:Riv2S5`` ``<C-E>2ss`` convert to s5 file and browse
-* ``:Riv2Latex`` ``<C-E>2ll`` convert to latex file and browse
+* ``:Riv2Odt`` ``<C-E>2oo`` convert to odt file and browse by ft browser
 
-The browser is set with ``g:riv_ft_browser``. 
-default is (unix:'xdg-open', windows:'start')
+  The browser is set with ``g:riv_ft_browser``. 
+  default is (unix:'xdg-open', windows:'start')
 
-The path of building files by default is under ``_build`` in your project directory.
+* ``:Riv2Xml`` ``<C-E>2xx`` convert to xml file and browse by web browser
+* ``:Riv2S5`` ``<C-E>2ss`` convert to s5 file and browse by web browser
+* ``:Riv2Latex`` ``<C-E>2ll`` convert to latex file and edit by gvim
 
-* To change the path. Set it in your vimrc::
-    
-    " Assume you have a project name project 1
-    let project1.build_path = '~/Documents/Riv_Build'
+* For the files that are in a project. 
+  The path of converted files by default is under ``_build`` in your project directory.
 
-* Open the build path: ``:Riv2BuildPath`` ``<C-E>2b``
+  + To change the path. Set it in your vimrc::
+      
+      " Assume you have a project name project 1
+      let project1.build_path = '~/Documents/Riv_Build'
+  
+  + Open the build path: ``:Riv2BuildPath`` ``<C-E>2b``
+
+* For the files that not in a project.  
+  ``g:riv_temp_path`` is used to determine the output path
+
+  + When it's empty , the converted file is put under the same directory of file ,
+  + Otherwise the converted file is put in the ``g:riv_temp_path``,
+    make sure it's an absolute path.
+  + Also no local file link will be converted.
+
+
+

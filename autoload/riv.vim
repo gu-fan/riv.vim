@@ -114,6 +114,7 @@ let s:default.options = {
     \'auto_format_table'  : 1,
     \'fold_text_align'    : 'right',
     \'ins_super_tab'      : 1,
+    \'temp_path'          : "",
     \'month_names'        : 'January,February,March,April,May,June,July,'
                           \.'August,September,October,November,December',
     \}
@@ -155,11 +156,11 @@ let s:default.maps = {
     \'RivTestObj'        : 'call riv#test#show_obj()',
     \'RivTableFormat'    : 'call riv#table#format()',
     \'Riv2HtmlIndex'     : 'call riv#publish#browse()',
-    \'Riv2HtmlAndBrowse' : 'call riv#publish#file2html(1)',
-    \'Riv2HtmlFile'      : 'call riv#publish#file2html(0)',
-    \'Riv2HtmlProject'   : 'call riv#publish#proj2html()',
+    \'Riv2HtmlAndBrowse' : 'call riv#publish#file2("html",1)',
+    \'Riv2HtmlFile'      : 'call riv#publish#file2("html",0)',
+    \'Riv2HtmlProject'   : 'call riv#publish#proj2("html")',
     \'Riv2Odt'           : 'call riv#publish#file2("odt",1)',
-    \'Riv2S5'            : 'call riv#publish#file2("s5",0)',
+    \'Riv2S5'            : 'call riv#publish#file2("s5",1)',
     \'Riv2Xml'           : 'call riv#publish#file2("xml",1)',
     \'Riv2Latex'         : 'call riv#publish#file2("latex",1)',
     \'Riv2BuildPath'     : 'call riv#publish#path()',
@@ -382,7 +383,7 @@ if !exists("g:_riv_c")
     let g:_riv_c.p_basic = {
         \'path'               : '~/Documents/Riv',
         \'build_path'         : '_build',
-        \'scratch_path'       : 'scratch' ,
+        \'scratch_path'       : 'Scratch' ,
         \}
     let g:_riv_c.p = []
     if exists("g:riv_projects") && type(g:riv_projects) == type([])
@@ -405,23 +406,27 @@ if !exists("g:_riv_c")
         return a:name =~ '/$' 
     endfun "}}}
 
+    let s:slash = has('win32') || has('win64') ? '\' : '/'
     for proj in g:_riv_c.p
         let root = expand(proj.path)
-        let slash = has('win32') || has('win64') ? '\' : '/'
-        let proj._root_path = s:is_directory(root) ? root : root . slash
+        let proj._root_path = s:is_directory(root) ? root : root . s:slash
         if s:is_relative(proj.build_path)
             let b_path =  proj._root_path . proj.build_path
-            let proj._build_path =  s:is_directory(b_path) ?  b_path : b_path . slash
+            let proj._build_path =  s:is_directory(b_path) ?  b_path 
+                        \ : b_path . s:slash
         else
             let b_path =   expand(proj.build_path)
-            let proj._build_path =  s:is_directory(b_path) ?  b_path : b_path . slash
+            let proj._build_path =  s:is_directory(b_path) ?  b_path 
+                        \ : b_path . s:slash
         endif
         if s:is_relative(proj.scratch_path)
             let s_path =  proj._root_path . proj.scratch_path
-            let proj._scratch_path =  s:is_directory(s_path) ?  s_path : s_path . slash
+            let proj._scratch_path =  s:is_directory(s_path) ?  s_path 
+                        \ : s_path . s:slash
         else
             let s_path =   expand(proj.scratch_path)
-            let proj._scratch_path =  s:is_directory(s_path) ?  s_path : s_path . slash
+            let proj._scratch_path =  s:is_directory(s_path) ?  s_path 
+                        \ : s_path . s:slash
         endif
     endfor
     "}}}
