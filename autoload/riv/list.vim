@@ -816,6 +816,7 @@ fun! s:list_shift_len(row,len) "{{{
     call setline(a:row,line)
 endfun "}}}
 fun! riv#list#shift(direction) range "{{{
+    " direction "+" or "-"
     " > to add indent, < to rmv indent 
     " if line is list then change bullet.
     let line = getline(a:firstline) 
@@ -832,6 +833,7 @@ fun! riv#list#shift(direction) range "{{{
     endif
     if a:firstline == a:lastline
         call s:list_shift_len(a:firstline, vec)
+        call cursor(line('.'), col('.')+vec)
     else
         for line in range(a:firstline,a:lastline)
             call s:list_shift_len(line, vec)

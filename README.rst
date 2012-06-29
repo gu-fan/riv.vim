@@ -67,7 +67,7 @@ Install
  
     Bundle 'Rykka/riv.vim'
 
-.. _Vundle: www.github.com/gmarik/vundle
+.. _Vundle: https://www.github.com/gmarik/vundle
 
 * Using downloaded file. 
   Just extract to your ``.vim`` folder .
@@ -127,6 +127,7 @@ Things todo in this version.
   :Publish_: DONE 2012-06-29 Support the reStructuredText document not in a project.
   :Indent_:  DONE 2012-06-29 fix indent of field list. 
              the line + 2 should line up with it's begining .
+  :Insert_:  DONE 2012-06-29 ``<Tab>`` and ``<S-Tab>`` before list item will now shift the list. 
 
 Next 
 ~~~~~
@@ -464,8 +465,10 @@ Also most shortcut can be used in insert mode. like ``<C-E>ee`` ``<C-E>s1`` ...
 
   When not in a table , will act as ``<C-N>`` or ``<C-P>`` if insert-popup-menu 
   is visible.
+
+  When in a list, and cursor is before the list symbol, will shift the list. 
   
-  Otherwise output a ``<Tab>``
+  Otherwise output a ``<Tab>`` or ``<S-Tab>``
 
 * BackSpace: for indent_, will goto correct indentation if no preceding non-whitespace character and after the indentation's ``&shiftwidth`` position ,
   otherwise ``<BS>``

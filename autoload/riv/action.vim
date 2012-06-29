@@ -125,7 +125,12 @@ fun! riv#action#ins_tab() "{{{
         if g:riv_ins_super_tab == 1 && pumvisible()
             return "\<C-N>"
         else
-            return "\<Tab>"
+            " if it's before the list item position. indent list.
+            if col('.') <= matchend(getline('.'), g:_riv_p.list_all)
+                return "\<C-O>:call riv#list#shift('+')\<CR>"
+            else
+                return "\<Tab>"
+            endif
         endif
     else
         " NOTE: Find the cell after table get formated.
@@ -137,7 +142,11 @@ fun! riv#action#ins_stab() "{{{
         if g:riv_ins_super_tab == 1 && pumvisible()
             return "\<C-P>"
         else
-            return "\<S-Tab>"
+            if col('.') <= matchend(getline('.'), g:_riv_p.list_all)
+                return "\<C-O>:call riv#list#shift('-')\<CR>"
+            else
+                return "\<S-Tab>"
+            endif
         endif
     else
         return "\<C-O>:call cursor(riv#table#prevcell())\<CR>"
