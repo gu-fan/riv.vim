@@ -2,15 +2,15 @@ Riv Instruction
 ===============
 
 :Author: Rykka G.Forest
-:Date:   2012-06-28 19:28:26
-:Version: 0.65 
+:Date:   2012-06-29 10:38:56
+:Version: 0.66 
 :Github: https://github.com/Rykka/riv.vim
 
-**Riv** is a vim plugin for managing and writing reStructuredText_ Documents.
+**Riv** is a vim plugin for managing and writing reStructuredText_ documents.
 Short for 'reStructuredText in Vim'. 
 
 It is for people either want to manage documents in a wiki way,
-or writing reStructuredText documents.
+or writing reStructuredText documents in an easy way.
 
 .. _reStructuredText: http://docutils.sourceforge.net/rst.html
 
@@ -26,6 +26,7 @@ These features are for all reStructuredText files.
 :Links_:    Jumping with links.
 :Table_:    Auto formatted table.
 :Indent_:   Improved indentation 
+:Insert_:   Improvment of some mapping in insert mode.
 :Highlighting_: Improved syntax file. 
 
 These features are for the Riv Project. 
@@ -107,29 +108,47 @@ See Changelog in doc/riv.txt
   + FIXED 2012-06-24 Fold : wrong end of section when fold_blank is 0.
 
 
-This
-~~~~~
-
-Things todo in this version.
-
 * 0.65:
 
   + DONE 2012-06-27 take care of the slash of directory in windows .
   + FIXED 2012-06-28 correct cursor position when creating todo items and list items.
   + DONE 2012-06-28 format the scratch index, sort with year/month/day 
 
+This
+~~~~~
+
+Things todo in this version.
+
+* 0.66: 
+
+  :Todo_:   DONE 2012-06-29 add field list for todo items.
+  :Indent_: correct ``<BS>`` indentation to reach the begin of field list.
+  :Indent_: DONE 2012-06-29 the indentation in directives should act the same as in comments.
+
+
 Next 
 ~~~~~
 
 Things todo in next versions.
 
-* Helper: An option Helper and option cache. 
-  let people use it even without touching ``.vimrc`` .
-* Helper: A command helper?
-* Doc: Detail option parts
-* Scratch: show Scratch sign in Calendar.
-* Publish: support the reStructuredText document not in a project.
+:Links_:   The standalone web link with ``/`` will be considered as local file.
+:File_:    A template or snippet or shortcut for adding ``./`` and ``../`` and files.
+           Maybe a sphinx doc ref and the content directive as well.
+:Documents_: Document part: options / commands.
+:Documents_: Seperate instruction and intro. help use instruction.rst 
+:Publish_: An option to enable highlighting todo items.
+:Helpers_: An option Helper and option cache. 
+           Let people use it even without touching ``.vimrc`` .
+:Scratch_: Show Scratch sign in Calendar.
+:Publish_: Support the reStructuredText document not in a project.
+:Helpers_: A command helper?
+:Links_:   Link tags?
+:Todo_:    Todo item priorities?
+:Table_:   Support simple table format?
+:Table_:   A shortcut or command to create table with row * col.
+:Sections_: Adjust section level.
 
+.. _Documents: 
 
 ----
 
@@ -138,12 +157,14 @@ Instruction Details
 
 * How to use?
 
-  When editing an reStructuredText document (``*.rst`` ), 
-  these settings will be automatically on. 
-  (make sure ``filetype on`` in your vimrc)
+  + For writing reStructuredText documents in an easy way.
 
-  To manage documents in a wiki way, you should set a project,
-  see Project_.
+    When editing an reStructuredText document (``*.rst`` ), 
+    these settings will be automatically on. 
+    (make sure ``filetype on`` in your vimrc)
+
+  + For managing documents in a wiki way, you should setup a project first, 
+    see Project_.
 
 * About the mapping
 
@@ -151,12 +172,23 @@ Instruction Details
   You can change it by following options.
   
   + ``g:riv_global_leader`` : leader map for Riv global mapping.
+
+    - ``:RivIndex`` ``<C-E>ww`` to open the project index.
+    - ``:RivAsk`` ``<C-E>wa`` to choose one project to open.
+    - ``:RivScratchCreate`` ``<C-E>cc`` Create or jump to the scratch of today.
+    - ``:RivScratchView`` ``<C-E>cv`` View Scratch index.
+
   + ``g:riv_buf_leader`` : leader map for reStructuredText buffers.
   + ``g:riv_buf_ins_leader`` : leader map for reStructuredText buffers's insert mode.
 
 
+For reStructuredText
+--------------------
+
+These features are for all reStructuredText files.
+
 Folding 
---------
+~~~~~~~~
 
 Fold reStructuredText file with sections, lists, and blocks automatically.
 
@@ -212,7 +244,7 @@ To set an initial folding level for a file . you can use ``modeline``::
         This means all fold will be folded when opening files
 
 Sections 
----------
+~~~~~~~~~
 
 Section levels and numbers are auto detected.
 
@@ -241,7 +273,7 @@ Clicking on the section reference will bring you to the section title.
        **=-~"'`** , you can change it with ``g:riv_section_levels``
 
 Lists
------
+~~~~~
 
 Auto numbered and auto leveled bullet and enumerated list.
 
@@ -293,7 +325,7 @@ The Sequence of the list level is:
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#bullet-lists
 
 Links
------
+~~~~~
 
   
 Clicking on links will executing it's default behavior 
@@ -315,7 +347,7 @@ Clicking on links will executing it's default behavior
     And append the footnote target to the end of file.
 
 Table
------
+~~~~~
   
 Auto Format Table (Grid Table Only).
 (Currently require vim compiled with python. )
@@ -340,7 +372,7 @@ To create a table , just insert ``| xxx |`` and press ``<Enter>``.
 +-----------------+-----------------------------------------------------------+
 
 Highlighting
-------------
+~~~~~~~~~~~~
 
 Improved syntax file. 
 
@@ -366,15 +398,49 @@ Improved syntax file.
    Disable it by set ``g:riv_hover_link_hl`` to 0
 
 Indent
-------
+~~~~~~
 
 Improved indent file.
 
-In Insert mode , when starting a newline or press ``<BS>`` (BackSpace key).
-the cursor will be put at the calculated position.
+In Insert mode , when starting a newline or 
+
+* starting newline (``<Enter>`` or ``o`` in Normal mode):
+  will start newline with correct indentation 
+* ``<BS>`` (BackSpace key).
+  will goto correct indentation if no preceding non-whitespace character
+  and after the indentation's ``&shiftwidth`` position , otherwise ``<BS>``
+
+Insert
+~~~~~~
+
+Improvment for some mapping in insert mode. Detail in each section.
+
+Also most shortcut can be used in insert mode. like ``<C-E>ee`` ``<C-E>s1`` ...
+
+* Enter: Insert lists_ with ``<C-Enter>`` , ``<S-Enter>`` and ``<C-S-Enter>``.
+
+  When in a table_, ``<Enter>`` to create a new line
+
+  When not in a table, will start new line with correct indentation
+
+* Tab:  When in a table , ``<Tab>`` to next cell , ``<S-Tab>`` to previous one.
+
+  When not in a table , will act as ``<C-N>`` or ``<C-P>`` if insert-popup-menu 
+  is visible.
+  
+  Otherwise output a ``<Tab>``
+
+* BackSpace: for indent_, will goto correct indentation if no preceding non-whitespace character and after the indentation's ``&shiftwidth`` position ,
+  otherwise ``<BS>``
+
+
+For Riv
+-------
+
+These features are for the Riv Project.
 
 Project
--------
+~~~~~~~
 
 Manage your reStructuredText documents in a wiki way.
 
@@ -392,7 +458,7 @@ Manage your reStructuredText documents in a wiki way.
 * Use ``:RivAsk`` ``<C-E>wa`` to choose one project to open.
 
 File
-----
+~~~~
 
 
 As reStructuredText haven't define a pattern for local files currently.
@@ -404,14 +470,14 @@ The ``bare extension style`` and ``square bracket style``
 
 * You can switch the style with ``g:riv_localfile_linktype``
 
-  + when set to 1, use bare extension style:
+  + when set to 1, use ``bare extension style``:
 
     words like ``xxx.rst`` ``xxx.py`` ``xxx.cpp`` will be detected as file link.
 
     words like ``xxx/`` will be considered as directory , 
     and link to ``xxx/index.rst``
 
-    words like ``/xxxx/xxx.rst`` ``~/xxx/xxx.rst`` ``c:/xxx.rst``
+    words like ``/xxxx/xxx.rst`` ``~/xxx/xxx.rst`` ``x:/xxx.rst``
     will be considered as external file links
 
     words like ``/xxxx/xxx/`` ``~/xxx/xxx/`` 
@@ -422,13 +488,13 @@ The ``bare extension style`` and ``square bracket style``
     which default is ``vim,cpp,c,py,rb,lua,pl`` ,
     meaning these files will be recongized.
 
-  + when set to 2, square bracket style: 
+  + when set to 2, ``square bracket style``: 
     
     words like ``[xxx]`` ``[xxx.vim]`` will be detected as file link. 
 
     words like ``[xxx/]' will link to ``xxx/index.rst``
 
-    words like ``[/xxxx/xxx.rst]`` ``[~/xxx/xxx.rst]``  ``[c:/xxx/xxx.rst]``
+    words like ``[/xxxx/xxx.rst]`` ``[~/xxx/xxx.rst]``  ``[x:/xxx/xxx.rst]``
     will be considered as external file links
 
     words like ``[/xxxx/xxx/]`` ``[~/xxx/xxx/]`` 
@@ -437,6 +503,7 @@ The ``bare extension style`` and ``square bracket style``
 
   + when set to 0, no local file link.
   + default is 1.
+
 
 * When Publish to html, all detected local file link will be converted to an embedded link.
 
@@ -448,7 +515,7 @@ The ``bare extension style`` and ``square bracket style``
   it will also delete all reference to this file in ``index.rst`` of the directory.
 
 Scratch
--------
+~~~~~~~
   
 The scratches is created auto named by date in '%Y-%m-%d' format.
 It is a place for writing diary or hold idea and thoughts.
@@ -475,15 +542,17 @@ You can change it with 'scratch_path' of project setting ,default is 'scratch'::
       ``January,February,March,April,May,June,July,August,September,October,November,December``
 
 Todos
------
+~~~~~
 
-Writing todo lists in reStructuredText documents.
-It's not the reStructuredText syntax. So no highlighting when converted.
+Writing and highlighting todo items in reStructuredText documents.
+It's not the reStructuredText syntax. 
+So no highlighting when converted.
 
-Todo items are bullet/enumerated lists with todo-box or todo-keywords.
-Datestamps are supported.
+Todo items are todo-box or todo-keywords in bullet/enumerated/field lists.
 
-The statistics of the progress (include child items) will be shown when folded. 
+Datestamps are supported to show todo items's start/end date.
+
+The statistics of the todo progress (include child items) will be shown when folded. 
 
 * A Todo item:
 
@@ -520,13 +589,13 @@ The statistics of the progress (include child items) will be shown when folded.
 
 * Actions:
 
-  + Double Click or ``<Enter>`` in the box or use ``:RivTodoToggle`` or ``<C-E>ee`` 
-    to switch the todo/done status.
+  + Use ``:RivTodoToggle`` or ``<C-E>ee`` to add or switch the todo status.
+  + Double Click or ``<Enter>`` in the box/keyword to swith the todo status
   + Double Click or ``<Enter>`` or ``:RivTodoDate`` on a datestamp to change date. 
   
     If you have Calendar_ installed , it will use it to choose date.
   
-  + Use ``:RivTodoType1`` ``<C-E>e1``... ``:RivTodoType4`` ``<C-E>e4`` 
+  + Use ``:RivTodoType1`` ``<C-E>e1`` ... ``:RivTodoType4`` ``<C-E>e4`` 
     to add or change the todo item by group. 
   + Use ``:RivTodoAsk`` ``<C-E>e``` will show an keyword group list to choose.
   + Use ``:RivTodoDel`` ``<C-E>ex`` will delete the todo item
@@ -536,7 +605,7 @@ The statistics of the progress (include child items) will be shown when folded.
   + Use ``:RivTodoHelper`` or ``<C-E>ht`` to open a `Todo Helper`_
   
 Helpers
--------
+~~~~~~~
 
 A window to show something of the project.
 
@@ -557,7 +626,7 @@ A window to show something of the project.
     - ``<Esc>`` or ``q`` to quit the window
 
 Publish
--------
+~~~~~~~
 
 Some wrapper to convert rst files to html/xml/latex/odt/... 
 (require python docutils package )
@@ -569,22 +638,24 @@ Some wrapper to convert rst files to html/xml/latex/odt/...
   default is 'firefox'
 
   The browser is set with ``g:riv_web_browser``
-* ``:Riv2HtmlProject`` ``<C-E>2hp``
+* ``:Riv2HtmlProject`` ``<C-E>2hp`` converting whole project into html.
+  And all the file with extension in ``g:riv_file_link_ext`` will be copied there too.
 
 Convert to the file and browse.
 
-* ``:Riv2Odt`` ``<C-E>2oo``  
-* ``:Riv2Xml`` ``<C-E>2xx``
-* ``:Riv2S5`` ``<C-E>2ss``
-* ``:Riv2Latex`` ``<C-E>2ll``
+* ``:Riv2Odt`` ``<C-E>2oo`` convert to odt file and browse
+* ``:Riv2Xml`` ``<C-E>2xx`` convert to xml file and browse
+* ``:Riv2S5`` ``<C-E>2ss`` convert to s5 file and browse
+* ``:Riv2Latex`` ``<C-E>2ll`` convert to latex file and browse
 
 The browser is set with ``g:riv_ft_browser``. 
 default is (unix:'xdg-open', windows:'start')
 
 The path of building files by default is under ``_build`` in your project directory.
 
-* Open the build path: `Riv2BuildPath` `<C-E>2b`
 * To change the path. Set it in your vimrc::
     
     " Assume you have a project name project 1
     let project1.build_path = '~/Documents/Riv_Build'
+
+* Open the build path: ``:Riv2BuildPath`` ``<C-E>2b``

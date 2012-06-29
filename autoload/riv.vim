@@ -180,6 +180,7 @@ let s:default.g_maps = {
     \'Riv2HtmlIndex'     : ['wi', '<C-W><C-I>'] ,
     \'RivAsk'            : ['wa', '<C-W><C-A>'] ,
     \'RivScratchCreate'  : ['cc', '<C-C><C-C>'] ,
+    \'RivScratchView'    : ['cv', '<C-C><C-V>'] ,
     \'RivTodoHelper'     : ['ht', '<C-h><C-t>'] ,
     \}
 let s:default.fold_maps = { 
@@ -229,9 +230,7 @@ let s:default.buf_maps = {
     \'Riv2S5'            : ['',  'm',   '2ss'],
     \'Riv2Xml'           : ['',  'm',   '2xx'],
     \'Riv2BuildPath'     : ['',  'm',   '2b'],
-    \'RivScratchView'    : ['',  'm',   'cv'],
-    \'RivScratchCreate'  : ['',  'm',   'cc'],
-    \'RivDeleteFile'     : ['',  'm',   'df'],
+    \'RivDelete'         : ['',  'm',   'df'],
     \'RivCreateLink'     : ['',  'mi',  'il'],
     \'RivCreateDate'     : ['',  'mi',  'id'],
     \'RivCreateFoot'     : ['',  'mi',  'if'],
@@ -263,6 +262,8 @@ let s:default.menus = [
     \['Choose\ Index'                     , 'wa'                     , 'RivAsk'            ]   ,
     \['Helper.Todo\ Helper'               , 'th'                     , 'RivTodoHelper'     ]   ,
     \['Helper.Update\ Todo\ Cache'        , 'uc'                     , 'RivTodoUpdateCache']   ,
+    \['Scratch.Create\ Scratch'           , 'cc'                     , 'RivScratchCreate'  ]   ,
+    \['Scratch.View\ Index'               , 'cv'                     , 'RivScratchView'    ]   ,
     \['--Action--'                        , '  '                     , '  '                ]   ,
     \['Title.Create\ level1\ Title'       , 's1'                     , 'RivTitle1'         ]   ,
     \['Title.Create\ level2\ Title'       , 's2'                     , 'RivTitle2'         ]   ,
@@ -282,7 +283,7 @@ let s:default.menus = [
     \['List.Next\ Type'                   , 'l2'                     , 'RivListTypeNext'   ]   ,
     \['List.Remove\ List\ Symbol'         , 'lx'                     , 'RivListTypeRemove' ]   ,
     \['Todo.Toggle\ Todo'                 , 'ee'                     , 'RivTodoToggle'     ]   ,
-    \['Todo.Del\ Todo'                    , 'ex'                     , 'RivTodoDel'        ]   ,
+    \['Todo.Delete\ Todo'                 , 'ex'                     , 'RivTodoDel'        ]   ,
     \['Todo.Change\ Date'                 , 'ed'                     , 'RivTodoDate'       ]   ,
     \['Todo.Todo\ Type0'                  , 'e`'                     , 'RivTodoType0'      ]   ,
     \['Todo.Todo\ Type1'                  , 'e1'                     , 'RivTodoType1'      ]   ,
@@ -290,6 +291,7 @@ let s:default.menus = [
     \['Todo.Todo\ Type3'                  , 'e3'                     , 'RivTodoType3'      ]   ,
     \['Create.Datestamp'                  , 'id'                     , 'RivCreateDate'     ]   ,
     \['Create.Timestamp'                  , 'it'                     , 'RivCreateTime'     ]   ,
+    \['Delete.Delete\ Current\ File'      , 'df'                     , 'RivDelete'         ]   ,
     \['--Convert---'                      , '  '                     , '  '                ]   ,
     \['Convert.Open\ Build\ Path'         , '2b'                     , 'Riv2BuildPath'     ]   ,
     \['Convert.to\ Html.Browse\ Current'  , '2hh'                    , 'Riv2HtmlAndBrowse' ]   ,
@@ -300,9 +302,6 @@ let s:default.menus = [
     \['Convert.to\ Latex'                 , '2ll'                    , 'Riv2Latex'         ]   ,
     \['Convert.to\ S5'                    , '2ss'                    , 'Riv2S5'            ]   ,
     \['Convert.to\ Xml'                   , '2xx'                    , 'Riv2Xml'           ]   ,
-    \['Scratch.Create\ Scratch'           , 'cc'                     , 'RivScratchCreate'  ]   ,
-    \['Scratch.View\ Index'               , 'cv'                     , 'RivScratchView'    ]   ,
-    \['Delete.Delete\ Current'            , 'df'                     , 'RivDelete'         ]   ,
     \['--Format---'                       , '  '                     , '  '                ]   ,
     \['Table.Format'                      , 'ft'                     , 'RivTableFormat'    ]   ,
     \['--Fold---'                         , '  '                     , '  '                ]   ,
@@ -474,11 +473,14 @@ if !exists("g:_riv_c")
     let g:_riv_p.bullet_list = '\v^\s*[-*+]\s+'
     let g:_riv_p.enumerate_list1 = '\v\c^\s*%(\d+|[#a-z]|[imlcxvd]+)[.)]\s+'
     let g:_riv_p.enumerate_list2 = '\v\c^\s*\(%(\d+|[#a-z]|[imlcxvd]+)\)\s+'
+    let g:_riv_p.field_list_spl = '\v^\s*:[^:]+:\s+'
+
     let g:_riv_p.list_all = g:_riv_p.bullet_list.'|'.g:_riv_p.enumerate_list1
                 \.'|'.g:_riv_p.enumerate_list2
+                \.'|'.g:_riv_p.field_list_spl
     
     
-    let g:_riv_p.field_list= '^\s*:[^:]\+:\s\+\ze\S.\+[^:]$'
+    let g:_riv_p.field_list= '\v^\s*:[^:]+:\s+\ze\S.+[^:]$'
 
     " sub1 (indent)
     " sub2 bullet
@@ -555,7 +557,7 @@ if !exists("g:_riv_c")
     "       submatch with uri body.
     "standlone link patterns: www.xxx-x.xxx/?xxx
     let g:_riv_p.link_uri = '\v%(%(file|https=|ftp|gopher)://|%(mailto|news):)([^[:space:]''\"<>]+[[:alnum:]/])'
-            \.'|www[[:alnum:]_-]*\.[[:alnum:]_-]+\.[^[:space:]''\"<>]+[[:alnum:]/]'
+        \.'|www[[:alnum:]_-]*\.[[:alnum:]_-]+\.[^[:space:]''\"<>]+[[:alnum:]/]'
 
 
     " File:
@@ -606,7 +608,7 @@ if !exists("g:_riv_c")
     " _`xxx xxx`
     let g:_riv_p.link_tar_inline = '\v%(\s|\_^)\zs_`[^:\\]+\ze:\_s`'
     " .. _xxx:
-    let g:_riv_p.link_tar_normal = 'v^\.\.\s\zs_[^:\\]+\ze:\_s'
+    let g:_riv_p.link_tar_normal = '\v^\.\.\s\zs_[^:\\]+\ze:\_s'
     " .. __:   or   __
     let g:_riv_p.link_tar_anonymous = '\v^\.\.\s__:\_s\zs|^__\_s\zs'
     " `xxx  <xxx>`
@@ -627,7 +629,8 @@ if !exists("g:_riv_c")
     let g:_riv_p.all_link = '\v('. g:_riv_p.link_target 
                 \ . ')|(' . g:_riv_p.link_reference
                 \ . ')|(' . g:_riv_p.link_uri 
-                \ . ')|(' . g:_riv_p.link_file . ')'
+                \ . ')|(' . g:_riv_p.link_file
+                \. ')'
 
     " Miscs:
     " indent.vim

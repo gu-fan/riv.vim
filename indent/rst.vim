@@ -37,7 +37,7 @@ function! GetRSTIndent(row) "{{{
     let ind = indent(pnb_num)
     
     " list
-    " 1/2:fix ind
+    " 1~2:fix ind
     " 3: ind
     " 4: prev ind
     let l_ind = matchend(pnb_line, g:_riv_p.list_all)
@@ -55,7 +55,7 @@ function! GetRSTIndent(row) "{{{
     endif
     
     " literal-block
-    " 1/2+:ind  
+    " 1~2+:ind  
     " 2:4
     let l_ind = matchend(pnb_line, '[^:]::\s*$')
     if l_ind != -1 &&  a:row == pnb_num+2
@@ -72,7 +72,10 @@ function! GetRSTIndent(row) "{{{
     " one empty without match
     " 1: ind
     " 2+ : check prev exp_mark
-    if a:row > pnb_num+1
+    " 3+ : 0
+    if a:row > pnb_num+2
+        return 0
+    elseif  a:row > pnb_num+1
         call cursor(pnb_num,1)
         let p_line = getline(searchpos('^\s*\.\.\s\|^\S', 'bW')[0])
         let p_ind  = matchend(p_line,'^\s*\.\.\s')

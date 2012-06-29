@@ -40,34 +40,34 @@ endfor
 let b:current_syntax = "rst"
 
 " todo list "{{{
-let s:td_keywords = g:_riv_p.td_keywords
-
+let s:td_key= g:_riv_p.td_keywords
+let s:td_box = '\[.\]'
+let s:lists = '\c%(^\s*%('
+            \.':[^:]+:'
+            \.'|[-*+]'
+            \.'|%(\d+|[#a-z]|[imlcxvd]+)[.)]'
+            \.'|\(%(#|\d+|[a-z]|[imlcxvd]+)\)'
+            \.')\s+)'
+let s:datestamp = '%(\s\d{4}-\d{2}-\d{2})=%(\s\~ \d{4}-\d{2}-\d{2})='
 exe 'syn match rstTodoBoxRegion '
-        \.'`\v\c%(^\s*%([-*+]|%(\d+|[#a-z]|[imlcxvd]+)[.)])\s+)@<='
-        \.'%(\[.\]|'. s:td_keywords .')'
-        \.'%(\s\d{4}-\d{2}-\d{2})='.'%(\s\~ \d{4}-\d{2}-\d{2})='
-        \.'\ze%(\s|$)` transparent contains=@rstTodoBoxGroup'
-exe 'syn match rstTodoBoxRegion `\v\c%(^\s*\(%(#|\d+|[a-z]|[imlcxvd]+)\)\s+)@<='
-        \.'%(\[.\]|'. s:td_keywords .')'
-        \.'%(\s\d{4}-\d{2}-\d{2})='.'%(\s\~ \d{4}-\d{2}-\d{2})='
-        \.'\ze%(\s|$)` transparent contains=@rstTodoBoxGroup'
+        \.'`\v' . s:lists . '@<='
+        \.'%(' . s:td_box . '|'. s:td_key .')'
+        \. s:datestamp
+        \.'\ze%(\s|$)`'
+        \.' transparent contains=@rstTodoBoxGroup'
 
 syn cluster rstTodoBoxGroup contains=rstTodoBoxList,rstTodoTmsList,rstTodoTmsEnd
 exe 'syn match rstTodoBoxList '
-            \.'`\v%(\[.\]|'. s:td_keywords .')`'
+            \.'`\v%(' . s:td_box . '|'. s:td_key .')`'
             \.' nextgroup=rstTodoTmsList contained'
 syn match rstTodoTmsList `\v\d{4}-\d{2}-\d{2}` contained nextgroup=rstTodoTmsEnd
 syn match rstTodoTmsEnd  `\v\~ \zs\d{4}-\d{2}-\d{2}` contained
 
 let s:td_done = g:_riv_p.todo_done_ptn
 exe 'syn match rstTodoBoxRegionDone '
-        \.'`\v\c%(^\s*%([-*+]|%(\d+|[#a-z]|[imlcxvd]+)[.)])\s+)@<='
+        \.'`\v' . s:lists . '@<='
         \. s:td_done
-        \.'%(\s\d{4}-\d{2}-\d{2})='.'%(\s\~ \d{4}-\d{2}-\d{2})='
-        \.'\ze%(\s|$)` '
-exe 'syn match rstTodoBoxRegionDone `\v\c%(^\s*\(%(#|\d+|[a-z]|[imlcxvd]+)\)\s+)@<='
-        \. s:td_done
-        \.'%(\s\d{4}-\d{2}-\d{2})='.'%(\s\~ \d{4}-\d{2}-\d{2})='
+        \. s:datestamp
         \.'\ze%(\s|$)` '
 
 "}}}

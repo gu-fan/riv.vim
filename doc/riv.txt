@@ -249,7 +249,7 @@ The Sequence of the list level is:
     Change current list item symbol to next type
   + `:RivListTyePrev` `<C-E>l2`
     Change current list item symbol to prev type
-  + `:RivListTypeRemove` `<C-E>l``
+  + `:RivListTypeRemove` `<C-E>lx`
     Delete current list item symbol
 
 NOTE: To contain a second paragraph (or blocks) in a list , 
