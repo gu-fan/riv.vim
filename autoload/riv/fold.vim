@@ -679,7 +679,7 @@ fun! riv#fold#text() "{{{
     if g:riv_fold_text_align == 'left'
         return printf("%-5s|%s  %4s+ ",cate,line,(v:foldend-lnum))
     else
-        return printf("%s|%-4s  %4s+ ",line,cate,(v:foldend-lnum))
+        return printf("%s|%-5s  %4s+ ",line,cate,(v:foldend-lnum))
     endif
 
 endfun "}}}

@@ -10,9 +10,22 @@ Intro
 Short for 'reStructuredText in Vim'. 
 
 It is for people either want to manage documents in a wiki way,
-or writing reStructuredText documents in an neat way.
+or writing reStructuredText documents in a neat way.
 
 .. _reStructuredText: http://docutils.sourceforge.net/rst.html
+
+
+Screenshot
+----------
+
+**Overview of this Intro**
+
+.. image::  http://i.minus.com/jqyQGm8G9gO9h.jpg
+
+**Folding_ infos**
+
+.. image::  http://i.minus.com/jcSDuRnaDoLnq.jpg
+
 
 
 Features
@@ -42,10 +55,8 @@ These features are for the Riv Project.
 :Publish_:  some wrapper to convert rst files to html/xml/latex/odt/... 
             (require python docutils package )
 
-* Take a glance
 
-.. image::  http://i.minus.com/jCFTijpr6oqYt.jpg
-
+* To Install: see `Install`_
 * To Start: see `Instruction`_
 
 Install
@@ -316,7 +327,29 @@ Folding
 
 Fold reStructuredText file with sections, lists, and blocks automatically.
 
-When folded, some info of the item will be shown at the foldline.
+When folded, some extra info of the item will be shown at the foldline.
+also the number of folded lines will be shown.
+
+
+* The sections_ will show it's section number
+* The lists_ will show todos_ progress : 
+  :math:`( 0 + 50 + 100+ 0 + 0 + 50 ) / 6 \thickapprox 33`
+
+  + [ ]  a todo box of start. 0%
+  + [o]  a todo box of in progress. 50%
+  + [X] 2012-06-29  a todo box of finish. 100%
+  + TODO a todo/done keyword group of start. 0%
+  + FIXME a fixme/fixed keyword group of start. 0%
+  + PROCESS a start/process/stop keyword group of progress. 50%
+
+* The table_ will show it's rows and columns.
+
+  +-------+----+
+  | a     | b  |
+  +-------+----+
+  | c     | d  |
+  +-------+----+
+* see ScreenShot_
 
 Folding will be updated after you write buffer to file.
 
@@ -549,7 +582,8 @@ Todo items are todo-box or todo-keywords in bullet/enumerated/field lists.
 
 Datestamps are supported to show todo items's start/end date.
 
-The statistics of the todo progress (include child items) will be shown when folded. 
+When list is folded. 
+The statistics of the child items (or this item) todo progress will be shown.
 
 * A Todo item:
 
@@ -579,6 +613,7 @@ The statistics of the todo progress (include child items) will be shown when fol
     
   + FIXED A todo item of FIXME/FIXED keyword.
   + DONE 2012-06-13 ~ 2012-06-23 A todo item of TODO/DONE keyword.
+  + START A todo item of TODO/DONE keyword.
   + You can define your own keyword group for todo items with ``g:riv_todo_keywords``
   
     each keyword is seperated by ',' , each group is seperated by ';'
