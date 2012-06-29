@@ -95,7 +95,7 @@ fun! riv#action#ins_c_enter() "{{{
     else
         let cmd = ''
     endif
-    let cmd .= "\<C-O>:call riv#list#act(0)\<CR>\<Esc>A"
+    let cmd .= "\<C-O>:call riv#list#new(0)\<CR>\<Esc>A"
     return cmd
 endfun "}}}
 fun! riv#action#ins_s_enter() "{{{
@@ -105,7 +105,7 @@ fun! riv#action#ins_s_enter() "{{{
     else
         let cmd = ''
     endif
-    let cmd .= "\<C-O>:call riv#list#act(1)\<CR>\<Esc>A"
+    let cmd .= "\<C-O>:call riv#list#new(1)\<CR>\<Esc>A"
     return cmd
 endfun "}}}
 fun! riv#action#ins_m_enter() "{{{
@@ -115,7 +115,7 @@ fun! riv#action#ins_m_enter() "{{{
     else
         let cmd = ''
     endif
-    let cmd .= "\<C-O>:call riv#list#act(-1)\<CR>\<Esc>A"
+    let cmd .= "\<C-O>:call riv#list#new(-1)\<CR>\<Esc>A"
     return cmd
 endfun "}}}
 

@@ -128,20 +128,20 @@ let s:default.maps = {
     \'RivLinkDBClick'    : 'call riv#action#db_click(1)',
     \'RivListShiftRight' : 'call riv#list#shift("+")',
     \'RivListShiftLeft'  : 'call riv#list#shift("-")',
-    \'RivListNewList'    : 'call riv#list#act(0)',
-    \'RivListSubList'    : 'call riv#list#act(1)',
-    \'RivListSupList'    : 'call riv#list#act(-1)',
+    \'RivListNewList'    : 'call riv#list#new(0)',
+    \'RivListSubList'    : 'call riv#list#new(1)',
+    \'RivListSupList'    : 'call riv#list#new(-1)',
     \'RivListTypeRemove' : 'call riv#list#toggle_type(0)',
     \'RivListTypeNext'   : 'call riv#list#toggle_type(1)',
     \'RivListTypePrev'   : 'call riv#list#toggle_type(-1)',
-    \'RivTodoToggle'     : 'call riv#list#toggle_todo()',
-    \'RivTodoDel'        : 'call riv#list#del_todo()',
-    \'RivTodoDate'       : 'call riv#list#change_date()',
-    \'RivTodoAsk'        : 'call riv#list#todo_ask()',
-    \'RivTodoType1'      : 'call riv#list#todo_change_type(0)',
-    \'RivTodoType2'      : 'call riv#list#todo_change_type(1)',
-    \'RivTodoType3'      : 'call riv#list#todo_change_type(2)',
-    \'RivTodoType4'      : 'call riv#list#todo_change_type(3)',
+    \'RivTodoToggle'     : 'call riv#todo#toggle_todo()',
+    \'RivTodoDel'        : 'call riv#todo#del_todo()',
+    \'RivTodoDate'       : 'call riv#todo#change_date()',
+    \'RivTodoAsk'        : 'call riv#todo#todo_ask()',
+    \'RivTodoType1'      : 'call riv#todo#todo_change_type(0)',
+    \'RivTodoType2'      : 'call riv#todo#todo_change_type(1)',
+    \'RivTodoType3'      : 'call riv#todo#todo_change_type(2)',
+    \'RivTodoType4'      : 'call riv#todo#todo_change_type(3)',
     \'RivViewScratch'    : 'call riv#create#view_scr()',
     \'RivTitle1'         : 'call riv#create#title(1)',
     \'RivTitle2'         : 'call riv#create#title(2)',
@@ -480,9 +480,9 @@ if !exists("g:_riv_c")
     let g:_riv_p.enumerate_list2 = '\v\c^\s*\(%(\d+|[#a-z]|[imlcxvd]+)\)\s+'
     let g:_riv_p.field_list_spl = '\v^\s*:[^:]+:\s+'
 
-    let g:_riv_p.list_all = g:_riv_p.bullet_list.'|'.g:_riv_p.enumerate_list1
+    let g:_riv_p.list_b_e = g:_riv_p.bullet_list.'|'.g:_riv_p.enumerate_list1
                 \.'|'.g:_riv_p.enumerate_list2
-                \.'|'.g:_riv_p.field_list_spl
+    let g:_riv_p.list_all = g:_riv_p.list_b_e . '|'. g:_riv_p.field_list_spl
     
     
     let g:_riv_p.field_list= '\v^\s*:[^:]+:\s+\ze\S.+[^:]$'

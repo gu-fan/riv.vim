@@ -131,6 +131,8 @@ Things todo in this version.
              before list item will now shift the list. 
   :Lists_:   DONE 2012-06-30 2b81464f_ bullet list will auto numbered when change to
              enumerated list.
+  :Lists_:   DONE 2012-06-30 2b81464f_ createing new list action in a field list will
+             only add it's indent.
 
 .. _9229651d: 
    https://github.com/Rykka/riv.vim/commit/9229651de15005970990df57afba06d1b54e9bc9
@@ -299,6 +301,7 @@ Auto numbered and auto leveled bullet and enumerated list.
       Insert a new list of current child list level
     - ``<C-S-CR>\<C-S-KEnter>`` 
       Insert a new list of current parent list level
+    - When it's a field list, only the indent is inserted.
   
   + Change List type:
 

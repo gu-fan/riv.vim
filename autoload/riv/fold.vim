@@ -405,7 +405,7 @@ fun! s:check(row) "{{{
     if line=~'^\s*[[:alnum:]]\+\_s'
         return
     elseif b:foldlevel > 1 && !has_key(b:state, 'e_chk')
-                \ && line=~s:p.list_all             
+                \ && line=~s:p.list_all
         let idt = riv#fold#indent(line)
         call insert(b:state.l_chk, 
                     \ {'type': 'list', 'bgn': a:row, 

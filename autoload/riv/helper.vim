@@ -88,7 +88,7 @@ fun! s:helper.map() dict "{{{
     " exe 'nn <buffer><silent> <ESC> :cal function('.string(self.exit).')<CR>'
     " exe 'nn <buffer><silent> H :function {'.string(self.exit).'}<CR>'
 endfun "}}}
-fun! s:helper.set() "{{{
+fun! s:helper.set() dict "{{{
 	setl noswf nonu nowrap nolist nospell nocuc wfh
 	setl fdc=0 fdl=99 tw=0 bt=nofile bh=unload
 	setl noma
