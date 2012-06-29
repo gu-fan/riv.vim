@@ -165,7 +165,7 @@ Instruction
 
 * How to use?
 
-  + For writing reStructuredText documents in an easy way.
+  + For writing reStructuredText documents in a neat way.
 
     When editing an reStructuredText document (``*.rst`` ), 
     these settings will be automatically on. 
