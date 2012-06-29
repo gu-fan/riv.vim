@@ -20,11 +20,11 @@ Screenshot
 
 **Overview of this Intro**
 
-.. image::  http://i.minus.com/jqyQGm8G9gO9h.jpg
+.. image::  http://i.minus.com/jqyQGm8G9gO9h.png
 
 **The Folding infos**
 
-.. image::  http://i.minus.com/jcSDuRnaDoLnq.jpg
+.. image::  http://i.minus.com/ibeAAXZxjcyoZ5.png
 
 
 
@@ -334,84 +334,96 @@ Folding
 
 Fold reStructuredText file with sections, lists, and blocks automatically.
 
-When folded, some extra info of the item will be shown at the foldline.
-also the number of folded lines will be shown.
+* Actions (Normal Mode Only):
 
+  + Open Folding: Pressing ``<Enter>`` or double clicking on folded lines 
+    will open that fold. 
 
-* The sections_ will show it's section number
-* The lists_ will show todos_ progress : 
-  ( 0 + 50 + 100+ 0 + 0 + 50 ) / 6 ≈ 33
+    use ``zo`` ``zO`` or ``zv`` will open it either.
 
-  + [ ]  a todo box of start. 0%
-  + [o]  a todo box of in progress. 50%
-  + [X] 2012-06-29  a todo box of finish. 100%
-  + TODO a todo/done keyword group of start. 0%
-  + FIXME a fixme/fixed keyword group of start. 0%
-  + PROCESS a start/process/stop keyword group of progress. 50%
+  + Close Folding:  use ``zc`` ``zC`` will close it.
 
-* The table_ will show it's rows and columns.
+    Also pressing ``<Enter>`` or double clicking the section title
+    will close the section.
 
-  +-------+----+
-  | a     | b  |
-  +-------+----+
-  | c     | d  |
-  +-------+----+
+  + Update Folding: use ``zx`` or ``<C-E><Space>j``
 
-* see ScreenShot_
-* You can use ``g:riv_fold_info_pos`` to change the info position.
+    Folding will be auto updated after you write buffer to file.
 
-  + when set to ``left``, these info will be shown at left side.
-  + default is ``right``
+  + Toggle Folding: use ``za`` or ``<C-E><Space><Space>`` 
+  + Toggle all Folding: use ``zA`` or ``<C-E><Space>m``
 
+* Extra Infos
+  When folded, some extra info of the item will be shown at the foldline.
+  also the number of folded lines will be shown. See screenshot_
 
-Folding will be updated after you write buffer to file.
+  + The sections_ will show it's section number
+  + The lists_ will show todos_ progress : 
+    ( 0 + 50 + 100+ 0 + 0 + 50 ) / 6 ≈ 33
+  
+    - [ ]  a todo box of start. 0%
+    - [o]  a todo box of in progress. 50%
+    - [X] 2012-06-29  a todo box of finish. 100%
+    - TODO a todo/done keyword group of start. 0%
+    - FIXME a fixme/fixed keyword group of start. 0%
+    - PROCESS a start/process/stop keyword group of progress. 50%
+  
+  + The table_ will show it's rows and columns.
+  
+    +-------+----+
+    | a     | b  |
+    +-------+----+
+    | c     | d  |
+    +-------+----+
+  
+  + You can use ``g:riv_fold_info_pos`` to change the info position.
+  
+    - when set to ``left``, these info will be shown at left side.
+    - default is ``right``
+  
+  
+  
+* Settings:
 
-Pressing ``<Enter>`` or double clicking on folded lines will open that fold.
+  + To show the blank lines in the end of a folding, use ``g:riv_fold_blank``.
 
-* Update Folding: use ``zx`` or ``<C-E><Space>j``
-* Toggle Folding: use ``za`` or ``<C-E><Space><Space>`` 
-* Toggle all Folding: use ``zA`` or ``<C-E><Space>m``
+    - when set to 2 , will fold all blank lines.
+    - when set to 1 , will fold all blank lines,
+      but showing one blank line if there are some.
+    - when set to 0 , will fold one blank line , 
+      but will showing the rest.
+    - default is 2
 
-To show the blank lines in the end of a folding, use ``g:riv_fold_blank``.
+  + For large files. calculate folding may cost time. 
+    So there are some options about it.
 
- + when set to 2 , will fold all blank lines.
- + when set to 1 , will fold all blank lines,
-   but showing one blank line if there are some.
- + when set to 0 , will fold one blank line , 
-   but will showing the rest.
- + default is 2
-
-For large files. calculate folding may cost time. 
-So there are some options about it.
-
-* ``g:riv_fold_level`` set which structures to be fold. 
-
-  + when set to 3 , means 'sections,lists and blocks'.
-  + when set to 2 , means 'sections and lists'
-  + when set to 1 , means 'sections'
-  + when set to 0 , means 'None'
-  + default is 3.
-
-* ``g:riv_auto_fold_force``, enable reducing fold level when editing large files.
-
-  + when set to 1 , means 'On'.
-  + default is 1.
-
-* ``g:riv_auto_fold1_lines``, the minimum lines file containing,
-  to force set fold_level to section only.
-
-  default is 5000.
-
-* ``g:riv_auto_fold2_lines``, the minimum lines file containing,
-  to force set fold_level to section and list only.
-
-  default is 3000.
-
-To set an initial folding level for a file . you can use ``modeline``::
+    - ``g:riv_fold_level`` set which structures to be fold. 
     
+      1. when set to 3 , means 'sections,lists and blocks'.
+      1. when set to 2 , means 'sections and lists'
+      1. when set to 1 , means 'sections'
+      1. when set to 0 , means 'None'
+      1. default is 3.
+    
+    - ``g:riv_auto_fold_force``, enable reducing fold level when editing large files.
+    
+      1. when set to 1 , means 'On'.
+      1. default is 1.
+    
+    - ``g:riv_auto_fold1_lines``, the minimum lines file containing,
+      to force set fold_level to section only.
+    
+      default is 5000.
+    
+    - ``g:riv_auto_fold2_lines``, the minimum lines file containing,
+      to force set fold_level to section and list only.
+    
+      default is 3000.
+    
+  + To set an initial folding level for a file . you can use ``modeline``::
 
-    ..  vim: fdl=0 :
-        This means all fold will be folded when opening files
+     ..  vim: fdl=0 :
+         This means all fold will be folded when opening files
 
 Highlighting
 ~~~~~~~~~~~~
