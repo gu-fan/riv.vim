@@ -1,0 +1,1120 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.9.1: http://docutils.sourceforge.net/" />
+<title></title>
+<style type="text/css">
+
+/*
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 7434 2012-05-11 21:06:27Z milde $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+object[type="image/svg+xml"], object[type="application/x-shockwave-flash"] {
+  overflow: hidden;
+}
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin: 0 0 0.5em 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left, .figure.align-left, object.align-left {
+  clear: left ;
+  float: left ;
+  margin-right: 1em }
+
+img.align-right, .figure.align-right, object.align-right {
+  clear: right ;
+  float: right ;
+  margin-left: 1em }
+
+img.align-center, .figure.align-center, object.align-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.align-left {
+  text-align: left }
+
+.align-center {
+  clear: both ;
+  text-align: center }
+
+.align-right {
+  text-align: right }
+
+/* reset inner alignment in figures */
+div.align-right {
+  text-align: inherit }
+
+/* div.align-center * { */
+/*   text-align: left } */
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font: inherit }
+
+pre.literal-block, pre.doctest-block, pre.math, pre.code {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+pre.code .ln { /* line numbers */
+  color: grey;
+}
+
+.code {
+  background-color: #eeeeee
+}
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
+</head>
+<body>
+<div class="document">
+
+
+<div class="section" id="riv-instruction">
+<h1>Riv Instruction</h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Author:</th><td class="field-body">Rykka G.Forest</td>
+</tr>
+<tr class="field"><th class="field-name">Date:</th><td class="field-body">2012-06-29 10:38:56</td>
+</tr>
+<tr class="field"><th class="field-name">Version:</th><td class="field-body">0.66</td>
+</tr>
+<tr class="field"><th class="field-name">Github:</th><td class="field-body"><a class="reference external" href="https://github.com/Rykka/riv.vim">https://github.com/Rykka/riv.vim</a></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Riv</strong> is a vim plugin for managing and writing <a class="reference external" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> documents.
+Short for 'reStructuredText in Vim'.</p>
+<p>It is for people either want to manage documents in a wiki way,
+or writing reStructuredText documents in an easy way.</p>
+<div class="section" id="features">
+<h2>Features</h2>
+<p>These features are for all reStructuredText files.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><a class="reference internal" href="#sections">Sections</a>:</th><td class="field-body">Section level and section number auto detected.</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#lists">Lists</a>:</th><td class="field-body">Auto Numbered and auto leveled bullet and enumerated list.</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#links">Links</a>:</th><td class="field-body">Jumping with links.</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#table">Table</a>:</th><td class="field-body">Auto formatted table.</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#folding">Folding</a>:</th><td class="field-body">Fold document by document structures (Section/List/Block).</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#indent">Indent</a>:</th><td class="field-body">Improved indentation</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#insert">Insert</a>:</th><td class="field-body">Improvment of some mapping in insert mode.</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#highlighting">Highlighting</a>:</th><td class="field-body">Improved syntax file.</td>
+</tr>
+</tbody>
+</table>
+<p>These features are for the Riv Project.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><a class="reference internal" href="#project">Project</a>:</th><td class="field-body"><p class="first">Manage your reStructuredText documents in a wiki way.</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#file">File</a>:</th><td class="field-body"><p class="first">Links to local file in rst documents.</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#scratch">Scratch</a>:</th><td class="field-body"><p class="first">A place for writing diary or hold idea and thoughts.</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#todos">Todos</a>:</th><td class="field-body"><p class="first">Writing todo lists in reStructuredText documents .</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#helpers">Helpers</a>:</th><td class="field-body"><p class="first">A help window for showing and doing something.</p>
+<ul class="simple">
+<li><a class="reference internal" href="#todo-helper">Todo Helper</a>: Managing todo items of project.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#publish">Publish</a>:</th><td class="field-body"><p class="first last">some wrapper to convert rst files to html/xml/latex/odt/...
+(require python docutils package )</p>
+</td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Take a glance</li>
+</ul>
+<img alt="http://i.minus.com/jCFTijpr6oqYt.jpg" src="http://i.minus.com/jCFTijpr6oqYt.jpg" />
+<ul class="simple">
+<li>To Start: see <a class="reference internal" href="#instruction-details">Instruction Details</a></li>
+</ul>
+</div>
+<div class="section" id="install">
+<h2>Install</h2>
+<ul>
+<li><p class="first">Using <a class="reference external" href="www.github.com/gmarik/vundle">Vundle</a>  (Recommend)</p>
+<p>Add this line to your vimrc:</p>
+<pre class="literal-block">
+Bundle 'Rykka/riv.vim'
+</pre>
+</li>
+</ul>
+<ul class="simple">
+<li>Using downloaded file.
+Just extract to your <tt class="docutils literal">.vim</tt> folder .</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">NOTE:</th><td class="field-body"><p class="first">Make sure the your .vim folder in option <tt class="docutils literal">runtimepath</tt>
+is before the $VIMRUNTIME.</p>
+<p class="last">Otherwise the syntax/indent files for rst file will using the vim built-in one.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Recommend plugins:<ul>
+<li><a class="reference external" href="https://github.com/scrooloose/syntastic">Syntastic</a>  for syntax checking of rst files.
+(require python docutils package )</li>
+<li><a class="reference external" href="https://github.com/mattn/calendar-vim">Calendar</a> setting datestamp easier.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="issues">
+<h2>Issues</h2>
+<ul class="simple">
+<li>Currently it's a developing version. So things may change quickly.
+keep up-to-date.</li>
+<li>Both bug reports and feature request are welcome.
+Please Post issues at <a class="reference external" href="https://github.com/Rykka/riv.vim/issues">https://github.com/Rykka/riv.vim/issues</a></li>
+</ul>
+</div>
+<div class="section" id="todo">
+<h2>Todo</h2>
+<div class="section" id="prev">
+<h3>Prev</h3>
+<p>See Changelog in doc/riv.txt</p>
+<ul class="simple">
+<li>0.65:<ul>
+<li>DONE 2012-06-27 take care of the slash of directory in windows .</li>
+<li>FIXED 2012-06-28 correct cursor position when creating todo items and list items.</li>
+<li>FIXED 2012-06-28 link highlight group removed after open another buffer.</li>
+<li>FIXED 2012-06-28 auto mkdir when write file to disk</li>
+<li>DONE 2012-06-28 format the scratch index, sort with year/month/day</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="this">
+<h3>This</h3>
+<p>Things todo in this version.</p>
+<ul>
+<li><p class="first">0.66:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><a class="reference internal" href="#todos">Todos</a>:</th><td class="field-body">DONE 2012-06-29 add field list for todo items.</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#indent">Indent</a>:</th><td class="field-body">DONE 2012-06-29 the indentation in directives should return 0 after
+2 blank lines</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#publish">Publish</a>:</th><td class="field-body">DONE 2012-06-29 Support the reStructuredText document not in a project.</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</div>
+<div class="section" id="next">
+<h3>Next</h3>
+<p>Things todo in next versions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name"><a class="reference internal" href="#todos">Todos</a>:</th><td class="field-body">The calculation of child todo items</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#indent">Indent</a>:</th><td class="field-body"><tt class="docutils literal">&lt;BS&gt;</tt> indentation to reach the begin of field list.</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#links">Links</a>:</th><td class="field-body">The standalone web link with <tt class="docutils literal">/</tt> is detected as local file.</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#file">File</a>:</th><td class="field-body">A template or snippet or shortcut for adding <tt class="docutils literal">./</tt> and <tt class="docutils literal">../</tt> and files.
+Maybe a sphinx doc ref as well.</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#riv-instruction">Documents</a>:</th><td class="field-body">Document part: options / commands.</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#riv-instruction">Documents</a>:</th><td class="field-body">Sreencast and screenshot of intro.</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#riv-instruction">Documents</a>:</th><td class="field-body">Seperate instruction and intro. help use instruction.rst</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#riv-instruction">Documents</a>:</th><td class="field-body">Add Specification/Intro of reStructuredText.</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#publish">Publish</a>:</th><td class="field-body">An option to enable highlighting todo items.</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#helpers">Helpers</a>:</th><td class="field-body">An option Helper and option cache.
+Let people use it even without touching <tt class="docutils literal">.vimrc</tt> .</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#scratch">Scratch</a>:</th><td class="field-body">Show Scratch sign in Calendar.</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#helpers">Helpers</a>:</th><td class="field-body">A command helper?</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#links">Links</a>:</th><td class="field-body">Link tags infile ?</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#todos">Todos</a>:</th><td class="field-body">Todo item priorities?</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#table">Table</a>:</th><td class="field-body">Support simple table format?</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#table">Table</a>:</th><td class="field-body">Support column span?</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#table">Table</a>:</th><td class="field-body">A vim table parser for compatible?</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#table">Table</a>:</th><td class="field-body">A shortcut or command to create table with row * col.</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#sections">Sections</a>:</th><td class="field-body">Adjust section level.</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#sections">Sections</a>:</th><td class="field-body">Shortcut to add sections like the content directive?</td>
+</tr>
+<tr class="field"><th class="field-name"><a class="reference internal" href="#folding">Folding</a>:</th><td class="field-body">A buf parser write in python for performance?</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="instruction-details">
+<h1>Instruction Details</h1>
+<ul>
+<li><p class="first">How to use?</p>
+<ul>
+<li><p class="first">For writing reStructuredText documents in an easy way.</p>
+<p>When editing an reStructuredText document (<tt class="docutils literal">*.rst</tt> ),
+these settings will be automatically on.
+(make sure <tt class="docutils literal">filetype on</tt> in your vimrc)</p>
+</li>
+<li><p class="first">For managing documents in a wiki way, you should setup a project first,
+see <a class="reference internal" href="#project">Project</a>.</p>
+</li>
+</ul>
+</li>
+<li><p class="first">About the mapping</p>
+<p>Default leader map for Riv is <tt class="docutils literal"><span class="pre">&lt;C-E&gt;</span></tt>.
+You can change it by following options.</p>
+<ul class="simple">
+<li><tt class="docutils literal">g:riv_global_leader</tt> : leader map for Riv global mapping.<ul>
+<li><tt class="docutils literal">:RivIndex</tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;ww</span></tt> to open the project index.</li>
+<li><tt class="docutils literal">:RivAsk</tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;wa</span></tt> to choose one project to open.</li>
+<li><tt class="docutils literal">:RivScratchCreate</tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;cc</span></tt> Create or jump to the scratch of today.</li>
+<li><tt class="docutils literal">:RivScratchView</tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;cv</span></tt> View Scratch index.</li>
+</ul>
+</li>
+<li><tt class="docutils literal">g:riv_buf_leader</tt> : leader map for reStructuredText buffers.</li>
+<li><tt class="docutils literal">g:riv_buf_ins_leader</tt> : leader map for reStructuredText buffers's insert mode.</li>
+</ul>
+</li>
+</ul>
+<div class="section" id="for-restructuredtext">
+<h2>For reStructuredText</h2>
+<p>These features are for all reStructuredText files.</p>
+<div class="section" id="sections">
+<h3>Sections</h3>
+<p>Section levels and numbers are auto detected.</p>
+<p>The section number will be shown when folded.</p>
+<p>Pressing <tt class="docutils literal">&lt;Enter&gt;</tt> or double clicking on section title will toggle the folding
+of the section.</p>
+<p>Clicking on the section reference will bring you to the section title.</p>
+<blockquote>
+e.g. <a class="reference internal" href="#features">Features</a> link will bring you to the <cite>Feature</cite> Section (in vim)</blockquote>
+<ul>
+<li><p class="first">Create Section Title:</p>
+<p>Normal and Insert:</p>
+<ul>
+<li><p class="first">Use <tt class="docutils literal">:RivTitle1</tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;s1</span></tt> ...  <tt class="docutils literal">:RivTitle6</tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;s6</span></tt> ,
+To create level 1 to level 6 section title from current word.</p>
+<p>If it's empty, you will be asked to input one.</p>
+</li>
+</ul>
+</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">NOTE:</th><td class="field-body"><p class="first">Although you can define a section title with most punctuations.</p>
+<p>Riv use following punctuations for titles:</p>
+<p class="last"><strong>=-~&quot;'`</strong> , you can change it with <tt class="docutils literal">g:riv_section_levels</tt></p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="lists">
+<h3>Lists</h3>
+<p>Auto numbered and auto leveled bullet and enumerated list.</p>
+<p>The Sequence of the list level is:</p>
+<blockquote>
+<tt class="docutils literal">* + - 1. A. a. I. i. 1) A) a) I) i) (1) (A) (a) (I) (i)</tt></blockquote>
+<ul>
+<li><p class="first">Editing Lists:</p>
+<p>Normal and Visual:</p>
+<ul>
+<li><p class="first"><tt class="docutils literal">&gt;</tt> or <tt class="docutils literal"><span class="pre">&lt;C-ScrollWheelDown&gt;</span></tt>
+Add Indentation, And add a level for list.</p>
+<p>if the first item is a list , the indentation is based on the list item.
+otherwise the indentation is based on <tt class="docutils literal">'shiftwidth'</tt>.</p>
+</li>
+<li><p class="first"><tt class="docutils literal">&lt;</tt> or <tt class="docutils literal"><span class="pre">&lt;C-ScrollWheelUp&gt;</span></tt>
+Remove Indentation, And remove a level for list.</p>
+</li>
+</ul>
+<p>Insert Mode Only:</p>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">&lt;CR&gt;\&lt;KEnter&gt;</span></tt> (enter key and keypad enter key)
+Insert the content of this list.</p>
+<p>To insert content in new line of this list item. add a blank line before it.</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">&lt;C-CR&gt;\&lt;C-KEnter&gt;</span></tt>
+Insert a new list of current list level</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">&lt;S-CR&gt;\&lt;S-KEnter&gt;</span></tt>
+Insert a new list of current child list level</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">&lt;C-S-CR&gt;\&lt;C-S-KEnter&gt;</span></tt>
+Insert a new list of current parent list level</p>
+</li>
+</ul>
+<p>Normal and Insert:</p>
+<ul class="simple">
+<li><tt class="docutils literal">:RivListTypeNext</tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;l1</span></tt>
+Change current list item symbol to next type</li>
+<li><tt class="docutils literal">:RivListTyePrev</tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;l2</span></tt>
+Change current list item symbol to prev type</li>
+<li><tt class="docutils literal">:RivListTypeRemove</tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;lx</span></tt>
+Delete current list item symbol</li>
+</ul>
+</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">NOTE:</th><td class="field-body"><p class="first">To contain a second paragraph (or blocks) in a list , you should make the left edge
+lines up with the main paragraph.</p>
+<p class="last">See <a class="reference external" href="http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#bullet-lists">reStructuredText Bullet Lists</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="links">
+<h3>Links</h3>
+<p>Clicking on links will executing it's default behavior
+(open browser/edit file/jump to internal target)</p>
+<p><tt class="docutils literal"><span class="pre">&lt;Tab&gt;/&lt;S-Tab&gt;</span></tt> in Normal mode will jump to next/prev link.</p>
+<ul>
+<li><p class="first">Create Links:</p>
+<p>Normal Mode Only :</p>
+<ul>
+<li><p class="first"><tt class="docutils literal">:RivCreateLink</tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;il</span></tt>
+create a link from current word.</p>
+<p>If it's empty, you will be asked to input one.</p>
+</li>
+<li><p class="first"><tt class="docutils literal">:RivCreateFoot</tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;if</span></tt>
+create a auto numbered footnote.
+And append the footnote target to the end of file.</p>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="table">
+<h3>Table</h3>
+<p>Auto Format Table (Grid Table Only).
+(Currently require vim compiled with python. )</p>
+<p>When folded, the numbers of rows and columns will be shown.</p>
+<p>Currently only Support the Grid Table with equal columns each row .</p>
+<p>Insert Mode Only:</p>
+<p>To create a table , just insert <tt class="docutils literal">| xxx |</tt> and press <tt class="docutils literal">&lt;Enter&gt;</tt>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="78%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">The Grid Table</th>
+<th class="head">Will be Auto Formatted after Leave Insert Mode</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Lines</td>
+<td><ul class="first last simple">
+<li>&lt;Enter&gt; in column to add a new line of column</li>
+<li>This is the second line of in same row of table.</li>
+</ul>
+</td>
+</tr>
+<tr><td>Rows</td>
+<td>&lt;Enter&gt; in seperator to add a new row</td>
+</tr>
+<tr><td>Cells</td>
+<td>&lt;Tab&gt; and &lt;S-Tab&gt; in table will switch to next/prev cell</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="folding">
+<h3>Folding</h3>
+<p>Fold reStructuredText file with sections, lists, and blocks automatically.</p>
+<p>When folded, some info of the item will be shown at the foldline.</p>
+<p>Folding will be updated after you write buffer to file.</p>
+<p>Pressing <tt class="docutils literal">&lt;Enter&gt;</tt> or double clicking on folded lines will open that fold.</p>
+<ul class="simple">
+<li>Update Folding: use <tt class="docutils literal">zx</tt> or <tt class="docutils literal"><span class="pre">&lt;C-E&gt;&lt;Space&gt;j</span></tt></li>
+<li>Toggle Folding: use <tt class="docutils literal">za</tt> or <tt class="docutils literal"><span class="pre">&lt;C-E&gt;&lt;Space&gt;&lt;Space&gt;</span></tt></li>
+<li>Toggle all Folding: use <tt class="docutils literal">zA</tt> or <tt class="docutils literal"><span class="pre">&lt;C-E&gt;&lt;Space&gt;m</span></tt></li>
+</ul>
+<p>To show the blank lines in the end of a folding, use <tt class="docutils literal">g:riv_fold_blank</tt>.</p>
+<blockquote>
+<ul class="simple">
+<li>when set to 2 , will fold all blank lines.</li>
+<li>when set to 1 , will fold all blank lines,
+but showing one blank line if there are some.</li>
+<li>when set to 0 , will fold one blank line ,
+but will showing the rest.</li>
+<li>default is 2</li>
+</ul>
+</blockquote>
+<p>For large files. calculate folding may cost time.
+So there are some options about it.</p>
+<ul>
+<li><p class="first"><tt class="docutils literal">g:riv_fold_level</tt> set which structures to be fold.</p>
+<ul class="simple">
+<li>when set to 3 , means 'sections,lists and blocks'.</li>
+<li>when set to 2 , means 'sections and lists'</li>
+<li>when set to 1 , means 'sections'</li>
+<li>when set to 0 , means 'None'</li>
+<li>default is 3.</li>
+</ul>
+</li>
+<li><p class="first"><tt class="docutils literal">g:riv_auto_fold_force</tt>, enable reducing fold level when editing large files.</p>
+<ul class="simple">
+<li>when set to 1 , means 'On'.</li>
+<li>default is 1.</li>
+</ul>
+</li>
+<li><p class="first"><tt class="docutils literal">g:riv_auto_fold1_lines</tt>, the minimum lines file containing,
+to force set fold_level to section only.</p>
+<p>default is 5000.</p>
+</li>
+<li><p class="first"><tt class="docutils literal">g:riv_auto_fold2_lines</tt>, the minimum lines file containing,
+to force set fold_level to section and list only.</p>
+<p>default is 3000.</p>
+</li>
+</ul>
+<p>To set an initial folding level for a file . you can use <tt class="docutils literal">modeline</tt>:</p>
+<pre class="literal-block">
+..  vim: fdl=0 :
+    This means all fold will be folded when opening files
+</pre>
+</div>
+<div class="section" id="highlighting">
+<h3>Highlighting</h3>
+<p>Improved syntax file.</p>
+<ul>
+<li><p class="first">Lists Highlightings</p>
+</li>
+<li><p class="first">Code Block syntax highlighting:</p>
+<pre class="literal-block">
+.. code:: python
+
+    # python highlighting
+    # github does not support syntax highlighting for rst file yet.
+    x = [0 for i in range(100)]
+</pre>
+<p>You can use <tt class="docutils literal">g:riv_highlight_code</tt> to set which type of code to highlight.
+default is <tt class="docutils literal">lua,python,cpp,javascript,vim,sh</tt></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">NOTE:</th><td class="field-body"><p class="first">To enable highlighting in converted file,
+python <a class="reference external" href="http://pygments.org/">pygments</a>  package must installed for <tt class="docutils literal">docutils</tt></p>
+<p>parsing syntax highlighting.</p>
+<p class="last">see <a class="reference external" href="http://docutils.sourceforge.net/sandbox/code-block-directive/tools/pygments-enhanced-front-ends/">http://docutils.sourceforge.net/sandbox/code-block-directive/tools/pygments-enhanced-front-ends/</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p class="first">The links under cursor are highlighted.
+Disable it by set <tt class="docutils literal">g:riv_hover_link_hl</tt> to 0</p>
+</li>
+</ul>
+</div>
+<div class="section" id="indent">
+<h3>Indent</h3>
+<p>Improved indent file.</p>
+<p>In Insert mode , when starting a newline or</p>
+<ul class="simple">
+<li>starting newline (<tt class="docutils literal">&lt;Enter&gt;</tt> or <tt class="docutils literal">o</tt> in Normal mode):
+will start newline with correct indentation</li>
+<li><tt class="docutils literal">&lt;BS&gt;</tt> (BackSpace key).
+will goto correct indentation if no preceding non-whitespace character
+and after the indentation's <tt class="docutils literal">&amp;shiftwidth</tt> position , otherwise <tt class="docutils literal">&lt;BS&gt;</tt></li>
+</ul>
+</div>
+<div class="section" id="insert">
+<h3>Insert</h3>
+<p>Improvment for some mapping in insert mode. Detail in each section.</p>
+<p>Also most shortcut can be used in insert mode. like <tt class="docutils literal"><span class="pre">&lt;C-E&gt;ee</span></tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;s1</span></tt> ...</p>
+<ul>
+<li><p class="first">Enter: Insert <a class="reference internal" href="#lists">lists</a> with <tt class="docutils literal"><span class="pre">&lt;C-Enter&gt;</span></tt> , <tt class="docutils literal"><span class="pre">&lt;S-Enter&gt;</span></tt> and <tt class="docutils literal"><span class="pre">&lt;C-S-Enter&gt;</span></tt>.</p>
+<p>When in a <a class="reference internal" href="#table">table</a>, <tt class="docutils literal">&lt;Enter&gt;</tt> to create a new line</p>
+<p>When not in a table, will start new line with correct indentation</p>
+</li>
+<li><p class="first">Tab:  When in a table , <tt class="docutils literal">&lt;Tab&gt;</tt> to next cell , <tt class="docutils literal"><span class="pre">&lt;S-Tab&gt;</span></tt> to previous one.</p>
+<p>When not in a table , will act as <tt class="docutils literal"><span class="pre">&lt;C-N&gt;</span></tt> or <tt class="docutils literal"><span class="pre">&lt;C-P&gt;</span></tt> if insert-popup-menu
+is visible.</p>
+<p>Otherwise output a <tt class="docutils literal">&lt;Tab&gt;</tt></p>
+</li>
+<li><p class="first">BackSpace: for <a class="reference internal" href="#indent">indent</a>, will goto correct indentation if no preceding non-whitespace character and after the indentation's <tt class="docutils literal">&amp;shiftwidth</tt> position ,
+otherwise <tt class="docutils literal">&lt;BS&gt;</tt></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="for-riv">
+<h2>For Riv</h2>
+<p>These features are for the Riv Project.</p>
+<div class="section" id="project">
+<h3>Project</h3>
+<p>Manage your reStructuredText documents in a wiki way.</p>
+<ul>
+<li><p class="first">By default. the path of project is at '~/Documents/Riv',
+you can set it by adding project to <tt class="docutils literal">g:riv_projects</tt> in your vimrc.:</p>
+<pre class="literal-block">
+let project1 = { 'path': '~/Dropbox/rst',}
+let g:riv_projects = [project1]
+
+&quot; You could add multiple projects as well
+let project2 = { 'path': '~/Dropbox/rst2',}
+let g:riv_projects = [project1, project2]
+</pre>
+</li>
+<li><p class="first">Use <tt class="docutils literal">:RivIndex</tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;ww</span></tt> to open the project index.</p>
+</li>
+<li><p class="first">Use <tt class="docutils literal">:RivAsk</tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;wa</span></tt> to choose one project to open.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="file">
+<h3>File</h3>
+<p>As reStructuredText haven't define a pattern for local files currently.</p>
+<p><strong>Riv</strong>  provides two kinds of style to determine the local file
+in the rst documents.</p>
+<p>The <tt class="docutils literal">bare extension style</tt> and <tt class="docutils literal">square bracket style</tt></p>
+<ul>
+<li><p class="first">You can switch the style with <tt class="docutils literal">g:riv_localfile_linktype</tt></p>
+<ul>
+<li><p class="first">when set to 1, use <tt class="docutils literal">bare extension style</tt>:</p>
+<p>words like <tt class="docutils literal">xxx.rst</tt> <tt class="docutils literal">xxx.py</tt> <tt class="docutils literal">xxx.cpp</tt> will be detected as file link.</p>
+<p>words like <tt class="docutils literal">xxx/</tt> will be considered as directory ,
+and link to <tt class="docutils literal">xxx/index.rst</tt></p>
+<p>words like <tt class="docutils literal">/xxxx/xxx.rst</tt> <tt class="docutils literal">~/xxx/xxx.rst</tt> <tt class="docutils literal"><span class="pre">x:/xxx.rst</span></tt>
+will be considered as external file links</p>
+<p>words like <tt class="docutils literal">/xxxx/xxx/</tt> <tt class="docutils literal">~/xxx/xxx/</tt>
+will be considered as external directory links,
+and link to the directory.</p>
+<p>You can add other extensions with <tt class="docutils literal">g:riv_file_link_ext</tt>.
+which default is <tt class="docutils literal">vim,cpp,c,py,rb,lua,pl</tt> ,
+meaning these files will be recongized.</p>
+</li>
+<li><p class="first">when set to 2, <tt class="docutils literal">square bracket style</tt>:</p>
+<p>words like <tt class="docutils literal">[xxx]</tt> <tt class="docutils literal">[xxx.vim]</tt> will be detected as file link.</p>
+<p>words like <tt class="docutils literal"><span class="pre">[xxx/]'</span> will link to ``xxx/index.rst</tt></p>
+<p>words like <tt class="docutils literal">[/xxxx/xxx.rst]</tt> <tt class="docutils literal"><span class="pre">[~/xxx/xxx.rst]</span></tt>  <tt class="docutils literal"><span class="pre">[x:/xxx/xxx.rst]</span></tt>
+will be considered as external file links</p>
+<p>words like <tt class="docutils literal">[/xxxx/xxx/]</tt> <tt class="docutils literal"><span class="pre">[~/xxx/xxx/]</span></tt>
+will be considered as external directory links,
+and link to the directory.</p>
+</li>
+<li><p class="first">when set to 0, no local file link.</p>
+</li>
+<li><p class="first">default is 1.</p>
+</li>
+</ul>
+</li>
+<li><p class="first">When Publish to html, all detected local file link will be converted to an embedded link.</p>
+<blockquote>
+<p>e.g. <a class="reference external" href="xxx.html">xxx.rst</a> <a class="reference external" href="xxx.py">xxx.py</a></p>
+</blockquote>
+</li>
+<li><p class="first">To delete a local file in project.</p>
+<p><tt class="docutils literal">:RivDelete</tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;df</span></tt>
+it will also delete all reference to this file in <tt class="docutils literal">index.rst</tt> of the directory.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="scratch">
+<h3>Scratch</h3>
+<p>The scratches is created auto named by date in '%Y-%m-%d' format.
+It is a place for writing diary or hold idea and thoughts.</p>
+<p>Scratches will be put in scratch folder in project directory.
+You can change it with 'scratch_path' of project setting ,default is 'Scratch':</p>
+<pre class="literal-block">
+&quot; Use another directory
+let project1.scratch_path = 'Diary'
+&quot; Use absolute path, then no todo helper and no converting for it.
+let project1.scratch_path = '~/Documents/Diary'
+</pre>
+<ul>
+<li><p class="first"><tt class="docutils literal">:RivScratchCreate</tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;cc</span></tt>
+Create or jump to the scratch of today.</p>
+</li>
+<li><p class="first"><tt class="docutils literal">:RivScratchView</tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;cv</span></tt>
+View Scratch index.</p>
+<p>The index is auto created. You can change the month name using
+<tt class="docutils literal">g:riv_month_names</tt>.</p>
+<p>default is:</p>
+<blockquote>
+<p><tt class="docutils literal">January,February,March,April,May,June,July,August,September,October,November,December</tt></p>
+</blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="todos">
+<h3>Todos</h3>
+<p>Writing and highlighting todo items in reStructuredText documents.
+It's not the reStructuredText syntax.
+So no highlighting when converted.</p>
+<p>Todo items are todo-box or todo-keywords in bullet/enumerated/field lists.</p>
+<p>Datestamps are supported to show todo items's start/end date.</p>
+<p>The statistics of the todo progress (include child items) will be shown when folded.</p>
+<ul>
+<li><p class="first">A Todo item:</p>
+<ul class="simple">
+<li>[ ] This is a todo item of initial state.</li>
+<li>[o] This is a todo item that's in progress.</li>
+<li>[X] This is a todo item that's finished.</li>
+</ul>
+</li>
+<li><p class="first">Datestamps:</p>
+<ul class="simple">
+<li>You can set the todo item timestamp style with 'g:riv_todo_timestamp'<ul>
+<li>when set to 2 , will init with a start datestamp.
+and when it's done , will add a finish datestamp.<ol class="arabic">
+<li>[ ] 2012-06-23 This is a todo item with start datestamp</li>
+<li>[X] 2012-06-23 ~ 2012-06-23  A todo item with both start and finish datestamp.</li>
+</ol>
+</li>
+<li>when set to 1 , no init datestamp ,
+will add a finish datestamp when it's done.<ol class="arabic">
+<li>[X] 2012-06-23 This is a todo item with finish datestamp,</li>
+</ol>
+</li>
+<li>when set to 0 , no datestamp</li>
+<li>Default is 1</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p class="first">Keyword groups:</p>
+<ul>
+<li><p class="first">FIXED A todo item of FIXME/FIXED keyword.</p>
+</li>
+<li><p class="first">DONE 2012-06-13 ~ 2012-06-23 A todo item of TODO/DONE keyword.</p>
+</li>
+<li><p class="first">You can define your own keyword group for todo items with <tt class="docutils literal">g:riv_todo_keywords</tt></p>
+<p>each keyword is seperated by ',' , each group is seperated by ';'</p>
+<p>default is <tt class="docutils literal">TODO,DONE;FIXME,FIXED;START,PROCESS,STOP</tt>,</p>
+</li>
+</ul>
+</li>
+<li><p class="first">Actions:</p>
+<ul>
+<li><p class="first">Use <tt class="docutils literal">:RivTodoToggle</tt> or <tt class="docutils literal"><span class="pre">&lt;C-E&gt;ee</span></tt> to add or switch the todo status.</p>
+</li>
+<li><p class="first">Double Click or <tt class="docutils literal">&lt;Enter&gt;</tt> in the box/keyword to swith the todo status</p>
+</li>
+<li><p class="first">Double Click or <tt class="docutils literal">&lt;Enter&gt;</tt> or <tt class="docutils literal">:RivTodoDate</tt> on a datestamp to change date.</p>
+<p>If you have <a class="reference external" href="https://github.com/mattn/calendar-vim">Calendar</a> installed , it will use it to choose date.</p>
+</li>
+<li><p class="first">Use <tt class="docutils literal">:RivTodoType1</tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;e1</span></tt> ... <tt class="docutils literal">:RivTodoType4</tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;e4</span></tt>
+to add or change the todo item by group.</p>
+</li>
+<li><p class="first">Use <tt class="docutils literal">:RivTodoAsk</tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;e`</span></tt> will show an keyword group list to choose.</p>
+</li>
+<li><p class="first">Use <tt class="docutils literal">:RivTodoDel</tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;ex</span></tt> will delete the todo item</p>
+</li>
+<li><p class="first">Use <tt class="docutils literal">:RivCreateDate</tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;id</span></tt> to insert a datestamp of today anywhere.</p>
+</li>
+<li><p class="first">Use <tt class="docutils literal">:RivCreateTime</tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;it</span></tt> to insert a timestamp of current time anywhere.</p>
+</li>
+<li><p class="first">Use <tt class="docutils literal">:RivTodoHelper</tt> or <tt class="docutils literal"><span class="pre">&lt;C-E&gt;ht</span></tt> to open a <a class="reference internal" href="#todo-helper">Todo Helper</a></p>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="helpers">
+<h3>Helpers</h3>
+<p>A window to show something of the project.</p>
+<ul>
+<li><p class="first"><span class="target" id="todo-helper">Todo Helper</span> : A helper to manage todo items of current project.</p>
+<ul>
+<li><p class="first"><tt class="docutils literal">:RivTodoHelper</tt> or <tt class="docutils literal"><span class="pre">&lt;C-E&gt;ht</span></tt>
+Open to view all todo-items.
+Default is in search mode.</p>
+<ul>
+<li><p class="first"><tt class="docutils literal">/</tt> to search todo item matching inputing, <tt class="docutils literal">&lt;Enter&gt;</tt> or <tt class="docutils literal">&lt;Esc&gt;</tt> to quit
+search mode.</p>
+<p>Set <tt class="docutils literal">g:riv_fuzzy_help</tt> to 1 to enable fuzzy searching in helper.</p>
+</li>
+<li><p class="first"><tt class="docutils literal">&lt;Tab&gt;</tt> to switch content,
+there are 'All/Todo/Done' contents for Todo Helper.</p>
+</li>
+<li><p class="first"><tt class="docutils literal">&lt;Enter&gt;</tt> or Double Click to jump to the todo item.</p>
+</li>
+<li><p class="first"><tt class="docutils literal">&lt;Esc&gt;</tt> or <tt class="docutils literal">q</tt> to quit the window</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="publish">
+<h3>Publish</h3>
+<p>Some wrapper to convert rst files to html/xml/latex/odt/...
+(require python <a class="reference external" href="http://docutils.sourceforge.net/">docutils</a>  package )</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">NOTE:</th><td class="field-body">When converting, It will first try <tt class="docutils literal">rst2xxxx2.py</tt> , then try <tt class="docutils literal">rst2xxxx.py</tt>
+You should install the package of python 2 version .
+Otherwise errors will occour.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p class="first">Actions:</p>
+<ul>
+<li><p class="first"><tt class="docutils literal">:Riv2HtmlFile</tt>  <tt class="docutils literal"><span class="pre">&lt;C-E&gt;2hf</span></tt>
+convert to html file.</p>
+</li>
+<li><p class="first"><tt class="docutils literal">:Riv2HtmlAndBrowse</tt>  <tt class="docutils literal"><span class="pre">&lt;C-E&gt;2hh</span></tt>
+convert to html file and browse.
+default is 'firefox'</p>
+<p>The browser is set with <tt class="docutils literal">g:riv_web_browser</tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal">:Riv2HtmlProject</tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;2hp</span></tt> converting whole project into html.
+And will ask you to copy all the file with extension in <tt class="docutils literal">g:riv_file_link_ext</tt></p>
+</li>
+<li><p class="first"><tt class="docutils literal">:Riv2Odt</tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;2oo</span></tt> convert to odt file and browse by ft browser</p>
+<p>The browser is set with <tt class="docutils literal">g:riv_ft_browser</tt>.
+default is (unix:'xdg-open', windows:'start')</p>
+</li>
+<li><p class="first"><tt class="docutils literal">:Riv2Xml</tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;2xx</span></tt> convert to xml file and browse by web browser</p>
+</li>
+<li><p class="first"><tt class="docutils literal">:Riv2S5</tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;2ss</span></tt> convert to s5 file and browse by web browser</p>
+</li>
+<li><p class="first"><tt class="docutils literal">:Riv2Latex</tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;2ll</span></tt> convert to latex file and edit by gvim</p>
+</li>
+</ul>
+</li>
+<li><p class="first">Options:</p>
+<ul>
+<li><p class="first">For the files that are in a project.
+The path of converted files by default is under <tt class="docutils literal">_build</tt> in your project directory.</p>
+<ul>
+<li><p class="first">To change the path. Set it in your vimrc:</p>
+<pre class="literal-block">
+&quot; Assume you have a project name project 1
+let project1.build_path = '~/Documents/Riv_Build'
+</pre>
+</li>
+<li><p class="first">Open the build path: <tt class="docutils literal">:Riv2BuildPath</tt> <tt class="docutils literal"><span class="pre">&lt;C-E&gt;2b</span></tt></p>
+</li>
+</ul>
+</li>
+<li><p class="first">For the files that not in a project.
+<tt class="docutils literal">g:riv_temp_path</tt> is used to determine the output path</p>
+<ul class="simple">
+<li>When it's empty , the converted file is put under the same directory of file ,</li>
+<li>Otherwise the converted file is put in the <tt class="docutils literal">g:riv_temp_path</tt>,
+make sure it's an absolute path.</li>
+<li>Also no local file link will be converted.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

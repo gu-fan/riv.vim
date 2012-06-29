@@ -113,8 +113,6 @@ Things todo in this version.
   :Todos_:  DONE 2012-06-29 add field list for todo items.
   :Indent_: DONE 2012-06-29 the indentation in directives should return 0 after 
             2 blank lines
-  :Todos_:  FIXME the calculation of child todo items
-  :Indent_: FIXME ``<BS>`` indentation to reach the begin of field list.
   :Publish_: DONE 2012-06-29 Support the reStructuredText document not in a project.
 
 Next 
@@ -122,6 +120,8 @@ Next
 
 Things todo in next versions.
 
+:Todos_:   The calculation of child todo items
+:Indent_:  ``<BS>`` indentation to reach the begin of field list.
 :Links_:   The standalone web link with ``/`` is detected as local file.
 :File_:    A template or snippet or shortcut for adding ``./`` and ``../`` and files.
            Maybe a sphinx doc ref as well.
@@ -385,7 +385,8 @@ Improved syntax file.
    default is ``lua,python,cpp,javascript,vim,sh``
 
    :NOTE: To enable highlighting in converted file, 
-          python ``pygments`` package must installed for ``docutils`` 
+          python pygments_  package must installed for ``docutils`` 
+
           parsing syntax highlighting.
 
           see http://docutils.sourceforge.net/sandbox/code-block-directive/tools/pygments-enhanced-front-ends/
@@ -626,54 +627,56 @@ Publish
 ~~~~~~~
 
 Some wrapper to convert rst files to html/xml/latex/odt/... 
-(require python docutils package )
+(require python docutils_  package )
 
 :NOTE: When converting, It will first try ``rst2xxxx2.py`` , then try ``rst2xxxx.py``
-
-       You should install the package of python2 version .
-
+       You should install the package of python 2 version .
        Otherwise errors will occour.
 
-* ``:Riv2HtmlFile``  ``<C-E>2hf``
-  convert to html file.
+* Actions:
 
-* ``:Riv2HtmlAndBrowse``  ``<C-E>2hh``
-  convert to html file and browse. 
-  default is 'firefox'
-
-  The browser is set with ``g:riv_web_browser``
-
-* ``:Riv2HtmlProject`` ``<C-E>2hp`` converting whole project into html.
-  And will ask you to copy all the file with extension in ``g:riv_file_link_ext`` 
-
-Convert to the file and browse.
-
-* ``:Riv2Odt`` ``<C-E>2oo`` convert to odt file and browse by ft browser
-
-  The browser is set with ``g:riv_ft_browser``. 
-  default is (unix:'xdg-open', windows:'start')
-
-* ``:Riv2Xml`` ``<C-E>2xx`` convert to xml file and browse by web browser
-* ``:Riv2S5`` ``<C-E>2ss`` convert to s5 file and browse by web browser
-* ``:Riv2Latex`` ``<C-E>2ll`` convert to latex file and edit by gvim
-
-* For the files that are in a project. 
-  The path of converted files by default is under ``_build`` in your project directory.
-
-  + To change the path. Set it in your vimrc::
-      
-      " Assume you have a project name project 1
-      let project1.build_path = '~/Documents/Riv_Build'
+  + ``:Riv2HtmlFile``  ``<C-E>2hf``
+    convert to html file.
   
-  + Open the build path: ``:Riv2BuildPath`` ``<C-E>2b``
+  + ``:Riv2HtmlAndBrowse``  ``<C-E>2hh``
+    convert to html file and browse. 
+    default is 'firefox'
+  
+    The browser is set with ``g:riv_web_browser``
+  
+  + ``:Riv2HtmlProject`` ``<C-E>2hp`` converting whole project into html.
+    And will ask you to copy all the file with extension in ``g:riv_file_link_ext`` 
+  
+  + ``:Riv2Odt`` ``<C-E>2oo`` convert to odt file and browse by ft browser
+  
+    The browser is set with ``g:riv_ft_browser``. 
+    default is (unix:'xdg-open', windows:'start')
+  
+  + ``:Riv2Xml`` ``<C-E>2xx`` convert to xml file and browse by web browser
+  + ``:Riv2S5`` ``<C-E>2ss`` convert to s5 file and browse by web browser
+  + ``:Riv2Latex`` ``<C-E>2ll`` convert to latex file and edit by gvim
+  
+* Options:
 
-* For the files that not in a project.  
-  ``g:riv_temp_path`` is used to determine the output path
+  + For the files that are in a project. 
+    The path of converted files by default is under ``_build`` in your project directory.
+  
+    - To change the path. Set it in your vimrc::
+        
+        " Assume you have a project name project 1
+        let project1.build_path = '~/Documents/Riv_Build'
+    
+    - Open the build path: ``:Riv2BuildPath`` ``<C-E>2b``
+  
+  + For the files that not in a project.  
+    ``g:riv_temp_path`` is used to determine the output path
+  
+    - When it's empty , the converted file is put under the same directory of file ,
+    - Otherwise the converted file is put in the ``g:riv_temp_path``,
+      make sure it's an absolute path.
+    - Also no local file link will be converted.
 
-  + When it's empty , the converted file is put under the same directory of file ,
-  + Otherwise the converted file is put in the ``g:riv_temp_path``,
-    make sure it's an absolute path.
-  + Also no local file link will be converted.
 
 
-
+.. _docutils: http://docutils.sourceforge.net/
+.. _pygments: http://pygments.org/

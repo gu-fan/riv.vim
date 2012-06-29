@@ -289,6 +289,9 @@ let s:months = g:_riv_t.month_names
 fun! s:format_src_index() "{{{
     " category scratch by month and format it 4 items a line
     let path = g:_riv_c.p[s:id()]._scratch_path
+    if !isdirectory(path)
+        return -1
+    endif
     let files = split(glob(path.'*.rst'),'\n')
     "
     let dates = filter(map(copy(files), 'fnamemodify(v:val,'':t:r'')'),'v:val=~''[[:digit:]_-]\+'' ')
