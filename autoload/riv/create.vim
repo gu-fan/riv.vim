@@ -614,7 +614,6 @@ fun! riv#create#cmd_helper() "{{{
     cal s:cmd.win()
 endfun "}}}
 
-
 fun! riv#create#date(...) "{{{
     if a:0 && a:1 == 1
         exe "normal! a" . strftime('%Y-%m-%d %H:%M:%S') . "\<ESC>"
@@ -628,7 +627,6 @@ fun! riv#create#auto_mkdir() "{{{
         call mkdir(dir,'p')
     endif
 endfun "}}}
-
 
 fun! s:SID() "{{{
     return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$')

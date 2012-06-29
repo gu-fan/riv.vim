@@ -1,5 +1,5 @@
-Riv Instruction
-===============
+Intro
+=====
 
 :Author: Rykka G.Forest
 :Date:   2012-06-29 10:38:56
@@ -10,7 +10,7 @@ Riv Instruction
 Short for 'reStructuredText in Vim'. 
 
 It is for people either want to manage documents in a wiki way,
-or writing reStructuredText documents in an easy way.
+or writing reStructuredText documents in an neat way.
 
 .. _reStructuredText: http://docutils.sourceforge.net/rst.html
 
@@ -46,7 +46,7 @@ These features are for the Riv Project.
 
 .. image::  http://i.minus.com/jCFTijpr6oqYt.jpg
 
-* To Start: see `Instruction Details`_
+* To Start: see `Instruction`_
 
 Install
 -------
@@ -144,12 +144,12 @@ Things todo in next versions.
 :Sections_: Shortcut to add sections like the content directive?
 :Folding_: A buf parser write in python for performance?
 
-.. _Documents: `Riv Instruction`_
+.. _Documents: `Intro`_
 
 ----
 
-Instruction Details
-===================
+Instruction
+===========
 
 * How to use?
 
