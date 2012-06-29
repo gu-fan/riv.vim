@@ -10,7 +10,7 @@ Intro
 Short for 'reStructuredText in Vim'. 
 
 It is for people either want to manage documents in a wiki way,
-or writing reStructuredText documents in a neat way.
+or writing documents in a neat way.
 
 .. _reStructuredText: http://docutils.sourceforge.net/rst.html
 
@@ -125,6 +125,8 @@ Things todo in this version.
   :Indent_: DONE 2012-06-29 the indentation in directives should return 0 after 
             2 blank lines
   :Publish_: DONE 2012-06-29 Support the reStructuredText document not in a project.
+  :Indent_:  DONE 2012-06-29 fix indent of field list. 
+             the line + 2 should line up with it's begining .
 
 Next 
 ~~~~~
@@ -132,7 +134,6 @@ Next
 Things todo in next versions.
 
 :Todos_:   The calculation of child todo items
-:Indent_:  fix indent of field list. the line + 2 should line up with it's begining .
 :Links_:   The standalone web link with ``/`` is detected as local file.
 :File_:    A template or snippet or shortcut for adding ``./`` and ``../`` and files.
            Maybe a sphinx doc ref as well.
