@@ -26,13 +26,6 @@ function! GetRSTIndent(row) "{{{
 
     let p_line = getline(a:row - 1)
 
-    " Field List
-    " 1:ind
-    let p_ind =  matchend(p_line, g:_riv_p.field_list)
-    if p_ind != -1
-        return p_ind
-    endif
-
     let pnb_line = getline(pnb_num)
     let ind = indent(pnb_num)
     
@@ -42,10 +35,14 @@ function! GetRSTIndent(row) "{{{
     " 4: prev ind
     let l_ind = matchend(pnb_line, g:_riv_p.list_all)
     if l_ind != -1 &&  a:row <= pnb_num+2 
+        " the start of list content
         return (ind + l_ind - matchend(pnb_line, '^\s*'))
     elseif l_ind != -1 &&  a:row <= pnb_num+3 
+        " the start of list left edge. 
+        " and should be the start of prev list content (if exists)
         return ind
     elseif l_ind != -1 &&  a:row >= pnb_num+4 
+        " the start of prev list left edge.
         call cursor(pnb_num,1)
         let p_lnum = searchpos(g:_riv_p.list_all.'|^\S', 'bW')[0]
         let p_ind  = matchend(getline(p_lnum),g:_riv_p.list_all)
