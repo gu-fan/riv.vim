@@ -349,7 +349,13 @@ also the number of folded lines will be shown.
   +-------+----+
   | c     | d  |
   +-------+----+
+
 * see ScreenShot_
+* You can use ``g:riv_fold_info_pos`` to change the info position.
+
+  + when set to ``left``, these info will be shown at left side.
+  + default is ``right``
+
 
 Folding will be updated after you write buffer to file.
 

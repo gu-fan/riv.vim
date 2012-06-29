@@ -676,7 +676,7 @@ fun! riv#fold#text() "{{{
         let dis_len = strdisplaywidth(line)
     endif
     let line = line."  ".repeat('-', max_len-dis_len)
-    if g:riv_fold_text_align == 'left'
+    if g:riv_fold_info_pos == 'left'
         return printf("%-5s|%s  %4s+ ",cate,line,(v:foldend-lnum))
     else
         return printf("%s|%-5s  %4s+ ",line,cate,(v:foldend-lnum))

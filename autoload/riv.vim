@@ -112,7 +112,7 @@ let s:default.options = {
     \'section_levels'     : '=-~"''`',
     \'fuzzy_help'         : 0,
     \'auto_format_table'  : 1,
-    \'fold_text_align'    : 'right',
+    \'fold_info_pos'      : 'right',
     \'ins_super_tab'      : 1,
     \'temp_path'          : "",
     \'month_names'        : 'January,February,March,April,May,June,July,'
