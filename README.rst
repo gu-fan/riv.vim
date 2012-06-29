@@ -131,13 +131,15 @@ Things todo in this version.
              before list item will now shift the list. 
   :Lists_:   DONE 2012-06-30 2b81464f_ bullet list will auto numbered when change to
              enumerated list.
-  :Lists_:   DONE 2012-06-30 2b81464f_ createing new list action in a field list will
-             only add it's indent.
+  :Lists_:   DONE 2012-06-30 21b8db23_ createing new list action in a field list will
+             only add it's indent. refile todo parts.
 
 .. _9229651d: 
    https://github.com/Rykka/riv.vim/commit/9229651de15005970990df57afba06d1b54e9bc9
 .. _2b81464f:
    https://github.com/Rykka/riv.vim/commit/2b81464fa2479f8aced799d9117a5081d9e780dc
+.. _21b8db23:
+   https://github.com/Rykka/riv.vim/commit/21b8db2398a6d8cbbf2332b9938c110022de2095
 
 Next 
 ~~~~~
