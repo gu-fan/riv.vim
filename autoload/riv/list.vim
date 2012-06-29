@@ -543,8 +543,10 @@ fun! s:is_roman(row) "{{{
     if line =~ '^\c\s*(\=[imlcxvd][).]'
         let older = s:get_older(a:row)
         if older==0 
+            " if no older , then 'i' is roman
             return line =~ '^\c\s*(\=i[).]'
         else
+            " if has older , then 'rr' is roman
             return getline(older) =~ '^\c\s*(\=[imlcxvd]\{2,}[).]'
         endif
     endif
@@ -661,7 +663,7 @@ fun! s:nr2listnum(n,type) "{{{
     if a:type=='1'
         return ''
     elseif a:type=='2' || a:type=='3'
-        return a:n<=0 ? 1 : 0
+        return a:n<=0 ? 1 : a:n
     elseif a:type=='4' || a:type=='5'
         return a:n > 26 ? 'Z' : a:n <= 0 ? 'A' : nr2char(a:n+64)
     elseif a:type=='6' || a:type=='7'
@@ -786,8 +788,10 @@ fun! riv#list#toggle_type(i) "{{{
 endfun "}}}
 fun! s:list_shift_len(row,len) "{{{
     let line = getline(a:row)
+
+
+    " sub the line's indentation
     let line = substitute(line,'^\s*', repeat(' ',indent(a:row)),'g')
-    let idt = repeat(' ', abs(a:len))
     if a:len>=0
         let act = 1
         let line = substitute(line,'^',repeat(' ',a:len),'')
@@ -795,16 +799,36 @@ fun! s:list_shift_len(row,len) "{{{
         let act = -1
         let line = substitute(line,'^\s\{,'.abs(a:len).'}','','')
     endif
-    let [type , idt , num , attr, space] =  riv#list#stat(line)
-    let nr = s:listnum2nr(num)
+    
+    " change the type
+    let is_roman = s:is_roman(a:row)
+    let [type , idt , num , attr, space] =  riv#list#stat(line, is_roman)
+    let nr = s:listnum2nr(num, is_roman)
     if type != -1
         if act == 1
             let level = s:stat2level(type, num, attr) 
             let [type,num,attr] = s:level2stat(level+1)
+            " from bullet list to enumerated list
+            if type > 1 && nr == 0
+                " for multi line action,
+                " last line have been changed. but current have not.
+                " so we find prev list and check if it's indent is same as 
+                " current to change
+                let older = s:get_list(a:row-1)
+                if older && indent(older) == indent(a:row) + a:len 
+                    let [_, _, o_nr, _, _ ] = riv#list#stat(getline(older), 
+                                \s:is_roman(older))
+                    let nr = o_nr + 1
+                else
+                    let nr = 1
+                endif
+            endif
         elseif act == -1
             let level = s:stat2level(type, num, attr) 
             let [type,num,attr] = s:level2stat(level-1)
         endif
+
+
         if num =~ '\u'
             let num = toupper(s:nr2listnum(nr,type))
         else
