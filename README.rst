@@ -121,16 +121,17 @@ Things todo in this version.
 
 * 0.66: 
 
-  :Todos_:  DONE 2012-06-29 add field list for todo items.
-  :Indent_: DONE 2012-06-29 the indentation in directives should return 0 after 
-            2 blank lines
+  :Todos_:   DONE 2012-06-29 add field list for todo items.
+  :Indent_:  DONE 2012-06-29 the indentation in directives should return 0 after 
+             2 blank lines
   :Publish_: DONE 2012-06-29 Support the reStructuredText document not in a project.
   :Indent_:  DONE 2012-06-29 fix indent of field list. 
              the line + 2 should line up with it's begining .
   :Insert_:  DONE 2012-06-29 9229651d_ ``<Tab>`` and ``<S-Tab>`` 
              before list item will now shift the list. 
 
-.. _9229651d: riv.vim/commit/9229651de15005970990df57afba06d1b54e9bc9
+.. _9229651d: 
+   https://github.com/Rykka/riv.vim/commit/9229651de15005970990df57afba06d1b54e9bc9
 
 Next 
 ~~~~~
@@ -151,13 +152,14 @@ Things todo in next versions.
 :Scratch_: Show Scratch sign in Calendar.
 :Helpers_: A command helper?
 :Links_:   Link tags infile ?
+:Links_:   Github flavor: commit link, issue link?
 :Todos_:   Todo item priorities?
 :Table_:   Support simple table format?
 :Table_:   Support column span?
 :Table_:   A vim table parser for compatible?
 :Table_:   A shortcut or command to create table with row * col.
 :Sections_: Adjust section level.
-:Sections_: Shortcut to add sections like the content directive?
+:Sections_: Shortcut to add sections references like the content directive?
 :Folding_: A buf parser write in python for performance?
 
 .. _Documents: `Intro`_

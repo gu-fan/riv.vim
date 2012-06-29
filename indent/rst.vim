@@ -70,14 +70,19 @@ function! GetRSTIndent(row) "{{{
     " 1: ind
     " 2+ : check prev exp_mark
     " 3+ : 0
-    if a:row > pnb_num+2
+    if a:row > pnb_num+3
         return 0
-    elseif  a:row > pnb_num+1
+    elseif  a:row > pnb_num+2
         call cursor(pnb_num,1)
-        let p_line = getline(searchpos('^\s*\.\.\s\|^\S', 'bW')[0])
+        let p_row = searchpos(g:_riv_p.list_all.'|^\s*\.\.\s\|^\S', 'bW')[0]
+        let p_line = getline(p_row)
         let p_ind  = matchend(p_line,'^\s*\.\.\s')
         if p_ind != -1
             return p_ind
+        endif
+        let p_ind  = matchend(p_line, g:_riv_p.list_all)
+        if p_ind != -1
+            return indent(p_row)
         endif
     endif
 
