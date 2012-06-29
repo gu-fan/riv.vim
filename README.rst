@@ -104,7 +104,7 @@ Todo
 Prev
 ~~~~
 
-See Changelog in doc/riv.txt
+See Changelog in doc/riv_log.rst
 
 * 0.65:
 
@@ -645,7 +645,6 @@ Manage your reStructuredText documents in a wiki way.
 File
 ~~~~
 
-
 As reStructuredText haven't define a pattern for local files currently.
 
 **Riv**  provides two kinds of style to determine the local file
@@ -689,8 +688,8 @@ The ``bare extension style`` and ``square bracket style``
   + when set to 0, no local file link.
   + default is 1.
 
-
-* When Publish to html, all detected local file link will be converted to an embedded link.
+* When Publish to html, and it's a file in a project.
+  all detected local file link will be converted to an embedded link.
 
     e.g. `xxx.rst <xxx.html>`_ `xxx.py <xxx.py>`_
 
