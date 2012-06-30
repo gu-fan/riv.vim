@@ -53,7 +53,7 @@ fun! s:find_tar(text) "{{{
 
     let norm_ptn = s:normal_ptn(a:text)
     let [c_row,c_col] = getpos('.')[1:2]
-    let row = s:find_sect('\v\c'.norm_ptn)
+    let row = s:find_sect('\v\c^'.norm_ptn.'$')
     if row > 0
         return [row, c_col]
     endif

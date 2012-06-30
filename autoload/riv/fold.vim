@@ -266,8 +266,8 @@ fun! s:set_obj_dict() "{{{
             " stop current sect_lv
             " may encounter erros
             let lst_lv = 0
-            let sec_lv = sec_lv>1 ? sec_lv-1 : 0
-            let m.level = sec_lv
+            " let sec_lv = sec_lv>1 ? sec_lv-1 : 0
+            " let m.level = sec_lv
             let b:riv_obj[m.bgn] = m
         elseif m.type== 'exp'
             let f = 1
@@ -364,12 +364,13 @@ endfun "}}}
 " Check "{{{
 fun! s:check(row) "{{{
     " check and set the state and return the value dict.
-    let row = a:row
-    let line = b:lines[row]
                 
     if b:foldlevel < 0
         return
     endif
+
+    let row = a:row
+    let line = b:lines[row]
 
     call s:s_checker(row)
 

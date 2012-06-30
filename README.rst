@@ -133,10 +133,9 @@ Things todo in this version.
              enumerated list.
   :Lists_:   DONE 2012-06-30 21b8db23_ createing new list action in a field list will
              only add it's indent. refile todo parts.
-  :Links_:   DONE 2012-06-30 69555b21_ Optimized link finding 
+  :Links_:   DONE 2012-06-30 69555b21_ Optimized link finding. Add email web link.
   :Links_:   DONE 2012-06-30 69555b21_ Add anonymous phase target and reference 
-             jumping and highlighting.
-
+             jumping and highlighting. 
 
 .. _69555b21: 
    https://github.com/Rykka/riv.vim/commit/69555b2172950ed1ddf236e43b3bdcaea343afe0
@@ -176,7 +175,7 @@ Things todo in next versions.
 :Sections_: Shortcut to add sections references like the content directive?
 :Folding_: A buf parser write in python for performance?
 
-.. _Documents: `Intro`_
+.. _Documents: Intro_
 
 ----
 
