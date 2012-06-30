@@ -3,7 +3,7 @@
 "    File: list.vim
 " Summary: the bullet list and enum list
 "  Author: Rykka G.Forest
-"  Update: 2012-06-15
+"  Update: 2012-06-30
 " Version: 0.5
 "=============================================
 let s:cpo_save = &cpo
@@ -478,6 +478,7 @@ fun! s:list_shift_len(row,len) "{{{
         let line = substitute(line,'^\s\{,'.abs(a:len).'}','','')
     endif
     
+    " when it's first and it's 'i', we should make sure it' roman.
     let is_roman = s:is_roman(a:row)
     let [type , idt , num , attr, space] =  riv#list#stat(line, is_roman)
     let nr = s:listnum2nr(num, is_roman)
@@ -506,15 +507,15 @@ fun! s:list_shift_len(row,len) "{{{
 endfun "}}}
 fun! s:fix_nr(row) "{{{
     " nr are based on previous list item
+    let line = getline(a:row)
     let older = s:get_older(a:row)
     if older 
         let is_roman = s:is_roman(older)
-        let line = getline(older)
-        let [type , idt , num , attr, space] = riv#list#stat(line, is_roman)
+        let oline = getline(older)
+        let [type , idt , num , attr, space] = riv#list#stat(oline, is_roman)
         let onr = s:listnum2nr(num, is_roman)
         let nr = onr + 1
     else
-        let line = getline(a:row)
         let is_roman = s:is_roman(a:row)
         let [type , idt , num , attr, space] = riv#list#stat(line, is_roman)
         let nr = s:listnum2nr(num, is_roman)

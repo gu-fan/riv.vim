@@ -406,13 +406,20 @@ fun! s:check(row) "{{{
         return
     elseif b:foldlevel > 1 && !has_key(b:state, 'e_chk')
                 \ && line=~s:p.list_all
+
         let idt = riv#fold#indent(line)
-        call insert(b:state.l_chk, 
-                    \ {'type': 'list', 'bgn': a:row, 
-                    \ 'indent': idt,
-                    \ 'child': [], 'parent': 'list_root',
-                    \ 'level': idt/2+1,
-                    \},0)
+        let l_item = {'type': 'list', 'bgn': a:row, 
+                  \ 'indent': idt,
+                  \ 'child': [], 'parent': 'list_root',
+                  \ 'level': idt/2+1,
+                  \}
+
+        if row == line('$')
+            let l_item.end = a:row
+            call add(b:state.matcher,l_item)
+        else
+            call insert(b:state.l_chk, l_item, 0)
+        endif
         return 1
     elseif line=~s:p.section 
                 \ && line !~ '^\.\.\_s*$'
