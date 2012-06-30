@@ -126,6 +126,7 @@ let s:default.maps = {
     \'RivLinkNext'       : 'call riv#link#finder("f")',
     \'RivLinkPrev'       : 'call riv#link#finder("b")',
     \'RivLinkDBClick'    : 'call riv#action#db_click(1)',
+    \'RivLinkEnter'      : 'call riv#action#db_click(0)',
     \'RivListShiftRight' : 'call riv#list#shift("+")',
     \'RivListShiftLeft'  : 'call riv#list#shift("-")',
     \'RivListNewList'    : 'call riv#list#new(0)',
@@ -197,7 +198,8 @@ let s:default.fold_maps = {
 " c => scratch
 " 2 => convert
 let s:default.buf_maps = {
-    \'RivLinkDBClick'    : [['<CR>', '<KEnter>', '<2-LeftMouse>'],  '',  ''],
+    \'RivLinkDBClick'    : [['<2-LeftMouse>'],  '',  ''],
+    \'RivLinkEnter'      : [['<CR>', '<KEnter>'],  '',  ''],
     \'RivLinkOpen'       : ['',  'n',  'ko'],
     \'RivLinkNext'       : ['<TAB>',    'n',  'kn'],
     \'RivLinkPrev'       : ['<S-TAB>',  'n',  'kp'],
@@ -517,16 +519,24 @@ if !exists("g:_riv_c")
                 \ '(v:val+1).".". td_key_list[v:val]')
     let g:_riv_t.td_keyword_groups = map(td_key_list, 
                 \ 's:normlist(split(v:val,'',''))')
+    " create a keyword index dic for query
+    let g:_riv_t.td_keyword_dic = {}
+    for i in range(len(g:_riv_t.td_keyword_groups))
+        for j in range(len(g:_riv_t.td_keyword_groups[i]))
+            " the 0 group is for td box.
+            let g:_riv_t.td_keyword_dic[g:_riv_t.td_keyword_groups[i][j]] = [i+1,j]
+        endfor
+    endfor
     let g:_riv_p.td_keywords = '\v%('.join(s:normlist(split(g:riv_todo_keywords,'[,;]')),'|').')'
 
     let g:_riv_t.time_fmt  = "%Y-%m-%d"
 
-    let g:_riv_p.todo_box = '\v('. g:_riv_p.list_all .')(\[.\] )'
+    let g:_riv_p.todo_box = '\v('. g:_riv_p.list_all .')(\[.\]\s+)'
     let g:_riv_p.todo_key = '\v('. g:_riv_p.list_all .')(' 
-                            \ . g:_riv_p.td_keywords.' )'
+                            \ . g:_riv_p.td_keywords.'\s+)'
     " sub1 list sub2 todo box sub3 todo key 
-    let g:_riv_p.todo_all = '\v('. g:_riv_p.list_all .')%((\[.\] )'
-                         \ .'|('. g:_riv_p.td_keywords.' ))'
+    let g:_riv_p.todo_all = '\v('. g:_riv_p.list_all .')%((\[.\]\s+)'
+                         \ .'|('. g:_riv_p.td_keywords.'\s+))'
     " sub4 timestamp
     let g:_riv_p.timestamp = '(\d{4}-\d{2}-\d{2}%( |$))'
     let g:_riv_p.todo_tm_bgn  = g:_riv_p.todo_all . g:_riv_p.timestamp

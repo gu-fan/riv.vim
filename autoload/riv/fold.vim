@@ -433,9 +433,13 @@ fun! s:check(row) "{{{
                 \ && line !~ '^\.\.\_s*$'
         let b:state.s_chk =  {'type': 'sect' , 'bgn': a:row, 'attr': line[0]}
         return 1
+    elseif line=~ '^__\s'
+        " it's anonymous link
+        let b:state.e_chk= {'type': 'exp', 'bgn':a:row,}
+        return 1
     elseif line=~'^\s*\w'
         return
-    elseif b:foldlevel > 2 && line=~s:p.exp_m
+    elseif b:foldlevel > 2 && (line=~s:p.exp_m )
         if  (line=~'^\.\.\s*$' && a:row!=line('$') 
                             \ && b:lines[a:row+1]=~'^\s*$')
             call add(b:state.matcher,{'type': 'exp', 'mark': 'ignored', 

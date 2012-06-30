@@ -26,8 +26,11 @@ fun! riv#todo#toggle_todo() "{{{
         echo "It's not a List, stopped..."
         return 
     endif
+    
+    " for adjust cursor position
     let prv_td_end = s:get_td_end(line)
     let prv_len = strwidth(line)
+
     if type == -1 
         if init_key == 0 
             let line = s:add_todo_box(line)
@@ -178,33 +181,29 @@ fun! s:get_todo_id(line) "{{{
     let idx  = match(a:line, g:_riv_p.list_all)
     if idx == -1 | return [-2, 0]  |  endif          " not an list
 
-    let todo_match = matchlist(a:line,g:_riv_p.todo_all, idx)
+    let todo_match = matchlist(a:line, g:_riv_p.todo_all)
     if empty(todo_match)
-        return [-1, 0]                            
+        return [-1, 0]
     endif
     
-    if !empty(todo_match[2])            " '[x] '
-        return s:get_box_id(todo_match[2][1])
-    elseif !empty(todo_match[3])        " 'KEYWORD '
-        return s:get_key_id(todo_match[3][:-2])
+    if !empty(todo_match[2])            
+        return s:get_box_id(s:strip(todo_match[2]))
+    elseif !empty(todo_match[3])        
+        return s:get_key_id(s:strip(todo_match[3]))
     endif
 endfun "}}}
-fun! s:get_box_id(text) "{{{
-    " [0,id] : box
-    let idx = index(g:_riv_t.todo_levels, a:text)
-    if idx == -1 | return [0, -1]  | endif           " null idx match
-    return [0, idx]                                   " a box idx
+fun! s:strip(text) "{{{
+    return matchstr(a:text, '^\s*\zs\S.*\S\ze\s*$')
 endfun "}}}
-fun! s:get_key_id(text) "{{{
-    " [1,id] : key grp[0] 
-    " [2,id] : key grp[1]
-    for i in range(len(g:_riv_t.td_keyword_groups))
-        let idx = index(g:_riv_t.td_keyword_groups[i], a:text)
-        if idx != -1
-            return [i+1, idx]             " group , idx
-        endif
-    endfor
-    return [-1, 0]                        " not keywords
+fun! s:get_box_id(text) "{{{
+    return [0, index(g:_riv_t.todo_levels, a:text)]
+endfun "}}}
+fun! s:get_key_id(key) "{{{
+    if has_key(g:_riv_t.td_keyword_dic, a:key)
+        return g:_riv_t.td_keyword_dic[a:key]
+    else
+        return [-1, 0]
+    endif
 endfun "}}}
 fun! riv#todo#get_td_stat(line) "{{{
     let [grp,idx] = s:get_todo_id(a:line)
@@ -229,7 +228,9 @@ fun! s:add_todo_box(line) "{{{
    return substitute(a:line, g:_riv_p.list_all, '\0[ ] ','')
 endfun "}}}
 fun! s:add_todo_key(line,grp,id) "{{{
-   return substitute(a:line, g:_riv_p.list_all, '\0'.g:_riv_t.todo_all_group[a:grp][a:id].' ','')
+   let max_id = len(g:_riv_t.todo_all_group[a:grp])-1
+   let id = a:id > max_id ? max_id : a:id < 0 ? 0 : a:id 
+   return substitute(a:line, g:_riv_p.list_all, '\0'.g:_riv_t.todo_all_group[a:grp][id].' ','')
 endfun "}}}
 fun! s:change_todo_box(line,id) "{{{
     let str = g:_riv_t.todo_levels[a:id]

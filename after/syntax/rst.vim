@@ -48,7 +48,7 @@ let s:lists = '\c%(^\s*%('
             \.'|%(\d+|[#a-z]|[imlcxvd]+)[.)]'
             \.'|\(%(#|\d+|[a-z]|[imlcxvd]+)\)'
             \.')\s+)'
-let s:datestamp = '%(\s\d{4}-\d{2}-\d{2})=%(\s\~ \d{4}-\d{2}-\d{2})='
+let s:datestamp = '%(\s+\d{4}-\d{2}-\d{2})=%(\s\~ \d{4}-\d{2}-\d{2})='
 exe 'syn match rstTodoBoxRegion '
         \.'`\v' . s:lists . '@<='
         \.'%(' . s:td_box . '|'. s:td_key .')'
@@ -74,9 +74,9 @@ exe 'syn match rstTodoBoxRegionDone '
 " relink "{{{
 
 if &background == 'light'
-    hi def rstFileLink    guifg=#437727  gui=underline
+    hi def rstFileLink    guifg=#437727  gui=underline ctermfg=28 cterm=underline
 else
-    hi def rstFileLink    guifg=#58A261  gui=underline
+    hi def rstFileLink    guifg=#58A261  gui=underline ctermfg=77 cterm=underline
 endif
 
 hi def link rstTodoBoxList Include

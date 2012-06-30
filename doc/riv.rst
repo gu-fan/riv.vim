@@ -2,7 +2,7 @@ Intro
 =====
 
 :Author: Rykka G.Forest
-:Date:   2012-06-29 10:38:56
+:Date:   2012-07-01 02:59:36
 :Version: 0.66 
 :Github: https://github.com/Rykka/riv.vim
 
@@ -13,7 +13,6 @@ It is for people either want to manage documents in a wiki way,
 or writing documents in a neat way.
 
 .. _reStructuredText: http://docutils.sourceforge.net/rst.html
-
 
 Screenshot
 ----------
@@ -109,11 +108,11 @@ See Changelog in doc/riv_log.rst
 
 * 0.65:
 
-  + DONE 2012-06-27 take care of the slash of directory in windows .
+  + TODO  2012-07-01 take care of the slash of directory in windows .
   + FIXED 2012-06-28 correct cursor position when creating todo items and list items.
   + FIXED 2012-06-28 link highlight group removed after open another buffer.
   + FIXED 2012-06-28 auto mkdir when write file to disk
-  + DONE 2012-06-28 format the scratch index, sort with year/month/day 
+  + DONE  2012-06-28 format the scratch index, sort with year/month/day 
 
 This
 ~~~~~
@@ -139,10 +138,13 @@ Things todo in this version.
              jumping and highlighting. 
   :Highlighting_:   DONE 2012-07-01 4dc853c1_ fix doctest highlighting
   :Table_:   DONE 2012-07-01 38a8cebb_ Support simple table folding.
+  :Documents_: DONE 2012-07-01 help doc use doc/riv.rst  which is link of README.rst
+  :Documents_: DONE 2012-07-01 Add reStructuredText hint and link in instructions
+  :Indent_:  DONE 2012-07-01 The indent for shifting lists should based on 
+             the parent/child list item length.
 
 .. _38a8cebb: 
    https://github.com/Rykka/riv.vim/commit/38a8cebbc69f018cbc7caafa26473e2aee2dbe94
-
 .. _4dc853c1: 
    https://github.com/Rykka/riv.vim/commit/4dc853c132848872810fdc549df3dc429f31fa56
 .. _69555b21: 
@@ -164,15 +166,13 @@ Things todo in next versions.
            Maybe a sphinx doc ref as well.
 :Documents_: Document part: options / commands.
 :Documents_: Sreencast and screenshot of intro.
-:Documents_: Seperate instruction and intro. help use instruction.rst 
-:Documents_: Add Specification/Intro of reStructuredText.
 :Publish_: An option to enable highlighting todo items.
 :Helpers_: An option Helper and option cache. 
            Let people use it even without touching ``.vimrc`` .
 :Scratch_: Show Scratch sign in Calendar.
 :Helpers_: A command helper?
-:Links_:   Link tags infile ?
-:Links_:   Github flavor: commit link, issue link?
+:Links_:   Link tags between files?
+:Links_:   Github flavor: create commit link, issue link?
 :Todos_:   Todo item priorities?
 :Table_:   Support simple table format?
 :Table_:   Support column span?
@@ -181,6 +181,10 @@ Things todo in next versions.
 :Sections_: Adjust section level.
 :Sections_: Shortcut to add sections references like the content directive?
 :Folding_: A buf parser write in python for performance?
+:Indent_:  <Tab> should act when as <Bs> when indenting
+:Indent_:  The content space for field list should align with prev field list.
+:Indent_:  A command to format the indent of lists.
+
 
 .. _Documents: Intro_
 
@@ -191,14 +195,23 @@ Instruction
 
 * How to use?
 
-  + For writing reStructuredText documents in a neat way.
+  + If you are not familiar with reStructuredText, see QuickStart__
+  
+__ http://docutils.sourceforge.net/docs/user/rst/quickstart.html
+..
+
+  + For writing documents,
 
     When editing an reStructuredText document (``*.rst`` ), 
-    these settings will be automatically on. 
+
+    These settings will be automatically on. 
     (make sure ``filetype on`` in your vimrc)
 
-  + For managing documents in a wiki way, you should setup a project first, 
-    see Project_.
+    See detail instruction in `For reStructuredText`_
+
+  + For managing documents, 
+
+    See detail instruction in `For Riv`_
 
 * About the mapping
 
@@ -215,35 +228,36 @@ Instruction
   + ``g:riv_buf_leader`` : leader map for reStructuredText buffers.
   + ``g:riv_buf_ins_leader`` : leader map for reStructuredText buffers's insert mode.
 
-
 For reStructuredText
 --------------------
 
-These features are for all reStructuredText files.
-
-If you are not familiar with it, see QuickStart__
-
-__ http://docutils.sourceforge.net/docs/user/rst/quickstart.html
+These features are in all reStructuredText files.
 
 Sections 
 ~~~~~~~~~
 
 Section levels and numbers are auto detected.
-The section number will be shown when folded.
 
 * Actions:
 
-  Normal and Insert:
+  Normal and Insert Mode
 
-  + Create: Use ``:RivTitle1`` ``<C-E>s1`` ...  ``:RivTitle6`` ``<C-E>s6`` ,
+  + Create: 
+
+    Use ``:RivTitle1`` ``<C-E>s1`` ...  ``:RivTitle6`` ``<C-E>s6`` ,
     To create level 1 to level 6 section title from current word.
 
     If it's empty, you will be asked to input one.
 
   + Folding: 
+
     Pressing ``<Enter>`` or double clicking on section title will toggle the folding
     of the section.
+
+    The section number will be shown when folded.
+
   + Jumping:
+
     Clicking on the section reference will bring you to the section title.
 
     e.g. Features_ link will bring you to the `Feature` Section (in vim)
@@ -298,10 +312,10 @@ Auto numbered and auto leveled bullet and enumerated list.
   You can use any of them as a list item, but the changing sequence is hard coded.
 
   This means when you shift right or add a child list with a ``-`` list item, 
-  it will auto change to ``1.``
+  the new one will be ``1.``
 
   And if you shift left or add a parent list item with a ``a.`` list item , 
-  it will auto change to ``A.``
+  the new one will be ``A.``
 
 * Auto Number:
 
@@ -417,7 +431,7 @@ The Block elements of the document.
    > It have a punctuation '' at the line beginning.
    > The quoting characters are preserved in the processed document
 
-  They are highlighted and folded.
+  It's highlighted and folded.
 
   See `Literal Blocks`__
     
@@ -480,13 +494,10 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#doctest-bl
 
   It's folded , and it's highlighted depending on it's role.
 
-  And for the ``code`` directives(also ``sourcecode`` and ``code-block``). 
-  syntax highlighting is on.
-
-  You can set which languages to be highlighted by ``g:riv_highlight_code``,
-  default is ``lua,python,cpp,javascript,vim,sh``
-   
   See `Explicit Markup Blocks`__
+
+  And for the ``code`` directives, syntax highlighting is on. 
+  See `code block syntax highlighting`_ 
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#explicit-markup-blocks
 
@@ -739,13 +750,16 @@ Highlighting
 
 Improved syntax file. 
 
-*  Lists Highlightings 
-*  Code Block syntax highlighting::
+*  Imporoved Section,Lists,Blocks,Links Highlightings 
+*  _`Code Block Syntax Highlighting`
+
+   for the ``code`` directives (also ``sourcecode`` and ``code-block``). 
+   syntax highlighting is on ::
  
      .. code:: python
      
          # python highlighting
-         # github does not support syntax highlighting for rst file yet.
+         # github does not support syntax highlighting rendering for rst file yet.
          x = [0 for i in range(100)]
 
    You can use ``g:riv_highlight_code`` to set which languages to be highlighted.
@@ -755,11 +769,13 @@ Improved syntax file.
           python pygments_  package must installed for ``docutils`` 
           parsing syntax highlighting.
 
-          see http://docutils.sourceforge.net/sandbox/code-block-directive/tools/pygments-enhanced-front-ends/
+          See http://docutils.sourceforge.net/sandbox/code-block-directive/tools/pygments-enhanced-front-ends/
 
-*  The links under cursor are highlighted. 
+*  The local files are highlighted by ``rstFileLink``, 
+   you can change the color if needed.
+*  The links under cursor are highlighted by ``hl-difftext``
    Disable it by set ``g:riv_hover_link_hl`` to 0
-*  Todo Item highlightings
+*  Todo Item are highlighted only in vim, not in converted files.
 
 Indent
 ~~~~~~
@@ -863,7 +879,9 @@ Some wrapper to convert rst files to html/xml/latex/odt/...
 For Riv
 -------
 
-These features are for the Riv Project.
+These features are for documents in a Riv Project, 
+Though some can be used in a document without a project. 
+They have no full support.
 
 Project
 ~~~~~~~

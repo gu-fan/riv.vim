@@ -24,6 +24,9 @@ fun! s:get_all_list(row) "{{{
         else
             let save_pos = getpos('.')
             let [row,col] = searchpos(g:_riv_p.list_all.'|^\S', 'wnb',0,100)
+            if row == 0
+                return 0
+            endif
             let s_idt = indent(row)
             while c_idt <= s_idt        " find a list have less indent
                 if getline(row) =~ '^\S'
@@ -55,6 +58,9 @@ fun! s:get_list(row) "{{{
         else
             let save_pos = getpos('.')
             let [row,col] = searchpos(g:_riv_p.list_b_e.'|^\S', 'wnb',0,100)
+            if row == 0
+                return 0
+            endif
             let s_idt = indent(row)
             while c_idt <= s_idt        " find a list have less indent
                 if getline(row) =~ '^\S'
@@ -67,7 +73,11 @@ fun! s:get_list(row) "{{{
                 let s_idt = indent(row)
             endwhile
             call setpos('.',save_pos)
-            return row
+            if getline(row) !~ '^\S'
+                return row
+            else
+                return 0
+            endif
         endif
     endif
 endfun "}}}
@@ -81,6 +91,9 @@ fun! s:get_older(row) "{{{
         exe prevnonblank(c_row-1)
         let c_idt = indent(c_row)
         let [row,col] = searchpos(g:_riv_p.list_b_e.'|^\S', 'wnb',0,100)
+        if row == 0
+            return 0
+        endif
         let s_idt = indent(row)
         while c_idt < s_idt    " find a list have 
                                " same list level           
@@ -94,8 +107,8 @@ fun! s:get_older(row) "{{{
             let s_idt = indent(row)
         endwhile
         call setpos('.',save_pos)
-        if s_idt == c_idt
-            return getline(row) =~ '^\S' ? 0 : row
+        if s_idt == c_idt && getline(row) !~ '^\S'
+            return row
         else
             return 0
         endif
@@ -114,6 +127,9 @@ fun! s:get_parent(row) "{{{
         let save_pos = getpos('.')
         exe prevnonblank(c_row-1)
         let [row,col] = searchpos(g:_riv_p.list_b_e.'|^\S', 'wnb',0,100)
+        if row == 0
+            return 0
+        endif
         let s_idt = indent(row)
         while c_idt <= s_idt  " find a list have 
                               " same list level           
@@ -127,7 +143,7 @@ fun! s:get_parent(row) "{{{
             let s_idt = indent(row)
         endwhile
         call setpos('.',save_pos)
-        if s_idt < c_idt
+        if s_idt < c_idt && getline(row) !~ '^\S'
             return row
         else
             return 0
@@ -144,6 +160,9 @@ fun! s:get_child(row) "{{{
         let save_pos = getpos('.')
         exe nextnonblank(c_row+1)
         let [row,col] = searchpos(g:_riv_p.list_b_e.'|^\S', 'wn',0,100)
+        if row == 0
+            return child
+        endif
         let s_idt = indent(row)
         while c_idt < s_idt
             if getline(row) =~ '^\S'
@@ -523,7 +542,8 @@ fun! s:fix_nr(row) "{{{
     else
         let is_roman = s:is_roman(a:row)
         let [type , idt , num , attr, space] = riv#list#stat(line, is_roman)
-        let nr = s:listnum2nr(num, is_roman)
+        " let nr = s:listnum2nr(num, is_roman)
+        let nr = 1
     endif
     if num =~ '\u'
         let num = toupper(s:nr2listnum(nr,type))
@@ -544,6 +564,23 @@ fun! riv#list#shift(direction) range "{{{
         let ln = &shiftwidth
     else
         let ln = len(space) + len(num . attr)
+        if a:direction=='-'
+            " use prev parent's item length
+            let prev = s:get_parent(a:firstline)
+            if prev 
+                let ln = indent(a:firstline) - indent(prev)
+            endif
+        else
+            let prev = s:get_list(a:firstline-1)
+            if prev 
+                let c_ln = indent(prev)  - indent(a:firstline)
+                " if prev list indent is smaller than current item's length.
+                " then use prev indent
+                if c_ln > 0  && c_ln < ln
+                    let ln = c_ln
+                endif
+            endif
+        endif
     endif
     if a:direction=="-"
         let vec = -ln
