@@ -611,13 +611,13 @@ if !exists("g:_riv_c")
     " `xxx xx`_
     let g:_riv_p.link_ref_phase  = '\v`[^`\\]*%(\\.[^`\\]*)*`_\ze'.s:ref_end
     "  xxx__
-    let g:_riv_p.link_ref_anoymous = '\v%(<'.s:ref_name.'|`[^`\\]*%(\\.[^`\\]*)*`)__\ze'.s:ref_end
+    let g:_riv_p.link_ref_anonymous = '\v%(<'.s:ref_name.'|`[^`\\]*%(\\.[^`\\]*)*`)__\ze'.s:ref_end
     " [#]_ [*]_  [#xxx]_  [3]_    and citation [xxxx]_
     let g:_riv_p.link_ref_footnote = '\v\[%(\d+|#|\*|#='.s:ref_name.')\]_\ze'.s:ref_end
 
     let g:_riv_p.link_reference = g:_riv_p.link_ref_normal
                 \ . '|' . g:_riv_p.link_ref_phase
-                \ . '|' . g:_riv_p.link_ref_anoymous
+                \ . '|' . g:_riv_p.link_ref_anonymous
                 \ . '|' . g:_riv_p.link_ref_footnote
 
     " Target:

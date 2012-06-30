@@ -74,12 +74,12 @@ fun! s:expand_link(word) "{{{
             let trim = strpart(word,  0 , len(word)-1)
             let ref = word
             let tar = '.. _'.trim.': '.trim
-        elseif word =~ g:_riv_p.link_ref_anoymous
+        elseif word =~ g:_riv_p.link_ref_anonymous
             " anonymous link
             let ref = word
-            let tar = '__ '.word
+            let tar = '__ '.s:normal_phase(word)
         elseif word =~ g:_riv_p.link_ref_phase
-            let trim = strpart(word,  0 , len(word)-1)
+            let trim = s:normal_phase(word)
             let ref = word
             let tar = '.. _'.trim.': '.trim
         else
@@ -90,34 +90,66 @@ fun! s:expand_link(word) "{{{
     endif
 endfun "}}}
 
-fun! riv#create#link() "{{{
-    let row = line('.')
+fun! s:normal_phase(text) "{{{
+    let text = substitute(a:text ,'\v(^__=|_=_$)','','g')
+    let text = substitute(text ,'\v(^`|`$)','','g')
+    let text = substitute(text ,'\v(^\[|\]$)','','g')
+    return text
+endfun "}}}
+fun! s:get_cWORD_obj() "{{{
+    let line = getline('.')
+    let ptn = printf('\%%%dc.', col('.'))
+    let obj = {}
+    if matchstr(line, ptn)=~'\S'
+        let ptn = '\S*'.ptn.'\S*'
+        let obj.str = matchstr(line, ptn)
+        let obj.start = match(line, ptn)
+        let obj.end  = matchend(line, ptn)
+    endif
+    return obj
+endfun "}}}
+fun! s:get_phase_obj() "{{{
+    " if cursor is in a phase ,return it's idx , else return -1
+    let line = getline('.')
     let col = col('.')
+    let ptn = printf('`[^`]*\%%%dc[^`]*`__\?\|\%%%dc`[^`]*`__\?', col, col)
+    let obj = {}
+    let start = match(line, ptn)
+    if start != -1
+        let obj.start = start
+        let obj.str = matchstr(line, ptn)
+        let obj.end  = matchend(line, ptn)
+    endif
+    return obj
+endfun "}}}
+fun! riv#create#link() "{{{
+    let [row, col] = [line('.'), col('.')]
     let line = getline(row)
-    let word = matchstr(line , '\S*\%'.col.'c\S*')
-    let idx = match(line , '\S*\%'.col.'c\S*')
-    let end = matchend(line , '\S*\%'.col.'c\S*')
-    if empty(word)
-        let word=input("Input A link name:")
-        if empty(word)
+
+    let obj = s:get_phase_obj()
+    if empty(obj)
+        let obj = s:get_cWORD_obj()
+    endif
+    if !empty(obj)
+        let word = obj.str
+        let idx  = obj.start + 1
+        let end  = obj.end + 1
+    else
+        let word = input("Input a link name:")
+        if word =~ '^\s*$'
             return
         endif
-        let idx =col
-        let end =col+1
+        let idx = col
+        let end = col
     endif
 
     let [ref, tar] = s:expand_link(word)
 
-    " could not substitute in an empty line
-    if line =~ '^$'
-        let line = ref
-    else
-        let line = substitute(line , '\%'.idx. 'c' . '.\{' .(end-idx+1).'}', 
-                    \ ' '.ref.' ' , '')
-    endif
+    let line = substitute(line, '\%'.idx.'c.\{'.(end-idx).'}', ref, '')
+
     call setline(row , line)
     call append(row, ["",tar])
-    exe "normal! jj$viW\<C-G>"
+    exe "normal! jj0f:2lv$\<C-G>"
 endfun "}}}
 "}}}
 " section title "{{{

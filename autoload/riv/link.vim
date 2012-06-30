@@ -37,6 +37,7 @@ fun! s:normal_ptn(text) "{{{
     let text = substitute(escape(text,'.^$*[]\'),'\s\+','\\s+','g')
     return text
 endfun "}}}
+
 fun! s:target_ptn(text) "{{{
     return '\v\c(_`\zs'. a:text .'`|\_^\.\.\s\zs\['.a:text.'\]|\_^\.\.\s\zs_'.a:text.':)'
 endfun "}}}
@@ -46,7 +47,7 @@ endfun "}}}
 
 fun! s:find_tar(text) "{{{
 
-    if a:text =~ g:_riv_p.link_ref_anoymous
+    if a:text =~ g:_riv_p.link_ref_anonymous
         let [a_row, a_col] = searchpos(g:_riv_p.link_tar_anonymous, 'wn', 0 , 100)
         return [a_row, a_col]
     endif
@@ -64,7 +65,7 @@ endfun "}}}
 fun! s:find_ref(text) "{{{
 
     if a:text =~ g:_riv_p.link_tar_anonymous
-        let [a_row, a_col] = searchpos(g:_riv_p.link_ref_anoymous, 'wnb', 0 , 100)
+        let [a_row, a_col] = searchpos(g:_riv_p.link_ref_anonymous, 'wnb', 0 , 100)
         return [a_row, a_col]
     endif
 
@@ -185,7 +186,7 @@ fun! s:get_phase_idx() "{{{
     " if cursor is in a phase ,return it's idx , else return -1
     let line = getline('.')
     let col = col('.')
-    let ptn = printf('`[^`]*\%%%dc[^`]*`_\|\%%%dc`[^`]*`_', col, col)
+    let ptn = printf('`[^`]*\%%%dc[^`]*`__\?\|\%%%dc`[^`]*`__\?', col, col)
     return match(line, ptn)
 endfun "}}}
 " highlight

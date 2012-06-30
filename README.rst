@@ -140,9 +140,11 @@ Things todo in this version.
   :Table_:   DONE 2012-07-01 38a8cebb_ Support simple table folding.
   :Documents_: DONE 2012-07-01 help doc use doc/riv.rst  which is link of README.rst
   :Documents_: DONE 2012-07-01 Add reStructuredText hint and link in instructions
-  :Indent_:  DONE 2012-07-01 The indent for shifting lists should based on 
+  :Indent_:  DONE 2012-07-01 7e19b531_ The indent for shifting lists should based on 
              the parent/child list item length.
 
+.. _7e19b531: 
+   https://github.com/Rykka/riv.vim/commit/7e19b531371e47e36bc039fa4f142434bcf4eb39
 .. _38a8cebb: 
    https://github.com/Rykka/riv.vim/commit/38a8cebbc69f018cbc7caafa26473e2aee2dbe94
 .. _4dc853c1: 
