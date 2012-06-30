@@ -1,10 +1,9 @@
 "=============================================
-"    Name: rstin.vim
-"    File: rstin.vim
+"    Name: riv.vim
+"    File: riv.vim
 " Summary: ReST file plugin
 "  Author: Rykka G.Forest
 "  Update: 2012-06-28
-" Version: 0.5
 "=============================================
 
 let g:riv_force = exists("g:riv_force") ? g:riv_force : 0
@@ -71,17 +70,16 @@ call s:fold_map(g:riv_default.fold_maps)
 call riv#show_menu()
 aug RIV_BUFFER "{{{
     if exists("g:riv_auto_format_table") "{{{
-        au InsertLeave <buffer> call riv#table#format_pos()
+        au! InsertLeave <buffer> call riv#table#format_pos()
     endif "}}}
     if exists("g:riv_hover_link_hl") "{{{
         " cursor_link_highlight
-        au CursorMoved,CursorMovedI <buffer>  call riv#link#hi_hover()
+        au! CursorMoved,CursorMovedI <buffer>  call riv#link#hi_hover()
         " clear the highlight before bufwin/winleave
-        au WinLeave,BufWinLeave     <buffer>  2match none
+        au! WinLeave,BufWinLeave     <buffer>  2match none
     endif "}}}
-    au BufWritePost <buffer>  call riv#fold#update()
-    au BufWritePost <buffer>  call riv#create#update_todo()
-    au BufWritePre  <buffer>  call riv#create#auto_mkdir()
+    au! BufWritePost <buffer>  call riv#fold#update() | call riv#create#update_todo()
+    au! BufWritePre  <buffer>  call riv#create#auto_mkdir()
 aug END "}}}
 
 " tests 

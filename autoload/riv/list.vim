@@ -244,9 +244,7 @@ fun! riv#list#new(act) "{{{
         let list_str = riv#list#line_str(line, a:act, idt, is_roman)
     endif
     let line = getline('.')
-    echoe line
     let line = substitute(line, '^\s*', list_str, '')
-    echoe line
     call setline(row, line)
 endfun "}}}
 fun! riv#list#line_str(line, act, idt,...) "{{{

@@ -137,6 +137,8 @@ Things todo in this version.
   :Links_:   DONE 2012-06-30 69555b21_ Add anonymous phase target and reference 
              jumping and highlighting. 
   :Highlighting_:   DONE 2012-07-01 4dc853c1_ fix doctest highlighting
+  :Table_:   Support simple table folding.
+
 
 .. _4dc853c1: 
    https://github.com/Rykka/riv.vim/commit/4dc853c132848872810fdc549df3dc429f31fa56
@@ -557,7 +559,7 @@ Auto Format Table
 Grid Table: 
 
     Highlighted and Folded.
-    When folded, the numbers of rows and columns will be shown.
+    When folded, the numbers of rows and columns will be shown as '3x2'
 
     Can be autoformated. Only support equal columns each row (no span).
 
@@ -584,9 +586,22 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#grid-table
 
 Simple Table:
 
-  Highlighted, but not folded.
+  Highlighted and folded.
+  When folded, the numbers of rows and columns will be shown as '3+2'
 
   No auto formatting.
+
+  ===========  ========================
+        This is a Simple Table
+  -------------------------------------
+  Col 1        Col 2
+  ===========  ========================
+  1             row 1        
+  2             row 2        
+  3             - first line row 3
+                - second line of row 3
+  ===========  ========================
+
 
     See `Simple Tables`__
 

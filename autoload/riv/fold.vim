@@ -281,6 +281,12 @@ fun! s:set_obj_dict() "{{{
             let m.row = len(filter(b:lines[m.bgn:m.end], 
                         \'v:val=~''^\s*+''')) - 1
             let b:riv_obj[m.bgn] = m
+        elseif m.type == 'simple_table'
+            let f = 1
+            let m.col = len(split(b:lines[m.bgn], '\s\+',1))
+            let m.row = m.end - m.bgn +1 - len(filter(b:lines[m.bgn:m.end], 
+                        \'v:val=~g:_riv_p.simple_table'))
+            let b:riv_obj[m.bgn] = m
         endif
         
         let m.fdl = sec_lv+lst_lv+f
@@ -389,6 +395,7 @@ fun! s:check(row) "{{{
     if b:foldlevel > 2
         call s:e_checker(row)
         call s:b_checker(row)
+        call s:st_checker(row)
 
         if !has_key(b:state, 'e_chk') && !has_key(b:state, 'b_chk')  
             \ && line=~s:p.literal_block && b:lines[a:row+1]=~ '^\s*$'
@@ -436,6 +443,10 @@ fun! s:check(row) "{{{
         else
             let b:state.e_chk= {'type': 'exp', 'bgn':a:row,}
         endif
+        return 1
+    elseif b:foldlevel > 2 && !has_key(b:state, 'st_chk') && line =~ s:p.simple_table 
+                \ && row != line('$') && b:lines[row+1] !~ '^\s*$'
+        let b:state.st_chk =  {'type': 'simple_table' , 'bgn': a:row}
         return 1
     elseif b:foldlevel > 2 && !has_key(b:state, 't_chk') 
                 \ && line=~s:p.table
@@ -546,6 +557,16 @@ fun! s:t_checker(row) "{{{
         call remove(b:state, 't_chk')
     endif
 endfun "}}}
+fun! s:st_checker(row) "{{{
+    if !has_key(b:state, 'st_chk') | return | endif
+    if b:state.st_chk.bgn < a:row && b:lines[a:row] =~ s:p.simple_table
+        \ && b:lines[a:row+1] =~ '^\s*$'
+        let b:state.st_chk.end = a:row
+        call add(b:state.matcher, b:state.st_chk)
+        call remove(b:state, 'st_chk')
+    endif
+endfun "}}}
+
 "}}}
 " Relation "{{{
 fun! s:add_child(p,o) "{{{
@@ -659,9 +680,10 @@ fun! riv#fold#text() "{{{
             let cate = " " . b:riv_obj[lnum].row 
                         \  . 'x' . b:riv_obj[lnum].col." "
             let line = getline(lnum+1)
-        elseif b:riv_obj[lnum].type == 'spl_table'
+        elseif b:riv_obj[lnum].type == 'simple_table'
             let cate = " " . b:riv_obj[lnum].row . '+' 
                         \  . b:riv_obj[lnum].col . " "
+            let line = getline(lnum+1)
         elseif b:riv_obj[lnum].type == 'exp'
             let cate = " .."
         elseif b:riv_obj[lnum].type == 'block'
