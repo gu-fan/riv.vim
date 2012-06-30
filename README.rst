@@ -35,6 +35,7 @@ These features are for all reStructuredText files.
 
 :Sections_: Section level and section number auto detected. 
 :Lists_:    Auto Numbered and auto leveled bullet and enumerated list.
+:Blocks_:   Highlighting and folding blocks.
 :Links_:    Jumping with links.
 :Table_:    Auto formatted table.
 :Folding_:  Fold document by document structures (Section/List/Block).
@@ -399,67 +400,95 @@ Blocks
 
 The Block elements of the document.
 
-Literal Blocks:
+* Literal Blocks:
     
-    Indented liteal Blocks ::
+  Indented liteal Blocks ::
 
-       This is a Indented Literal Block.
-       No markup processing is done within it
+   This is a Indented Literal Block.
+   No markup processing is done within it
 
-       for a in [5,4,3,2,1]:   # this is program code, shown as-is
-              print a
-       print "it's..."
+   for a in [5,4,3,2,1]:   # this is program code, shown as-is
+          print a
+   print "it's..."
 
-    Quoted literal blocks ::
+  Quoted literal blocks ::
 
-       > This is a Indented Literal Block.
-       > It have a punctuation '' at the line beginning.
-       > The quoting characters are preserved in the processed document
+   > This is a Indented Literal Block.
+   > It have a punctuation '' at the line beginning.
+   > The quoting characters are preserved in the processed document
 
-    They are highlighted and folded.
+  They are highlighted and folded.
 
-    See `Literal Blocks`__
+  See `Literal Blocks`__
     
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#literal-blocks
 
-Line Blocks: 
+* Line Blocks::
 
-    | This is a line block
+    | It should have '|' at the begining
     | It can have multiple lines
 
-    It's highlighted but not folded.
+  | This is a line block
+  | This is the second line
 
-    See `Line Blocks`__
+  It's highlighted but not folded.
+
+  See `Line Blocks`__
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#line-blocks
 
-Block Quotes:
+* Block Quotes:
+
+    Block quote are indented paragraphs.
 
     This is a block quote
 
-    Block quotes are not highlighted and not folded, 
-    cause it contains other document elements.
+  Block quotes are not highlighted and not folded, 
+  cause it contains other document elements.
 
-    --- Attribution
+    This is a blockquote with attribution
 
-    The attribution: a text block beginning with "--", "---".
+    -- Attribution
 
-    The attribution is highlighted.
+  The attribution: a text block beginning with "--", "---".::
 
-    See `Block Quotes`__
+    -- Attribution
+    
+  The attribution is highlighted.
+
+  See `Block Quotes`__
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#block-quotes
 
-Doctest Blocks:
+* Doctest Blocks:
 
 >>> print 'this is a Doctest block'
-The second line of Doctest block.
+this is a Doctest block
     
-    It's highlighted but not folded
+  It's highlighted but not folded
 
-    See `Doctest Blocks`__
+  See `Doctest Blocks`__
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#doctest-blocks
+
+* Explicit Markup Blocks::
+    
+    start with '..' and a whitespace.
+
+  The explicit markup syntax is used for footnotes, citations, hyperlink targets,
+  directives, substitution definitions, and comments.
+
+  It's folded , and it's highlighted depending on it's role.
+
+  And for the ``code`` directives(also ``sourcecode`` and ``code-block``). 
+  syntax highlighting is on.
+
+  You can set which languages to be highlighted by ``g:riv_highlight_code``,
+  default is ``lua,python,cpp,javascript,vim,sh``
+   
+  See `Explicit Markup Blocks`__
+
+__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#explicit-markup-blocks
 
 Links
 ~~~~~
@@ -514,9 +543,9 @@ Jumping with links
     create a auto numbered footnote. 
     And append the footnote target to the end of file.
 
-:NTOE: **A reStructuredText syntax hint**
+:NOTE: **A reStructuredText syntax hint**
 
-       Links are both hyperlink references and hyperlink targes.
+       Links are hyperlink references and hyperlink targets.
         
        The hyperlink references are indicated by a trailling underscore
        or stanalone hyperlinks::
@@ -541,8 +570,8 @@ Jumping with links
        Explicit hyperlink targets are defined as follows::
 
         .. _hyperlink-name: link-block
-
         .. __: anonymous-hyperlink-target-link-block
+        _`an inline hyperlink target`
             
        See `Hyperlink targets`_
 
@@ -719,18 +748,18 @@ Improved syntax file.
          # github does not support syntax highlighting for rst file yet.
          x = [0 for i in range(100)]
 
-   You can use ``g:riv_highlight_code`` to set which type of code to highlight.
+   You can use ``g:riv_highlight_code`` to set which languages to be highlighted.
    default is ``lua,python,cpp,javascript,vim,sh``
 
-   :NOTE: To enable highlighting in converted file, 
+   :NOTE: To enable syntax highlighting in converted file, 
           python pygments_  package must installed for ``docutils`` 
-
           parsing syntax highlighting.
 
           see http://docutils.sourceforge.net/sandbox/code-block-directive/tools/pygments-enhanced-front-ends/
 
 *  The links under cursor are highlighted. 
    Disable it by set ``g:riv_hover_link_hl`` to 0
+*  Todo Item highlightings
 
 Indent
 ~~~~~~
@@ -901,7 +930,11 @@ The ``bare extension style`` and ``square bracket style``
   + default is 1.
 
 * When Publish to html, and it's a file in a project.
-  all detected local file link will be converted to an embedded link.
+  all detected local file link except the links in a grid table, 
+  will be converted to an embedded link. 
+
+  The links in a grid table should use ``:RivCreateLink`` or ``<C-E>il`` to 
+  convert it manually.
 
     e.g. `xxx.rst <xxx.html>`_ `xxx.py <xxx.py>`_
 
