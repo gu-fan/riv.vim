@@ -137,8 +137,10 @@ Things todo in this version.
   :Links_:   DONE 2012-06-30 69555b21_ Add anonymous phase target and reference 
              jumping and highlighting. 
   :Highlighting_:   DONE 2012-07-01 4dc853c1_ fix doctest highlighting
-  :Table_:   Support simple table folding.
+  :Table_:   DONE 2012-07-01 38a8cebb_ Support simple table folding.
 
+.. _38a8cebb: 
+   https://github.com/Rykka/riv.vim/commit/38a8cebbc69f018cbc7caafa26473e2aee2dbe94
 
 .. _4dc853c1: 
    https://github.com/Rykka/riv.vim/commit/4dc853c132848872810fdc549df3dc429f31fa56
