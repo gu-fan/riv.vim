@@ -59,8 +59,12 @@ fun! s:expand_link(word) "{{{
         return s:expand_file_link(word)
     else
         if word =~ '\v^'.g:_riv_p.ref_name.'$'
-            let ref = word.'_'
-            let tar = '.. _'.word.': '.word
+            if word =~ '^[[:alnum:]]\{40}$'
+                let [ref, tar] = [word[:7].'_', '.. _' . word[:7].': '.word]
+            else
+                let ref = word.'_'
+                let tar = '.. _'.word.': '.word
+            endif
         elseif word =~ g:_riv_p.link_ref_footnote
             " footnote
             let trim = strpart(word,  0 , len(word)-1)
@@ -101,7 +105,10 @@ fun! riv#create#link() "{{{
         let idx =col
         let end =col+1
     endif
+
     let [ref, tar] = s:expand_link(word)
+
+    " could not substitute in an empty line
     if line =~ '^$'
         let line = ref
     else

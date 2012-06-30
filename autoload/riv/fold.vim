@@ -254,7 +254,7 @@ fun! s:set_obj_dict() "{{{
                 call s:add_brother(brother, m)
             endif
 
-            let m.td_stat = riv#list#get_td_stat(b:lines[m.bgn])
+            let m.td_stat = riv#todo#get_td_stat(b:lines[m.bgn])
 
             let p_l_obj = m
             let p_lst_lv = lst_lv

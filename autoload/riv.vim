@@ -3,7 +3,7 @@
 "    File: riv.vim
 " Summary: Riv autoload main
 "  Author: Rykka G.Forest
-"  Update: 2012-06-27
+"  Update: 2012-06-30
 " Version: 0.5
 "=============================================
 let s:cpo_save = &cpo

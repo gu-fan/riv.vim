@@ -133,11 +133,13 @@ Things todo in this version.
              enumerated list.
   :Lists_:   DONE 2012-06-30 21b8db23_ createing new list action in a field list will
              only add it's indent. refile todo parts.
-  :Links_:   DONE 2012-06-30 Optimized link finding 
-  :Links_:   DONE 2012-06-30 Add anonymous phase target and reference 
+  :Links_:   DONE 2012-06-30 69555b21_ Optimized link finding 
+  :Links_:   DONE 2012-06-30 69555b21_ Add anonymous phase target and reference 
              jumping and highlighting.
 
 
+.. _69555b21: 
+   https://github.com/Rykka/riv.vim/commit/69555b2172950ed1ddf236e43b3bdcaea343afe0
 .. _9229651d: 
    https://github.com/Rykka/riv.vim/commit/9229651de15005970990df57afba06d1b54e9bc9
 .. _2b81464f:

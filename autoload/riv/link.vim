@@ -107,7 +107,6 @@ fun! riv#link#open() "{{{
     if !empty(mo.groups[1])
         " at it's target , find it's referrence
         let [sr,sc] = s:find_ref(mo.str)
-        echo 'tar ' mo.str
         if sr != 0
             call setpos("'`",getpos('.'))
             call setpos('.',[0,sr,sc,0])
@@ -116,7 +115,6 @@ fun! riv#link#open() "{{{
     elseif !empty(mo.groups[2])
         " check if it's embbed link
         let em = matchstr(mo.groups[2], '`[^`]*\s<\zs[^`]*\ze>`_')
-        echo 'ref' mo.str
         if empty(em)
             let [sr,sc] = s:find_tar(mo.str)
             if sr != 0
