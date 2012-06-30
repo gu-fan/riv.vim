@@ -431,13 +431,14 @@ Block Quotes:
 
     This is a block quote
 
-    It's not highlighted and not folded, cause it contains other document elements.
+    Block quotes are not highlighted and not folded, 
+    cause it contains other document elements.
 
     --- Attribution
 
     The attribution: a text block beginning with "--", "---".
 
-    It is highlighted.
+    The attribution is highlighted.
 
     See `Block Quotes`__
 
@@ -445,12 +446,10 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#block-quot
 
 Doctest Blocks:
 
-    >>> print 'this is a Doctest block'
-    The second line of Doctest block.
+>>> print 'this is a Doctest block'
+The second line of Doctest block.
     
-    it's not highlighted or folded.
-
-    Should be highlighted in the future.
+    It's highlighted but not folded
 
     See `Doctest Blocks`__
 
