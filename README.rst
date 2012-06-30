@@ -133,6 +133,10 @@ Things todo in this version.
              enumerated list.
   :Lists_:   DONE 2012-06-30 21b8db23_ createing new list action in a field list will
              only add it's indent. refile todo parts.
+  :Links_:   DONE 2012-06-30 Optimized link finding 
+  :Links_:   DONE 2012-06-30 Add anonymous phase target and reference 
+             jumping and highlighting.
+
 
 .. _9229651d: 
    https://github.com/Rykka/riv.vim/commit/9229651de15005970990df57afba06d1b54e9bc9
@@ -209,6 +213,10 @@ For reStructuredText
 
 These features are for all reStructuredText files.
 
+If you are not familiar with it, see QuickStart__
+
+__ http://docutils.sourceforge.net/docs/user/rst/quickstart.html
+
 Sections 
 ~~~~~~~~~
 
@@ -234,13 +242,36 @@ The section number will be shown when folded.
 
 * Options:
 
-  Although you can define a section title with most punctuations. 
+  Although you can define a section title with most punctuations
+  (any non-alphanumeric printable 7-bit ASCII character). 
 
   Riv use following punctuations for titles: 
 
-  ``= - ~ " ' ``` , 
+  ``= - ~ " ' ``` , (HTML has 6 levels)
 
   you can change it with ``g:riv_section_levels``
+
+:NTOE: **A reStructuredText syntax hint**
+    
+       reStructuredText Section title have two styles. 
+        
+            ``underline`` and ``underline and overline``
+
+       both of them can be used freely. 
+
+       As section title created by Riv is ``underline`` only, 
+       To add an ``overline``, you should copy the ``underline`` and paste it there.
+
+       A blank line is need before the title if it's not the first line of document,
+       A blank line after a title is optional. 
+
+       The punctuation lines must begin at column 1.
+
+       The highlighting of it is a hint for it.
+
+       See `reStructuredText sections`__
+
+__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#sections
 
 Lists
 ~~~~~
@@ -321,7 +352,7 @@ Auto numbered and auto leveled bullet and enumerated list.
     - ``:RivListTypeRemove`` ``<C-E>lx``
       Delete current list item symbol
 
-:NOTE: A reStructredText syntax hint.
+:NOTE: **A reStructuredText syntax hint**
 
        To contain a sublist or second paragraph or blocks in a list , 
        you should make a new blank line ,
@@ -342,24 +373,131 @@ Auto numbered and auto leveled bullet and enumerated list.
             - TOO WRONG! 
               it's not a sub list of prev list , it's just a line in the content. 
 
-            - RIGHT! this one is sub list of sub list2.
+          + sub list 3
+             - STILL WRONG!
+               it's not a sub list , but it's a list in a definition list
 
-       See `reStructuredText Bullet Lists`__
+          + sub list 4
+
+            - RIGHT! this one is sub list of sub list4.
+
+       See `reStructuredText Bullet Lists`__ 
+
+       and following enumerated lists, definition lists , field lists and option lists.
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#bullet-lists
+
+Blocks
+~~~~~~
+
+The Block elements of the document.
+
+Literal Blocks:
+    
+    Indented liteal Blocks ::
+
+       This is a Indented Literal Block.
+       No markup processing is done within it
+
+       for a in [5,4,3,2,1]:   # this is program code, shown as-is
+              print a
+       print "it's..."
+
+    Quoted literal blocks ::
+
+       > This is a Indented Literal Block.
+       > It have a punctuation '' at the line beginning.
+       > The quoting characters are preserved in the processed document
+
+    They are highlighted and folded.
+
+    See `Literal Blocks`__
+    
+__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#literal-blocks
+
+Line Blocks: 
+
+    | This is a line block
+    | It can have multiple lines
+
+    It's highlighted but not folded.
+
+    See `Line Blocks`__
+
+__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#line-blocks
+
+Block Quotes:
+
+    This is a block quote
+
+    It's not highlighted and not folded, cause it contains other document elements.
+
+    --- Attribution
+
+    The attribution: a text block beginning with "--", "---".
+
+    It is highlighted.
+
+    See `Block Quotes`__
+
+__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#block-quotes
+
+Doctest Blocks:
+
+    >>> print 'this is a Doctest block'
+    The second line of Doctest block.
+    
+    it's not highlighted or folded.
+
+    Should be highlighted in the future.
+
+    See `Doctest Blocks`__
+
+__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#doctest-blocks
 
 Links
 ~~~~~
 
-  
-Clicking on links will executing it's default behavior 
-(open browser/edit file/jump to internal target)
-
-``<Tab>/<S-Tab>`` in Normal mode will jump to next/prev link.
+Jumping with links
 
 * Actions:
+
+  Jumping(Normal Mode):
+
+  + Clicking on links will jump there.
     
-  Normal Mode Only :
+    - A web link ( www.xxx.xxx or http://xxx.xxx.xxx or xxx@xxx.xxx ): 
+
+      Open web browser. 
+
+      if it's an email address ``xxx@xxx.xxx`` will add ``mailto:`` 
+
+      the browser is set by ``g:riv_web_browser``, default is ``firefox``
+
+    - A internal reference ( ``xxx_ [xxx]_ `xxx`_`` ): 
+
+      Find and Jump to the target.
+
+      if it's an anonymous reference ``xxx__``,
+
+      will jump to the nearest anonymous target.
+
+    - A internal targets (``.. [xxx]:  .. _xxx:``)
+
+      Find and Jump to the nearest reference , backward.
+
+    - A local file (if ``g:riv_localfile_linktype`` is not 0):
+
+      Edit the file. 
+
+      To split editing , you could split the document first:
+      ``<C-W><C-S>`` or ``<C-W><C-V>``
+
+  Navigate(Normal Mode):
+    
+  + ``<Tab>/<S-Tab>`` will navigate to next/prev link in document.
+   
+  Create (Normal and Insert):
 
   + ``:RivCreateLink`` ``<C-E>il``
     create a link from current word. 
@@ -370,32 +508,87 @@ Clicking on links will executing it's default behavior
     create a auto numbered footnote. 
     And append the footnote target to the end of file.
 
+:NTOE: **A reStructuredText syntax hint**
+
+       Links are both hyperlink references and hyperlink targes.
+        
+       The hyperlink references are indicated by a trailling underscore
+       or stanalone hyperlinks::
+
+            xxx_            A reference
+            `xxx xxx`_      Phase reference
+            xxx__           Anonymous referces, links to next anonymous targes
+            `Python home page <http://www.python.org>`_ 
+                            Embedded URIs
+            [xxx]_          A footnote or citation reference
+            www.xxxx.xxx   http://xxx.xxx.xxx
+                            Standalone hyperlinks
+            xxx@ccc.com     Email adress as mailto:xxx@ccc.com
+
+       See `Hyperlink References`_
+
+       There are implicit hyperlink targets and explicit hyperlink targets.
+
+       Implicit hyperlink targets are generated by section titles, 
+       footnotes, and citations
+
+       Explicit hyperlink targets are defined as follows::
+
+        .. _hyperlink-name: link-block
+
+        .. __: anonymous-hyperlink-target-link-block
+            
+       See `Hyperlink targets`_
+
+.. _Hyperlink References:
+   http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#hyperlink-references
+
+.. _Hyperlink targets:
+   http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#hyperlink-targets
+
 Table
 ~~~~~
-  
-Auto Format Table (Grid Table Only).
+
+Auto Format Table 
 (Currently require vim compiled with python. )
 
-When folded, the numbers of rows and columns will be shown.
+Grid Table: 
 
-Currently only Support the Grid Table with equal columns each row .
+    Highlighted and Folded.
+    When folded, the numbers of rows and columns will be shown.
 
-* Actions:
+    Can be autoformated. Only support equal columns each row (no span).
 
-  Insert Mode Only:
+  + Actions:
 
-  To create a table , just insert ``| xxx |`` and press ``<Enter>``.
+    Insert Mode Only:
 
-+-----------------+-----------------------------------------------------------+
-| The Grid Table  |  Will be Auto Formatted after Leave Insert Mode           |
-+=================+===========================================================+
-| Lines           | - <Enter> in column to add a new line of column           |
-|                 | - This is the second line of in same row of table.        |
-+-----------------+-----------------------------------------------------------+
-| Rows            | <Enter> in seperator to add a new row                     |
-+-----------------+-----------------------------------------------------------+
-| Cells           | <Tab> and <S-Tab> in table will switch to next/prev cell  |
-+-----------------+-----------------------------------------------------------+
+    To create a table , just insert ``| xxx |`` and press ``<Enter>``.
+
+    +-----------------+-----------------------------------------------------------+
+    | The Grid Table  |  Will be Auto Formatted after Leave Insert Mode           |
+    +=================+===========================================================+
+    | Lines           | - <Enter> in column to add a new line of column           |
+    |                 | - This is the second line of in same row of table.        |
+    +-----------------+-----------------------------------------------------------+
+    | Rows            | <Enter> in seperator to add a new row                     |
+    +-----------------+-----------------------------------------------------------+
+    | Cells           | <Tab> and <S-Tab> in table will switch to next/prev cell  |
+    +-----------------+-----------------------------------------------------------+
+
+    See `Grid Tables`__
+
+__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#grid-tables
+
+Simple Table:
+
+  Highlighted, but not folded.
+
+  No auto formatting.
+
+    See `Simple Tables`__
+
+__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#simple-tables
 
 Folding 
 ~~~~~~~~
@@ -429,12 +622,12 @@ Fold reStructuredText file with sections, lists, and blocks automatically.
   + The lists_ will show todos_ progress : 
     ( 0 + 50 + 100+ 0 + 0 + 50 ) / 6 ≈ 33
   
-   - [ ]  a todo box of start. 0%
-   - [o]  a todo box of in progress. 50%
-   - [X] 2012-06-29  a todo box of finish. 100%
-   - TODO a todo/done keyword group of start. 0%
-   - FIXME a fixme/fixed keyword group of start. 0%
-   - PROCESS a start/process/stop keyword group of progress. 50%
+    - [ ]  a todo box of start. 0%
+    - [o]  a todo box of in progress. 50%
+    - [X] 2012-06-29  a todo box of finish. 100%
+    - TODO a todo/done keyword group of start. 0%
+    - FIXME a fixme/fixed keyword group of start. 0%
+    - PROCESS a start/process/stop keyword group of progress. 50%
   
   + The table_ will show it's rows and columns.
   
@@ -580,7 +773,7 @@ Some wrapper to convert rst files to html/xml/latex/odt/...
     convert to html file and browse. 
     default is 'firefox'
   
-    The browser is set with ``g:riv_web_browser``
+    the browser is set by ``g:riv_web_browser``, default is ``firefox``
   
   + ``:Riv2HtmlProject`` ``<C-E>2hp`` converting whole project into html.
     And will ask you to copy all the file with extension in ``g:riv_file_link_ext`` 

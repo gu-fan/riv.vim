@@ -505,6 +505,7 @@ fun! s:list_shift_len(row,len) "{{{
         call s:fix_nr(a:row)
     endif
 endfun "}}}
+
 fun! s:fix_nr(row) "{{{
     " nr are based on previous list item
     let line = getline(a:row)
@@ -528,7 +529,6 @@ fun! s:fix_nr(row) "{{{
     let list_str =  s:list_str(type,idt,num,attr,space)
     let line = substitute(line, g:_riv_p.list_b_e , list_str, '')
     call setline(a:row,line)
-
 endfun "}}}
 fun! riv#list#shift(direction) range "{{{
     " direction "+" or "-"

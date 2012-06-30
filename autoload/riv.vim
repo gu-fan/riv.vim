@@ -561,8 +561,11 @@ if !exists("g:_riv_c")
     "        mailto:xxx@xxx.xxx
     "       submatch with uri body.
     "standlone link patterns: www.xxx-x.xxx/?xxx
-    let g:_riv_p.link_uri = '\v%(%(file|https=|ftp|gopher)://|%(mailto|news):)([^[:space:]''\"<>]+[[:alnum:]/])'
-        \.'|www[[:alnum:]_-]*\.[[:alnum:]_-]+\.[^[:space:]''\"<>]+[[:alnum:]/]'
+    "
+    let g:_riv_p.link_mail = '\v<[[:alnum:]_-]+%(\.[[:alnum:]_-])*\@[[:alnum:]]%([[:alnum:]-]*[[:alnum:]]\.)+[[:alnum:]]%([[:alnum:]-]*[[:alnum:]])=>'
+    let g:_riv_p.link_uri = '\v<%(%(file|https=|ftp|gopher)://|%(mailto|news):)([^[:space:]''\"<>]+[[:alnum:]/])'
+        \.'|<www[[:alnum:]_-]*\.[[:alnum:]_-]+\.[^[:space:]''\"<>]+[[:alnum:]/]'
+        \.'|'.g:_riv_p.link_mail
 
 
     " File:
@@ -598,7 +601,7 @@ if !exists("g:_riv_c")
     " `xxx xx`_
     let g:_riv_p.link_ref_phase  = '\v`[^`\\]*%(\\.[^`\\]*)*`_\ze'.s:ref_end
     "  xxx__
-    let g:_riv_p.link_ref_anoymous = '\v<'.s:ref_name.'__\ze'.s:ref_end
+    let g:_riv_p.link_ref_anoymous = '\v%(<'.s:ref_name.'|`[^`\\]*%(\\.[^`\\]*)*`)__\ze'.s:ref_end
     " [#]_ [*]_  [#xxx]_  [3]_    and citation [xxxx]_
     let g:_riv_p.link_ref_footnote = '\v\[%(\d+|#|\*|#='.s:ref_name.')\]_\ze'.s:ref_end
 

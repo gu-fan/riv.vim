@@ -139,10 +139,9 @@ execute 'syn match rstCitationReference contains=@NoSpell' .
 execute 'syn match rstHyperlinkReference' .
       \ ' /\<' . s:ReferenceName . '__\=\ze\%($\|\s\|[''")\]}>/:.,;!?\\-]\)/'
 
-syn match   rstStandaloneHyperlink  contains=@NoSpell
-      \ "\<\%(\%(\%(https\=\|file\|ftp\|gopher\)://\|\%(mailto\|news\):\)[^[:space:]'\"<>]\+\|www[[:alnum:]_-]*\.[[:alnum:]_-]\+\.[^[:space:]'\"<>]\+\)[[:alnum:]/]"
-
-
+exe 'syn match  rstStandaloneHyperlink  contains=@NoSpell '
+    \. '`\<\%(\%(\%(https\=\|file\|ftp\|gopher\)://\|\%(mailto\|news\):\)[^[:space:]''\"<>]\+\|www[[:alnum:]_-]*\.[[:alnum:]_-]\+\.[^[:space:]''\"<>]\+\)[[:alnum:]/]'
+    \.'\|\<[[:alnum:]_-]\+\%(\.[[:alnum:]_-]\)*@[[:alnum:]]\%([[:alnum:]-]*[[:alnum:]]\.\)\+[[:alnum:]]\%([[:alnum:]-]*[[:alnum:]]\)\=\>`'
 
 " Lists in rst file
 syn match rstDefinitionList `\v^(\s*)\h[^:]*\ze%(\s:\s.*)*\n\1\s+\S`
@@ -153,7 +152,7 @@ syn match rstOptionList `\v^%(-\w%( \w+)=|--[[:alnum:]_-]+%(\=\w+)=|/\u)%(, %(-\
 syn match rstFieldList `\v^\s*:[^:[:space:]][^:]+:\_s`
 syn match rstBibliographicField `\v^\s*:(Author|Authors|Organization|Contact|Address|Version|Status|Date|Copyright|Dedication|Abstract):\_s`
 
-syn match rstBlockQuoteAttr  `\v%(\_^\s*\n)@<=\s+-- .*`
+syn match rstBlockQuoteAttr  `\v%(\_^\s*\n)@<=\s+---=\s.*`
 
 syn match   rstCommentTitle '\v(^\s+|(^\.\.\s+)@<=):=\u\w*(\s+\u\w*)*:' contained 
 syn cluster rstCommentGroup contains=rstCommentTitle,rstTodo
