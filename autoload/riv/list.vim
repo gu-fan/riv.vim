@@ -212,21 +212,6 @@ endfun "}}}
 "}}}
 
 " List Level: "{{{
-fun! s:is_roman(row) "{{{
-    let line = getline(a:row)
-    if line =~ '^\c\s*(\=[imlcxvd][).]\s'
-        let older = s:get_older(a:row)
-        if older==0 
-            " if no older , then 'i' is roman
-            return line =~ '^\c\s*(\=i[).]\s'
-        else
-            " if has older , then when older is 'rr' is roman
-            return getline(older) =~ '^\c\s*(\=[imlcxvd]\{2,}[).]\s'
-        endif
-    else
-        return line =~ '^\c\s*(\=[imlcxvd]\{2,}[).]\s'
-    endif
-endfun "}}}
 fun! riv#list#new(act) "{{{
     " change the list type of current line with act: '1' , '0' ,'-1'
     " used to create new list, child list, parent list
@@ -240,7 +225,9 @@ fun! riv#list#new(act) "{{{
         " if it's field list , then just use it's indent.
         if line =~ g:_riv_p.field_list_spl
             let idt = repeat(' ', indent(cur_list))
-            call setline(row, idt)
+            let line = getline('.')
+            let line = substitute(line, '^\s*', idt, '')
+            call setline(row, line)
             return
         endif
         if line =~ '^\c\s*(\=[imlcxvd][).]'
@@ -256,7 +243,11 @@ fun! riv#list#new(act) "{{{
         endif
         let list_str = riv#list#line_str(line, a:act, idt, is_roman)
     endif
-    call setline(row, list_str)
+    let line = getline('.')
+    echoe line
+    let line = substitute(line, '^\s*', list_str, '')
+    echoe line
+    call setline(row, line)
 endfun "}}}
 fun! riv#list#line_str(line, act, idt,...) "{{{
     " create the next list item by line
@@ -279,6 +270,21 @@ fun! riv#list#line_str(line, act, idt,...) "{{{
         let num = s:next_list_num(num, is_roman)
     endif
     return s:list_str(type,idt,num,attr,space)
+endfun "}}}
+fun! s:is_roman(row) "{{{
+    let line = getline(a:row)
+    if line =~ '^\c\s*(\=[imlcxvd][).]\s'
+        let older = s:get_older(a:row)
+        if older==0 
+            " if no older , then 'i' is roman
+            return line =~ '^\c\s*(\=i[).]\s'
+        else
+            " if has older , then when older is 'rr' is roman
+            return getline(older) =~ '^\c\s*(\=[imlcxvd]\{2,}[).]\s'
+        endif
+    else
+        return line =~ '^\c\s*(\=[imlcxvd]\{2,}[).]\s'
+    endif
 endfun "}}}
 "    *   +   -            =>
 "    1.  A.  a.  I.  i.    =>

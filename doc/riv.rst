@@ -136,7 +136,10 @@ Things todo in this version.
   :Links_:   DONE 2012-06-30 69555b21_ Optimized link finding. Add email web link.
   :Links_:   DONE 2012-06-30 69555b21_ Add anonymous phase target and reference 
              jumping and highlighting. 
+  :Highlighting_:   DONE 2012-07-01 4dc853c1_ fix doctest highlighting
 
+.. _4dc853c1: 
+   https://github.com/Rykka/riv.vim/commit/4dc853c132848872810fdc549df3dc429f31fa56
 .. _69555b21: 
    https://github.com/Rykka/riv.vim/commit/69555b2172950ed1ddf236e43b3bdcaea343afe0
 .. _9229651d: 
@@ -151,7 +154,6 @@ Next
 
 Things todo in next versions.
 
-:Todos_:   The calculation of child todo items
 :Links_:   The standalone web link with ``/`` is detected as local file.
 :File_:    A template or snippet or shortcut for adding ``./`` and ``../`` and files.
            Maybe a sphinx doc ref as well.
