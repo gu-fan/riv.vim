@@ -251,10 +251,10 @@ fun! s:test_list_parse()
 endfun
 fun! riv#test#test() "{{{
     let func = riv#list#SID()."get_list"
-    echo riv#test#timer(func, 10, [line('.')])
+    " echo riv#test#timer(func, 10, [line('.')])
     let func2 = riv#list#SID()."get_older"
-    echo riv#test#timer(func2, 10, [line('.')])
-    " echo call(func,[line('.')])
+    " echo riv#test#timer(func2, 10, [line('.')])
+    echo call(func2,[line('.')])
 endfun "}}}
 fun! s:SID() "{{{
     return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$')

@@ -65,20 +65,21 @@ fun! s:get_older(row) "{{{
         call cursor(row,1)
 
         let c_idt = indent(row)
-        let idt = c_idt
 
-        let idt_ptn = '^\s\{,'.idt.'}\S'
+        let idt_ptn = '^\s\{,'.c_idt.'}\S'
         let [row,col] = searchpos(idt_ptn, 'b',0,100)
+        let idt = indent(row)
         
         while getline(row) !~ g:_riv_p.list_b_e && row != 0
-            let idt = indent(row)
             if idt <= c_idt
                 let row = 0
                 break
             endif
             let idt_ptn = '^\s\{,'.idt.'}\S'
             let [row,col] = searchpos(idt_ptn, 'b',0,100)
+            let idt = indent(row)
         endwhile
+
 
         call setpos('.',save_pos)
 
@@ -95,23 +96,23 @@ fun! s:get_parent(row) "{{{
         let save_pos = getpos('.')
 
         let c_idt = indent(row)
-        let idt = c_idt
-        if idt == 0 
+        if c_idt == 0 
             return 0
         endif
-        call cursor(row,1)
-        let idt_ptn = '^\s\{,'.(idt-1).'}\S'
+        let idt_ptn = '^\s\{,'.(c_idt-1).'}\S'
 
+        call cursor(row,1)
         let [row,col] = searchpos(idt_ptn, 'b',0,100)
+        let idt = indent(row)
         
         while getline(row) !~ g:_riv_p.list_b_e && row != 0
-            let idt = indent(row)
             if idt == 0 
                 let row = 0
                 break
             endif
             let idt_ptn = '^\s\{,'.idt.'}\S'
             let [row,col] = searchpos(idt_ptn, 'b',0,100)
+            let idt = indent(row)
         endwhile
 
         call setpos('.',save_pos)
@@ -435,10 +436,10 @@ fun! s:list_shift_len(row,len,...) "{{{
 
     " sub the line's if it have '\t'
     let line = substitute(line,'^\s*', repeat(' ',indent(a:row)),'g')
-    if a:len>0
+    if a:len > 0
         let act = 1
         let line = substitute(line,'^',repeat(' ',a:len),'')
-    elseif a:len< 0
+    elseif a:len < 0
         let act = -1
         let line = substitute(line,'^\s\{,'.abs(a:len).'}','','')
     else
@@ -468,7 +469,6 @@ fun! s:list_shift_len(row,len,...) "{{{
     endif
 
     call setline(a:row,line)
-
     if type != -1
         call s:fix_nr(a:row)
     else
@@ -507,7 +507,6 @@ fun! s:fix_nr(row) "{{{
     else
         let is_roman = s:is_roman(a:row)
         let [type , idt , num , attr, space] = riv#list#stat(line, is_roman)
-        " let nr = s:listnum2nr(num, is_roman)
         let nr = 1
     endif
     if num =~ '\u'
