@@ -44,6 +44,7 @@ These features are for all reStructuredText files.
 :Publish_:  some wrapper to convert rst files to html/xml/latex/odt/... 
             (require python docutils package )
 
+
 These features are for the Riv Project. 
 
 :Project_:  Manage your reStructuredText documents in a wiki way.
@@ -53,8 +54,6 @@ These features are for the Riv Project.
 :Helpers_:  A help window for showing and doing something.
 
   + `Todo Helper`_: Managing todo items of project.
-
-
 
 * To Install: see `Install`_
 * To Start: see `Instruction`_
