@@ -32,26 +32,26 @@ Features
  
 These features are for all reStructuredText files.
 
-:Sections_: Section level and section number auto detected. 
-:Lists_:    Auto Numbered and auto leveled bullet and enumerated list.
-:Blocks_:   Highlighting and folding blocks.
-:Links_:    Jumping with links.
-:Table_:    Auto formatted table.
-:Folding_:  Fold document by document structures (Section/List/Block).
-:Indent_:   Improved indentation 
-:Insert_:   Improvment of some mapping in insert mode.
-:Highlighting_: Improved syntax file. 
-:Publish_:  some wrapper to convert rst files to html/xml/latex/odt/... 
+* :Sections_: Section level and section number auto detected. 
+* :Lists_:    Auto Numbered and auto leveled bullet and enumerated list.
+* :Blocks_:   Highlighting and folding blocks.
+* :Links_:    Jumping with links.
+* :Table_:    Auto formatted table.
+* :Folding_:  Fold document by document structures (Section/List/Block).
+* :Indent_:   Improved indentation 
+* :Insert_:   Improvment of some mapping in insert mode.
+* :Highlighting_: Improved syntax file. 
+* :Publish_:  some wrapper to convert rst files to html/xml/latex/odt/... 
             (require python docutils package )
 
 
 These features are for the Riv Project. 
 
-:Project_:  Manage your reStructuredText documents in a wiki way.
-:File_:     Links to local file in rst documents. 
-:Scratch_:  A place for writing diary or hold idea and thoughts.
-:Todos_:    Writing todo lists in reStructuredText documents .
-:Helpers_:  A help window for showing and doing something.
+* :Project_:  Manage your reStructuredText documents in a wiki way.
+* :File_:     Links to local file in rst documents. 
+* :Scratch_:  A place for writing diary or hold idea and thoughts.
+* :Todos_:    Writing todo lists in reStructuredText documents .
+* :Helpers_:  A help window for showing and doing something.
 
   + `Todo Helper`_: Managing todo items of project.
 
@@ -120,28 +120,28 @@ Things todo in this version.
 
 * 0.66: 
 
-  :Todos_:   DONE 2012-06-29 add field list for todo items.
-  :Indent_:  DONE 2012-06-29 the indentation in directives should return 0 after 
-             2 blank lines
-  :Publish_: DONE 2012-06-29 Support the reStructuredText document not in a project.
-  :Indent_:  DONE 2012-06-29 fix indent of field list. 
-             the line + 2 should line up with it's begining .
-  :Insert_:  DONE 2012-06-29 9229651d_ ``<Tab>`` and ``<S-Tab>`` 
-             before list item will now shift the list. 
-  :Lists_:   DONE 2012-06-30 2b81464f_ bullet list will auto numbered when change to
-             enumerated list.
-  :Lists_:   DONE 2012-06-30 21b8db23_ createing new list action in a field list will
-             only add it's indent. refile todo parts.
-  :Links_:   DONE 2012-06-30 69555b21_ Optimized link finding. Add email web link.
-  :Links_:   DONE 2012-06-30 69555b21_ Add anonymous phase target and reference 
-             jumping and highlighting. 
-  :Highlighting_:   DONE 2012-07-01 4dc853c1_ fix doctest highlighting
-  :Table_:   DONE 2012-07-01 38a8cebb_ Support simple table folding.
-  :Documents_: DONE 2012-07-01 help doc use doc/riv.rst  which is link of README.rst
-  :Documents_: DONE 2012-07-01 Add reStructuredText hint and link in instructions
-  :Indent_:  DONE 2012-07-01 7e19b531_ The indent for shifting lists should based on 
-             the parent/child list item length.
-  :Lists_:   DONE 2012-07-02 Add a list parser.
+* :Todos_:   DONE 2012-06-29 add field list for todo items.
+* :Indent_:  DONE 2012-06-29 the indentation in directives should return 0 after 
+* 2 blank lines
+* :Publish_: DONE 2012-06-29 Support the reStructuredText document not in a project.
+* :Indent_:  DONE 2012-06-29 fix indent of field list. 
+* the line + 2 should line up with it's begining .
+* :Insert_:  DONE 2012-06-29 9229651d_ ``<Tab>`` and ``<S-Tab>`` 
+* before list item will now shift the list. 
+* :Lists_:   DONE 2012-06-30 2b81464f_ bullet list will auto numbered when change to
+* enumerated list.
+* :Lists_:   DONE 2012-06-30 21b8db23_ createing new list action in a field list will
+* only add it's indent. refile todo parts.
+* :Links_:   DONE 2012-06-30 69555b21_ Optimized link finding. Add email web link.
+* :Links_:   DONE 2012-06-30 69555b21_ Add anonymous phase target and reference 
+* jumping and highlighting. 
+* :Highlighting_:   DONE 2012-07-01 4dc853c1_ fix doctest highlighting
+* :Table_:   DONE 2012-07-01 38a8cebb_ Support simple table folding.
+* :Documents_: DONE 2012-07-01 help doc use doc/riv.rst  which is link of README.rst
+* :Documents_: DONE 2012-07-01 Add reStructuredText hint and link in instructions
+* :Indent_:  DONE 2012-07-01 7e19b531_ The indent for shifting lists should based on 
+* the parent/child list item length.
+* :Lists_:   DONE 2012-07-02 Add a list parser.
 
 .. _7e19b531: 
    https://github.com/Rykka/riv.vim/commit/7e19b531371e47e36bc039fa4f142434bcf4eb39
@@ -163,29 +163,29 @@ Next
 
 Things todo in next versions.
 
-:Links_:   The standalone web link with ``/`` is detected as local file.
-:File_:    A template or snippet or shortcut for adding ``./`` and ``../`` and files.
-           Maybe a sphinx doc ref as well.
-:Documents_: Document part: options / commands.
-:Documents_: Sreencast and screenshot of intro.
-:Publish_: An option to enable highlighting todo items.
-:Helpers_: An option Helper and option cache. 
-           Let people use it even without touching ``.vimrc`` .
-:Scratch_: Show Scratch sign in Calendar.
-:Helpers_: A command helper?
-:Links_:   Link tags between files?
-:Links_:   Github flavor: create commit link, issue link?
-:Todos_:   Todo item priorities?
-:Table_:   Support simple table format?
-:Table_:   Support column span?
-:Table_:   A vim table parser for compatible?
-:Table_:   A shortcut or command to create table with row * col.
-:Sections_: Adjust section level.
-:Sections_: Shortcut to add sections references like the content directive?
-:Folding_: A buf parser write in python for performance?
-:Indent_:  <Tab> should act as <Bs> when indenting
-:Indent_:  The content space for field list should align with prev field list.
-:Indent_:  A command to format the indent of lists.
+* :Links_:   The standalone web link with ``/`` is detected as local file.
+* :File_:    A template or snippet or shortcut for adding ``./`` and ``../`` and files.
+* Maybe a sphinx doc ref as well.
+* :Documents_: Document part: options / commands.
+* :Documents_: Sreencast and screenshot of intro.
+* :Publish_: An option to enable highlighting todo items.
+* :Helpers_: An option Helper and option cache. 
+             Let people use it even without touching ``.vimrc`` .
+* :Scratch_: Show Scratch sign in Calendar.
+* :Helpers_: A command helper?
+* :Links_:   Link tags between files?
+* :Links_:   Github flavor: create commit link, issue link?
+* :Todos_:   Todo item priorities?
+* :Table_:   Support simple table format?
+* :Table_:   Support column span?
+* :Table_:   A vim table parser for compatible?
+* :Table_:   A shortcut or command to create table with row * col.
+* :Sections_: Adjust section level.
+* :Sections_: Shortcut to add sections references like the content directive?
+* :Folding_: A buf parser write in python for performance?
+* :Indent_:  <Tab> should act as <Bs> when indenting
+* :Indent_:  The content space for field list should align with prev field list.
+* :Indent_:  A command to format the indent of lists.
 
 
 .. _Documents: Intro_
