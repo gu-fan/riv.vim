@@ -55,30 +55,6 @@ fun! s:parse_from_start() "{{{
     call garbagecollect(1)
     echon "Done"
 endfun "}}}
-fun! s:parse_from_row(row) "{{{
-    " seems it's buggy.
-    call filter(b:riv_obj,      'v:key < a:row')
-    call filter(b:state.matcher, 'v:val.bgn < a:row')
-    call filter(b:state.sectmatcher, 'v:val.bgn < a:row')
-    call filter(b:state.sect_root.child,  'v:val < a:row')
-    call filter(b:state.list_root.child,  'v:val < a:row')
-    if line('$')+1-len(b:fdl_list) > 0
-        call extend(b:fdl_list,range(line('$')+1-len(b:fdl_list)))
-    endif
-    let  b:fdl_list[a:row : ] = map(b:fdl_list[a:row : ],'0')
-    let b:lines= ['']+getline(1,line('$'))+['']
-    let b:state.l_chk = []
-    for i in range(a:row, line('$'))
-        call s:check(i)
-    endfor
-    " 20%
-    " sort the unordered list.
-    call sort(b:state.matcher,"s:sort_match")
-    call s:set_obj_dict()
-    call s:set_sect_end()
-    call s:set_fdl_list()
-    call s:set_td_child(b:state.list_root)
-endfun "}}}
 let s:tmpfile = tempname()
 fun! s:get_changed_range() "{{{
     sil exe 'w !diff % - > ' s:tmpfile
@@ -168,7 +144,6 @@ fun! s:set_obj_dict() "{{{
     let lst_lv = 0              " current list_level
     let p_lst_lv = 0
     let p_l_obj = stat.list_root   " previous list object 
-    let p_lst_end = line('$')   " let  root contains all level 1 list object
     for m in mat
         let f = 0
         if m.type == 'sect'
@@ -231,7 +206,6 @@ fun! s:set_obj_dict() "{{{
         elseif m.type== 'list'
             " The List Part "{{{
             let lst_lv = m.level
-            let lst_end = m.end
             
             if lst_lv > p_lst_lv
                 call s:add_child(p_l_obj,m)
@@ -253,7 +227,6 @@ fun! s:set_obj_dict() "{{{
 
             let p_l_obj = m
             let p_lst_lv = lst_lv
-            let p_lst_end = lst_end
                 
             let b:riv_obj[m.bgn] = m
             " Stop List Part "}}}
@@ -370,7 +343,7 @@ fun! s:check(row) "{{{
     let line = b:lines[row]
 
     call s:s_checker(row)
-" 
+
     
     if line=~'^\s*$' && row != line('$')
         return
@@ -470,12 +443,16 @@ fun! s:s_checker(row) "{{{
             let chk.parent = 'sect_root'
             call add(b:state.matcher, chk)
             call add(b:state.sectmatcher, chk)
+            call remove(b:state, 's_chk')
+            return 1
         elseif line =~ blank && b:lines[a:row-2]=~ blank && len(b:lines[a:row-1])>=4
             " transition : blank, section ,blank(cur) ,len>4
             let chk.type = 'trans'
             let chk.bgn = a:row - 1
             let chk.end = a:row - 1
             call add(b:state.matcher, chk)
+            call remove(b:state, 's_chk')
+            return 
         elseif b:lines[a:row-2] !~ blank && b:lines[a:row-3] =~ blank
                     \ && b:lines[a:row-1] != b:lines[a:row-2]
             " 2 row title : blank , noblank , section , cur
@@ -485,8 +462,9 @@ fun! s:s_checker(row) "{{{
             let chk.parent = 'sect_root'
             call add(b:state.matcher, chk)
             call add(b:state.sectmatcher, chk)
+            call remove(b:state, 's_chk')
+            return 1
         endif
-        call remove(b:state, 's_chk')
     endif
 endfun "}}}
 fun! s:l_checker(row) "{{{
@@ -497,12 +475,13 @@ fun! s:l_checker(row) "{{{
     if has_key(b:state, 'e_chk') | return | endif
     let l = b:state.l_chk
     let idt = riv#fold#indent(b:lines[a:row]) 
+    let end = line('$')
     while !empty(l)
-        if (a:row>l[0].bgn && idt <= l[0].indent ) 
+        if (idt <= l[0].indent ) 
             let l[0].end = a:row-1
             call add(b:state.matcher,l[0])
             call remove(l , 0)
-        elseif a:row==line('$')
+        elseif a:row==end
             let l[0].end = a:row
             call add(b:state.matcher,l[0])
             call remove(l , 0)
@@ -513,7 +492,7 @@ fun! s:l_checker(row) "{{{
 endfun "}}}
 fun! s:e_checker(row) "{{{
     if !has_key(b:state, 'e_chk') | return | endif
-    if ( b:state.e_chk.bgn < a:row && b:lines[a:row] =~ '^\S' )
+    if (  b:lines[a:row] =~ '^\S' )
         let b:state.e_chk.end = a:row-1
         call add(b:state.matcher,b:state.e_chk)
         call remove(b:state, 'e_chk')
@@ -525,7 +504,7 @@ fun! s:e_checker(row) "{{{
 endfun "}}}
 fun! s:b_checker(row) "{{{
     if !has_key(b:state, 'b_chk') | return | endif
-    if ( b:state.b_chk.bgn < a:row && riv#fold#indent(b:lines[a:row]) <= b:state.b_chk.indent )
+    if (  riv#fold#indent(b:lines[a:row]) <= b:state.b_chk.indent )
         let b:state.b_chk.end = a:row-1
         call add(b:state.matcher, b:state.b_chk)
         call remove(b:state, 'b_chk')
@@ -537,7 +516,7 @@ fun! s:b_checker(row) "{{{
 endfun "}}}
 fun! s:t_checker(row) "{{{
     if !has_key(b:state, 't_chk') | return | endif
-    if (b:state.t_chk.bgn < a:row && b:lines[a:row] !~ s:p.table )
+    if (b:lines[a:row] !~ s:p.table )
         let b:state.t_chk.end = a:row-1
         call add(b:state.matcher, b:state.t_chk)
         call remove(b:state, 't_chk')
@@ -549,7 +528,7 @@ fun! s:t_checker(row) "{{{
 endfun "}}}
 fun! s:st_checker(row) "{{{
     if !has_key(b:state, 'st_chk') | return | endif
-    if b:state.st_chk.bgn < a:row && b:lines[a:row] =~ s:p.simple_table
+    if  b:lines[a:row] =~ s:p.simple_table
         \ && b:lines[a:row+1] =~ '^\s*$'
         let b:state.st_chk.end = a:row
         call add(b:state.matcher, b:state.st_chk)
@@ -559,19 +538,22 @@ endfun "}}}
 
 "}}}
 " Relation "{{{
-fun! s:add_child(p,o) "{{{
+fun! s:add_child(p,o,...) "{{{
     call add(a:p.child, a:o.bgn )
     let a:o.parent = a:p.bgn
 endfun "}}}
-fun! s:add_brother(b,o) "{{{
+fun! s:add_brother(b,o,...) "{{{
+    let dic = a:0 ? a:1 : b:riv_obj
     let a:o.parent = a:b.parent
-    call add(b:riv_obj[a:o.parent].child, a:o.bgn )
+    call add(dic[a:o.parent].child, a:o.bgn )
 endfun "}}}
-fun! s:get_child(o,i) "{{{
-    return b:riv_obj[a:o.child[a:i]]
+fun! s:get_child(o,i,...) "{{{
+    let dic = a:0 ? a:1 : b:riv_obj
+    return dic[a:o.child[a:i]]
 endfun "}}}
-fun! s:get_parent(o) "{{{
-    return b:riv_obj[a:o.parent]
+fun! s:get_parent(o,...) "{{{
+    let dic = a:0 ? a:1 : b:riv_obj
+    return dic[a:o.parent]
 endfun "}}}
 fun! riv#fold#get_prev_brother(o) "{{{
     for i in range(len(b:riv_obj[a:o.parent].child))
@@ -641,6 +623,12 @@ fun! s:sort_match(i1,i2) "{{{
 endfun "}}}
 fun! riv#fold#indent(line) "{{{
     return strdisplaywidth(matchstr(a:line,'^\s*'))
+endfun "}}}
+fun! s:SID() "{{{
+    return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$')
+endfun "}}}
+fun! riv#fold#SID() "{{{
+    return '<SNR>'.s:SID().'_'
 endfun "}}}
 "}}}
 " Main "{{{
@@ -713,5 +701,133 @@ fun! riv#fold#init() "{{{
     call s:init_stat()
 endfun "}}}
 "}}}
+"
+fun! s:parse_list() "{{{
+    " setup list object in current section
+    " should detect the indent if lines
+    
+    " check line by line, search a list or an line ,
+    " if it's indent < prev list , then it's prev's child
+    " else if it's indent == prev list , then end prev list ,
+    " elseif indent > prev list, end list to that indent.
+    " 
+    " the tree is 
+    " list_root => list_0_root( roots contain seperated 0 level list ) 
+    "           => list_0  => list_1 ...
+    
+    let row = line('.')
+    let savepos = getpos('.')
+    " get the 0_root begin.
+    " first search backward to find the begin
+    " it's a non list start with '^\S'
+    let root_obj = {'bgn':row ,'parent': 'None','child':[],'indent':0}
+    let l_chk = []
+    let l_match = []
+    let end = line('$')
+    let [row,col] = searchpos('^\S','bc',0,100)
+    while getline(row) =~ g:_riv_p.list_b_e && row != 0
+        let [row,col] = searchpos('^\S','b',0,100)
+    endwhile
+    if row 
+        let root_obj.bgn = row
+        let root = row
+    endif
+    
+    " we parse from bgn and check every non empty line 
+    while 1
+
+        let row = nextnonblank(row+1)
+        let idt = indent(row)
+
+        " check
+        while !empty(l_chk)
+            if idt <= l_chk[-1].indent
+                let l_chk[-1].end = row-1
+                call add(l_match,l_chk[-1])
+                call remove(l_chk , -1)
+            elseif row == end
+                let l_chk[-1].end = row
+                call add(l_match,l_chk[-1])
+                call remove(l_chk , -1)
+            else
+                break
+            endif
+        endwhile
+        
+
+        if row == end
+            break
+        endif
+
+        " add
+        if getline(row) =~ g:_riv_p.list_b_e
+            let l_obj = {'bgn':row,'indent':idt,'parent':0,'child':[]}
+            call add(l_chk, l_obj)
+        else
+            if idt ==  0 
+                break
+            endif
+        endif
+    endwhile
+    let root_obj.end = row
+    call sort(l_match,"s:sort_match")
+
+    " set obj dict
+    let obj_dic = { root : root_obj , 'root': root_obj}
+    let p_obj = root_obj
+ 
+    for m in l_match
+        let idt = m.indent
+        let end = m.end
+        
+        " when  idt < prev, we will find the paren tindent which <= idt
+        if idt < p_obj.indent
+            while idt < p_obj.indent && p_obj.parent != 'None'
+                let p_obj = s:get_parent(p_obj, obj_dic)
+            endwhile
+        endif
+
+        if idt > p_obj.indent
+        " if it's idt > prev one, and end <= prev end 
+        " then it's prev's child
+            " find prev's parent and if end <= p_end , add child
+            while end > p_obj.end && p_obj.parent != 'None'
+                let p_obj = s:get_parent(p_obj, obj_dic)
+            endwhile
+            call s:add_child(p_obj, m, obj_dic)
+        elseif idt == p_obj.indent
+        " if it's idt == prev one, and end <= prev's parents end 
+        " then it's prev's brother (prev's parent's child)
+            let p_par = p_obj 
+            while end > p_par.end && p_par.parent != 'None'
+                let p_par = s:get_parent(p_par, obj_dic)
+            endwhile
+            let m.parent = p_par.bgn
+            call s:add_child(p_par, m, obj_dic)
+        endif
+
+        let p_obj = m
+            
+        let obj_dic[m.bgn] = m
+    endfor
+    call setpos('.',savepos)
+    
+    let b:riv_l_dic = obj_dic
+    return obj_dic
+
+endfun "}}}
+fun! s:dic2line(o) "{{{
+    let lines = []
+    let o = a:o
+    let dic = b:riv_l_dic
+    call add(lines, repeat(' ',dic[o].indent) . ':'. dic[o].bgn )
+    if !empty(dic[o].child)
+        for child in dic[o].child
+            call extend(lines, s:dic2line(child))
+        endfor
+    endif
+    return lines
+endfun "}}}
+
 let &cpo = s:cpo_save
 unlet s:cpo_save

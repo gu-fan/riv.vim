@@ -240,14 +240,21 @@ fun! riv#test#link_expand() "{{{
     call riv#init()
     call s:test_func(func, arg_list)
 endfun "}}}
-
+fun! s:test_list_parse()
+    let func1 = riv#fold#SID()."parse_list"
+    let func = riv#fold#SID()."dic2line"
+    echo call(func1,[])
+    let lines = call(func,['root'])
+    for line in lines
+        echo line
+    endfor
+endfun
 fun! riv#test#test() "{{{
-    " let func = riv#list#SID()."get_child"
-    " " echo riv#test#timer(func, 1000, [line('.')])
-    " let func2 = riv#list#SID()."get_child2"
-    " " echo riv#test#timer(func2, 1000, [line('.')])
-    " echo call(func,[line('.')])
-    " echo call(func2,[line('.')])
+    " let func = riv#list#SID()."get_older"
+    " echo riv#test#timer(func, 100, [line('.')])
+    " let func2 = riv#fold#SID()."parse_list"
+    " echo riv#test#timer(func2, 10, [])
+    call s:test_list_parse()
 endfun "}}}
 fun! s:SID() "{{{
     return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$')

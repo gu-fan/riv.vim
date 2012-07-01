@@ -142,6 +142,7 @@ Things todo in this version.
   :Documents_: DONE 2012-07-01 Add reStructuredText hint and link in instructions
   :Indent_:  DONE 2012-07-01 7e19b531_ The indent for shifting lists should based on 
              the parent/child list item length.
+  :Lists_:   DONE 2012-07-02 Add a list parser.
 
 .. _7e19b531: 
    https://github.com/Rykka/riv.vim/commit/7e19b531371e47e36bc039fa4f142434bcf4eb39

@@ -24,9 +24,9 @@ fun! riv#action#db_click(mouse) "{{{
         let line = getline(row)
         let col = col('.')
         if s:is_in_todo_item(line,col)
-            call riv#list#toggle_todo()
+            call riv#todo#toggle_todo()
         elseif s:is_in_todo_time(line,col)
-            call riv#list#change_date()
+            call riv#todo#change_date()
         else
             if a:mouse== 1
                 exe "normal! \<2-LeftMouse>"
