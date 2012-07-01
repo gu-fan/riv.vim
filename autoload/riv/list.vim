@@ -17,6 +17,7 @@ fun! s:get_all_list(row) "{{{
     let row = prevnonblank(a:row)
 
     let save_pos = getpos('.')
+    call cursor(row,1)
 
     while getline(row) !~ g:_riv_p.list_all && row != 0
         let idt = indent(row)
@@ -25,8 +26,7 @@ fun! s:get_all_list(row) "{{{
             break
         endif
         let idt_ptn = '^\s\{,'.(idt-1).'}\S'
-        call cursor(prevnonblank(row-1),1)
-        let [row,col] = searchpos(idt_ptn, 'nbc',0,100)
+        let [row,col] = searchpos(idt_ptn, 'b',0,100)
     endwhile
     
     call setpos('.',save_pos)
@@ -37,6 +37,7 @@ fun! s:get_list(row) "{{{
     let row = prevnonblank(a:row)
 
     let save_pos = getpos('.')
+    call cursor(row,1)
 
     while getline(row) !~ g:_riv_p.list_b_e && row != 0
         let idt = indent(row)
@@ -45,49 +46,12 @@ fun! s:get_list(row) "{{{
             break
         endif
         let idt_ptn = '^\s\{,'.(idt-1).'}\S'
-        call cursor(prevnonblank(row-1),1)
-        let [row,col] = searchpos(idt_ptn, 'nbc',0,100)
+        let [row, col] = searchpos(idt_ptn, 'b',0,100)
     endwhile
     
     call setpos('.',save_pos)
 
     return row
-endfun "}}}
-fun! s:get_list_(row) "{{{
-    " To find if a row is in  a list's range. 
-    " this list's indent should smaller than current line (when not list).
-    " return 0 if '^\S' or not find
-
-    let c_row = prevnonblank(a:row)
-    if getline(c_row) =~ g:_riv_p.list_b_e
-        return c_row 
-    else
-        let c_idt = indent(c_row)
-        if c_idt == 0 
-            return 0
-        endif
-        let idt_ptn = '^\s{,'.(c_idt-1).'}\S'
-        let ptn = g:_riv_p.list_b_e.'|'.idt_ptn
-        let save_pos = getpos('.')
-
-        let row = c_row
-        let s_idt = c_idt + 1
-        while ( getline(row) !~ g:_riv_p.list_b_e || s_idt>= c_idt ) && row!=0
-            call cursor(prevnonblank(row-1),1)
-            let [row,col] = searchpos(ptn, 'wnbc',0,100)
-            if s_idt == 0
-                let row =0
-                break
-            endif
-            if s_idt < c_idt 
-                let c_idt = s_idt
-            endif
-            let s_idt = indent(row)
-        endwhile
-
-        call setpos('.',save_pos)
-        return row
-    endif
 endfun "}}}
 fun! s:get_older(row) "{{{
     " check if a list item have an older item, 
@@ -98,13 +62,13 @@ fun! s:get_older(row) "{{{
     else
 
         let save_pos = getpos('.')
+        call cursor(row,1)
 
         let c_idt = indent(row)
         let idt = c_idt
 
         let idt_ptn = '^\s\{,'.idt.'}\S'
-        call cursor(prevnonblank(row-1),1)
-        let [row,col] = searchpos(idt_ptn, 'nbc',0,100)
+        let [row,col] = searchpos(idt_ptn, 'b',0,100)
         
         while getline(row) !~ g:_riv_p.list_b_e && row != 0
             let idt = indent(row)
@@ -113,8 +77,7 @@ fun! s:get_older(row) "{{{
                 break
             endif
             let idt_ptn = '^\s\{,'.idt.'}\S'
-            call cursor(prevnonblank(row-1),1)
-            let [row,col] = searchpos(idt_ptn, 'nbc',0,100)
+            let [row,col] = searchpos(idt_ptn, 'b',0,100)
         endwhile
 
         call setpos('.',save_pos)
@@ -133,35 +96,28 @@ fun! s:get_parent(row) "{{{
 
         let c_idt = indent(row)
         let idt = c_idt
-
+        if idt == 0 
+            return 0
+        endif
+        call cursor(row,1)
         let idt_ptn = '^\s\{,'.(idt-1).'}\S'
-        call cursor(prevnonblank(row-1),1)
-        let [row,col] = searchpos(idt_ptn, 'nbc',0,100)
+
+        let [row,col] = searchpos(idt_ptn, 'b',0,100)
         
         while getline(row) !~ g:_riv_p.list_b_e && row != 0
             let idt = indent(row)
+            if idt == 0 
+                let row = 0
+                break
+            endif
             let idt_ptn = '^\s\{,'.idt.'}\S'
-            call cursor(prevnonblank(row-1),1)
-            let [row,col] = searchpos(idt_ptn, 'nbc',0,100)
+            let [row,col] = searchpos(idt_ptn, 'b',0,100)
         endwhile
 
         call setpos('.',save_pos)
 
         return idt < c_idt ? row : 0
     endif
-endfun "}}}
-fun! s:get_tree(start,end) "{{{
-    " create root and get children
-    
-endfun "}}}
-fun! s:check_l() "{{{
-    
-endfun "}}}
-fun! s:add_l() "{{{
-    
-endfun "}}}
-fun! s:set_obj() "{{{
-    
 endfun "}}}
 
 " the buf obj dict version.
@@ -471,13 +427,13 @@ fun! riv#list#toggle_type(i) "{{{
         call cursor(row, mod_ls_end )
     endif
 endfun "}}}
-fun! s:list_shift_len(row,len) "{{{
+fun! s:list_shift_len(row,len,...) "{{{
     let line = getline(a:row)
     if line=~ '^\s*$'
         return
     endif
 
-    " sub the line's indentation
+    " sub the line's if it have '\t'
     let line = substitute(line,'^\s*', repeat(' ',indent(a:row)),'g')
     if a:len>0
         let act = 1
@@ -516,7 +472,9 @@ fun! s:list_shift_len(row,len) "{{{
     if type != -1
         call s:fix_nr(a:row)
     else
-        call s:fix_idt(a:row)
+        if a:0 && a:1               " only fix idt when it's multiline action
+            call s:fix_idt(a:row)
+        endif
     endif
 endfun "}}}
 fun! s:fix_idt(row) "{{{
@@ -525,9 +483,10 @@ fun! s:fix_idt(row) "{{{
     let line = getline(a:row)
     if list
         let f_idt = matchend(getline(list), g:_riv_p.list_all)
-        let idt = matchend(line,'^\s*')
+        let f_len = f_idt - indent(list)
+        let idt = indent(a:row)
         " if the ident is between the fix + item len and indent
-        if (idt > indent(list) && idt <= f_idt+s:get_item_length(list) )
+        if (idt > indent(list) && idt <= f_idt + f_len )
             \ || (idt == indent(list) && list == a:row-1)
             let line = substitute(line, '^\s*', repeat(' ',f_idt), '')
             call setline(a:row,line)
@@ -607,11 +566,11 @@ fun! riv#list#shift(direction) range "{{{
         let vec = 0
     endif
     if a:firstline == a:lastline
-        call s:list_shift_len(a:firstline, vec)
+        call s:list_shift_len(a:firstline, vec,0)
         call cursor(line('.'), col('.')+vec)
     else
         for line in range(a:firstline,a:lastline)
-            call s:list_shift_len(line, vec)
+            call s:list_shift_len(line, vec,1)
         endfor
         normal! gv
     endif

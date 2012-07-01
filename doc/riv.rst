@@ -122,25 +122,25 @@ Things todo in this version.
 
 * :Todos_:   DONE 2012-06-29 add field list for todo items.
 * :Indent_:  DONE 2012-06-29 the indentation in directives should return 0 after 
-* 2 blank lines
+             2 blank lines
 * :Publish_: DONE 2012-06-29 Support the reStructuredText document not in a project.
 * :Indent_:  DONE 2012-06-29 fix indent of field list. 
-* the line + 2 should line up with it's begining .
+             the line + 2 should line up with it's begining .
 * :Insert_:  DONE 2012-06-29 9229651d_ ``<Tab>`` and ``<S-Tab>`` 
-* before list item will now shift the list. 
+             before list item will now shift the list. 
 * :Lists_:   DONE 2012-06-30 2b81464f_ bullet list will auto numbered when change to
-* enumerated list.
+             enumerated list.
 * :Lists_:   DONE 2012-06-30 21b8db23_ createing new list action in a field list will
-* only add it's indent. refile todo parts.
+             only add it's indent. refile todo parts.
 * :Links_:   DONE 2012-06-30 69555b21_ Optimized link finding. Add email web link.
 * :Links_:   DONE 2012-06-30 69555b21_ Add anonymous phase target and reference 
-* jumping and highlighting. 
+             jumping and highlighting. 
 * :Highlighting_:   DONE 2012-07-01 4dc853c1_ fix doctest highlighting
 * :Table_:   DONE 2012-07-01 38a8cebb_ Support simple table folding.
 * :Documents_: DONE 2012-07-01 help doc use doc/riv.rst  which is link of README.rst
 * :Documents_: DONE 2012-07-01 Add reStructuredText hint and link in instructions
 * :Indent_:  DONE 2012-07-01 7e19b531_ The indent for shifting lists should based on 
-* the parent/child list item length.
+             the parent/child list item length.
 * :Lists_:   DONE 2012-07-02 Add a list parser.
 
 .. _7e19b531: 
@@ -165,7 +165,7 @@ Things todo in next versions.
 
 * :Links_:   The standalone web link with ``/`` is detected as local file.
 * :File_:    A template or snippet or shortcut for adding ``./`` and ``../`` and files.
-* Maybe a sphinx doc ref as well.
+             Maybe a sphinx doc ref as well.
 * :Documents_: Document part: options / commands.
 * :Documents_: Sreencast and screenshot of intro.
 * :Publish_: An option to enable highlighting todo items.
@@ -338,6 +338,8 @@ Auto numbered and auto leveled bullet and enumerated list.
   
     - Shift left: ``<`` or ``<C-ScrollWheelUp>`` 
       Remove Indentation, And remove a level for list.
+    - Format:   ``=``
+      Format the list's number and indentation
 
     Insert Mode Only: 
   
