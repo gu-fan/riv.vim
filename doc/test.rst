@@ -1,5 +1,11 @@
 
-:Sections: Section level and section number auto detected. 
+
+* list 1
+* list 2
+
+:Sections:  Section level and section number auto detected.
+
+
 :Lists:    Auto Numbered and auto leveled bullet and enumerated list.
 :Blocks:   Highlighting and folding blocks.
 :Links:    Jumping with links.
