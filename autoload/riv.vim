@@ -129,6 +129,7 @@ let s:default.maps = {
     \'RivLinkEnter'      : 'call riv#action#db_click(0)',
     \'RivListShiftRight' : 'call riv#list#shift("+")',
     \'RivListShiftLeft'  : 'call riv#list#shift("-")',
+    \'RivListFormat'     : 'call riv#list#shift("=")',
     \'RivListNewList'    : 'call riv#list#new(0)',
     \'RivListSubList'    : 'call riv#list#new(1)',
     \'RivListSupList'    : 'call riv#list#new(-1)',
@@ -205,6 +206,7 @@ let s:default.buf_maps = {
     \'RivLinkPrev'       : ['<S-TAB>',  'n',  'kp'],
     \'RivListShiftRight' : [['>', '<C-ScrollwheelDown>' ],  'mi',  'lu'],
     \'RivListShiftLeft'  : [['<', '<C-ScrollwheelUp>'],  'mi',  'ld'],
+    \'RivListFormat'     : [['='],  'mi',  'l='],
     \'RivListTypeNext'   : ['',  'mi',  'l2'],
     \'RivListTypePrev'   : ['',  'mi',  'l1'],
     \'RivListTypeRemove' : ['',  'mi',  'lx'],
@@ -484,6 +486,8 @@ if !exists("g:_riv_c")
 
     let g:_riv_p.list_b_e = g:_riv_p.bullet_list.'|'.g:_riv_p.enumerate_list1
                 \.'|'.g:_riv_p.enumerate_list2
+
+    let g:_riv_p.list_item = '%([-*+]|%(\d+|[#a-z]|[imlcxvd]+)[.)]|\(%(\d+|[#a-z]|[imlcxvd]+)\))'
     let g:_riv_p.list_all = g:_riv_p.list_b_e . '|'. g:_riv_p.field_list_spl
     
     
@@ -663,8 +667,8 @@ if !exists("g:_riv_c")
     let g:_riv_t.highlight_code = s:normlist(split(g:riv_highlight_code,','))
     let g:_riv_t.month_names = split(g:riv_month_names,',')
 
-    lockvar 2 g:_riv_c
-    lockvar 2 g:_riv_p
+    " lockvar 2 g:_riv_c
+    " lockvar 2 g:_riv_p
 endif
 
 endfun "}}}

@@ -365,7 +365,7 @@ fun! s:cache_todo(force) "{{{
         return
     endif
     let files = split(glob(root.'**/*.rst'))
-    let files  =filter(files, ' v:val !~ ''_build''')
+    let files = filter(files, ' v:val !~ ''_build''')
     let todos = []
     echo 'Caching...'
     let lines = []
@@ -434,8 +434,8 @@ endfun "}}}
 fun! s:lines2helper(lines) "{{{
     let list = []
     let todos = []
-    let path =[]
-    let lines =[]
+    let path = []
+    let lines = []
     let g:_riv_td_path = [path, lines]
     for line in a:lines
         let file=matchstr(line, '^F: \zs.*')
@@ -451,7 +451,7 @@ fun! s:lines2helper(lines) "{{{
             let lnum= matchstr(line, '^\d\+\ze:\t.*')
             call add(path, [f, lnum])
             call add(lines, td)
-            call add(todos , td)
+            call add(todos, td)
         endif
     endfor
     return list

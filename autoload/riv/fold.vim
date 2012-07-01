@@ -20,13 +20,6 @@ fun! s:init_stat() "{{{
 
     if !exists("b:fdl_list") || len(b:fdl_list) != line('$')+1 || g:_riv_debug
         call s:parse_from_start()
-        " if &modified && !exists("s:added")
-        "     call s:add_change_range(s:get_changed_range())
-        "     let s:added = 1
-        " else
-        "     call s:parse_from_start()
-        "     unlet! s:added
-        " endif
     endif
 endfun "}}}
 " Parse "{{{
@@ -48,9 +41,9 @@ fun! s:parse_from_start() "{{{
                 \ 'None': b:state.None }
     " 3%
     let b:fdl_list = map(range(len+1),'0')
-    let b:lines= ['']+getline(1,line('$'))+['']
-    for i in range(len+1)
+    let b:lines= ['']+getline(1,line('$'))+['']     " [-1] and [0] are blank
     " 75%
+    for i in range(len+1)
         call s:check(i)
     endfor
     " 20%
@@ -217,7 +210,7 @@ fun! s:set_obj_dict() "{{{
             let p_sec_lv = sec_lv
             let p_sec_num = sec_num
             
-            " Get the section text like 1.1 1.2 1.2.1
+            " Get the section text like 1-1 1-2 1-2-1
             let t_obj = m
             let t_lst = []
             while !empty(t_obj) && t_obj.bgn != 'sect_root'
@@ -225,6 +218,7 @@ fun! s:set_obj_dict() "{{{
                 let t_obj = s:get_parent(t_obj)
             endwhile
             let m.txt = join(reverse(t_lst), s:sect_sep)
+            let p_sec_txt = m.txt
 
             let b:riv_obj[m.bgn]   = m
             let b:riv_obj[m.bgn+1] = m
@@ -232,12 +226,13 @@ fun! s:set_obj_dict() "{{{
                 let b:riv_obj[m.bgn+2] = m
             endif
             " Stop Sect Part "}}}
+            " let lst_sect = {'bgn':'sect' . m.txt, 'parent':'list_root', 'child':[]}
+            " call s:add_child(b:riv_obj['list_root'], lst_sect)
         elseif m.type== 'list'
             " The List Part "{{{
-
             let lst_lv = m.level
             let lst_end = m.end
-
+            
             if lst_lv > p_lst_lv
                 call s:add_child(p_l_obj,m)
             elseif lst_lv == p_lst_lv  
@@ -263,11 +258,7 @@ fun! s:set_obj_dict() "{{{
             let b:riv_obj[m.bgn] = m
             " Stop List Part "}}}
         elseif m.type == 'trans'
-            " stop current sect_lv
-            " may encounter erros
             let lst_lv = 0
-            " let sec_lv = sec_lv>1 ? sec_lv-1 : 0
-            " let m.level = sec_lv
             let b:riv_obj[m.bgn] = m
         elseif m.type== 'exp'
             let f = 1
@@ -379,13 +370,14 @@ fun! s:check(row) "{{{
     let line = b:lines[row]
 
     call s:s_checker(row)
-
-    if b:foldlevel > 2
-        call s:t_checker(row)
-    endif
+" 
     
     if line=~'^\s*$' && row != line('$')
         return
+    endif
+
+    if b:foldlevel > 2
+        call s:t_checker(row)
     endif
 
     if b:foldlevel > 1
@@ -405,6 +397,7 @@ fun! s:check(row) "{{{
             else
                 let b:state.b_chk = {'type': 'block', 'bgn': a:row+1, 
                             \ 'indent': riv#fold#indent(line)}
+                " the block line may be other item, so not return
             endif
         endif
 
@@ -429,9 +422,8 @@ fun! s:check(row) "{{{
             call insert(b:state.l_chk, l_item, 0)
         endif
         return 1
-    elseif line=~s:p.section 
-                \ && line !~ '^\.\.\_s*$'
-        let b:state.s_chk =  {'type': 'sect' , 'bgn': a:row, 'attr': line[0]}
+    elseif line=~s:p.section  && line !~ '^\.\.\_s*$'
+        let b:state.s_chk =  {'type': 'sect' , 'bgn': row, 'attr': line[0]}
         return 1
     elseif line=~ '^__\s'
         " it's anonymous link
@@ -472,8 +464,6 @@ fun! s:s_checker(row) "{{{
         if line !~ blank  && b:lines[a:row-2] =~ blank  && a:row!=line('$')
             \ && b:lines[a:row+1] == b:lines[a:row-1]
             " 3 row title : blank ,section , noblank(cur) , section
-            " let m = {'type':'sect', 'bgn':a:row-1,'attr':b:state.s_chk.attr,
-            "             \'title_rows':3,'child':[],'parent':{}}
             let chk.bgn = a:row-1
             let chk.title_rows = 3
             let chk.child = []
@@ -482,7 +472,6 @@ fun! s:s_checker(row) "{{{
             call add(b:state.sectmatcher, chk)
         elseif line =~ blank && b:lines[a:row-2]=~ blank && len(b:lines[a:row-1])>=4
             " transition : blank, section ,blank(cur) ,len>4
-            " let m = {'type':'trans', 'bgn':a:row-1, 'end':a:row-1}
             let chk.type = 'trans'
             let chk.bgn = a:row - 1
             let chk.end = a:row - 1
@@ -490,8 +479,6 @@ fun! s:s_checker(row) "{{{
         elseif b:lines[a:row-2] !~ blank && b:lines[a:row-3] =~ blank
                     \ && b:lines[a:row-1] != b:lines[a:row-2]
             " 2 row title : blank , noblank , section , cur
-            " let m = {'type':'sect', 'bgn':a:row-2,'attr':b:state.s_chk.attr,
-            "             \'title_rows':2,'child':[],'parent':{}}
             let chk.bgn = a:row - 2
             let chk.title_rows = 2
             let chk.child = []
@@ -509,8 +496,9 @@ fun! s:l_checker(row) "{{{
     " List can contain Explicit Markup items.
     if has_key(b:state, 'e_chk') | return | endif
     let l = b:state.l_chk
+    let idt = riv#fold#indent(b:lines[a:row]) 
     while !empty(l)
-        if (a:row>l[0].bgn && riv#fold#indent(b:lines[a:row]) <= l[0].indent ) 
+        if (a:row>l[0].bgn && idt <= l[0].indent ) 
             let l[0].end = a:row-1
             call add(b:state.matcher,l[0])
             call remove(l , 0)
@@ -525,20 +513,18 @@ fun! s:l_checker(row) "{{{
 endfun "}}}
 fun! s:e_checker(row) "{{{
     if !has_key(b:state, 'e_chk') | return | endif
-    let chk = b:state.e_chk
     if ( b:state.e_chk.bgn < a:row && b:lines[a:row] =~ '^\S' )
-        let chk.end = a:row-1
-        call add(b:state.matcher,chk)
+        let b:state.e_chk.end = a:row-1
+        call add(b:state.matcher,b:state.e_chk)
         call remove(b:state, 'e_chk')
     elseif  a:row==line('$')
-        let chk.end = a:row
-        call add(b:state.matcher,chk)
+        let b:state.e_chk.end = a:row
+        call add(b:state.matcher,b:state.e_chk)
         call remove(b:state, 'e_chk')
     endif
 endfun "}}}
 fun! s:b_checker(row) "{{{
     if !has_key(b:state, 'b_chk') | return | endif
-    " let chk = b:state.b_chk
     if ( b:state.b_chk.bgn < a:row && riv#fold#indent(b:lines[a:row]) <= b:state.b_chk.indent )
         let b:state.b_chk.end = a:row-1
         call add(b:state.matcher, b:state.b_chk)

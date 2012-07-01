@@ -183,7 +183,7 @@ Things todo in next versions.
 :Sections_: Adjust section level.
 :Sections_: Shortcut to add sections references like the content directive?
 :Folding_: A buf parser write in python for performance?
-:Indent_:  <Tab> should act when as <Bs> when indenting
+:Indent_:  <Tab> should act as <Bs> when indenting
 :Indent_:  The content space for field list should align with prev field list.
 :Indent_:  A command to format the indent of lists.
 
@@ -197,10 +197,7 @@ Instruction
 
 * How to use?
 
-  + If you are not familiar with reStructuredText, see QuickStart__
-  
-__ http://docutils.sourceforge.net/docs/user/rst/quickstart.html
-..
+  + If you are not familiar with reStructuredText, see QuickStart_
 
   + For writing documents,
 
@@ -229,6 +226,8 @@ __ http://docutils.sourceforge.net/docs/user/rst/quickstart.html
 
   + ``g:riv_buf_leader`` : leader map for reStructuredText buffers.
   + ``g:riv_buf_ins_leader`` : leader map for reStructuredText buffers's insert mode.
+
+.. _QuickStart: http://docutils.sourceforge.net/docs/user/rst/quickstart.html
 
 For reStructuredText
 --------------------

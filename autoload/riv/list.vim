@@ -14,171 +14,154 @@ set cpo-=C
 " the searchpos and setpos version
 " it's heavy though.
 fun! s:get_all_list(row) "{{{
-    let c_row = prevnonblank(a:row)
-    if getline(c_row) =~ g:_riv_p.list_all       " it's list
-        return c_row
-    else
-        let c_idt = indent(c_row)
-        if c_idt == 0       " it's '^\S'
-            return 0
-        else
-            let save_pos = getpos('.')
-            let [row,col] = searchpos(g:_riv_p.list_all.'|^\S', 'wnb',0,100)
-            if row == 0
-                return 0
-            endif
-            let s_idt = indent(row)
-            while c_idt <= s_idt        " find a list have less indent
-                if getline(row) =~ '^\S'
-                    let row = 0
-                    break         " could not find a list.
-                endif
-                " goto prev line
-                exe prevnonblank(row-1)
-                let [row,col] = searchpos(g:_riv_p.list_all.'|^\S', 'wnb',0,100)
-                let s_idt = indent(row)
-            endwhile
-            call setpos('.',save_pos)
-            return row
+    let row = prevnonblank(a:row)
+
+    let save_pos = getpos('.')
+
+    while getline(row) !~ g:_riv_p.list_all && row != 0
+        let idt = indent(row)
+        if idt == 0 
+            let row = 0
+            break
         endif
-    endif
+        let idt_ptn = '^\s\{,'.(idt-1).'}\S'
+        call cursor(prevnonblank(row-1),1)
+        let [row,col] = searchpos(idt_ptn, 'nbc',0,100)
+    endwhile
+    
+    call setpos('.',save_pos)
+
+    return row
 endfun "}}}
 fun! s:get_list(row) "{{{
-    " To find if a row is in  a list's arrange. 
+    let row = prevnonblank(a:row)
+
+    let save_pos = getpos('.')
+
+    while getline(row) !~ g:_riv_p.list_b_e && row != 0
+        let idt = indent(row)
+        if idt == 0 
+            let row = 0
+            break
+        endif
+        let idt_ptn = '^\s\{,'.(idt-1).'}\S'
+        call cursor(prevnonblank(row-1),1)
+        let [row,col] = searchpos(idt_ptn, 'nbc',0,100)
+    endwhile
+    
+    call setpos('.',save_pos)
+
+    return row
+endfun "}}}
+fun! s:get_list_(row) "{{{
+    " To find if a row is in  a list's range. 
     " this list's indent should smaller than current line (when not list).
-    " return 0 if break by none list '^\S'.
+    " return 0 if '^\S' or not find
 
     let c_row = prevnonblank(a:row)
-    if getline(c_row) =~ g:_riv_p.list_b_e       " it's list
-        return c_row
+    if getline(c_row) =~ g:_riv_p.list_b_e
+        return c_row 
     else
         let c_idt = indent(c_row)
-        if c_idt == 0       " it's '^\S'
+        if c_idt == 0 
             return 0
-        else
-            let save_pos = getpos('.')
-            let [row,col] = searchpos(g:_riv_p.list_b_e.'|^\S', 'wnb',0,100)
-            if row == 0
-                return 0
+        endif
+        let idt_ptn = '^\s{,'.(c_idt-1).'}\S'
+        let ptn = g:_riv_p.list_b_e.'|'.idt_ptn
+        let save_pos = getpos('.')
+
+        let row = c_row
+        let s_idt = c_idt + 1
+        while ( getline(row) !~ g:_riv_p.list_b_e || s_idt>= c_idt ) && row!=0
+            call cursor(prevnonblank(row-1),1)
+            let [row,col] = searchpos(ptn, 'wnbc',0,100)
+            if s_idt == 0
+                let row =0
+                break
+            endif
+            if s_idt < c_idt 
+                let c_idt = s_idt
             endif
             let s_idt = indent(row)
-            while c_idt <= s_idt        " find a list have less indent
-                if getline(row) =~ '^\S'
-                    let row = 0
-                    break         " could not find a list.
-                endif
-                " goto prev line
-                exe prevnonblank(row-1)
-                let [row,col] = searchpos(g:_riv_p.list_b_e.'|^\S', 'wnb',0,100)
-                let s_idt = indent(row)
-            endwhile
-            call setpos('.',save_pos)
-            if getline(row) !~ '^\S'
-                return row
-            else
-                return 0
-            endif
-        endif
+        endwhile
+
+        call setpos('.',save_pos)
+        return row
     endif
 endfun "}}}
 fun! s:get_older(row) "{{{
-    " check if a list item have an older .
-    let c_row = s:get_list(a:row)
-    if c_row == 0
+    " check if a list item have an older item, 
+    " which have same indent with it
+    let row = s:get_list(a:row)
+    if row == 0
         return 0
     else
+
         let save_pos = getpos('.')
-        exe prevnonblank(c_row-1)
-        let c_idt = indent(c_row)
-        let [row,col] = searchpos(g:_riv_p.list_b_e.'|^\S', 'wnb',0,100)
-        if row == 0
-            return 0
-        endif
-        let s_idt = indent(row)
-        while c_idt < s_idt    " find a list have 
-                               " same list level           
-            if getline(row) =~ '^\S'
+
+        let c_idt = indent(row)
+        let idt = c_idt
+
+        let idt_ptn = '^\s\{,'.idt.'}\S'
+        call cursor(prevnonblank(row-1),1)
+        let [row,col] = searchpos(idt_ptn, 'nbc',0,100)
+        
+        while getline(row) !~ g:_riv_p.list_b_e && row != 0
+            let idt = indent(row)
+            if idt <= c_idt
                 let row = 0
-                break         " could not find a list.
+                break
             endif
-            " goto prev line
-            exe prevnonblank(row-1)
-            let [row,col] = searchpos(g:_riv_p.list_b_e.'|^\S', 'wnb',0,100)
-            let s_idt = indent(row)
+            let idt_ptn = '^\s\{,'.idt.'}\S'
+            call cursor(prevnonblank(row-1),1)
+            let [row,col] = searchpos(idt_ptn, 'nbc',0,100)
         endwhile
+
         call setpos('.',save_pos)
-        if s_idt == c_idt && getline(row) !~ '^\S'
-            return row
-        else
-            return 0
-        endif
+
+        return idt == c_idt ? row : 0
     endif
 endfun "}}}
 fun! s:get_parent(row) "{{{
-    " check if a list item have an older .
-    let c_row = s:get_list(a:row)
-    if c_row == 0
+   
+    let row = s:get_list(a:row)
+    if row == 0
         return 0
     else
-        let c_idt = indent(c_row)
-        if c_idt == 0
-            return 0
-        endif
+
         let save_pos = getpos('.')
-        exe prevnonblank(c_row-1)
-        let [row,col] = searchpos(g:_riv_p.list_b_e.'|^\S', 'wnb',0,100)
-        if row == 0
-            return 0
-        endif
-        let s_idt = indent(row)
-        while c_idt <= s_idt  " find a list have 
-                              " same list level           
-            if getline(row) =~ '^\S'
-                let row = 0
-                break         " could not find a list.
-            endif
-            " goto prev line
-            exe prevnonblank(row-1)
-            let [row,col] = searchpos(g:_riv_p.list_b_e.'|^\S', 'wnb',0,100)
-            let s_idt = indent(row)
+
+        let c_idt = indent(row)
+        let idt = c_idt
+
+        let idt_ptn = '^\s\{,'.(idt-1).'}\S'
+        call cursor(prevnonblank(row-1),1)
+        let [row,col] = searchpos(idt_ptn, 'nbc',0,100)
+        
+        while getline(row) !~ g:_riv_p.list_b_e && row != 0
+            let idt = indent(row)
+            let idt_ptn = '^\s\{,'.idt.'}\S'
+            call cursor(prevnonblank(row-1),1)
+            let [row,col] = searchpos(idt_ptn, 'nbc',0,100)
         endwhile
+
         call setpos('.',save_pos)
-        if s_idt < c_idt && getline(row) !~ '^\S'
-            return row
-        else
-            return 0
-        endif
+
+        return idt < c_idt ? row : 0
     endif
 endfun "}}}
-fun! s:get_child(row) "{{{
-    let child = []
-    let c_row = s:get_list(a:row)
-    if c_row == 0
-        return child
-    else
-        let c_idt = indent(c_row)
-        let save_pos = getpos('.')
-        exe nextnonblank(c_row+1)
-        let [row,col] = searchpos(g:_riv_p.list_b_e.'|^\S', 'wn',0,100)
-        if row == 0
-            return child
-        endif
-        let s_idt = indent(row)
-        while c_idt < s_idt
-            if getline(row) =~ '^\S'
-                break
-            else 
-                call add(child, row)
-            endif
-            " goto next line
-            exe nextnonblank(row)
-            let [row,col] = searchpos(g:_riv_p.list_b_e.'|^\S', 'wn',0,100)
-            let s_idt = indent(row)
-        endwhile
-        call setpos('.',save_pos)
-        return child
-        endif
-    endif
+fun! s:get_tree(start,end) "{{{
+    " create root and get children
+    
+endfun "}}}
+fun! s:check_l() "{{{
+    
+endfun "}}}
+fun! s:add_l() "{{{
+    
+endfun "}}}
+fun! s:set_obj() "{{{
+    
 endfun "}}}
 
 " the buf obj dict version.
@@ -490,22 +473,27 @@ fun! riv#list#toggle_type(i) "{{{
 endfun "}}}
 fun! s:list_shift_len(row,len) "{{{
     let line = getline(a:row)
+    if line=~ '^\s*$'
+        return
+    endif
 
     " sub the line's indentation
     let line = substitute(line,'^\s*', repeat(' ',indent(a:row)),'g')
-    if a:len>=0
+    if a:len>0
         let act = 1
         let line = substitute(line,'^',repeat(' ',a:len),'')
-    else
+    elseif a:len< 0
         let act = -1
         let line = substitute(line,'^\s\{,'.abs(a:len).'}','','')
+    else
+        let act = 0
     endif
     
     " when it's first and it's 'i', we should make sure it' roman.
     let is_roman = s:is_roman(a:row)
     let [type , idt , num , attr, space] =  riv#list#stat(line, is_roman)
     let nr = s:listnum2nr(num, is_roman)
-    if type != -1
+    if type != -1 && act != 0
         if act == 1
             let level = s:stat2level(type, num, attr) 
             let [type,num,attr] = s:level2stat(level+1)
@@ -522,10 +510,28 @@ fun! s:list_shift_len(row,len) "{{{
         let list_str =  s:list_str(type,idt,num,attr,space)
         let line = substitute(line, g:_riv_p.list_b_e , list_str, '')
     endif
+
     call setline(a:row,line)
 
     if type != -1
         call s:fix_nr(a:row)
+    else
+        call s:fix_idt(a:row)
+    endif
+endfun "}}}
+fun! s:fix_idt(row) "{{{
+    " if it's not a list , then the indent should fixed based on current list
+    let list = s:get_list(a:row-1)
+    let line = getline(a:row)
+    if list
+        let f_idt = matchend(getline(list), g:_riv_p.list_all)
+        let idt = matchend(line,'^\s*')
+        " if the ident is between the fix + item len and indent
+        if (idt > indent(list) && idt <= f_idt+s:get_item_length(list) )
+            \ || (idt == indent(list) && list == a:row-1)
+            let line = substitute(line, '^\s*', repeat(' ',f_idt), '')
+            call setline(a:row,line)
+        endif
     endif
 endfun "}}}
 
@@ -554,38 +560,51 @@ fun! s:fix_nr(row) "{{{
     let line = substitute(line, g:_riv_p.list_b_e , list_str, '')
     call setline(a:row,line)
 endfun "}}}
-fun! riv#list#shift(direction) range "{{{
-    " direction "+" or "-"
-    " > to add indent, < to rmv indent 
-    " if line is list then change bullet.
-    let line = getline(a:firstline) 
-    let [type , idt , num , attr, space] = riv#list#stat(line)
-    if type == -1
-        let ln = &shiftwidth
+fun! s:get_item_length(row) "{{{
+    let end = matchend(getline(a:row), g:_riv_p.list_all)
+    if end != -1
+        return end - indent(a:row)
     else
-        let ln = len(space) + len(num . attr)
-        if a:direction=='-'
-            " use prev parent's item length
-            let prev = s:get_parent(a:firstline)
-            if prev 
-                let ln = indent(a:firstline) - indent(prev)
-            endif
+        return 0
+    endif
+endfun "}}}
+fun! riv#list#shift(direction) range "{{{
+    " direction "+" or "-" or "="
+    " if firstline is list then whole indent based on parent item
+    " if it's not list, then whole indent based on shiftwidth
+    " the list in it will change it's level and number
+    let line = getline(a:firstline) 
+    if a:direction !="="
+        let end =  matchend(getline(a:firstline), g:_riv_p.list_all)
+        if end != -1
+            let ln = end - indent(a:firstline)
         else
-            let prev = s:get_list(a:firstline-1)
-            if prev 
-                let c_ln = indent(prev)  - indent(a:firstline)
-                " if prev list indent is smaller than current item's length.
-                " then use prev indent
-                if c_ln > 0  && c_ln < ln
-                    let ln = c_ln
-                endif
+            let ln = &shiftwidth
+        endif
+    endif
+    if a:direction=='-'
+        let prev = s:get_parent(a:firstline)
+        " if has parent, and the sft is smaller or equal than idt
+        " shift to parent
+        if prev 
+            let sft = indent(a:firstline) - indent(prev)
+            if sft <= ln
+                let ln = sft
             endif
+        endif
+    elseif a:direction == "+"
+        let prev = s:get_older(a:firstline)
+        if prev 
+            " if has older , use older's item length
+            let ln = matchend(getline(prev), g:_riv_p.list_all) - indent(prev)
         endif
     endif
     if a:direction=="-"
         let vec = -ln
-    else
+    elseif a:direction =="+"
         let vec = ln
+    else
+        let vec = 0
     endif
     if a:firstline == a:lastline
         call s:list_shift_len(a:firstline, vec)

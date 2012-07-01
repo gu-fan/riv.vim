@@ -242,9 +242,12 @@ fun! riv#test#link_expand() "{{{
 endfun "}}}
 
 fun! riv#test#test() "{{{
-    " call riv#test#repl_link()
-    " call riv#test#list_item()
-    " call riv#test#link_expand()
+    " let func = riv#list#SID()."get_child"
+    " " echo riv#test#timer(func, 1000, [line('.')])
+    " let func2 = riv#list#SID()."get_child2"
+    " " echo riv#test#timer(func2, 1000, [line('.')])
+    " echo call(func,[line('.')])
+    " echo call(func2,[line('.')])
 endfun "}}}
 fun! s:SID() "{{{
     return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$')
