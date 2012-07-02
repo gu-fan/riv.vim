@@ -1,10 +1,10 @@
 Intro
 =====
 
-:Author: Rykka G.Forest
-:Date:   2012-07-01 02:59:36
-:Version: 0.66 
-:Github: https://github.com/Rykka/riv.vim
+* :Author: Rykka G.Forest
+* :Date:   2012-07-01 02:59:36
+* :Version: 0.66 
+* :Github: https://github.com/Rykka/riv.vim
 
 **Riv** is a vim plugin for managing and writing reStructuredText_ documents.
 Short for 'reStructuredText in Vim'. 
@@ -71,7 +71,7 @@ Install
 * Using downloaded file. 
   Just extract to your ``.vim`` folder .
 
-:NOTE: Make sure the your .vim folder in option ``runtimepath`` 
+* :NOTE: Make sure the your .vim folder in option ``runtimepath`` 
        is before the $VIMRUNTIME. 
 
        Otherwise the syntax/indent files for rst file will using the vim built-in one.
@@ -269,7 +269,7 @@ Section levels and numbers are auto detected.
 
   you can change it with ``g:riv_section_levels``
 
-:NTOE: **A reStructuredText syntax hint**
+* :NTOE: **A reStructuredText syntax hint**
     
        reStructuredText Section title have two styles. 
         
@@ -372,7 +372,7 @@ Auto numbered and auto leveled bullet and enumerated list.
     - ``:RivListTypeRemove`` ``<C-E>lx``
       Delete current list item symbol
 
-:NOTE: **A reStructuredText syntax hint**
+* :NOTE: **A reStructuredText syntax hint**
 
        To contain a sublist or second paragraph or blocks in a list , 
        you should make a new blank line ,
@@ -552,7 +552,7 @@ Jumping with links
     create a auto numbered footnote. 
     And append the footnote target to the end of file.
 
-:NOTE: **A reStructuredText syntax hint**
+* :NOTE: **A reStructuredText syntax hint**
 
        Links are hyperlink references and hyperlink targets.
         
@@ -822,7 +822,7 @@ Publish
 Some wrapper to convert rst files to html/xml/latex/odt/... 
 (require python docutils_  package )
 
-:NOTE: When converting, It will first try ``rst2xxxx2.py`` , then try ``rst2xxxx.py``
+* :NOTE: When converting, It will first try ``rst2xxxx2.py`` , then try ``rst2xxxx.py``
        You should install the package of python 2 version .
        Otherwise errors will occour.
 
