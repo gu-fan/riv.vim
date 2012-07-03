@@ -585,19 +585,19 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#grid-table
   No auto formatting. ::
 
       ===========  ========================
-            This is a 7x2 Simple Table
+            This is a 6x2 Simple Table
       -------------------------------------
       Col 1        Col 2
       ===========  ========================
       1             row 1        
       2             row 2        
       3             - first line row 3
-                    1. second line of row 3
+                    - second line of row 3
       ===========  ========================
 
 
   ===========  ========================
-        This is a 7x2 Simple Table
+        This is a 6x2 Simple Table
   -------------------------------------
   Col 1        Col 2
   ===========  ========================

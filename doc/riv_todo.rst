@@ -44,6 +44,9 @@ TODOS
    + Table:   Support column span?
    + Table:   A vim table parser for compatible?
    + Table:   A shortcut or command to create table with row * col.
+   + Simple table highlighting: not highlighted when after a literal block.
+   + Simple table highlighting: the span line is not highlighted when one span.
+   + Simple table: the fold calc not calc the span line.
 
 8. Folding
 
