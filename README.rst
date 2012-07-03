@@ -103,7 +103,11 @@ Todo
 Prev
 ~~~~
 
-See Changelog in doc/riv_log.rst
+See Changelog in `doc/riv_log.rst`_
+
+.. _doc/riv_log.rst: riv.vim/doc/riv_log.rst
+
+
 
 This
 ~~~~~
@@ -115,7 +119,9 @@ Things todo in this version.
 Next 
 ~~~~~
 
-See doc/riv_todo.rst
+See `doc/riv_todo.rst`_
+
+.. _doc/riv_todo.rst: riv.vim/doc/riv_todo.rst
 
 ----
 
