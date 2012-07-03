@@ -32,28 +32,28 @@ Features
  
 These features are for all reStructuredText files.
 
-* :Sections_: Section level and section number auto detected. 
-* :Lists_:    Auto Numbered and auto leveled bullet and enumerated list.
-* :Blocks_:   Highlighting and folding blocks.
-* :Links_:    Jumping with links.
-* :Table_:    Auto formatted table.
-* :Folding_:  Fold document by document structures (Section/List/Block).
-* :Indent_:   Improved indentation 
-* :Insert_:   Improvment of some mapping in insert mode.
-* :Highlighting_: Improved syntax file. 
-* :Publish_:  some wrapper to convert rst files to html/xml/latex/odt/... 
+ :Sections_: Section level and section number auto detected. 
+ :Lists_:    Auto Numbered and auto leveled bullet and enumerated list.
+ :Blocks_:   Highlighting and folding blocks.
+ :Links_:    Jumping with links.
+ :Table_:    Auto formatted table.
+ :Folding_:  Fold document by document structures (Section/List/Block).
+ :Indent_:   Improved indentation 
+ :Insert_:   Improvment of some mapping in insert mode.
+ :Highlighting_: Improved syntax file. 
+ :Publish_:  some wrapper to convert rst files to html/xml/latex/odt/... 
             (require python docutils package )
 
 
 These features are for the Riv Project. 
 
-* :Project_:  Manage your reStructuredText documents in a wiki way.
-* :File_:     Links to local file in rst documents. 
-* :Scratch_:  A place for writing diary or hold idea and thoughts.
-* :Todos_:    Writing todo lists in reStructuredText documents .
-* :Helpers_:  A help window for showing and doing something.
+ :Project_:  Manage your reStructuredText documents in a wiki way.
+ :File_:     Links to local file in rst documents. 
+ :Scratch_:  A place for writing diary or hold idea and thoughts.
+ :Todos_:    Writing todo lists in reStructuredText documents .
+ :Helpers_:  A help window for showing and doing something.
 
-  + `Todo Helper`_: Managing todo items of project.
+             a. `Todo Helper`_: Managing todo items of project.
 
 * To Install: see `Install`_
 * To Start: see `Instruction`_
