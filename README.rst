@@ -547,16 +547,31 @@ Auto Format Table
 
     To create a table , just insert ``| xxx |`` and press ``<Enter>``.
 
-    +-----------------+-----------------------------------------------------------+
-    | The Grid Table  |  Will be Auto Formatted after Leave Insert Mode           |
-    +=================+===========================================================+
-    | Lines           | - <Enter> in column to add a new line of column           |
-    |                 | - This is the second line of in same row of table.        |
-    +-----------------+-----------------------------------------------------------+
-    | Rows            | <Enter> in seperator to add a new row                     |
-    +-----------------+-----------------------------------------------------------+
-    | Cells           | <Tab> and <S-Tab> in table will switch to next/prev cell  |
-    +-----------------+-----------------------------------------------------------+
+    It will be autoformatted after Leave Insert Mode 
+    or pressing ``<Enter>`` or ``<Tab>`` ::
+
+        +--------+-----------------------------------------------------------+
+        | 4x2    | Grid Table                                                |
+        +========+===========================================================+
+        | Lines  | - <Enter> in column to add a new line of column           |
+        |        | - This is the second line of in same row of table.        |
+        +--------+-----------------------------------------------------------+
+        | Rows   | <Enter> in seperator to add a new row                     |
+        +--------+-----------------------------------------------------------+
+        | Cells  | <Tab> and <S-Tab> in table will switch to next/prev cell  |
+        +--------+-----------------------------------------------------------+
+
+
+    +--------+-----------------------------------------------------------+
+    | 4x2    | Grid Table                                                |
+    +========+===========================================================+
+    | Lines  | - <Enter> in column to add a new line of column           |
+    |        | - This is the second line of in same row of table.        |
+    +--------+-----------------------------------------------------------+
+    | Rows   | <Enter> in seperator to add a new row                     |
+    +--------+-----------------------------------------------------------+
+    | Cells  | <Tab> and <S-Tab> in table will switch to next/prev cell  |
+    +--------+-----------------------------------------------------------+
 
     See `Grid Tables`__
 
@@ -567,10 +582,22 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#grid-table
   Highlighted and folded.
   When folded, the numbers of rows and columns will be shown as '3+2'
 
-  No auto formatting.
+  No auto formatting. ::
+
+      ===========  ========================
+            This is a 7x2 Simple Table
+      -------------------------------------
+      Col 1        Col 2
+      ===========  ========================
+      1             row 1        
+      2             row 2        
+      3             - first line row 3
+                    1. second line of row 3
+      ===========  ========================
+
 
   ===========  ========================
-        This is a Simple Table
+        This is a 7x2 Simple Table
   -------------------------------------
   Col 1        Col 2
   ===========  ========================
