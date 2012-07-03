@@ -534,12 +534,12 @@ Table
 Auto Format Table 
 (Currently require vim compiled with python. )
 
-Grid Table: 
+* Grid Table: 
 
-    Highlighted and Folded.
-    When folded, the numbers of rows and columns will be shown as '3x2'
+  Highlighted and Folded.
+  When folded, the numbers of rows and columns will be shown as '3x2'
 
-    Can be autoformated. Only support equal columns each row (no span).
+  Can be autoformated. Only support equal columns each row (no span).
 
   + Actions:
 
@@ -562,7 +562,7 @@ Grid Table:
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#grid-tables
 
-Simple Table:
+* Simple Table:
 
   Highlighted and folded.
   When folded, the numbers of rows and columns will be shown as '3+2'
