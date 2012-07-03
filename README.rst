@@ -105,7 +105,7 @@ Prev
 
 See Changelog in `doc/riv_log.rst`_
 
-.. _doc/riv_log.rst: riv.vim/doc/riv_log.rst
+.. _doc/riv_log.rst: riv.vim/blob/master/doc/riv_log.rst
 
 
 
@@ -121,7 +121,7 @@ Next
 
 See `doc/riv_todo.rst`_
 
-.. _doc/riv_todo.rst: riv.vim/doc/riv_todo.rst
+.. _doc/riv_todo.rst: riv.vim/blob/master/doc/riv_todo.rst
 
 ----
 
