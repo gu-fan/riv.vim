@@ -1,10 +1,10 @@
 Intro
 =====
 
-* :Author: Rykka G.Forest
-* :Date:   2012-07-01 02:59:36
-* :Version: 0.66 
-* :Github: https://github.com/Rykka/riv.vim
+:Author: Rykka G.Forest
+:Date:   2012-07-01 02:59:36
+:Version: 0.66 
+:Github: https://github.com/Rykka/riv.vim
 
 **Riv** is a vim plugin for managing and writing reStructuredText_ documents.
 Short for 'reStructuredText in Vim'. 

@@ -8,7 +8,7 @@ TODOS
 
 1. Temlates:
 
-   A. A basic templates for each file in project.
+   A. A shortcut to create basic templates for each file in project.
       shows parent index / index and file: create/modified date
       for index, only show parent index and file.
       for root , only show file.
@@ -30,43 +30,58 @@ TODOS
    + Links:   Link tags between files?
    + Links:   Github flavor: create commit link, issue link?
 
-5. Todos
+5. Lists
+
+   A. '=' should format the sub list which indent is between parent's item and idt.
+
+6. Todos
 
    + Todos:   Todo item priorities?
 
-6. Table
+7. Table
 
    + Table:   Support simple table format?
    + Table:   Support column span?
    + Table:   A vim table parser for compatible?
    + Table:   A shortcut or command to create table with row * col.
 
-7. Folding
+8. Folding
 
    + Folding: A buf parser write in python for performance?
 
-8. Indent 
+9. Indent 
 
-   + Indent:  <Tab> should act as <Bs> when indenting
+   + Indent:  <Tab> to indent. improved <BS> indent
    + Indent:  The content space for field list should align with prev field list.
    + Indent:  A command to format the indent of lists.
 
-9. File
+10. highlighting
 
-   + File:    A template or snippet or shortcut for adding ``./`` and ``../`` 
-     and files.  Maybe a sphinx doc ref as well.
+    + highlight the directives with indents.
 
-10. Publish
+11. File
 
-   + Publish: An option to enable highlighting todo items.
+    + File:    A template or snippet or shortcut for adding ``./`` and ``../`` 
+      and files.  Maybe a sphinx doc ref as well.
 
-11. Helpers
+12. Publish
 
-   + Helpers: An option Helper and option cache. 
-     Let people use it even without touching ``.vimrc`` .
-   + Helpers: A command helper?
+    + Publish: An option to enable highlighting todo items.
 
-12. Scratch
+13. Helpers
 
-   + Scratch: Show Scratch sign in Calendar.
+    A. Helpers: An option Helper and option cache. 
+       Let people use it even without touching ``.vimrc`` .
+    B. Helpers: A command helper?
+
+14. Scratch
+
+    - Scratch: Show Scratch sign in Calendar.
+
+15. ScreenCast
+
+    + A list tutor
+    + A todo tutor
+    + A section tutor
+
 
