@@ -103,9 +103,9 @@ Todo
 Prev
 ~~~~
 
-See Changelog in doc/riv_log.rst [1]_
+See Changelog in doc/riv_log.rst [riv_log]_
 
-.. [1] https://github.com/Rykka/riv.vim/blob/master/doc/riv_log.rst
+.. [riv_log] https://github.com/Rykka/riv.vim/blob/master/doc/riv_log.rst
 
 
 
@@ -123,9 +123,9 @@ Things todo in this version.
 Next 
 ~~~~~
 
-See doc/riv_todo.rst [2]_
+See doc/riv_todo.rst [riv_todo]_
 
-.. [2] https://github.com/Rykka/riv.vim/blob/master/doc/riv_todo.rst
+.. [riv_todo] https://github.com/Rykka/riv.vim/blob/master/doc/riv_todo.rst
 
 ----
 
