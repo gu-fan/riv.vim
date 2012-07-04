@@ -474,6 +474,9 @@ if !exists("g:_riv_c")
 
     " ======  ===============
     let g:_riv_p.simple_table  = '^\s*=\+\s\+=[=[:space:]]\+\s*$'
+    " -------
+    " -----  ----------
+    let g:_riv_p.spl_span_sep = '^\s*-\+\( \+-\+\)*\s*$'
     
 
 

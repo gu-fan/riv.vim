@@ -3,7 +3,7 @@ Intro
 
 :Author: Rykka G.Forest
 :Date:   2012-07-01 02:59:36
-:Version: 0.66 
+:Version: 0.67 
 :Github: https://github.com/Rykka/riv.vim
 
 **Riv** is a vim plugin for managing and writing reStructuredText_ documents.
@@ -103,9 +103,9 @@ Todo
 Prev
 ~~~~
 
-See Changelog in `doc/riv_log.rst`_
+See Changelog in doc/riv_log.rst [1]_
 
-.. _doc/riv_log.rst: riv.vim/blob/master/doc/riv_log.rst
+.. [1] https://github.com/Rykka/riv.vim/blob/master/doc/riv_log.rst
 
 
 
@@ -116,12 +116,16 @@ Things todo in this version.
 
 * 0.67:
 
+  :Folding_: DONE 2012-07-05 The line block is folded now.
+  :Table_:   DONE 2012-07-05 Improved row & col count.
+
+
 Next 
 ~~~~~
 
-See `doc/riv_todo.rst`_
+See doc/riv_todo.rst [2]_
 
-.. _doc/riv_todo.rst: riv.vim/blob/master/doc/riv_todo.rst
+.. [2] https://github.com/Rykka/riv.vim/blob/master/doc/riv_todo.rst
 
 ----
 
@@ -232,7 +236,65 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#sections
 Lists
 ~~~~~
 
-Auto numbered and auto leveled bullet and enumerated list.
+There are several List items in reStructuredText
+
+List items
+""""""""""
+
+* Bullet Lists
+
+  start with ``*,+,-`` , NOT include ``•‣⁃`` which are unicode chars.
+
+  It is highlighted, folded. And auto leveled.
+
+  See `Bullet Lists`__ 
+
+__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#bullet-lists
+
+1. Enumerated Lists
+
+   A sequenced enumerator. like arabic numberl , alphabet characters , Roman numerals
+   with the formating type ``#.`` ``(#)`` ``#)``
+
+   It is highlighted, folded. auto numbered and auto leveled.
+    
+   See `Enumerated Lists`__ 
+
+__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#enumerated-lists
+
+Definition Lists
+    A list with a term and an indented definition.
+
+    It is highlighted, not folded.
+
+    See `Definition Lists`__ 
+
+__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#definition-lists
+
+:Field Lists:   A List which field name is suffix and 
+                prefix by a single colon ``:field:``
+
+                It is highlighted, and folded.
+
+                Bibliographic Fields items are highlighted in another color.
+
+                See `Field Lists`__ 
+
+__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#field-lists
+
+* Option Lists
+  A list for command-line options and descriptions
+
+  It is highlighted , not folded.
+
+  See `Option Lists`__ 
+
+__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#option-lists
+
+List flavor
+"""""""""""
+
+The auto level and auto number for bullet list and enumerated list.
 
 * Auto Level:
 
@@ -310,11 +372,23 @@ Auto numbered and auto leveled bullet and enumerated list.
     - ``:RivListTypeRemove`` ``<C-E>lx``
       Delete current list item symbol
 
+
+* List types:
+
+    
+
+
 :NOTE: **A reStructuredText syntax hint**
+    
+       Most reStructuredText items is seperated by blank line. 
+       Include sections, lists, blocks, paragraphs ...
+
+       The reStructuredText is indent sensitive.
 
        To contain a sublist or second paragraph or blocks in a list , 
-       you should make a new blank line ,
-       and make the the item lines up with the main list content's left edge.::
+        
+       A blank line is needed and the the item should 
+       lines up with the main list content's left edge.::
 
         * parent list
 
@@ -339,11 +413,9 @@ Auto numbered and auto leveled bullet and enumerated list.
 
             - RIGHT! this one is sub list of sub list4.
 
-       See `reStructuredText Bullet Lists`__ 
 
        and following enumerated lists, definition lists , field lists and option lists.
 
-__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#bullet-lists
 
 Blocks
 ~~~~~~
@@ -381,7 +453,10 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#literal-bl
   | This is a line block
   | This is the second line
 
-  It's highlighted but not folded.
+  It's highlighted and folded. 
+
+  :Note: for speed considering , the blank line between line blocks are ignored
+         as they are a single line block.
 
   See `Line Blocks`__
 
@@ -415,7 +490,7 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#block-quot
 >>> print 'this is a Doctest block'
 this is a Doctest block
     
-  It's highlighted but not folded
+  It's highlighted but not folded.
 
   See `Doctest Blocks`__
 
@@ -436,6 +511,17 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#doctest-bl
   See `code block syntax highlighting`_ 
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#explicit-markup-blocks
+
+Inline Markup
+~~~~~~~~~~~~~~
+
+Inline Markup are highlighted only.
+
+Maybe should an option for conceal it in the future.
+
+See `inline markup`__
+
+__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#inline-markup
 
 Links
 ~~~~~
@@ -585,7 +671,7 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#grid-table
   No auto formatting. ::
 
       ===========  ========================
-            This is a 6x2 Simple Table
+            A 6x2 Simple Table
       -------------------------------------
       Col 1        Col 2
       ===========  ========================
@@ -597,7 +683,7 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#grid-table
 
 
   ===========  ========================
-        This is a 6x2 Simple Table
+        A 6x2 Simple Table
   -------------------------------------
   Col 1        Col 2
   ===========  ========================
@@ -971,6 +1057,10 @@ The statistics of the child items (or this item) todo progress will be shown.
   + [o] This is a todo item that's in progress.
   + [X] This is a todo item that's finished.
 
+  + You can change the todo box item by ``g:riv_todo_levels`` ,
+
+    default is ``" ,o,X"``
+
 * Datestamps:
 
   + You can set the todo item timestamp style with 'g:riv_todo_timestamp'
@@ -991,14 +1081,16 @@ The statistics of the child items (or this item) todo progress will be shown.
   
 * Keyword groups:
     
-  + FIXED A todo item of FIXME/FIXED keyword.
-  + DONE 2012-06-13 ~ 2012-06-23 A todo item of TODO/DONE keyword.
-  + START A todo item of TODO/DONE keyword.
+  + FIXED A todo item of FIXME/FIXED keyword group.
+  + DONE 2012-06-13 ~ 2012-06-23 A todo item of TODO/DONE keyword group.
+  + START A todo item of START/PROCESS/STOP keyword group.
   + You can define your own keyword group for todo items with ``g:riv_todo_keywords``
   
     each keyword is seperated by ',' , each group is seperated by ';'
   
-    default is ``TODO,DONE;FIXME,FIXED;START,PROCESS,STOP``,
+    default is ``"TODO,DONE;FIXME,FIXED;START,PROCESS,STOP"``,
+
+    Note that, the end of each group is considered as the 'DONE' keyword
 
 * Actions:
 
