@@ -83,11 +83,11 @@ TODOS
    + Indent:  The content space for field list should align with prev field list.
    + Indent:  A command to format the indent of lists.
 
-10. highlighting
+10. Syntax
 
     + highlight the directives with indents.
-    + Simple table highlighting: not highlighted when after a literal block.
-    + Simple table highlighting: the span line is not highlighted when one span.
+    + DONE 2012-07-05 table : not highlighted when after a literal block.
+    + DONE 2012-07-05 simple table : the span line is not highlighted when one span.
 
 11. Folding
 

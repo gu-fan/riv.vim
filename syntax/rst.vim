@@ -38,18 +38,18 @@ syn region  rstQuotedLiteralBlock   matchgroup=rstDelimiter
 syn region  rstDoctestBlock         display matchgroup=rstDelimiter
       \ start='^>>>\s' end='^\s*$'
 
-syn region  rstTable                transparent start='^\s*\n\s*+[-=+]\+' end='^$'
+syn region  rstTable                transparent start='\%(\_^\s*\n\)\@<=\s*+[-=+]\+' end='^$'
       \ contains=rstTableLines,@rstCruft
 syn match   rstTableLines           contained display '|\|+\%(=\+\|-\+\)\='
 
 syn region  rstSimpleTable          transparent
-      \ start='^\n\%(\s*\)\@>\%(\%(=\+\)\@>\%(\s\+\)\@>\)\%(\%(\%(=\+\)\@>\%(\s*\)\@>\)\+\)\@>$'
+      \ start='\%(\_^\s*\)\@<=\%(\%(=\+\)\@>\%(\s\+\)\@>\)\%(\%(\%(=\+\)\@>\%(\s*\)\@>\)\+\)\@>$'
       \ end='^$'
       \ contains=rstSimpleTableLines,@rstCruft
 syn match   rstSimpleTableLines     contained display
-      \ '^\%(\s*\)\@>\%(\%(=\+\)\@>\%(\s\+\)\@>\)\%(\%(\%(=\+\)\@>\%(\s*\)\@>\)\+\)\@>$'
+      \ '\%(\_^\s*\)\@<=\%(\%(=\+\)\@>\%(\s\+\)\@>\)\%(\%(\%(=\+\)\@>\%(\s*\)\@>\)\+\)\@>$'
 syn match   rstSimpleTableLines     contained display
-      \ '^\%(\s*\)\@>\%(\%(-\+\)\@>\%(\s\+\)\@>\)\%(\%(\%(-\+\)\@>\%(\s*\)\@>\)\+\)\@>$'
+      \ '^\s*-\+\%(\s*-\+\)*\s*$'
 
 syn cluster rstDirectives           contains=rstFootnote,rstCitation,
       \ rstHyperlinkTarget,rstExDirective

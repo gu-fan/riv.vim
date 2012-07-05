@@ -40,7 +40,7 @@ These features are for all reStructuredText files.
  :Folding_:  Fold document by document structures (Section/List/Block).
  :Indent_:   Improved indentation 
  :Insert_:   Improvment of some mapping in insert mode.
- :Highlighting_: Improved syntax file. 
+ :Syntax_:   Improved syntax file. 
  :Publish_:  some wrapper to convert rst files to html/xml/latex/odt/... 
             (require python docutils package )
 
@@ -119,6 +119,9 @@ Things todo in this version.
              so it did not change the document structure.
   :Lists_:   DONE 2012-07-05 When we add parent list,
              check if there is a prev parent level and item.
+  :Syntax_: DONE 2012-07-05 table : not highlighted when after a literal block.
+  :Syntax_: DONE 2012-07-05 simple table : the span line is not highlighted when one span.
+
 
 .. _da03e247: 
    https://github.com/Rykka/riv.vim/commit/da03e247418f86fe423d20961b61716fbea36d9b
@@ -798,8 +801,8 @@ Fold reStructuredText file with sections, lists, and blocks automatically.
      ..  vim: fdl=0 :
          This means all fold will be folded when opening files
 
-Highlighting
-~~~~~~~~~~~~
+Syntax
+~~~~~~
 
 Improved syntax file. 
 
