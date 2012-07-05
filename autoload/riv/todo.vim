@@ -111,6 +111,13 @@ fun! riv#todo#del_todo(...) "{{{
         endif
     endif
 endfun "}}}
+fun! s:list_str(type,idt,num,attr, space) "{{{
+    if a:attr == "()"
+        return a:idt ."(".a:num .")" . a:space
+    else
+        return a:idt . a:num .  a:attr . a:space
+    endif
+endfun "}}}
 fun! riv#todo#todo_change_type(grp) "{{{
     " change current line's todo type
     " if it's not a list , add a list item
@@ -123,7 +130,7 @@ fun! riv#todo#todo_change_type(grp) "{{{
     let prv_len = strwidth(line)
     if type == -2
         let list_str = s:list_str(1 , '', '' , "*", " ") 
-        let line = substitute(line, '^\s*', list_str, '')
+        let line = substitute(line, '^\s*', '\0'.list_str, '')
     elseif type == -1
         " change idx of previous group to current grp
         let max_i = s:todo_lv_len(a:grp)-1

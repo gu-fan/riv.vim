@@ -119,8 +119,8 @@ Things todo in this version.
              so it did not change the document structure.
   :Lists_:   DONE 2012-07-05 When we add parent list,
              check if there is a prev parent level and item.
-  :Syntax_: DONE 2012-07-05 table : not highlighted when after a literal block.
-  :Syntax_: DONE 2012-07-05 simple table : the span line is not highlighted when one span.
+  :Syntax_:  FIXED 2012-07-05 table : not highlighted when after a literal block.
+  :Syntax_:  FIXED 2012-07-05 simple table : the span line is not highlighted when one span.
 
 
 .. _da03e247: 
