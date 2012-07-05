@@ -55,7 +55,7 @@ TODOS
 
 
 
-   C. When we add parent list , check if there is a prev parent level and item.
+   C. DONE 2012-07-05 When we add parent list , check if there is a prev parent level and item.
 
 6. Todos
 

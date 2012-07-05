@@ -117,6 +117,8 @@ Things todo in this version.
   :Lists_:   DONE 2012-07-05 Rewrite the list shifting action and 
              formatting action.  only fix the indent caused by list-item change. 
              so it did not change the document structure.
+  :Lists_:   DONE 2012-07-05 When we add parent list,
+             check if there is a prev parent level and item.
 
 .. _da03e247: 
    https://github.com/Rykka/riv.vim/commit/da03e247418f86fe423d20961b61716fbea36d9b
@@ -326,17 +328,17 @@ The auto level and auto number for bullet list and enumerated list.
 
     Normal and Visual Mode:
 
-    - Shift right: ``>`` or ``<C-ScrollWheelDown>`` 
+    - Shift right: ``>`` or ``<C-ScrollWheelDown>`` (unix only) 
   
       Add Indentation, And add a level for list.
   
       if the first item is a list , the indentation is based on the list item.
       otherwise the indentation is based on ``'shiftwidth'``.
   
-    - Shift left: ``<`` or ``<C-ScrollWheelUp>`` 
+    - Shift left: ``<`` or ``<C-ScrollWheelUp>``  (unix only) 
       Remove Indentation, And remove a level for list.
     - Format:   ``=``
-      Format the list's number and indentation
+      Format list's number.
 
     Insert Mode Only: 
   
@@ -367,9 +369,9 @@ The auto level and auto number for bullet list and enumerated list.
 
     Normal and Insert Mode:
     
-    - ``:RivListTypeNext`` ``<C-E>l1``
+    - ``:RivListTypeNext`` ``<C-E>ln``
       Change current list item symbol to next type
-    - ``:RivListTyePrev`` ``<C-E>l2``
+    - ``:RivListTyePrev`` ``<C-E>lp``
       Change current list item symbol to prev type
     - ``:RivListTypeRemove`` ``<C-E>lx``
       Delete current list item symbol

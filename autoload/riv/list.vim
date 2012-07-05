@@ -171,10 +171,13 @@ fun! s:buf_get_child(row) "{{{
 endfun "}}}
 "}}}
 
-" List Level: "{{{
+" List: "{{{
 fun! riv#list#new(act) "{{{
-    " change the list type of current line with act: '1' , '0' ,'-1'
-    " used to create new list, child list, parent list
+    " create new list with act: 
+    " '1'  : child 
+    " '0'  : new
+    " '-1' : parent
+  
     let row = line('.')
     let cur_list = s:get_all_list(row)
     if cur_list == 0
@@ -190,47 +193,46 @@ fun! riv#list#new(act) "{{{
             call setline(row, line)
             return
         endif
-        if line =~ '^\c\s*(\=[imlcxvd][).]'
-            let is_roman = s:is_roman(cur_list)
-        else
-            let is_roman = 0
-        endif
+
+        let is_roman = s:is_roman(cur_list)
         let idt = ''
-        " get a parent list , find it's idt and num and type
-        if a:act == -1
-            let parent = s:get_parent(cur_list)
-            let idt = parent ? repeat(' ',indent(parent)) : ''
+
+        let [type , idt , num , attr, space] = 
+                    \ riv#list#stat(line, is_roman)
+        if type == -1
+            return s:list_str(1 , '', '' , "*", " ") 
         endif
-        let list_str = riv#list#next_list_str(line, a:act, idt, is_roman)
+
+        if a:act == 1
+            " calc the child idt
+            let idt = idt . space . repeat(' ',len(num.attr))
+
+            let level = s:stat2level(type, num, attr) 
+            let [type,num,attr] = s:level2stat(level+1)
+        elseif a:act == -1
+            let parent = s:get_parent(cur_list)
+            if parent
+                " use parent's attributes
+                let is_roman = s:is_roman(parent)
+                let [type , idt , num , attr, space] = 
+                            \ riv#list#stat(getline(parent), is_roman)
+                let num = s:next_list_num(num, is_roman)
+            else
+                let level = s:stat2level(type, num, attr) 
+                let [type,num,attr] = s:level2stat(level-1)
+            endif
+        else
+            let num = s:next_list_num(num, is_roman)
+        endif
+        let list_str = s:list_str(type,idt,num,attr,space)
     endif
     let line = getline('.')
     let line = substitute(line, '^\s*', list_str, '')
+    
     call setline(row, line)
 endfun "}}}
-fun! riv#list#next_list_str(line, act, idt,...) "{{{
-    let is_roman = a:0 ? a:1 : 0
-    let [type , idt , num , attr, space] = 
-                \ riv#list#stat(a:line, is_roman)
-    if type == -1
-        return s:list_str(1 , '', '' , "*", " ") 
-    endif
-    if a:act == 1
-        
-        " should prev list's num.attr
-        let idt = idt . space . repeat(' ',len(num.attr))
 
-        let level = s:stat2level(type, num, attr) 
-        let [type,num,attr] = s:level2stat(level+1)
-    elseif a:act == -1
-        let idt = a:idt
 
-        let level = s:stat2level(type, num, attr) 
-        let [type,num,attr] = s:level2stat(level-1)
-    else
-        let num = s:next_list_num(num, is_roman)
-    endif
-    return s:list_str(type,idt,num,attr,space)
-endfun "}}}
 fun! s:is_roman(row) "{{{
     let line = getline(a:row)
     if line =~ '^\c\s*(\=[imlcxvd][).]\s'
@@ -246,10 +248,8 @@ fun! s:is_roman(row) "{{{
         return line =~ '^\c\s*(\=[imlcxvd]\{2,}[).]\s'
     endif
 endfun "}}}
-"    *   +   -            =>
-"    1.  A.  a.  I.  i.    =>
-"    1)  A)  a)  I)  i)    =>
-"   (1) (A) (a) (I) (i)
+
+
 fun! riv#list#stat(line,...) "{{{
     " return [type , idt , num , attr, space]
     let is_roman = a:0 ? a:1 : 0
@@ -287,6 +287,14 @@ fun! riv#list#stat(line,...) "{{{
         return [7,idt,ma[7][1 : len-2], "()", ma[8]]
     endif
 endfun "}}}
+fun! s:list_str(type,idt,num,attr, space) "{{{
+    if a:attr == "()"
+        return a:idt ."(".a:num .")" . a:space
+    else
+        return a:idt . a:num .  a:attr . a:space
+    endif
+endfun "}}}
+
 fun! s:listnum2nr(num,...) "{{{
     let is_roman = a:0 ? a:1 : 0
     if a:num == ''
@@ -325,28 +333,28 @@ fun! s:next_list_num(num,...) "{{{
     elseif a:num =~ '^[A-Za-z]$' &&
             \ ( match(a:num, '\c[imlcxvd]') == -1 || is_roman == 0)
         if a:num=="z"
-            return "a"
+            return "z"
         elseif a:num=="Z"
-            return "A"
+            return "Z"
         else
             return nr2char(char2nr(a:num)+1)
         endif
     elseif a:num =~ '\c[imlcxvd]\+'
         let nr =riv#roman#to_nr(toupper(a:num))
-        if a:num!~ '\u\+'
+        if a:num =~ '\U'
             return tolower(riv#roman#from_nr(nr+1))
         else
             return riv#roman#from_nr(nr+1)
         endif
     endif
 endfun "}}}
-fun! s:list_str(type,idt,num,attr, space) "{{{
-    if a:attr == "()"
-        return a:idt ."(".a:num .")" . a:space
-    else
-        return a:idt . a:num .  a:attr . a:space
-    endif
-endfun "}}}
+
+
+" Level and stats "{{{
+"    *   +   -             =>
+"    1.  A.  a.  I.  i.    =>
+"    1)  A)  a)  I)  i)    =>
+"   (1) (A) (a) (I) (i)
 fun! riv#list#level(line,...) "{{{
     let is_roman = a:0 ? a:1 : 0
     let [type , idt , num , attr, space] = riv#list#stat(a:line,is_roman)
@@ -393,6 +401,7 @@ fun! s:level2stat(level) "{{{
     endif
     return s:list_stats[a:level]
 endfun "}}}
+"}}}
 "}}}
 
 fun! riv#list#toggle_type(i) "{{{
@@ -570,14 +579,6 @@ fun! s:fix_nr(row, indent) "{{{
                 \ s:list_str(type,idt,num,attr,space), '')
     let s:sft_fix[a:indent] += len(line) - p_len
     call setline(a:row,line)
-endfun "}}}
-fun! s:get_item_length(row) "{{{
-    let end = matchend(getline(a:row), g:_riv_p.list_all)
-    if end != -1
-        return end - indent(a:row)
-    else
-        return 0
-    endif
 endfun "}}}
 fun! s:set_idt(line, indent) "{{{
     if a:indent > 0
