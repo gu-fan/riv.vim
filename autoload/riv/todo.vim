@@ -379,24 +379,10 @@ endfun "}}}
 
 " Todo Helper: "{{{
 let s:slash = has('win32') || has('win64') ? '\' : '/'
-fun! s:get_rel_to(dir,path) "{{{
-    if a:dir == 'root'
-        let root = s:get_root_path()
-    else
-        " use fnamemodify ':gs?\\?/?' ?
-        let root = s:get_root_path().a:dir . s:slash
-    endif
-    if match(a:path, root) == -1
-        throw 'Riv: Not Same Path with Project'
-    endif
-    let r_path = substitute(a:path, root , '' , '')
-    let r_path = substitute(r_path, '^/', '' , '')
-    return r_path
-endfun "}}}
 fun! s:cache_todo(force) "{{{
     " TODO: we should cache once for the first time or manually
     " and update them with editing buffer only.
-    let root = s:get_root_path()
+    let root = riv#path#root()
     let cache = root.'.todo_cache'
     if filereadable(cache) && a:force==0
         return
@@ -407,7 +393,7 @@ fun! s:cache_todo(force) "{{{
     echo 'Caching...'
     let lines = []
     for file in files
-        let lines += s:file2lines(readfile(file),file)
+        let lines += s:file2lines(readfile(file), riv#path#rel_to_root(file))
     endfor
     echon 'Done'
     
@@ -430,13 +416,9 @@ fun! s:file2lines(filelines,filename) "{{{
     let lines = a:filelines
     let list  = range(len(lines))
     call filter(list, 'lines[v:val]=~g:_riv_p.todo_all  ')
-    let f = s:get_rel_to('root',a:filename)
-    call map(list , 'printf("%-20s %4d | ",f,(v:val+1)). s:strip(lines[v:val])')
-    return list
-endfun "}}}
 
-fun! s:get_root_path() "{{{
-    return g:_riv_c.p[s:id()]._root_path
+    call map(list , 'printf("%-20s %4d | ", a:filename ,(v:val+1)). s:strip(lines[v:val])')
+    return list
 endfun "}}}
 
 fun! s:list2lines(list) "{{{
@@ -494,27 +476,33 @@ fun! s:lines2helper(lines) "{{{
     return list
 endfun "}}}
 fun! s:load_todo() "{{{
-    call s:cache_todo(0)
-    return readfile(s:get_root_path().'.todo_cache')
+    let file = expand('%:p')
+    if riv#path#is_rel_to(riv#path#root(), file ) || &ft!='rst'
+        call s:cache_todo(0)
+        return readfile(riv#path#root().'.todo_cache')
+    else
+        let s:todo_file = file
+        return s:file2lines(readfile(file), '%')
+    endif
 endfun "}}}
 fun! riv#todo#force_update() "{{{
     call s:cache_todo(1)
 endfun "}}}
-fun! riv#todo#update_todo() "{{{
+fun! riv#todo#update() "{{{
     " every time writing buffer.
     " parse the buffer. find the todo item.
     " then parse the cache , remove lines match the buffer filename
     " add with the buffer's new todo-item
     let file = expand('%:p')
     " windows use '\' as directory delimiter
-    if file =~ escape(g:_riv_c.p[s:id()]._build_path,'\')
+    if riv#path#is_rel_to(riv#path#build_path, file)
         return
     endif
     try
-        let lines = s:file2lines(getline(1,line('$')), file)
-        let cache = s:get_root_path() .'.todo_cache'
-        let f = s:get_rel_to('root',file)
-    catch /Riv: Not Same Path with Project/
+        let f = riv#path#rel_to_root(file)
+        let lines = s:file2lines(getline(1,line('$')), f)
+        let cache = riv#path#root() .'.todo_cache'
+    catch 
         return
     endtry
     if filereadable(cache)
@@ -527,7 +515,17 @@ endfun "}}}
 fun! riv#todo#enter() "{{{
     let [all,file,lnum;rest] = matchlist(getline('.'),  '\v^(\S*)\s+(\d+)\ze |')
     call s:todo.exit()
-    call s:split(s:get_root_path().file)
+    if file !=  '%'
+        call s:split(riv#path#root().file)
+    else
+        let file = s:todo_file
+        let win = bufwinnr(file)  
+        if win != -1
+            exe win. 'wincmd w'
+        else
+        call s:split(file)
+        endif
+    endif
     call cursor(lnum, 1)
     normal! zv
 endfun "}}}
@@ -536,15 +534,15 @@ fun! riv#todo#syn_hi() "{{{
     syn match rivHelperFile  '^\S*' 
     syn match rivHelperLNum  '\s\+\d\+ |'
     exe 'syn match rivHelperTodo '
-            \.'`\v\c%(^\S*\s+\d+ |)@<=\s*%([-*+]|%(\d+|[#a-z]|[imlcxvd]+)[.)])\s+'
+            \.'`\v\c%(^\S*\s+\d+ |)@<=\s*%([-*+]|:[^:]+:|%(\d+|[#a-z]|[imlcxvd]+)[.)])\s+'
             \.'%(\[.\]|'. s:td_keywords .')'
-            \.'%(\s\d{4}-\d{2}-\d{2})='.'%(\s\~ \d{4}-\d{2}-\d{2})='
+            \.'%(\s+\d{4}-\d{2}-\d{2})='.'%(\s\~ \d{4}-\d{2}-\d{2})='
             \.'\ze%(\s|$)` transparent contains=@rivTodoBoxGroup'
 
     exe 'syn match rivHelperTodoDone '
             \.'`\v\c%(^\S*\s+\d+ |)@<=\s*%([-*+]|%(\d+|[#a-z]|[imlcxvd]+)[.)])\s+'
             \. g:_riv_p.todo_done_ptn
-            \.'%(\s\d{4}-\d{2}-\d{2})='.'%(\s\~ \d{4}-\d{2}-\d{2})='
+            \.'%(\s+\d{4}-\d{2}-\d{2})='.'%(\s\~ \d{4}-\d{2}-\d{2})='
             \.'\ze%(\s|$)` '
     syn cluster rivTodoBoxGroup contains=rivTodoList,rivTodoBoxList,rivTodoTmsList,rivTodoTmsEnd
     syn match rivTodoList `\v\c\s*%([-*+]|%(\d+|[#a-z]|[imlcxvd]+)[.)])\s+`

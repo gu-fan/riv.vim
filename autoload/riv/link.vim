@@ -29,12 +29,14 @@ fun! riv#link#finder(dir) "{{{
         call cursor(srow, scol)
     endif
 endfun "}}}
-
+fun! s:escape(str) "{{{
+    return escape(a:str, '.^$*[]\@+=~')
+endfun "}}}
 fun! s:normal_ptn(text) "{{{
     let text = substitute(a:text ,'\v(^__=|_=_$)','','g')
     let text = substitute(text ,'\v(^`|`$)','','g')
     let text = substitute(text ,'\v(^\[|\]$)','','g')
-    let text = substitute(escape(text,'.^$*[]\'),'\s\+','\\s+','g')
+    let text = substitute(s:escape(text),'\s\+','\\s+','g')
     return text
 endfun "}}}
 
@@ -147,10 +149,10 @@ fun! riv#link#open() "{{{
         if g:riv_localfile_linktype == 2
             let mo.str = matchstr(mo.str, '^\[\zs.*\ze\]$')
         endif
-        if s:is_relative(mo.str)
+        if riv#path#is_relative(mo.str)
             let dir = expand('%:p:h').'/'
             let file = dir . mo.str
-            if s:is_directory(file)
+            if riv#path#is_directory(file)
                 let file = file . 'index.rst'
             elseif g:riv_localfile_linktype == 2 && fnamemodify(file, ':e') == ''
                 let file = file . '.rst'
@@ -163,13 +165,6 @@ fun! riv#link#open() "{{{
         let b:riv_p_id = s:id()
         return 4
     endif
-endfun "}}}
-
-fun! s:is_relative(name) "{{{
-    return a:name !~ '^\~\|^/\|^[a-zA-Z]:'
-endfun "}}}
-fun! s:is_directory(name) "{{{
-    return a:name =~ '/$' 
 endfun "}}}
 
 fun! s:get_cWORD_idx() "{{{
@@ -202,11 +197,20 @@ fun! riv#link#hi_hover() "{{{
         let line = getline(l)
         let bgn = match(line, g:_riv_p.all_link, idx) + 1
         if bgn && bgn <= c
-            let end = matchend(line, g:_riv_p.all_link, idx) +1
+            let obj = s:matchobject(line, g:_riv_p.all_link , idx)
+            let end = obj.end + 1
             if c <= end
-                execute '2match' "DiffText".' /\%'.(l)
-                            \.'l\%>'.(bgn-1) .'c\%<'.(end).'c/'
-                return
+                let [file, is_dir] = riv#file#from_str(obj.str)
+                if (is_dir && isdirectory(file) ) 
+                    \ || (!is_dir && filereadable(file) )
+                    execute '2match' "DiffText".' /\%'.(l)
+                                \.'l\%>'.(bgn-1) .'c\%<'.(end).'c/'
+                    return
+                else
+                    execute '2match' "DiffChange".' /\%'.(l)
+                                \.'l\%>'.(bgn-1) .'c\%<'.(end).'c/'
+                    return
+                endif
             endif
         endif
     endif

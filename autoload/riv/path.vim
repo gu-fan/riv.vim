@@ -11,7 +11,6 @@ set cpo-=C
 
 let s:slash = has('win32') || has('win64') ? '\' : '/'
 let s:win =  has('win32') || has('win64') ? 1 : 0
-let g:_riv_e.NOT_REL_PATH = 'Riv: Not a related path'
 
 " check 'ssl' ?
 
@@ -21,6 +20,9 @@ endfun "}}}
 
 fun! riv#path#build_ft(ft) "{{{
     return g:_riv_c.p[s:id()]._build_path . a:ft . s:slash
+endfun "}}}
+fun! riv#path#build_path() "{{{
+    return g:_riv_c.p[s:id()]._build_path
 endfun "}}}
 
 fun! riv#path#directory(path) "{{{
@@ -37,6 +39,18 @@ fun! riv#path#rel_to(dir, path) "{{{
         throw g:_riv_e.NOT_REL_PATH
     endif
     return substitute(path, dir, '','')
+endfun "}}}
+
+fun! riv#path#is_rel_to(dir, path) "{{{
+    
+    let dir = riv#path#is_directory(a:dir) ? a:dir : a:dir.'/'
+    let dir = fnamemodify(dir, ':gs?\?/?') 
+    let path = fnamemodify(a:path, ':gs?\?/?') 
+    if match(path, dir) == -1
+        return 0
+    else
+        return 1
+    endif
 endfun "}}}
 fun! riv#path#rel_to_root(path) "{{{
     return riv#path#rel_to(riv#path#root(), a:path)
@@ -55,9 +69,6 @@ endfun "}}}
 fun! riv#path#ext_tail(file, ft) "{{{
     return fnamemodify(a:file, ":t:r") . '.' . a:ft
 endfun "}}}
-
-
-
 
 fun! s:id() "{{{
     return exists("b:riv_p_id") ? b:riv_p_id : g:riv_p_id

@@ -124,17 +124,17 @@ fun! riv#publish#proj2(ft) abort "{{{
         call riv#publish#2(a:ft,file, ft_path, 0)
         echon '>'
     endfor
-    echohl Normal
     let copy_ext = '{'.join(g:_riv_t.file_ext_lst,',').'}'
     if a:ft == "html" 
         \ && input("Copy all file of extension: ".copy_ext."\n(Y/n):")!~?'n'
         let files = filter(split(glob(root.'**/*'.copy_ext)), 'v:val !~ ''_build''')
         for file in files
-            call riv#publish#copy2proj(file,html_path)
+            call riv#publish#copy2proj(file, ft_path)
             echon '>'
         endfor
     endif
     echon ' Done.'
+    echohl Normal
 endfun "}}}
 
 " ['s5', 'latex', 'odt', 'xml' , 'pseudoxml', 'html' ]
@@ -143,8 +143,10 @@ fun! riv#publish#file2(ft, browse) "{{{
     try 
         call riv#path#rel_to_root(file_path)
         call riv#publish#2(a:ft , file_path, riv#path#build_ft(a:ft), a:browse)
-    catch g:_riv_e.NOT_REL_PATH
-        call s:single2(a:ft, file_path, a:browse)
+    catch 
+        if v:exception == g:_riv_e.NOT_REL_PATH
+            call s:single2(a:ft, file_path, a:browse)
+        endif
     endtry
 endfun "}}}
 fun! s:single2(ft, file, browse) "{{{

@@ -10,12 +10,6 @@ let s:cpo_save = &cpo
 set cpo-=C
 
 " link "{{{
-fun! s:is_relative(name) "{{{
-    return a:name !~ '^\~\|^/\|^[a-zA-Z]:'
-endfun "}}}
-fun! s:is_directory(name) "{{{
-    return a:name =~ '/$' 
-endfun "}}}
 
 fun! s:expand_file_link(file) "{{{
     " all with ``
@@ -28,30 +22,41 @@ fun! s:expand_file_link(file) "{{{
     " the rel directory with [] will add index.html
     " other unchanged.
     let file = a:file
-    let str = matchstr(file, '^\[\zs.*\ze\]$')
+    let str = 
     if g:riv_localfile_linktype == 2 && !empty(str)
-        let file = str
+        let file = matchstr(file, '^\[\zs.*\ze\]$')
     endif
-    if !s:is_relative(file)
-            let ref = '`'.file.'`_'
-            let tar = '.. _`'.file.'`: '.file
-    elseif s:is_directory(file)
-        let ref = '`'.file.'`_'
-        let tar = '.. _`'.file.'`: '.file.'index.html'
+    if !riv#path#is_relative(file)
+            let tar = s:str_to_tar(file,file)
+    elseif riv#path#is_directory(file)
+        let tar = s:str_to_tar(file, file.'index.html')
     else
         if file =~ '\.rst$'
-            let ref = '`'.file.'`_'
-            let tar = '.. _`'.file.'`: '. fnamemodify(file, ':r').'.html'
+            let tar = s:str_to_tar(file, fnamemodify(file, ':r').'.html') 
         elseif fnamemodify(file, ':e') == '' && g:riv_localfile_linktype == 2
-            let ref = '`'.file.'`_'
-            let tar = '.. _`'.file.'`: '.file.'.html'
+            let tar = s:str_to_tar(file, file.'index.html')
         else
-            let ref = '`'.file.'`_'
-            let tar = '.. _`'.file.'`: '.file
+            let tar = s:str_to_tar(file,file)
         endif
     endif
+    let ref = s:str_to_ref(file)
     return [ref, tar]
 endfun "}}}
+fun! s:str_to_ref(str) "{{{
+    if a:str !~ '[[:alnum:]._-]'
+        return '`'.a:str.'`_'
+    else
+        return ''.a:str.'_'
+    endif
+endfun "}}}
+fun! s:str_to_tar(str,loc) "{{{
+    if a:str =~ '[`\\]'
+        return '.. _`'.a:str.'`: '.a:loc
+    else
+        return '.. _'.a:str.': '.a:loc
+    endif
+endfun "}}}
+
 fun! s:expand_link(word) "{{{
     " expand file, and let the refname expand
     let word = a:word
@@ -83,12 +88,13 @@ fun! s:expand_link(word) "{{{
             let ref = word
             let tar = '.. _'.trim.': '.trim
         else
-            let ref = '`'.word.'`_'
-            let tar = '.. _`'.word.'`: '.word
+            let ref = s:str_to_ref(word)
+            let tar = s:str_to_tar(word, word)
         endif
         return [ref, tar]
     endif
 endfun "}}}
+
 
 fun! s:normal_phase(text) "{{{
     let text = substitute(a:text ,'\v(^__=|_=_$)','','g')
@@ -312,12 +318,17 @@ fun! riv#create#view_scr() "{{{
  
     call s:split(path.'index.rst')
 endfun "}}}
+
+fun! s:escape(str) "{{{
+    return escape(a:str, '.^$*[]\~')
+endfun "}}}
 fun! s:escape_file_ptn(file) "{{{
     if g:riv_localfile_linktype == 2
-        return   '\%(^\|\s\)\zs\[' . fnamemodify(a:file, ':t:r') 
+        return   '\%(^\|\s\)\zs\[' . fnamemodify(s:escape(a:file), ':t:r') 
                     \ . '\]\ze\%(\s\|$\)'
     else
-        return   '\%(^\|\s\)\zs' . fnamemodify(a:file, ':t') . '\ze\%(\s\|$\)'
+        return   '\%(^\|\s\)\zs' . fnamemodify(s:escape(a:file), ':t')
+                    \ . '\ze\%(\s\|$\)'
     endif
 endfun "}}}
 fun! riv#create#delete() "{{{

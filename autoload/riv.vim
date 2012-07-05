@@ -403,35 +403,21 @@ if !exists("g:_riv_c")
         call add(g:_riv_c.p, g:_riv_c.p_basic)
     endif
 
-    fun! s:is_relative(name) "{{{
-        return a:name !~ '^\~\|^/\|^[a-zA-Z]:'
-    endfun "}}}
-    fun! s:is_directory(name) "{{{
-        return a:name =~ '/$' 
-    endfun "}}}
-
-    let s:slash = has('win32') || has('win64') ? '\' : '/'
     for proj in g:_riv_c.p
         let root = expand(proj.path)
-        let proj._root_path = s:is_directory(root) ? root : root . s:slash
-        if s:is_relative(proj.build_path)
+        let proj._root_path = riv#path#directory(root)
+        if riv#path#is_relative(proj.build_path)
             let b_path =  proj._root_path . proj.build_path
-            let proj._build_path =  s:is_directory(b_path) ?  b_path 
-                        \ : b_path . s:slash
         else
-            let b_path =   expand(proj.build_path)
-            let proj._build_path =  s:is_directory(b_path) ?  b_path 
-                        \ : b_path . s:slash
+            let b_path =  expand(proj.build_path)
         endif
-        if s:is_relative(proj.scratch_path)
+        let proj._build_path =  riv#path#directory(b_path)
+        if riv#path#is_relative(proj.scratch_path)
             let s_path =  proj._root_path . proj.scratch_path
-            let proj._scratch_path =  s:is_directory(s_path) ?  s_path 
-                        \ : s_path . s:slash
         else
             let s_path =   expand(proj.scratch_path)
-            let proj._scratch_path =  s:is_directory(s_path) ?  s_path 
-                        \ : s_path . s:slash
         endif
+        let proj._scratch_path =  riv#path#directory(s_path)
     endfor
     "}}}
     
@@ -534,7 +520,7 @@ if !exists("g:_riv_c")
             let g:_riv_t.td_keyword_dic[g:_riv_t.td_keyword_groups[i][j]] = [i+1,j]
         endfor
     endfor
-    let g:_riv_p.td_keywords = '\v%('.join(s:normlist(split(g:riv_todo_keywords,'[,;]')),'|').')'
+    let g:_riv_p.td_keywords = '\v\C%('.join(s:normlist(split(g:riv_todo_keywords,'[,;]')),'|').')'
 
     let g:_riv_t.time_fmt  = "%Y-%m-%d"
 
@@ -671,6 +657,7 @@ if !exists("g:_riv_c")
     let g:_riv_t.month_names = split(g:riv_month_names,',')
 
     let g:_riv_e = {}
+    let g:_riv_e.NOT_REL_PATH = "Riv: Not a related path"
     " lockvar 2 g:_riv_c
     " lockvar 2 g:_riv_p
 endif
