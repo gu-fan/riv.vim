@@ -22,8 +22,7 @@ fun! s:expand_file_link(file) "{{{
     " the rel directory with [] will add index.html
     " other unchanged.
     let file = a:file
-    let str = 
-    if g:riv_localfile_linktype == 2 && !empty(str)
+    if g:riv_localfile_linktype == 2 && !empty(file)
         let file = matchstr(file, '^\[\zs.*\ze\]$')
     endif
     if !riv#path#is_relative(file)
