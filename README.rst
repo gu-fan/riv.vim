@@ -83,7 +83,7 @@ Install
 
     .. _Syntastic: https://github.com/scrooloose/syntastic
 
-  + Calendar_ setting datestamp easier.
+  + Calendar_ setting todo-item datestamp. 
 
     .. _Calendar: https://github.com/mattn/calendar-vim
 
@@ -119,8 +119,8 @@ Things todo in this version.
              so it did not change the document structure.
   :Lists_:   DONE 2012-07-05 When we add parent list,
              check if there is a prev parent level and item.
-  :Syntax_:  FIXED 2012-07-05 table : not highlighted when after a literal block.
-  :Syntax_:  FIXED 2012-07-05 simple table : the span line is not highlighted when one span.
+  :Syntax_:  FIXED 2012-07-05 table: not highlighted when after a literal block.
+  :Syntax_:  FIXED 2012-07-05 simple table: Span line is not highlighted with one span.
 
 
 .. _da03e247: 
@@ -335,13 +335,19 @@ The auto level and auto number for bullet list and enumerated list.
   
       Add Indentation, And add a level for list.
   
-      if the first item is a list , the indentation is based on the list item.
-      otherwise the indentation is based on ``'shiftwidth'``.
-  
     - Shift left: ``<`` or ``<C-ScrollWheelUp>``  (unix only) 
+
       Remove Indentation, And remove a level for list.
     - Format:   ``=``
       Format list's number.
+
+    :NOTE: The shifting indentation is dynamic. 
+           if it's a list item,
+           When shifting right, it will indent to the list item's sub list
+           When shifting left, it will indent to the list item's parent list
+
+           otherwise it will use ``shiftwidth`` 
+           and check if it's in a list item to fix the indentation
 
     Insert Mode Only: 
   
@@ -717,7 +723,10 @@ Fold reStructuredText file with sections, lists, and blocks automatically.
 
     use ``zo`` ``zO`` or ``zv`` will open it either.
 
-  + Close Folding:  use ``zc`` ``zC`` will close it.
+    :NOTE: To use mouse to open or close fold anywhere. 
+           ``set fdc=1``
+
+  + Close Folding:  use ``zc`` or ``zC`` will close it.
 
     Also pressing ``<Enter>`` or double clicking the section title
     will close the section.
@@ -728,6 +737,7 @@ Fold reStructuredText file with sections, lists, and blocks automatically.
 
   + Toggle Folding: use ``za`` or ``<C-E><Space><Space>`` 
   + Toggle all Folding: use ``zA`` or ``<C-E><Space>m``
+
 
 * Extra Infos:
   When folded, some extra info of the item will be shown at the foldline.

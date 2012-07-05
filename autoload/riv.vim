@@ -165,10 +165,10 @@ let s:default.maps = {
     \'Riv2S5'            : 'call riv#publish#file2("s5",1)',
     \'Riv2Xml'           : 'call riv#publish#file2("xml",1)',
     \'Riv2Latex'         : 'call riv#publish#file2("latex",1)',
-    \'Riv2BuildPath'     : 'call riv#publish#path()',
+    \'Riv2BuildPath'     : 'call riv#publish#open_path()',
     \'RivDelete'         : 'call riv#create#delete()',
-    \'RivTodoHelper'     : 'call riv#create#todo_helper()',
-    \'RivTodoUpdateCache': 'call riv#create#force_update()',
+    \'RivTodoHelper'     : 'call riv#todo#todo_helper()',
+    \'RivTodoUpdateCache': 'call riv#todo#force_update()',
     \'RivCreateLink'     : 'call riv#create#link()',
     \'RivCreateFoot'     : 'call riv#create#foot()',
     \'RivCreateDate'     : 'call riv#create#date()',
@@ -670,6 +670,7 @@ if !exists("g:_riv_c")
     let g:_riv_t.highlight_code = s:normlist(split(g:riv_highlight_code,','))
     let g:_riv_t.month_names = split(g:riv_month_names,',')
 
+    let g:_riv_e = {}
     " lockvar 2 g:_riv_c
     " lockvar 2 g:_riv_p
 endif

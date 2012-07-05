@@ -87,7 +87,7 @@ TODOS
 
     + highlight the directives with indents.
     + DONE 2012-07-05 table : not highlighted when after a literal block.
-    + FIXED 2012-07-05 simple table : the span line is not highlighted when one span.
+    + FIXED 2012-07-05 simple table : span line is not highlighted with one span.
 
 11. Folding
 

@@ -31,31 +31,31 @@ fun! s:repl_file_link(line) "{{{
     
     
     let line = a:line
+    
     if line =~ g:_riv_p.table || line =~ g:_riv_p.exp_m
         return line
     endif
 
-
-    let file = matchstr(a:line, g:_riv_p.link_file)
-    let idx = matchend(a:line, g:_riv_p.link_file)
+    let file = matchstr(line, g:_riv_p.link_file)
+    let idx = matchend(line, g:_riv_p.link_file)
     while !empty(file)
         if g:riv_localfile_linktype == 2
             let file = matchstr(file, '^\[\zs.*\ze\]$')
         endif
         let file = s:escape(file)
-        if !s:is_relative(file)
+        if !riv#path#is_relative(file)
                 let title = file
                 let path = file
-        elseif s:is_directory(file)
+        elseif riv#path#is_directory(file)
             let title = file
             let path = title . 'index.html'
         else
-            if file =~ '\.rst$' 
-                let title = matchstr(file, '.*\ze\.rst$')
+            let f = s:get_rst_file(file)
+            if !empty(f)
+                let title = f
                 let path = title.'.html'
-            elseif fnamemodify(file, ':e') == '' && g:riv_localfile_linktype == 2
+            elseif g:riv_localfile_linktype == 2 && fnamemodify(file, ':e') == ''
                 let title = file
-
                 let path = title.'.html'
             else
                 let title = file
@@ -69,6 +69,10 @@ fun! s:repl_file_link(line) "{{{
     endwhile
     return line
 endfun "}}}
+
+fun! s:get_rst_file(file) "{{{
+    return matchstr(a:file, '.*\ze\.rst$')
+endfun "}}}
 fun! s:escape_file_ptn(file) "{{{
     if g:riv_localfile_linktype == 2
         return   '\%(^\|\s\)\zs\[' . a:file . '\]\ze\%(\s\|$\)'
@@ -79,35 +83,12 @@ endfun "}}}
 fun! s:escape(txt) "{{{
     return escape(a:txt, '~.*\[]^$')
 endfun "}}}
-fun! s:is_relative(name) "{{{
-    return a:name !~ '^\~\|^/\|^[a-zA-Z]:'
-endfun "}}}
-fun! s:is_directory(name) "{{{
-    return a:name =~ '/$' 
-endfun "}}}
 fun! s:gen_embed_link(title, path) "{{{
     if g:riv_localfile_linktype == 2
         return  '`['.a:title.'] <'.a:path.'>`_'
     else
         return  '`'.a:title.' <'.a:path.'>`_'
     endif
-endfun "}}}
-
-let s:slash = has('win32') || has('win64') ? '\' : '/'
-fun! s:get_build_path_of(ft) "{{{
-    return g:_riv_c.p[s:id()]._build_path . a:ft . s:slash
-endfun "}}}
-fun! s:get_root_path() "{{{
-    return g:_riv_c.p[s:id()]._root_path
-endfun "}}}
-fun! s:get_rel_to_root(path) "{{{
-    let root = s:get_root_path()
-    if match(a:path, root) == -1
-        throw 'Riv: Not Same Path with Project'
-    endif
-    let r_path = substitute(a:path, root , '' , '')
-    let r_path = substitute(r_path, '^/', '' , '')
-    return r_path
 endfun "}}}
 
 fun! s:rst_args(ft) "{{{
@@ -123,21 +104,19 @@ endfun "}}}
 let s:tempfile = tempname()
 fun! s:create_tmp(file) "{{{
     update
-    let id =  s:id()
     let lines = map(readfile(a:file),'s:repl_file_link(v:val)')
     call writefile(lines, s:tempfile)       " not all system can pipe
     return s:tempfile
 endfun "}}}
 
 fun! riv#publish#copy2proj(file,html_path) abort "{{{
-    let out_path = a:html_path . s:get_rel_to_root(expand(a:file))
+    let out_path = a:html_path . riv#path#rel_to_root(expand(a:file))
     call s:auto_mkdir(out_path)
     call s:sys( 'cp -f '. a:file. ' '.  fnamemodify(out_path, ':h'))
 endfun "}}}
 fun! riv#publish#proj2(ft) abort "{{{
-    let id =  exists("b:riv_p_id") ? b:riv_p_id : g:riv_p_id
-    let ft_path = s:get_build_path_of(a:ft)
-    let root = s:get_root_path()
+    let ft_path = riv#path#build_ft(a:ft)
+    let root = riv#path#root()
     let files = filter(split(glob(root.'**/*.rst')), 'v:val !~ ''_build''')
     echohl Function
     echon 'Convert: '
@@ -162,9 +141,9 @@ endfun "}}}
 fun! riv#publish#file2(ft, browse) "{{{
     let file_path = expand('%:p')
     try 
-        call s:get_rel_to_root(file_path)
-        call riv#publish#2(a:ft , file_path, s:get_build_path_of(a:ft), a:browse)
-    catch /Riv: Not Same Path with Project/
+        call riv#path#rel_to_root(file_path)
+        call riv#publish#2(a:ft , file_path, riv#path#build_ft(a:ft), a:browse)
+    catch g:_riv_e.NOT_REL_PATH
         call s:single2(a:ft, file_path, a:browse)
     endtry
 endfun "}}}
@@ -172,27 +151,28 @@ fun! s:single2(ft, file, browse) "{{{
     " A file that is not in a project
     let file = expand(a:file)
     if g:riv_temp_path == ""
-        let out_path = fnamemodify(file, ":r") . '.' . a:ft
+        let out_path = riv#path#ext_to(file, a:ft)
     else
-        let temp_path = s:is_directory(g:riv_temp_path) ? g:riv_temp_path 
-                    \ : g:riv_temp_path . s:slash
-        let out_path = g:riv_temp_path . fnamemodify(file, ":t:r") . "." . a:ft
+        let temp_path = riv#path#directory(g:riv_temp_path)  
+        let out_path = temp_path . riv#path#ext_tail(file, a:ft)
     endif
+
     call s:convert(a:ft, file, out_path, s:rst_args(a:ft))
+
     if a:browse
         if a:ft == "latex"
             exe 'sp ' out_path
         elseif a:ft == "odt"
-            call s:sys(g:riv_ft_browser . ' '. out_path . ' &')
+            call s:sys(g:riv_ft_browser . ' '. shellescape(out_path) . ' &')
         else
-            call s:sys(g:riv_web_browser . ' '. out_path . ' &')
+            call s:sys(g:riv_web_browser . ' '. shellescape(out_path) . ' &')
         endif
     endif
 endfun "}}}
 fun! riv#publish#2(ft, file, path, browse) "{{{
     let file = expand(a:file)
-    let out_path = a:path . s:get_rel_to_root(file)
-    let file_path = fnamemodify(out_path, ":r").'.'.a:ft
+    let out_path = a:path . riv#path#rel_to_root(file)
+    let file_path = riv#path#ext_to(out_path, a:ft)
     call s:auto_mkdir(out_path)
     call s:convert(a:ft, s:create_tmp(file), file_path, s:rst_args(a:ft))
     if a:browse
@@ -216,14 +196,14 @@ fun! s:convert(ft, input, output, ...) "{{{
         endif
     endif
     let args = a:0 ? a:1 : ''
-    call s:sys( exe." ". args .' '. a:input . " > " . a:output )
+    call s:sys( exe." ". args .' '. shellescape(a:input) . " > " . shellescape(a:output) )
 endfun "}}}
 
 fun! riv#publish#browse() "{{{
-    let path = s:get_build_path_of('html') .  'index.html'
-    call s:sys(g:riv_web_browser . ' '. path . ' &')
+    let path = riv#path#build_ft('html') .  'index.html'
+    call s:sys(g:riv_web_browser . ' '. shellescape(path) . ' &')
 endfun "}}}
-fun! riv#publish#path() "{{{
+fun! riv#publish#open_path() "{{{
     exe 'sp ' g:_riv_c.p[s:id()]._build_path
 endfun "}}}
 

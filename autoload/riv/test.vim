@@ -249,12 +249,19 @@ fun! s:test_list_parse()
         echo line
     endfor
 endfun
+fun! s:test_path()
+    let func = "riv#path#rel_to"
+    let arg_list  = [
+                \['/a/c','/a/c/b'],
+                \["/a/c","/a/c/b"],
+                \['\a\c','\a\c\f'],
+                \["\a\c","\a\c\f"],
+                \]
+    call s:test_func(func, arg_list)
+    
+endfun
 fun! riv#test#test() "{{{
-    let func = riv#list#SID()."get_list"
-    " echo riv#test#timer(func, 10, [line('.')])
-    let func2 = riv#list#SID()."get_older"
-    " echo riv#test#timer(func2, 10, [line('.')])
-    echo call(func2,[line('.')])
+    call s:test_path()
 endfun "}}}
 fun! s:SID() "{{{
     return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$')
