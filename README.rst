@@ -105,10 +105,6 @@ Prev
 
 See Changelog in doc/riv_log.rst [riv_log]_
 
-.. [riv_log] https://github.com/Rykka/riv.vim/blob/master/doc/riv_log.rst
-
-
-
 This
 ~~~~~
 
@@ -116,15 +112,21 @@ Things todo in this version.
 
 * 0.67:
 
-  :Folding_: DONE 2012-07-05 The line block is folded now.
-  :Table_:   DONE 2012-07-05 Improved row & col count.
+  :Folding_: DONE 2012-07-05 da03e247_ The line block is folded now.
+  :Table_:   DONE 2012-07-05 da03e247_ Improved row & col count.
+  :Lists_:   DONE 2012-07-05 Rewrite the list shifting action and 
+             formatting action.  only fix the indent caused by list-item change. 
+             so it did not change the document structure.
 
+.. _da03e247: 
+   https://github.com/Rykka/riv.vim/commit/da03e247418f86fe423d20961b61716fbea36d9b
 
 Next 
 ~~~~~
 
 See doc/riv_todo.rst [riv_todo]_
 
+.. [riv_log] https://github.com/Rykka/riv.vim/blob/master/doc/riv_log.rst
 .. [riv_todo] https://github.com/Rykka/riv.vim/blob/master/doc/riv_todo.rst
 
 ----

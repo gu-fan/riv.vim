@@ -41,7 +41,9 @@ TODOS
 5. Lists
 
    A. '=' should format the sub list which indent is between parent's item and idt.
-   B. ReThinking the list shifting action and formatting action.
+   B. DONE 2012-07-05 Rewrite the list shifting action and formatting action.
+      only fix the indent caused by list-item change. 
+      so it did not change the document structure.
 
       a. a non-list 
       b. a list
@@ -50,6 +52,8 @@ TODOS
       e. a blockquote.
       f. the shiftwidth and shift length
       g. should the indent use the list's shift setting?
+
+
 
    C. When we add parent list , check if there is a prev parent level and item.
 
