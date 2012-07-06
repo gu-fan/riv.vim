@@ -4,8 +4,7 @@
 " Summary: file operation
 "          find /match/delete/
 "  Author: Rykka G.Forest
-"  Update: 2012-06-08
-" Version: 0.5
+"  Update: 2012-07-07
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -13,6 +12,7 @@ set cpo-=C
 
 
 fun! riv#file#from_str(str) "{{{
+    " parse file name from string
     " return [file , is_dir]
     let file = a:str
     if g:riv_localfile_linktype == 2
@@ -37,6 +37,18 @@ fun! riv#file#from_str(str) "{{{
         endif
     endif
 endfun "}}}
+
+fun! riv#file#edit(file) "{{{
+    let id = s:id()
+    exe "edit ".a:file
+    let b:riv_p_id = id
+endfun "}}}
+fun! riv#file#split(file) "{{{
+    let id = s:id()
+    exe "split ".a:file
+    let b:riv_p_id = id
+endfun "}}}
+
 
 let &cpo = s:cpo_save
 unlet s:cpo_save

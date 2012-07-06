@@ -158,6 +158,8 @@ Instruction
 
 * About the mapping
 
+  The mapping and commands are described in each section.
+
   Default leader map for Riv is ``<C-E>``.
   You can change it by following options.
   
@@ -170,6 +172,9 @@ Instruction
 
   + ``g:riv_buf_leader`` : leader map for reStructuredText buffers.
   + ``g:riv_buf_ins_leader`` : leader map for reStructuredText buffers's insert mode.
+  + To remap one mapping, use the commands ::
+        
+        map <C-E>wi    :RivIndex<CR> 
 
 .. _QuickStart: http://docutils.sourceforge.net/docs/user/rst/quickstart.html
 
@@ -181,7 +186,10 @@ These features are in all reStructuredText files.
 Sections 
 ~~~~~~~~~
 
-Section levels and numbers are auto detected.
+With Riv, Section levels and numbers are auto detected.
+
+It's highlighted , folded by the section level, 
+and section number is shown as fold info.
 
 * Actions:
 
@@ -250,7 +258,8 @@ List items
 
 * Bullet Lists
 
-  start with ``*,+,-`` , NOT include ``•‣⁃`` which are unicode chars.
+  List item start with ``*,+,-`` , 
+  **NOT** include ``•‣⁃`` as they are unicode chars.
 
   It is highlighted, folded. And auto leveled.
 
@@ -513,6 +522,7 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#doctest-bl
     
     start with '..' and a whitespace.
 
+
   The explicit markup syntax is used for footnotes, citations, hyperlink targets,
   directives, substitution definitions, and comments.
 
@@ -528,9 +538,9 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#explicit-m
 Inline Markup
 ~~~~~~~~~~~~~~
 
-Inline Markup are highlighted only.
+Inline Markup are highlighted.
 
-Maybe should an option for conceal it in the future.
+Maybe an option for conceal in the future.
 
 See `inline markup`__
 
@@ -539,7 +549,10 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#inline-mar
 Links
 ~~~~~
 
-Jumping with links
+With Riv, you can jumping with links.
+
+Links are highlighted in syntax and with `cursor highlighting`_.
+
 
 * Actions:
 
@@ -839,7 +852,12 @@ Improved syntax file.
 
 *  The local files are highlighted by ``rstFileLink``, 
    you can change the color if needed.
-*  The links under cursor are highlighted by ``hl-difftext``
+*  _`Cursor Highlighting` 
+   The links under cursor are highlighted by ``hl-DiffText``
+
+   For local file links , if the target is invalid , it will be highlighted by 
+   ``hl-DiffChange``
+
    Disable it by set ``g:riv_hover_link_hl`` to 0
 *  Todo Item are highlighted only in vim, not in converted files.
 

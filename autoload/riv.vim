@@ -3,8 +3,7 @@
 "    File: riv.vim
 " Summary: Riv autoload main
 "  Author: Rykka G.Forest
-"  Update: 2012-06-30
-" Version: 0.5
+"  Update: 2012-07-07
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -94,7 +93,9 @@ let s:default.options = {
     \'hover_link_hl'      : 1,
     \'usr_syn_dir'        : "",
     \'todo_levels'        : " ,o,X",
-    \'todo_timestamp'     : 1,
+    \'todo_priors'        : "ABC",
+    \'todo_default_group' : 0,
+    \'todo_datestamp'     : 1,
     \'todo_keywords'      : "TODO,DONE;FIXME,FIXED;START,PROCESS,STOP",
     \'fold_blank'         : 2,
     \'fold_level'         : 3,
@@ -136,14 +137,15 @@ let s:default.maps = {
     \'RivListTypeRemove' : 'call riv#list#toggle_type(0)',
     \'RivListTypeNext'   : 'call riv#list#toggle_type(1)',
     \'RivListTypePrev'   : 'call riv#list#toggle_type(-1)',
-    \'RivTodoToggle'     : 'call riv#todo#toggle_todo()',
-    \'RivTodoDel'        : 'call riv#todo#del_todo()',
-    \'RivTodoDate'       : 'call riv#todo#change_date()',
+    \'RivTodoToggle'     : 'call riv#todo#toggle()',
+    \'RivTodoDel'        : 'call riv#todo#delete()',
+    \'RivTodoDate'       : 'call riv#todo#change_datestamp()',
+    \'RivTodoPrior'      : 'call riv#todo#toggle_prior(1)',
     \'RivTodoAsk'        : 'call riv#todo#todo_ask()',
-    \'RivTodoType1'      : 'call riv#todo#todo_change_type(0)',
-    \'RivTodoType2'      : 'call riv#todo#todo_change_type(1)',
-    \'RivTodoType3'      : 'call riv#todo#todo_change_type(2)',
-    \'RivTodoType4'      : 'call riv#todo#todo_change_type(3)',
+    \'RivTodoType1'      : 'call riv#todo#change(0)',
+    \'RivTodoType2'      : 'call riv#todo#change(1)',
+    \'RivTodoType3'      : 'call riv#todo#change(2)',
+    \'RivTodoType4'      : 'call riv#todo#change(3)',
     \'RivViewScratch'    : 'call riv#create#view_scr()',
     \'RivTitle1'         : 'call riv#create#title(1)',
     \'RivTitle2'         : 'call riv#create#title(2)',
@@ -213,6 +215,7 @@ let s:default.buf_maps = {
     \'RivTodoHelper'     : ['',  'm' ,  'ht'],
     \'RivTodoUpdateCache': ['',  'm' ,  'uc'],
     \'RivTodoToggle'     : ['',  'mi',  'ee'],
+    \'RivTodoPrior'      : ['',  'mi',  'ep'],
     \'RivTodoDel'        : ['',  'mi',  'ex'],
     \'RivTodoDate'       : ['',  'mi',  'ed'],
     \'RivTodoAsk'        : ['',  'mi',  'e`'],
@@ -289,6 +292,7 @@ let s:default.menus = [
     \['List.Remove\ List\ Symbol'         , 'lx'                     , 'RivListTypeRemove' ]   ,
     \['Todo.Toggle\ Todo'                 , 'ee'                     , 'RivTodoToggle'     ]   ,
     \['Todo.Delete\ Todo'                 , 'ex'                     , 'RivTodoDel'        ]   ,
+    \['Todo.Toggle\ Prior'                , 'ep'                     , 'RivTodoPrior'      ]   ,
     \['Todo.Change\ Date'                 , 'ed'                     , 'RivTodoDate'       ]   ,
     \['Todo.Todo\ Type0'                  , 'e`'                     , 'RivTodoType0'      ]   ,
     \['Todo.Todo\ Type1'                  , 'e1'                     , 'RivTodoType1'      ]   ,
@@ -348,62 +352,66 @@ endfun "}}}
 "}}}
 
 fun! riv#load_conf() "{{{1
-let g:_riv_debug = exists("g:_riv_debug") ? g:_riv_debug : 0
-if g:_riv_debug==1
-    unlet! g:_riv_c
-    unlockvar g:_riv_c
-    unlockvar g:_riv_p
-endif
+    let g:_riv_debug = exists("g:_riv_debug") ? g:_riv_debug : 0
 
-if !exists("g:_riv_c")
     let g:_riv_c = {}
     let g:_riv_p = {}
     let g:_riv_t = {}
-    let g:_riv_c.riv_path = s:autoload_path . '/riv/'
-        if has("python") "{{{
-            let g:_riv_c['py'] = "py "
-            let g:_riv_c.has_py = 2
-        elseif has("python3")
-            let g:_riv_c['py'] = "py3 "
-            let g:_riv_c.has_py = 3
-        else
-            let g:_riv_c['py'] = "echom 'No Python: ' "
-            let g:_riv_c.has_py = 0
-        endif "}}}
-    if g:_riv_c.has_py && !exists("g:_riv_c.py_imported") "{{{
+    let g:_riv_e = {}
+    let g:_riv_s = {}
+
+    let s:c = g:_riv_c
+    let s:p = g:_riv_p
+    let s:t = g:_riv_t
+    let s:e = g:_riv_e
+
+    let s:c.riv_path = s:autoload_path . '/riv/'
+
+    " Python:
+    if has("python") "{{{
+        let s:c['py'] = "py "
+        let s:c.has_py = 2
+    elseif has("python3")
+        let s:c['py'] = "py3 "
+        let s:c.has_py = 3
+    else
+        let s:c['py'] = "echom 'No Python: ' "
+        let s:c.has_py = 0
+    endif "}}}
+    if s:c.has_py && !exists("s:c.py_imported") "{{{
         try
-            exe g:_riv_c.py "import sys"
-            exe g:_riv_c.py "import vim"
-            exe g:_riv_c.py "sys.path.append(vim.eval('g:_riv_c.riv_path'))"
-            exe g:_riv_c.py "from rivlib.table import GetTable"
-            exe g:_riv_c.py "from rivlib.buffer import RivBuf"
-            let g:_riv_c.py_imported = 1
+            exe s:c.py "import sys"
+            exe s:c.py "import vim"
+            exe s:c.py "sys.path.append(vim.eval('s:c.riv_path'))"
+            exe s:c.py "from rivlib.table import GetTable"
+            exe s:c.py "from rivlib.buffer import RivBuf"
+            let s:c.py_imported = 1
         catch
-            let g:_riv_c.py_imported = 0
+            let s:c.py_imported = 0
         endtry
     endif "}}}
     
-    " Project option Setup "{{{
-    let g:_riv_c.p_basic = {
+    " Project: "{{{
+    let s:c.p_basic = {
         \'path'               : '~/Documents/Riv',
         \'build_path'         : '_build',
         \'scratch_path'       : 'Scratch' ,
         \}
-    let g:_riv_c.p = []
+    let s:c.p = []
     if exists("g:riv_projects") && type(g:riv_projects) == type([])
         for project in g:riv_projects
             if type(project) == type({})
-                call add(g:_riv_c.p, s:set_proj_conf(project))
+                call add(s:c.p, s:set_proj_conf(project))
             endif
         endfor
     elseif exists("g:riv_project") && type(g:riv_project) == type({})
-        call add(g:_riv_c.p, s:set_proj_conf(g:riv_project))
+        call add(s:c.p, s:set_proj_conf(g:riv_project))
     endif
-    if empty(g:_riv_c.p)
-        call add(g:_riv_c.p, g:_riv_c.p_basic)
+    if empty(s:c.p)
+        call add(s:c.p, s:c.p_basic)
     endif
 
-    for proj in g:_riv_c.p
+    for proj in s:c.p
         let root = expand(proj.path)
         let proj._root_path = riv#path#directory(root)
         if riv#path#is_relative(proj.build_path)
@@ -421,6 +429,20 @@ if !exists("g:_riv_c")
     endfor
     "}}}
     
+    " Patterns:
+    call riv#ptn#init()
+
+    " Configs: "{{{
+    let s:t.time_fmt  = "%Y-%m-%d"
+    let s:t.sect_punc = '!"#$%&''()*+,-./:;<=>?@[\]^_`{|}~'
+    let s:t.list_lvs  =  ["*","+","-"]
+    let s:t.highlight_code = s:normlist(split(g:riv_highlight_code,','))
+    let s:t.month_names = split(g:riv_month_names,',')
+    let s:t.prior_str = g:riv_todo_priors
+    
+    let s:c.sect_lvs = split(g:riv_section_levels,'\zs')
+    let s:c.sect_lvs_b = split('#*+:.^','\zs')
+
     if empty(g:riv_ft_browser) "{{{
         if has('win32') || has('win64')
             let g:riv_ft_browser = 'start'
@@ -428,239 +450,14 @@ if !exists("g:_riv_c")
             let g:riv_ft_browser = 'xdg-open'
         endif
     endif "}}}
-
-    " Patterns: "{{{2
+    "}}}
     
-    " Basic: "{{{3
-    let g:_riv_p.blank = '^\s*$'
-    let g:_riv_p.indent = '^\_s\+'
-    let g:_riv_p.s_bgn = '^\_s\|^$'
-    let g:_riv_p.S_bgn = '^\S'
-
-    " Section: "{{{3
-    " Note: Most puncutation can be used, but we choose some of them.
-    let g:_riv_p.section = '^\v([=`:.''"~^_*+#-])\1+\s*$'
-
-
-    " Table: "{{{3
-    " The grid table
-    " +--------+     \s*+\%([-=]\++\)\+\s*
-    " |  wfwef |     \s*|.\{-}|\s*
-    " +====+===+
-    " |    |   |
-    " +----+   |     \s*+\%([-=]\++\)\+.\{-}|\s*        \s*|.\{-}+\%([-=]\++\)\+\s*
-    " |    |   |
-    " +----+---+
-    "                ^\s*\%(|\s.\{-}\)\=+\%([-=]\++\)\+\%(.\{-}\s|\)\=\s*$
-    let g:_riv_p.table_fence  = '\v^\s*%(\|\s.{-})=\+%([-=]+\+)+%(.{-}\s\|)=\s*$'
-    let g:_riv_p.table_line  = '\v^\s*\|\s.{-}\s\|\s*$'
-    let g:_riv_p.table  =  g:_riv_p.table_fence . '|' . g:_riv_p.table_line
-    let g:_riv_p.cell  = '\v%(^|\s)\|\s\zs|^\s*$'
-    let g:_riv_p.cell0 = '\v^\s*\|\s\zs'
-
-    " ======  ===============
-    let g:_riv_p.simple_table  = '^\s*=\+\s\+=[=[:space:]]\+\s*$'
-    " -------
-    " -----  ----------
-    let g:_riv_p.spl_span_sep = '^\s*-\+\( \+-\+\)*\s*$'
-    
-
-
-    " List: "{{{3
-    
-    let g:_riv_p.bullet_list = '\v^\s*[-*+]\s+'
-    let g:_riv_p.enumerate_list1 = '\v\c^\s*%(\d+|[#a-z]|[imlcxvd]+)[.)]\s+'
-    let g:_riv_p.enumerate_list2 = '\v\c^\s*\(%(\d+|[#a-z]|[imlcxvd]+)\)\s+'
-    let g:_riv_p.field_list_spl = '\v^\s*:[^:]+:\s+'
-
-    let g:_riv_p.list_b_e = g:_riv_p.bullet_list.'|'.g:_riv_p.enumerate_list1
-                \.'|'.g:_riv_p.enumerate_list2
-
-    let g:_riv_p.list_item = '%([-*+]|%(\d+|[#a-z]|[imlcxvd]+)[.)]|\(%(\d+|[#a-z]|[imlcxvd]+)\))'
-    let g:_riv_p.list_all = g:_riv_p.list_b_e . '|'. g:_riv_p.field_list_spl
-    
-    
-    let g:_riv_p.field_list= '\v^\s*:[^:]+:\s+\ze\S.+[^:]$'
-
-    " sub1 (indent)
-    " sub2 bullet
-    " sub3 #. \d. \d)
-    " sub4 a. z. a)
-    " sub5 ii.
-    " sub6 (#)
-    " sub7 (a)
-    " sub8 (ii)
-    " sub9 (space)
-    let g:_riv_p.list_checker =  '\v\c^\s*%('
-                    \.'([-*+])'
-                    \.'|(%(#|\d+)[.)])'
-                    \.'|([(]%(#|\d+)[)])'
-                    \.'|([a-z][.)])'
-                    \.'|([(][a-z][)])'
-                    \.'|([imlcxvd]+[.)])'
-                    \.'|([(][imlcxvd]+[)])'
-                    \.')(\s+)'
-
-    " Todo Items: "{{{3
-    " - [x] 2012-03-04 ~ 2012-05-06 The Todo Timestamp with start and end.
-    " - TODO 2012-01-01
-    " - DONE 2012-01-01 ~ 2012-01-02 
-
-    let td_key_list  = split(g:riv_todo_keywords,';')
-    let g:_riv_t.td_ask_keywords = ["Choosing a keyword group:"] +
-                \  map(range(len(td_key_list)), 
-                \ '(v:val+1).".". td_key_list[v:val]')
-    let g:_riv_t.td_keyword_groups = map(td_key_list, 
-                \ 's:normlist(split(v:val,'',''))')
-    " create a keyword index dic for query
-    let g:_riv_t.td_keyword_dic = {}
-    for i in range(len(g:_riv_t.td_keyword_groups))
-        for j in range(len(g:_riv_t.td_keyword_groups[i]))
-            " the 0 group is for td box.
-            let g:_riv_t.td_keyword_dic[g:_riv_t.td_keyword_groups[i][j]] = [i+1,j]
-        endfor
-    endfor
-    let g:_riv_p.td_keywords = '\v\C%('.join(s:normlist(split(g:riv_todo_keywords,'[,;]')),'|').')'
-
-    let g:_riv_t.time_fmt  = "%Y-%m-%d"
-
-    let g:_riv_p.todo_box = '\v('. g:_riv_p.list_all .')(\[.\]\s+)'
-    let g:_riv_p.todo_key = '\v('. g:_riv_p.list_all .')(' 
-                            \ . g:_riv_p.td_keywords.'\s+)'
-    " sub1 list sub2 todo box sub3 todo key 
-    let g:_riv_p.todo_all = '\v('. g:_riv_p.list_all .')%((\[.\]\s+)'
-                         \ .'|('. g:_riv_p.td_keywords.'\s+))'
-    " sub4 timestamp
-    let g:_riv_p.timestamp = '(\d{4}-\d{2}-\d{2}%( |$))'
-    let g:_riv_p.todo_tm_bgn  = g:_riv_p.todo_all . g:_riv_p.timestamp
-    " sub5 timestamp end
-    let g:_riv_p.todo_tm_end  = g:_riv_p.todo_tm_bgn .'\~ '. g:_riv_p.timestamp
-
-    let g:_riv_t.todo_levels = split(g:riv_todo_levels,',')
-    let g:_riv_t.todo_all_group = insert(copy(g:_riv_t.td_keyword_groups), 
-                \  split(g:riv_todo_levels,',') , 0 )
-
-    let g:_riv_t.todo_done_key = join(map(copy(g:_riv_t.td_keyword_groups),
-                \'v:val[-1]'),'|')
-    let g:_riv_p.todo_done_ptn = '%((\[['.g:_riv_t.todo_levels[-1].']\])'
-                \.'|('.g:_riv_t.todo_done_key.'))'
-    let g:_riv_p.todo_done_list_ptn = '\v('. g:_riv_p.list_all .')'.g:_riv_p.todo_done_ptn
-
-
-    " Explicit_mark: "{{{3
-    " We only support the exp without padding space for convenience
-    let g:_riv_p.exp_m = '^\.\.\%(\_s\|$\)'
-
-    " Block: "{{{3
-    " NOTE: The literal block should not be matched with the
-    " directives like '.. xxx::'
-    let g:_riv_p.literal_block = '::\s*$'
-    let g:_riv_p.line_block = '^\s*|.*[^|]\s*$'
-    let g:_riv_p.doctest_block = '^\s*>>> '
-    
-    " Links: "{{{3
-    "
-    " URI: " http://xxx.xxx.xxx file:///xxx/xxx/xx
-    "        mailto:xxx@xxx.xxx
-    "       submatch with uri body.
-    "standlone link patterns: www.xxx-x.xxx/?xxx
-    "
-    let g:_riv_p.link_mail = '\v<[[:alnum:]_-]+%(\.[[:alnum:]_-])*\@[[:alnum:]]%([[:alnum:]-]*[[:alnum:]]\.)+[[:alnum:]]%([[:alnum:]-]*[[:alnum:]])=>'
-    let g:_riv_p.link_uri = '\v<%(%(file|https=|ftp|gopher)://|%(mailto|news):)([^[:space:]''\"<>]+[[:alnum:]/])'
-        \.'|<www[[:alnum:]_-]*\.[[:alnum:]_-]+\.[^[:space:]''\"<>]+[[:alnum:]/]'
-        \.'|'.g:_riv_p.link_mail
-
-
-    " File:
-    let s:file_end = '%($|\s)'
-    let g:_riv_t.file_ext_lst = s:normlist(split(g:riv_file_link_ext,','))
-    if g:riv_localfile_linktype == 1
-        " *.rst *.vim xxx/
-        let s:file_name = '[[:alnum:]~./][[:alnum:]~:./\\_-]*'
-        let s:file_start = '%(\_^|\s)'
-        let g:_riv_p.file_ext_ptn = 'rst|'.join(g:_riv_t.file_ext_lst,'|')
-        let g:_riv_p.link_file = '\v' . s:file_start . '\zs' . s:file_name
-                    \.'%(\.%('. g:_riv_p.file_ext_ptn .')|/)\ze'. s:file_end
-    elseif g:riv_localfile_linktype == 2
-        " [*]  [xxx/] [*.vim]
-        let g:_riv_p.file_ext_ptn = join(g:_riv_t.file_ext_lst,'|')
-        " we should make sure it's not citation, footnote (with preceding '..')
-        " and not a todo box. (a single char)
-        let s:file_name = '[[:alnum:]~./][[:alnum:]~:./\\_-]+'
-        let s:file_start = '%(\_^|(\_^\.\.)@<!\s)'
-        let g:_riv_p.link_file = '\v'.s:file_start.'\zs\['. s:file_name .'\]\ze'. s:file_end
-    else
-        " NONE
-        let g:_riv_t.file_ext_lst = s:normlist(split(g:riv_file_link_ext,','))
-        let g:_riv_p.link_file = '^^'
-    endif
-
-    " Reference:
-    let s:ref_name = '[[:alnum:]]+%([_.-][[:alnum:]]+)*'
-    let s:ref_end = '%($|\s|[''")\]}>/:.,;!?\\-])'
-    let g:_riv_p.ref_name = s:ref_name
-    "  xxx_
-    let g:_riv_p.link_ref_normal = '\v<'.s:ref_name.'_\ze'.s:ref_end
-    " `xxx xx`_
-    let g:_riv_p.link_ref_phase  = '\v`[^`\\]*%(\\.[^`\\]*)*`_\ze'.s:ref_end
-    "  xxx__
-    let g:_riv_p.link_ref_anonymous = '\v%(<'.s:ref_name.'|`[^`\\]*%(\\.[^`\\]*)*`)__\ze'.s:ref_end
-    " [#]_ [*]_  [#xxx]_  [3]_    and citation [xxxx]_
-    let g:_riv_p.link_ref_footnote = '\v\[%(\d+|#|\*|#='.s:ref_name.')\]_\ze'.s:ref_end
-
-    let g:_riv_p.link_reference = g:_riv_p.link_ref_normal
-                \ . '|' . g:_riv_p.link_ref_phase
-                \ . '|' . g:_riv_p.link_ref_anonymous
-                \ . '|' . g:_riv_p.link_ref_footnote
-
-    " Target:
-    " .. [xxx]  or  [#xxx]  or  [1] with one space
-    let g:_riv_p.link_tar_footnote = '\v^\.\.\s\zs\[%(\d+|#|#='.s:ref_name .')\]\ze\_s'
-    " _`xxx xxx`
-    let g:_riv_p.link_tar_inline = '\v%(\s|\_^)\zs_`[^:\\]+\ze:\_s`'
-    " .. _xxx:
-    let g:_riv_p.link_tar_normal = '\v^\.\.\s\zs_[^:\\]+\ze:\_s'
-    " .. __:   or   __
-    let g:_riv_p.link_tar_anonymous = '\v^\.\.\s__:\_s\zs|^__\_s\zs'
-    " `xxx  <xxx>`
-    let g:_riv_p.link_tar_embed  = '\v^%(\s|\_^)_`.+\s<\zs.+\ze>`'
-
-    let g:_riv_p.link_target = g:_riv_p.link_tar_normal
-            \.'|'. g:_riv_p.link_tar_inline
-            \.'|'. g:_riv_p.link_tar_footnote
-            \.'|'. g:_riv_p.link_tar_anonymous
-
-
-    " sub match for all_link:
-    " 1 link_tar
-    " 2 link_ref
-    " 3 link_uri
-    "   4 link_uri_body
-    " 5 link_file
-    let g:_riv_p.all_link = '\v('. g:_riv_p.link_target 
-                \ . ')|(' . g:_riv_p.link_reference
-                \ . ')|(' . g:_riv_p.link_uri 
-                \ . ')|(' . g:_riv_p.link_file
-                \. ')'
-
-    " Miscs:
-    " indent.vim
-    let g:_riv_p.indent_stoper = g:_riv_p.list_all.'|^\s*\.\.\s|^\S'
-
-    "}}}2
-    
-    let g:_riv_t.sect_punc = '!"#$%&''()*+,-./:;<=>?@[\]^_`{|}~'
-    let g:_riv_t.list_lvs  =  ["*","+","-"]
-    let g:_riv_c.sect_lvs = split(g:riv_section_levels,'\zs')
-    let g:_riv_c.sect_lvs_b = split('#*+:.^','\zs')
-    let g:_riv_t.highlight_code = s:normlist(split(g:riv_highlight_code,','))
-    let g:_riv_t.month_names = split(g:riv_month_names,',')
-
-    let g:_riv_e = {}
-    let g:_riv_e.NOT_REL_PATH = "Riv: Not a related path"
-    " lockvar 2 g:_riv_c
-    " lockvar 2 g:_riv_p
-endif
+    " Errors:
+    let s:e.NOT_REL_PATH = "Riv: Not a related path"
+    let s:e.INVALID_TODO_GROUP = "Riv: Not a valid Todo Group"
+    let s:e.NOT_TODO_ITEM = "Riv: Not a Todo Item"
+    let s:e.NOT_LIST_ITEM = "Riv: Not a List Item"
+    let s:e.NOT_DATESTAMP = "Riv: Not a Datestamp"
 
 endfun "}}}
 fun! riv#init() "{{{
@@ -673,5 +470,8 @@ fun! riv#init() "{{{
     call riv#show_menu()
 endfun "}}}
 
+if expand('<sfile>:p') == expand('%:p') 
+    call riv#init()
+endif
 let &cpo = s:cpo_save
 unlet s:cpo_save

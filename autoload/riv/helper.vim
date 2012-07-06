@@ -3,8 +3,7 @@
 "    File: helper.vim
 " Summary: helper to access file and lines
 "  Author: Rykka G.Forest
-"  Update: 2012-06-17
-" Version: 0.5
+"  Update: 2012-07-07
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C

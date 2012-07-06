@@ -2,8 +2,7 @@
 "    Name: restin/insert.vim
 "    File: restin/insert.vim
 "  Author: Rykka G.Forest
-"  Update: 2012-06-14
-" Version: 0.5
+"  Update: 2012-07-07
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -27,7 +26,7 @@ fun! riv#insert#indent(row) "{{{
 
     " Field List
     " 1:ind
-    let p_ind =  matchend(p_line, g:_riv_p.field_list)
+    let p_ind =  matchend(p_line, g:_riv_p.field_list_full)
     if p_ind != -1
         return p_ind
     endif
@@ -37,7 +36,7 @@ fun! riv#insert#indent(row) "{{{
     
     " list
     " <=3: ind: we want a stop at the list begin here
-    let l_ind = matchend(pnb_line, g:_riv_p.list_all)
+    let l_ind = matchend(pnb_line, g:_riv_p.all_list)
     if l_ind != -1
         return ind
     endif
@@ -52,7 +51,7 @@ fun! riv#insert#indent(row) "{{{
 
     " exp_markup
     " 1~2: ind
-    let l_ind = matchend(pnb_line, g:_riv_p.exp_m)
+    let l_ind = matchend(pnb_line, g:_riv_p.exp_mark)
     if l_ind != -1 &&  a:row <= pnb_num+2
         return (ind + l_ind - matchend(pnb_line, g:_riv_p.indent))
     endif
@@ -67,7 +66,7 @@ fun! riv#insert#indent(row) "{{{
         if l_ind != -1
             return l_ind
         endif
-        let l_ind = matchend(p_line, g:_riv_p.list_all)
+        let l_ind = matchend(p_line, g:_riv_p.all_list)
         if l_ind != -1
             return indent(p_num)
         endif

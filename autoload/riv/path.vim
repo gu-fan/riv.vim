@@ -3,8 +3,7 @@
 "    File: path.vim
 " Summary: calc the path of files
 "  Author: Rykka G.Forest
-"  Update: 2012-07-05
-" Version: 0.5
+"  Update: 2012-07-07
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -15,6 +14,7 @@ let s:win =  has('win32') || has('win64') ? 1 : 0
 " check 'ssl' ?
 
 fun! riv#path#root() "{{{
+    echoe s:id()
     return g:_riv_c.p[s:id()]._root_path
 endfun "}}}
 
@@ -23,6 +23,9 @@ fun! riv#path#build_ft(ft) "{{{
 endfun "}}}
 fun! riv#path#build_path() "{{{
     return g:_riv_c.p[s:id()]._build_path
+endfun "}}}
+fun! riv#path#scratch_path() "{{{
+    return g:_riv_c.p[s:id()]._scratch_path
 endfun "}}}
 
 fun! riv#path#directory(path) "{{{
@@ -54,6 +57,9 @@ fun! riv#path#is_rel_to(dir, path) "{{{
 endfun "}}}
 fun! riv#path#rel_to_root(path) "{{{
     return riv#path#rel_to(riv#path#root(), a:path)
+endfun "}}}
+fun! riv#path#is_rel_to_root(path) "{{{
+    return riv#path#is_rel_to(riv#path#root(), a:path)
 endfun "}}}
 
 fun! riv#path#is_relative(name) "{{{

@@ -3,8 +3,7 @@
 "    File: list.vim
 " Summary: the bullet list and enum list
 "  Author: Rykka G.Forest
-"  Update: 2012-06-30
-" Version: 0.5
+"  Update: 2012-07-07
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -19,7 +18,7 @@ fun! s:get_all_list(row) "{{{
     let save_pos = getpos('.')
     call cursor(row,1)
 
-    while getline(row) !~ g:_riv_p.list_all && row != 0
+    while getline(row) !~ g:_riv_p.all_list && row != 0
         let idt = indent(row)
         if idt == 0 
             let row = 0
@@ -39,7 +38,7 @@ fun! s:get_list(row) "{{{
     let save_pos = getpos('.')
     call cursor(row,1)
 
-    while getline(row) !~ g:_riv_p.list_b_e && row != 0
+    while getline(row) !~ g:_riv_p.b_e_list && row != 0
         let idt = indent(row)
         if idt == 0 
             let row = 0
@@ -71,7 +70,7 @@ fun! s:get_older(row) "{{{
         let [row,col] = searchpos(idt_ptn, 'b',0,100)
         let idt = indent(row)
         
-        while getline(row) !~ g:_riv_p.list_b_e && row != 0
+        while getline(row) !~ g:_riv_p.b_e_list && row != 0
             if idt <= c_idt
                 let row = 0
                 break
@@ -106,7 +105,7 @@ fun! s:get_parent(row) "{{{
         let [row,col] = searchpos(idt_ptn, 'b',0,100)
         let idt = indent(row)
         
-        while getline(row) !~ g:_riv_p.list_b_e && row != 0
+        while getline(row) !~ g:_riv_p.b_e_list && row != 0
             if idt == 0 
                 let row = 0
                 break
@@ -186,7 +185,7 @@ fun! riv#list#new(act) "{{{
         let line = getline(cur_list)
 
         " if it's field list , then just use it's indent.
-        if line =~ g:_riv_p.field_list_spl
+        if line =~ g:_riv_p.field_list
             let idt = repeat(' ', indent(cur_list))
             let line = getline('.')
             let line = substitute(line, '^\s*', idt, '')
@@ -421,7 +420,7 @@ fun! riv#list#toggle_type(i) "{{{
         let list_str = s:list_str(1 , '', '' , "*", " ") 
         let line = substitute(line, '^\s*', list_str, '')
     else
-        let prv_ls_end = matchend(line, g:_riv_p.list_b_e)
+        let prv_ls_end = matchend(line, g:_riv_p.b_e_list)
         let level = s:stat2level(type, num, attr) 
         if a:i == 0
             let list_str = idt
@@ -429,7 +428,7 @@ fun! riv#list#toggle_type(i) "{{{
             let [type,num,attr] = s:level2stat(level+a:i)
             let list_str = s:list_str(type,idt,num,attr,space)
         endif
-        let line = substitute(line, g:_riv_p.list_b_e , list_str, '')
+        let line = substitute(line, g:_riv_p.b_e_list , list_str, '')
     endif
     call setline(row, line)
     let mod_len = strwidth(line)
@@ -463,7 +462,7 @@ fun! riv#list#shift(direction) range "{{{
         if list && list != a:firstline
             let l_idt = indent(list)
             let c_idt = indent(a:firstline)
-            let f_idt = matchend(getline(list), g:_riv_p.list_b_e)
+            let f_idt = matchend(getline(list), g:_riv_p.b_e_list)
             if (a:direction=='+' && c_idt<f_idt && c_idt+ln>f_idt)
             \ || (a:direction=='-' && c_idt>f_idt && c_idt-ln<f_idt)
                 let ln =  abs(f_idt - c_idt)
@@ -483,7 +482,7 @@ fun! riv#list#shift(direction) range "{{{
         let older = s:get_older(a:firstline)
         if older 
             " if has older , use older's item length
-            let ln = matchend(getline(older), g:_riv_p.list_b_e) - indent(older)
+            let ln = matchend(getline(older), g:_riv_p.b_e_list) - indent(older)
         endif
     endif
     let vec = a:direction=="-" ? -ln : a:direction=="+"  ? ln : 0
@@ -549,7 +548,7 @@ fun! s:list_shift_len(row,vec,...) "{{{
         let num = num=~'\U' ? tolower(s:nr2listnum(nr,type)) : s:nr2listnum(nr,type)
 
         let p_len = len(line)
-        let line = substitute(line, g:_riv_p.list_b_e,
+        let line = substitute(line, g:_riv_p.b_e_list,
                     \ s:list_str(type,idt,num,attr,space), '')
         let s:sft_fix[indent] = s:sft_fix[indent-1] +  len(line) - p_len
     endif
@@ -575,7 +574,7 @@ fun! s:fix_nr(row, indent) "{{{
     endif
     let num = num=~'\U' ? tolower(s:nr2listnum(nr,type)) : s:nr2listnum(nr,type)
     let p_len = len(line)
-    let line = substitute(line, g:_riv_p.list_b_e,
+    let line = substitute(line, g:_riv_p.b_e_list,
                 \ s:list_str(type,idt,num,attr,space), '')
     let s:sft_fix[a:indent] += len(line) - p_len
     call setline(a:row,line)

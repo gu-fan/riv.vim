@@ -3,8 +3,7 @@
 "    File: action.vim
 " Summary: simulate and fix some misc actions
 "  Author: Rykka G.Forest
-"  Update: 2012-06-08
-" Version: 0.5
+"  Update: 2012-07-07
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -16,51 +15,32 @@ fun! riv#action#db_click(mouse) "{{{
     if foldclosed(row) != -1
         exe "normal! zv"
     elseif !riv#link#open()
-        " Open fold with clicking on section title.
         if s:is_in_sect_title(row)
             exe "normal! zc"
             return
         endif
         let line = getline(row)
         let col = col('.')
-        if s:is_in_todo_item(line,col)
-            call riv#todo#toggle_todo()
-        elseif s:is_in_todo_time(line,col)
-            call riv#todo#change_date()
-        else
+        let [is_in,bgn,end,obj] = riv#todo#col_item(line,col)
+        if !is_in
             if a:mouse== 1
                 exe "normal! \<2-LeftMouse>"
             else
                 exe "normal! \<Enter>"
             endif
+        elseif is_in == 2
+            call riv#todo#toggle()
+        elseif is_in == 3
+            call riv#todo#toggle_prior(0)
+        elseif is_in == 4 || is_in == 5
+            call riv#todo#change_datestamp()
         endif
     endif
 endfun "}}}
 
-
 fun! s:is_in_sect_title(row) "{{{
    return exists("b:riv_obj") && has_key(b:riv_obj, a:row)
                \ && b:riv_obj[a:row].type =='sect'
-endfun "}}}
-fun! s:is_in_todo_item(line,col) "{{{
-   return  a:col < matchend(a:line, g:_riv_p.todo_all)
-            \ && a:col > matchend(a:line, g:_riv_p.list_all)
-endfun "}}}
-fun! s:is_in_todo_time(line,col) "{{{
-    if a:line=~ g:_riv_p.todo_tm_end
-        if ( a:col < matchend(a:line, g:_riv_p.todo_tm_end)
-                \ && a:col > matchend(a:line, g:_riv_p.todo_tm_bgn.'\~ ') )
-            return 2
-        elseif (  a:col < matchend(a:line, g:_riv_p.todo_tm_bgn)
-                \ && a:col > matchend(a:line, g:_riv_p.todo_all))
-            return 1
-        endif
-    else
-        if a:col < matchend(a:line, g:_riv_p.todo_tm_bgn)
-                \ && a:col > matchend(a:line, g:_riv_p.todo_all)
-            return 1
-        endif
-   endif
 endfun "}}}
 fun! riv#action#ins_bs() "{{{
     let [row,col]  = getpos('.')[1:2]
@@ -126,7 +106,7 @@ fun! riv#action#ins_tab() "{{{
             return "\<C-N>"
         else
             " if it's before the list item position. indent list.
-            if col('.') <= matchend(getline('.'), g:_riv_p.list_all)
+            if col('.') <= matchend(getline('.'), g:_riv_p.all_list)
                 return "\<C-O>:call riv#list#shift('+')\<CR>"
             else
                 return "\<Tab>"
@@ -142,7 +122,7 @@ fun! riv#action#ins_stab() "{{{
         if g:riv_ins_super_tab == 1 && pumvisible()
             return "\<C-P>"
         else
-            if col('.') <= matchend(getline('.'), g:_riv_p.list_all)
+            if col('.') <= matchend(getline('.'), g:_riv_p.all_list)
                 return "\<C-O>:call riv#list#shift('-')\<CR>"
             else
                 return "\<S-Tab>"

@@ -3,12 +3,12 @@
 "    File: riv/create.vim
 " Summary: Create miscellaneous things.
 "  Author: Rykka G.Forest
-"  Update: 2012-06-27
-" Version: 0.5
+"  Update: 2012-07-07
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
 
+let s:months = g:_riv_t.month_names
 " link "{{{
 
 fun! s:expand_file_link(file) "{{{
@@ -191,7 +191,7 @@ fun! riv#create#title(level) "{{{
     if exists("g:_riv_c.sect_lvs[a:level-1]")
         let t = g:_riv_c.sect_lvs[a:level-1]
     else
-        let t = s:sect_lv_b[ a:level - len(g:_riv_c.sect_lvs) - 1 ]
+        let t = g:_riv_c.sect_lvs_b[ a:level - len(g:_riv_c.sect_lvs) - 1 ]
     endif
     
     let t = repeat(t, len(title))
@@ -253,13 +253,11 @@ endfun "}}}
 "}}}
 " scratch "{{{
 fun! riv#create#scratch() "{{{
-    let scr = g:_riv_c.p[s:id()]._scratch_path . strftime("%Y-%m-%d") . '.rst'
-    call s:split(scr)
+    call riv#file#split(riv#path#scratch_path . strftime("%Y-%m-%d") . '.rst')
 endfun "}}}
-let s:months = g:_riv_t.month_names
 fun! s:format_src_index() "{{{
     " category scratch by month and format it 4 items a line
-    let path = g:_riv_c.p[s:id()]._scratch_path
+    let path = riv#path#scratch_path()
     if !isdirectory(path)
         return -1
     endif
@@ -313,9 +311,9 @@ endfun "}}}
 
 fun! riv#create#view_scr() "{{{
     call s:format_src_index()
-    let path = g:_riv_c.p[s:id()]._scratch_path
+    let path = riv#path#scratch_path()
  
-    call s:split(path.'index.rst')
+    call riv#file#split(path.'index.rst')
 endfun "}}}
 
 fun! s:escape(str) "{{{
@@ -337,24 +335,23 @@ fun! riv#create#delete() "{{{
     endif
     let ptn = s:escape_file_ptn(file)
     call delete(file)
+ 
+    if riv#path#is_rel_to_root(file)
+        let index = expand('%:p:h').'/index.rst'
+        if filereadable(index)
+            call riv#file#edit(index)
+            let f_idx = filter(range(1,line('$')),'getline(v:val)=~ptn')
+            for i in f_idx
+                call setline(i, substitute(getline(i), ptn ,'','g'))
+            endfor
+            update | redraw
+            echo len(f_idx) ' relative link in index deleted.'
+        endif
+    endif
 
-    exe 'edit ' expand('%:p:h').'/index.rst'
-    let b:riv_p_id = s:id()
-
-    let f_idx = filter(range(1,line('$')),'getline(v:val)=~ptn')
-    for i in f_idx
-        call setline(i, substitute(getline(i), ptn ,'','g'))
-    endfor
-    update
-    redraw
-    echo len(f_idx) ' relative link in index deleted.'
 endfun "}}}
 "}}}
 
-fun! s:split(file) "{{{
-    exe 'sp ' a:file
-    let b:riv_p_id = s:id()
-endfun "}}}
 " misc "{{{
 fun! riv#create#foot() "{{{
     " return a link target and ref def.
@@ -413,8 +410,8 @@ fun! riv#create#cmd_helper() "{{{
     " let s:cmd.maps['<2-leftmouse>'] = 'riv#create#enter'
     " let s:cmd.syntax_func  = "riv#create#syn_hi"
     let s:cmd.contents = [s:load_cmd(),
-                \filter(copy(s:cmd.contents[0]),'v:val=~g:_riv_p.todo_done_list_ptn '),
-                \filter(copy(s:cmd.contents[0]),'v:val!~g:_riv_p.todo_done_list_ptn '),
+                \filter(copy(s:cmd.contents[0]),'v:val=~g:_riv_p.todo_done '),
+                \filter(copy(s:cmd.contents[0]),'v:val!~g:_riv_p.todo_done '),
                 \]
     let s:cmd.input=""
     cal s:cmd.win()

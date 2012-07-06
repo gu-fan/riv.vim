@@ -1,10 +1,9 @@
 "=============================================
 "    Name: test.vim
 "    File: test.vim
-" Summary: 
+" Summary: test 
 "  Author: Rykka G.Forest
-"  Update: 2012-06-11
-" Version: 0.5
+"  Update: 2012-07-07
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -21,8 +20,8 @@ function! riv#test#timer(func,...) "{{{
         call s:debug("[TIMER]: ".a:func." does not exists. stopped")
         return
     endif
-    let num  = a:0 ? a:1 : 1
-    let farg = a:0>1 ? a:2 : []
+    let farg = a:0 ? a:1 : []
+    let num  = a:0>1 ? a:2 : 1
 
     let o_t = s:time()
 
@@ -35,11 +34,12 @@ function! riv#test#timer(func,...) "{{{
 
     return rtn
 endfunction "}}}
+let s:tempname = tempname()
 fun! riv#test#log(msg) "{{{
     
     let log =  "Time:". strftime("%Y-%m-%d %H:%M")
     " write time to log.
-    let file = expand("~/Desktop/test.log")
+    let file = s:tempname
     if filereadable(file)
         let lines = readfile(file)
     else
@@ -53,6 +53,63 @@ fun! riv#test#log(msg) "{{{
     endif
     call writefile(lines, file)
 endfun "}}}
+fun! riv#test#view_log() "{{{
+    exe 'sp ' s:tempname
+endfun "}}}
+
+fun! riv#test#assert(val1, val2) "{{{
+    if a:val1 == a:val2
+        echo '1'
+    else
+        echo '0 $' a:val1
+        echo '  >' a:val2
+    endif
+endfun "}}}
+fun! s:test_func(func,arg_list) "{{{
+    echo "Func:" a:func 
+    for arg in a:arg_list
+        echo "Arg:" arg
+        if type(arg) == type([])
+            echon "\t>" call(a:func, arg)
+        else
+            echon "\t>" call(a:func, [arg])
+        endif
+        unlet arg
+    endfor
+endfun "}}}
+
+function! riv#test#compare(func1,func2,num,...) "{{{
+    if a:0==1
+        echom riv#test#timer(a:func1,a:1,a:num)
+        echom riv#test#timer(a:func2,a:1,a:num)
+    elseif a:0==2
+        echom riv#test#timer(a:func1,a:1,a:num)
+        echom riv#test#timer(a:func2,a:2,a:num)
+    else
+        echom riv#test#timer(a:func1,[],a:num)
+        echom riv#test#timer(a:func2,[],a:num)
+    endif
+    echom riv#test#timer("riv#test#stub0",[],a:num)
+endfunction "}}}
+function! riv#test#stub0()
+endfunction
+
+fun! riv#test#echo(l) "{{{
+    if type(a:l) == type({})
+        for [key,val] in items(a:l)
+            echohl Question | echo key.':' | echohl Normal | echon  val
+            unlet val
+        endfor
+    elseif type(a:l) == type([])
+        for item in a:l
+            echo item
+            unlet item
+        endfor
+    else
+        echo a:l
+    endif
+endfun "}}}
+
 fun! riv#test#fold(...) "{{{
     let line=line('.')
     let o_t = s:time()
@@ -110,12 +167,21 @@ fun! riv#test#fold(...) "{{{
                \]
     call riv#test#log(log)
 endfun "}}}
+
 fun! riv#test#buf() "{{{
     
     let o_t = s:time()
     call riv#fold#parse()
     echo "Total time: " (s:time()-o_t)
 endfun "}}}
+
+
+fun! riv#test#todo() "{{{
+    call riv#todo#test()
+endfun "}}}
+
+
+
 fun! riv#test#insert_idt() "{{{
     " breakadd func riv#insert#indent
     echo riv#insert#indent(line('.'))
@@ -158,18 +224,6 @@ fun! riv#test#repl_link() "{{{
     let g:riv_localfile_linktype = 2
     call riv#init()
     call s:test_func(func, arg_list)
-endfun "}}}
-fun! s:test_func(func,arg_list) "{{{
-    echo "Func:" a:func 
-    for arg in a:arg_list
-        echo "Arg:" arg
-        if type(arg) == type([])
-            echon "\t>" call(a:func, arg)
-        else
-            echon "\t>" call(a:func, [arg])
-        endif
-        unlet arg
-    endfor
 endfun "}}}
 fun! riv#test#list_item() "{{{
     let func = "riv#list#level"
@@ -240,7 +294,7 @@ fun! riv#test#link_expand() "{{{
     call riv#init()
     call s:test_func(func, arg_list)
 endfun "}}}
-fun! s:test_list_parse()
+fun! s:test_list_parse() "{{{
     let func1 = riv#fold#SID()."parse_list"
     let func = riv#fold#SID()."dic2line"
     echo call(func1,[])
@@ -248,8 +302,8 @@ fun! s:test_list_parse()
     for line in lines
         echo line
     endfor
-endfun
-fun! s:test_path()
+endfun "}}}
+fun! s:test_path() "{{{
     let func = "riv#path#rel_to"
     let arg_list  = [
                 \['/a/c','/a/c/b'],
@@ -259,9 +313,9 @@ fun! s:test_path()
                 \]
     call s:test_func(func, arg_list)
     
-endfun
+endfun "}}}
 fun! riv#test#test() "{{{
-    call s:test_path()
+
 endfun "}}}
 fun! s:SID() "{{{
     return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$')
@@ -270,9 +324,16 @@ fun! riv#test#SID() "{{{
     return '<SNR>'.s:SID().'_'
 endfun "}}}
 
+function! riv#test#stub1() "{{{
+endfunction "}}}
+function! riv#test#stub2() "{{{
+endfunction "}}}
 " Testing 
 if expand('<sfile>:p') == expand('%:p') "{{{
-    call riv#test#test()
+
+    let func1 = "riv#test#stub1"
+    let func2 = "riv#test#stub2"
+    call riv#test#compare(func1,func2,1000)
 endif "}}}
 
 let &cpo = s:cpo_save

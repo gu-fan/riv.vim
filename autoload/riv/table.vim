@@ -2,8 +2,7 @@
 "    Name: table.vim
 "    File: table.vim
 "  Author: Rykka G.Forest
-"  Update: 2012-06-05
-" Version: 0.5
+"  Update: 2012-07-07
 "=============================================
 fun! riv#table#format() "{{{
     exe g:_riv_c.py ."GetTable().format_table()"

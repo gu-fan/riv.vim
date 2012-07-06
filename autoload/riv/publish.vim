@@ -3,8 +3,7 @@
 "    File: publish.vim
 " Summary: publish to html/pdf.
 "  Author: Rykka G.Forest
-"  Update: 2012-06-27
-" Version: 0.5
+"  Update: 2012-07-07
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -32,7 +31,7 @@ fun! s:repl_file_link(line) "{{{
     
     let line = a:line
     
-    if line =~ g:_riv_p.table || line =~ g:_riv_p.exp_m
+    if line =~ g:_riv_p.table || line =~ g:_riv_p.exp_mark
         return line
     endif
 

@@ -2,8 +2,7 @@
 "    Name: fold.vim
 "    File: fold.vim
 "  Author: Rykka G.Forest
-"  Update: 2012-06-29
-" Version: 0.5
+"  Update: 2012-07-07
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -221,7 +220,7 @@ fun! s:set_obj_dict() "{{{
                 call s:add_brother(brother, m)
             endif
 
-            let m.td_stat = riv#todo#get_td_stat(b:lines[m.bgn])
+            let m.td_stat = riv#todo#stat(b:lines[m.bgn])
 
             let p_l_obj = m
             let p_lst_lv = lst_lv
@@ -348,7 +347,7 @@ fun! s:check(row) "{{{
 
         if !has_key(b:state, 'e_chk') && !has_key(b:state, 'b_chk')  
             \ && line=~s:p.literal_block && b:lines[a:row+1]=~ '^\s*$'
-            if line=~s:p.exp_m
+            if line=~s:p.exp_mark
                 let b:state.e_chk= {'type': 'exp', 'bgn':a:row,}
                 return 1
             else
@@ -363,7 +362,7 @@ fun! s:check(row) "{{{
     if line=~'^\s*[[:alnum:]]\+\_s'
         return
     elseif b:foldlevel > 1 && !has_key(b:state, 'e_chk')
-                \ && line=~s:p.list_all
+                \ && line=~s:p.all_list
 
         let idt = riv#fold#indent(line)
         let l_item = {'type': 'list', 'bgn': a:row, 
@@ -388,7 +387,7 @@ fun! s:check(row) "{{{
         return 1
     elseif line=~'^\s*\w'
         return
-    elseif b:foldlevel > 2 && (line=~s:p.exp_m )
+    elseif b:foldlevel > 2 && (line=~s:p.exp_mark )
         if  (line=~'^\.\.\s*$' && a:row!=line('$') 
                             \ && b:lines[a:row+1]=~'^\s*$')
             call add(b:state.matcher,{'type': 'exp', 'mark': 'ignored', 
@@ -735,7 +734,7 @@ fun! s:parse_list() "{{{
     let l_match = []
     let end = line('$')
     let [row,col] = searchpos('^\S','bc',0,100)
-    while getline(row) =~ g:_riv_p.list_b_e && row != 0
+    while getline(row) =~ g:_riv_p.b_e_list && row != 0
         let [row,col] = searchpos('^\S','b',0,100)
     endwhile
     if row 
@@ -770,7 +769,7 @@ fun! s:parse_list() "{{{
         endif
 
         " add
-        if getline(row) =~ g:_riv_p.list_b_e
+        if getline(row) =~ g:_riv_p.b_e_list
             let l_obj = {'bgn':row,'indent':idt,'parent':0,'child':[]}
             call add(l_chk, l_obj)
         else
