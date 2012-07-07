@@ -9,8 +9,8 @@ Intro
 **Riv** is a vim plugin for managing and writing reStructuredText_ documents.
 Short for 'reStructuredText in Vim'. 
 
-It is for people either want to manage documents in a wiki way,
-or writing documents in a neat way.
+It is for people either want to writing documents in a neat way,
+or manage documents in a wiki way.
 
 .. _reStructuredText: http://docutils.sourceforge.net/rst.html
 
@@ -741,7 +741,8 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#simple-tab
 Folding 
 ~~~~~~~~
 
-**Folding** is a vim feature to allow you to display a section as one line.
+**Folding** is a vim feature,
+it allow you to display a section as one line to get an overview.
 
 Riv will fold reStructuredText file with sections, lists, and blocks automatically.
 
@@ -753,6 +754,7 @@ Riv will fold reStructuredText file with sections, lists, and blocks automatical
     use ``zo`` ``zO`` or ``zv`` will open it either.
 
     :NOTE: To use mouse to open or close fold anywhere. 
+           use vim option ``foldcolumn``
            ``set fdc=1``
 
   + Close Folding:  use ``zc`` or ``zC`` will close it.
@@ -841,6 +843,11 @@ Riv will fold reStructuredText file with sections, lists, and blocks automatical
      ..  vim: fdls=0 :
 
   + Use  ':h folding' in vim to get an overview of folding in vim.
+
+:NOTE: if the folding did not update correctly, 
+
+       You can use ``<C-E>t``` or  ``:RivTestReload`` 
+       to force reload riv variable and local buffer.
 
 Syntax
 ~~~~~~
@@ -1127,6 +1134,8 @@ Todo items to keep track of todo things.
 
 It is Todo-box or Todo-keywords in a bullet/enumerated/field list.
 
+It is not defined by reStructuredText syntax.
+
 * Todo Box:
 
   + [ ] This is a todo item of initial state.
@@ -1183,9 +1192,10 @@ It is Todo-box or Todo-keywords in a bullet/enumerated/field list.
 
   The Priorites of todo item
 
-  + [ ] [#A] priorty A
-  + [ ] [#C] priorty B
-  + Double Click or ``<Enter>`` or ``:RivTodoPrior`` on priorty to change priority. 
+  + [ ] [#A] a todo item of priorty A
+  + [ ] [#C] a todo item of priorty C
+  + Double Click or ``<Enter>`` or ``:RivTodoPrior`` on priorty item 
+    to change priority. 
   + You can define the priorty chars by ``g:riv_todo_priorities``
     Only alphabet or digits are supported.
 
@@ -1213,7 +1223,7 @@ It is Todo-box or Todo-keywords in a bullet/enumerated/field list.
  
   Delete Item 
 
-  + Use ``:RivTodoDel`` ``<C-E>ex`` will delete the todo item
+  + Use ``:RivTodoDel`` ``<C-E>ex`` to delete the whole todo item
 
   Helper
 
@@ -1235,11 +1245,11 @@ It is Todo-box or Todo-keywords in a bullet/enumerated/field list.
 Helpers
 ~~~~~~~
 
-A window to show something of the project.
+A window to manage something of the project.
 
 
 * _`Todo Helper` : A helper to manage todo items of current project.
-  When current file is not in a project, will show current file's todo items.
+  When current document is not in a project, will show current file's todo items.
 
   See Todos_ for details.
 

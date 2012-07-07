@@ -34,13 +34,13 @@ TODOS
 4. Links
 
    + Links:   The standalone web link with ``/`` is detected as local file.
-   + Links:   Link tags between files?
+   + Links:   Link tags between files? index.rst#section -> index.html#section
    + Links:   Github flavor: create commit link, issue link?
-   + TODO highlight in another color when the file of file link is not readable.
+   + DONE 2012-07-07 highlight in another color when the file of file link is not readable.
 
 5. Lists
 
-   A. '=' should format the sub list which indent is between parent's item and idt.
+   A. DONE 2012-07-07 '>' and '<' and '=' will format the sub list's num/level and fix the indent
    B. DONE 2012-07-05 Rewrite the list shifting action and formatting action.
       only fix the indent caused by list-item change. 
       so it did not change the document structure.
@@ -59,9 +59,9 @@ TODOS
 
 6. Todos
 
-   + TODO [#C] Todos: Todo item priorities?
-   + FIXME an option for setting default type when toggle todo.
-   + TODO Rethiking the todo item
+   + DONE [#C] 2012-07-07 Todos: Todo item priorities?
+   + FIXED 2012-07-07 an option for setting default type when toggle todo.
+   + DONE 2012-07-07 Rethiking the todo item
    + the name of todo cache.
 
 7. _`Table`
@@ -98,7 +98,7 @@ TODOS
     + File:    A template or snippet or shortcut for adding ``./`` and ``../`` 
       and files.  Maybe a sphinx doc ref as well.
     + A file tag jump like ``:xxx:`xxxx``` for sphinx docs
-    + for bare style, a method to escape file that not convert to links
+    + for bare style, a method/syntax to escape file that not convert to links
     + an option for not converting links
 
 13. Publish
@@ -112,7 +112,7 @@ TODOS
     B. Helpers: A command helper?
     C. A file helper : showing file structure
     D. A documnet helper : showing doucment structure
-    E. TODO Todo Helper : showing document todo for a file not in project.
+    E. DONE 2012-07-07 Todo Helper : showing document todo for a file not in project.
 
 15. Scratch
 
