@@ -161,7 +161,7 @@ Instruction
 
   + ``g:riv_buf_leader`` : leader map for reStructuredText buffers.
   + ``g:riv_buf_ins_leader`` : leader map for reStructuredText buffers's insert mode.
-  + To remap one mapping, use the commands ::
+  + To remap one mapping, use the ``map`` commands ::
         
         map <C-E>wi    :RivIndex<CR> 
 
@@ -334,7 +334,7 @@ The bullet and enumerated list are auto level and auto numbered.
       
       The list item of each type is:: 
       
-        ``'*' , '1.' , 'a.' , 'A)' ,'i)'``
+        '*' , '1.' , 'a.' , 'A)' ,'i)'
 
       :NOTE:  You should act this on a new list or list with no sub line.
 
@@ -352,7 +352,7 @@ The bullet and enumerated list are auto level and auto numbered.
 List items
 """"""""""
 
-Intro of each list type.
+Intro of the reStructuredText lists.
 
 * Bullet Lists
 
@@ -1002,19 +1002,21 @@ There are some convenience with projects.
 * Publish_ : You can convert whole project to html, and view them as wiki.
 * Todos_ : You can manage all the todo items in a project
 * Scratch_ : Writing diary in a project
+
 * The default project path is ``'~/Documents/Riv'``,
   you can change it by defining project to ``g:riv_projects`` in your vimrc.::
 
     let project1 = { 'path': '~/Dropbox/rst',}
     let g:riv_projects = [project1]
 
+* Use ``:RivIndex`` ``<C-E>ww`` to open the first project index.
+
+
 * You can have multiple projects also::
 
     " You could add multiple projects as well 
     let project2 = { 'path': '~/Dropbox/rst2',}
     let g:riv_projects = [project1, project2]
-
-* Use ``:RivIndex`` ``<C-E>ww`` to open the first project index.
 * Use ``:RivAsk`` ``<C-E>wa`` to choose one project to open.
 
 File
