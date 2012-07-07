@@ -442,13 +442,12 @@ fun! riv#list#change(id) "{{{
     let prv_len = strwidth(line)
     let end = matchend(line, g:_riv_p.b_e_list)
 
+    let [type,num,attr] = s:level2stat(s:change_levels[a:id])
+    let list_str = s:list_str(type,'',num,attr,'')
     if end == -1
-        let line = substitute(line, '^\s*', '\0* ', '')
+        let line = substitute(line, '^\s*', '\0'.list_str.' ', '')
     else
-        let [type , idt , num , attr, space] = riv#list#stat(line)
-        let [type,num,attr] = s:level2stat(s:change_levels[a:id])
-        let list_str = s:list_str(type,idt,num,attr,space)
-        let line = substitute(line, s:p.b_e_list , list_str, '')
+        let line = substitute(line, s:p.list_white , '\1'.list_str.'\3', '')
     endif
     call setline(row, line)
     call cursor(row, riv#list#fix_col(col, end, (strwidth(line) - prv_len)))
