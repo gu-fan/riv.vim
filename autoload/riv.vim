@@ -442,6 +442,7 @@ fun! riv#load_conf() "{{{1
     "}}}
     
     " Patterns:
+    let s:t.prior_str = g:riv_todo_priorities
     call riv#ptn#init()
 
     " Configs: "{{{
@@ -450,7 +451,6 @@ fun! riv#load_conf() "{{{1
     let s:t.list_lvs  =  ["*","+","-"]
     let s:t.highlight_code = s:normlist(split(g:riv_highlight_code,','))
     let s:t.month_names = split(g:riv_month_names,',')
-    let s:t.prior_str = g:riv_todo_priorities
     
     let s:c.sect_lvs = split(g:riv_section_levels,'\zs')
     let s:c.sect_lvs_b = split('#*+:.^','\zs')

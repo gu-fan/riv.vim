@@ -8,6 +8,9 @@
 let s:cpo_save = &cpo
 set cpo-=C
 
+let s:p = g:_riv_p
+let s:s = g:_riv_s
+let s:t = g:_riv_t
 
 " Always use magic
 if !&magic
@@ -72,8 +75,6 @@ fun! riv#ptn#get_WORD_obj(line,col) "{{{
 endfun "}}}
 
 fun! riv#ptn#init() "{{{
-    let s:p = g:_riv_p
-    let s:s = g:_riv_s
     
     " Patterns:  "{{{2
     " Basic: "{{{3
@@ -204,6 +205,9 @@ fun! riv#ptn#init() "{{{
 
     let td_prior = '(\[#[[:alnum:]]\]%( |$))'
     let s:p.td_prior = '\[#\zs[[:alnum:]]\ze\]'
+    let td_prior1 = '\[#'.s:t.prior_str[0].'\]%( |$)'
+    let td_prior2 = '\[#'.s:t.prior_str[1].'\]%( |$)'
+    let td_prior3 = '\[#'.s:t.prior_str[2].'\]%( |$)'
 
     let td_list = printf('(^\s*%s\s+)', all_list )
     let td_tms = '(\d{4}-\d{2}-\d{2}%( |$))'
@@ -212,19 +216,21 @@ fun! riv#ptn#init() "{{{
     let s:p.td_keywords = '\v\C%('.td_keywords.')'
 
     let s:p.todo_box = '\v'. td_list . td_box. '\s+'
-    let s:p.todo_key = '\v\C'. td_list . td_keywords.'\s+'
-    let s:p.todo_done = '\v\C'. td_list . td_b_k_done.'\s+'
+    let s:p.todo_key = '\v\C'. td_list . s:p.td_keywords.'\s+'
+
 
     let td_b_k = '(%(' . td_box. '|%('. td_keywords.'))\s+)'
 
     " sub1 list sub2 box and key
     let s:p.todo_b_k = '\v\C'. td_list . td_b_k
+    let s:p.todo_done = '\v\C'. td_list . td_b_k_done
     
     " 1:list, 2:b_k, 3:piority, 4:tms, 5:tms_end
     let todo_all = td_list . td_b_k . td_prior . '=%(' . td_tms . td_tms_end . '=)='
     let s:p.todo_all = '\v\C' . todo_all
     let s:p.todo_check = '\v\C'. td_list .'%('. td_b_k . td_prior . '=%(' . td_tms . td_tms_end . '=)=)='
 
+    let s:p.todo_prior1 = '\v\C'.td_list . td_b_k . td_prior1
     " sub4 timestamp bgn
     let s:p.todo_tm_bgn  = s:p.todo_b_k . td_prior .  td_tms
     " sub5 timestamp end
@@ -354,19 +360,28 @@ fun! riv#ptn#init() "{{{
     
     " Syntax Patterns: "{{{2
     " Todo Helper: "{{{3
-    let riv_file = '^\S*'
+        let riv_file = '^\S*'
     let riv_lnum = '\s+\d+ \|'
     let riv_end = '\ze%(\s|$)'
 
     let s:s.rivFile = riv_file
     let s:s.rivLnum = '\v'.riv_lnum
 
-    let s:s.rivTodo = '\v\C('. riv_file . riv_lnum .')@<=\s*'.all_list.'\s+'
-                \ . td_b_k . td_prior . '=%(' . td_tms . td_tms_end . '=)=' 
-    let s:s.rivDone = '\v\C('. riv_file . riv_lnum .')@<=\s*'.all_list.'\s+'
-                \ . td_b_k_done . td_prior . '=%(' . td_tms . td_tms_end . '=)=' 
+    let help_list = '\s*'.all_list.'\s+'
+    let help_todo = help_list. td_b_k . td_prior . '=%('
+                \. td_tms . td_tms_end . '=)='
+    let help_done = help_list. td_b_k_done . td_prior . '=%('
+                \. td_tms . td_tms_end . '=)='
+    let s:p.help_todo_done = '\v\C'.riv_file . riv_lnum
+                \ . help_list . td_b_k_done
+    let s:p.help_prior1 = '\v\C'.help_list. td_b_k . td_prior1
+    let s:p.help_prior2 = '\v\C'.help_list. td_b_k . td_prior2
+    let s:p.help_prior3 = '\v\C'.help_list. td_b_k . td_prior3
+
+    let s:s.rivTodo = '\v\C('. riv_file . riv_lnum .')@<='. help_todo
+    let s:s.rivDone = '\v\C('. riv_file . riv_lnum .')@<='.help_done
     
-    let s:s.rivTodoList = '\v\s*'. all_list.'\s+'
+    let s:s.rivTodoList = '\v'.help_list
     let s:s.rivTodoItem = '\v'.td_b_k
     let s:s.rivTodoPrior = '\v'.td_prior
     let s:s.rivTodoTmBgn = '\v'.td_tms
