@@ -6,8 +6,10 @@ Intro
 :Version: 0.68 
 :Github: https://github.com/Rykka/riv.vim
 
-**Riv** is a vim plugin for managing and writing reStructuredText_ documents.
+**Riv** is for writing and managing documents in vim.
+
 Short for 'reStructuredText in Vim'. 
+As it uses reStructuredText_ syntax.
 
 It is for people either want to writing documents in a neat way,
 or manage documents in a wiki way.
