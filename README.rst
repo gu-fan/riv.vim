@@ -982,7 +982,7 @@ Some wrapper to convert rst files to html/xml/latex/odt/...
 Riv Guide
 ---------
 
-Following features are in documents in a Project.
+Following features are in documents within project.
 
 Some can be used in a document without a project. 
 
@@ -1065,19 +1065,23 @@ The ``bare extension style`` and ``square bracket style``
   + when set to 0, no local file link.
   + default is 1.
 
-* When Publish to html, and it's a file in a project.
-  all detected local file link except the links in a grid table, 
-  will be converted to an embedded link. 
-
-  The links in a grid table should use ``:RivCreateLink`` or ``<C-E>il`` to 
-  convert it manually.
-
-    e.g. `xxx.rst <xxx.html>`_ `xxx.py <xxx.py>`_
+* File link are highlighted and cursor highlighted.
+  See `Cursor Highlighting`_
 
 * To delete a local file in project.
 
   ``:RivDelete`` ``<C-E>df``
   it will also delete all reference to this file in ``index.rst`` of the directory.
+
+* When Publish_ , and it's a file in a project.
+
+  All detected local file link will be converted to an embedded link. 
+  Except the links in a grid table or line of an explicit markup.
+
+  Those links should use ``:RivCreateLink`` or ``<C-E>il`` to 
+  convert it manually.
+
+    e.g. `xxx.rst <xxx.html>`_ `xxx.py <xxx.py>`_
 
 Scratch
 ~~~~~~~
