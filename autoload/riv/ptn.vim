@@ -409,6 +409,7 @@ endfun "}}}
 
 " Test 
 if expand('<sfile>:p') == expand('%:p') 
+    echo '-p xxx   efefe' =~ '\v^\s*%(-\w%( \w+)=|--[[:alnum:]_-]+%(\=\w+)=|/\u)%(, %(-\w%( \w+)=|--[[:alnum:]_.-]+%(\=\w+)=|/\u))*%(  |\t)\ze\s*\S'
     call riv#ptn#init()
 endif
 

@@ -397,7 +397,12 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#definition
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#field-lists
 
 * Option Lists
+
   A list for command-line options and descriptions
+
+  -a         Output all.
+  -b         Output both (this description is
+             quite long).
 
   It is highlighted , not folded.
 
