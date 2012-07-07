@@ -443,6 +443,7 @@ fun! riv#load_conf() "{{{1
     
     " Patterns:
     let s:t.prior_str = g:riv_todo_priorities
+
     call riv#ptn#init()
 
     " Configs: "{{{

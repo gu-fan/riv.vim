@@ -8,9 +8,6 @@
 let s:cpo_save = &cpo
 set cpo-=C
 
-let s:p = g:_riv_p
-let s:s = g:_riv_s
-let s:t = g:_riv_t
 
 " Always use magic
 if !&magic
@@ -76,6 +73,10 @@ endfun "}}}
 
 fun! riv#ptn#init() "{{{
     
+    let s:p = g:_riv_p
+    let s:s = g:_riv_s
+    let s:t = g:_riv_t
+
     " Patterns:  "{{{2
     " Basic: "{{{3
     let s:p.blank = '^\s*$'

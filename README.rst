@@ -483,8 +483,10 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#literal-bl
     | It should have '|' at the begining
     | It can have multiple lines
 
+
   | This is a line block
-  | This is the second line
+
+  | This is the second line (github did not render it correctly as it have div)
 
   It's highlighted and folded. 
 
@@ -510,7 +512,7 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#line-block
 
   The attribution: a text block beginning with "--", "---".::
 
-    -- Attribution
+    -- Attribution (Github did not rendering it correctly as no 'attribution' class)
     
   The attribution is highlighted.
 
@@ -523,7 +525,7 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#block-quot
 >>> print 'this is a Doctest block'
 this is a Doctest block
     
-  It's highlighted but not folded.
+  It's highlighted, not folded.
 
   See `Doctest Blocks`__ for syntax details.
 
