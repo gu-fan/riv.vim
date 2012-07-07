@@ -34,26 +34,25 @@ Features
  
 These features are contained in all reStructuredText files.
 
- :Sections_: Section level and section number auto detected. 
- :Lists_:    Auto Numbered and auto leveled bullet and enumerated list.
+ :Sections_: Fold by it's level, and showing it's section number.
+ :Lists_:    Auto Numbered and auto leveled lists.
  :Blocks_:   Highlighted and folded blocks.
- :Links_:    Jumping with links.
+ :Links_:    Link jumping and cursor_highlighting_
  :Table_:    Auto formatted table.
- :Folding_:  Fold document by document structures (Section/List/Block).
- :Indent_:   Improved indentation 
- :Insert_:   Improvment of some mapping in insert mode.
- :Syntax_:   Improved syntax file. 
- :Publish_:  some wrapper to convert rst files to html/xml/latex/odt/... 
-            (require python docutils package )
-
+ :Folding_:  Folded document structures (Sections/Lists/Blocks).
+ :Indent_:   Smarter indent.
+ :Insert_:   Multi actions in different context.
+ :Syntax_:   Improved highlights to indicate document items.
+ :Publish_:  Some command wrapper to convert rst files to html/xml/latex/odt/... 
+             (require python docutils package )
 
 These features are better working with the project. 
 
- :Project_:  Manage your reStructuredText documents in a wiki way.
- :File_:     Links to local file in rst documents. 
- :Scratch_:  A place for writing diary or hold idea and thoughts.
- :Todos_:    Writing todo lists in reStructuredText documents .
- :Helpers_:  A help window for showing and doing something.
+ :Project_:  Hold your rst documents in place.
+ :File_:     Local file link in rst documents. 
+ :Scratch_:  A place for writing diary or notes.
+ :Todos_:    Keep track of todo things.
+ :Helpers_:  A window to help manage the project.
 
              a. `Todo Helper`_: Managing todo items of project.
 
@@ -126,6 +125,13 @@ This
 
 Things todo in this version.
 
+* 0.69:
+
+  :Indent_: 8b2c4611_ Rewrite the indent for list and insert.
+
+.. _8b2c4611: 
+   https://github.com/Rykka/riv.vim/commit/8b2c4611acf959a28d4413e0131de70b68c9368d
+
 Next 
 ~~~~~
 
@@ -183,14 +189,7 @@ These settings will be automatically on.
 Sections 
 ~~~~~~~~~
 
-Sections are basic document structure.
-
-Section titles are highlighted. 
-
-Section levels and numbers are auto detected.
-Sections are folded by it's section level, 
-and showing it's section number (chapter number) as fold info.
-
+Fold sections by it's level, and showing it's section number.
 
 * Actions:
 
@@ -452,6 +451,8 @@ Blocks
 
 The Block elements of the document.
 
+Highlighted , and most are folded.
+
 * Literal Blocks:
     
   Indented liteal Blocks ::
@@ -563,9 +564,10 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#inline-mar
 Links
 ~~~~~
 
-Links are highlighted in syntax and highlighted with Cursor_Highlighting_.
+You can jumping with links.
 
-And you can jumping with links.
+And it's highlighted with Cursor_Highlighting_.
+
 
 * Actions:
 
@@ -858,7 +860,7 @@ And provide extra infos of them.
 Syntax
 ~~~~~~
 
-Highlights of document items.
+Improved highlights to indicate document items.
 
 .. [Code_Highlighting]
 ..
@@ -902,49 +904,61 @@ Highlights of document items.
 Indent
 ~~~~~~
 
-Improved indent in insert mode.
+Smarter indent in insert mode.
+
+The indenting in reStructuredText is complicated. 
+
+Riv will fixed indent for lines in the context of 
+blocks, list, explicit marks. 
+
+If no fix is needed, use ``shiftwidth``
 
 * Actions:
     
   Insert Mode Only
 
-  + starting newline (``<Enter>`` or ``o`` in Normal mode):
-    will start newline with correct indentation 
-  + ``<BS>`` (BackSpace key).
-    will goto correct indentation if no preceding non-whitespace character
-    and after the indentation's ``&shiftwidth`` position , otherwise ``<BS>``
+  + Newline (``<Enter>`` or ``o`` in Normal mode):
+    will start newline with fixed indentation 
+  + ``<BS>`` (BackSpace key) and ``<S-Tab>`` .
+    will use fixed indentation if no preceding non-whitespace character, 
+    otherwise ``<BS>``
+  + ``<Tab>`` (Tab key).
+    will use fixed indentation if no preceding non-whitespace character, 
+    otherwise ``<Tab>``
   
 
 Insert
 ~~~~~~
 
-Improvment for some mapping in insert mode. Detail commands are in each section.
+Multi actions in different context.
 
-Most shortcuts can be used in insert mode. like ``<C-E>ee`` ``<C-E>s1`` ...
+* Most mappings commands can be used in insert mode. like ``<C-E>ee`` ``<C-E>s1`` ...
 
-* Enter: Insert lists_ with ``<C-Enter>`` , ``<S-Enter>`` and ``<C-S-Enter>``.
-
-  When in a table_, ``<Enter>`` to create a new line
-
-  When not in a table, will start new line with correct indentation
-
-* Tab:  When in a table , ``<Tab>`` to next cell , ``<S-Tab>`` to previous one.
-
-  When not in a table , will act as ``<C-N>`` or ``<C-P>`` if insert-popup-menu 
-  is visible.
-
-  When in a list, and cursor is before the list symbol, will shift the list. 
+* Enter and KEnter (Keypad Enter): 
   
-  Otherwise output a ``<Tab>`` or ``<S-Tab>``
+  + When in a table_, ``<Enter>`` to create a new line
 
-* BackSpace: for indent_, will goto correct indentation if no preceding non-whitespace character and after the indentation's ``&shiftwidth`` position ,
-  otherwise ``<BS>``
+  + When not in a table, will start new line with correct indentation
+
+* Tab and Shift-Tab:  
+  
+  * When in a table , ``<Tab>`` to next cell , ``<S-Tab>`` to previous one.
+  * When not in a table, 
+
+    + If insert-popup-menu is visible, will act as ``<C-N>`` or ``<C-P>`` 
+    + If it's a list, and cursor is before the list symbol, will shift the list. 
+    + if have fixed indent, use it. see indent_.
+    + Otherwise act as ``<Tab>`` and ``<BS>``.
+    
+  :NOTE:  ``<S-Tab>`` act as ``<BS>`` when not in a table and no insert-popup menu.
+
+* BackSpace: use fixed indent. see indent_.
 
 
 Publish
 ~~~~~~~
 
-Some wrapper to convert rst files to html/xml/latex/odt/... 
+Some command wrapper to convert rst files to html/xml/latex/odt/... 
 (require python docutils_  package )
 
 * Actions:
@@ -1114,7 +1128,7 @@ The ``bare extension style`` and ``square bracket style``
 Scratch
 ~~~~~~~
   
-Scratch is a place for writing diary or hold idea and thoughts.
+Scratch is a place for writing diary or notes.
 
 * ``:RivScratchCreate`` ``<C-E>cc``
   Create or jump to the scratch of today.
@@ -1257,10 +1271,12 @@ It is not defined by reStructuredText syntax.
 Helpers
 ~~~~~~~
 
-A window to manage something of the project.
+A window to help manage the project.
 
+.. _Todo Helper:
+..
 
-* _`Todo Helper` : A helper to manage todo items of current project.
+  A helper to manage todo items of current project.
   When current document is not in a project, will show current file's todo items.
 
   See Todos_ for details.

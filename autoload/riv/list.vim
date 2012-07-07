@@ -506,7 +506,13 @@ fun! riv#list#toggle_type(i) "{{{
 endfun "}}}
 
 fun! riv#list#fixed_col(row,col,sft) "{{{
-    
+    " add prev line idt
+    " check block indent
+    " if it's in list context
+    "   if row is not list, use it's indent
+    "   if row is list , use parent indent when "-" 
+    "                    use older indent when "+"
+    " else check exp mark
     let pnb_row = prevnonblank(a:row - 1)
     if pnb_row == 0
         return a:col + a:sft
@@ -538,8 +544,10 @@ fun! riv#list#fixed_col(row,col,sft) "{{{
         endif
     else
         let exp_row = riv#ptn#get(g:_riv_p.exp_mark, a:row)
-        let exp_cdt = riv#ptn#exp_con_idt(getline(exp_row))
-        let f_idts += [exp_cdt]
+        if exp_row
+            let exp_cdt = riv#ptn#exp_con_idt(getline(exp_row))
+            let f_idts += [exp_cdt]
+        endif
     endif
 
     return riv#ptn#fix_sfts(a:col,f_idts,a:sft)
