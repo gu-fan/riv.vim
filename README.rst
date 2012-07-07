@@ -37,7 +37,7 @@ These features are contained in all reStructuredText files.
  :Sections_: Fold by it's level, and showing it's section number.
  :Lists_:    Auto Numbered and auto leveled lists.
  :Blocks_:   Highlighted and folded blocks.
- :Links_:    Link jumping and cursor_highlighting_
+ :Links_:    Link jumping and cursor-highlighting_
  :Table_:    Auto formatted table.
  :Folding_:  Folded document structures (Sections/Lists/Blocks).
  :Indent_:   Smarter indent.
@@ -546,7 +546,7 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#doctest-bl
   See `Explicit Markup Blocks`__ for syntax details.
 
   And for the ``code`` directives, syntax highlighting is on. 
-  See Code_Highlighting_  for details.
+  See Code-Highlighting_  for details.
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#explicit-markup-blocks
 
@@ -566,7 +566,7 @@ Links
 
 You can jumping with links.
 
-And it's highlighted with Cursor_Highlighting_.
+And it's highlighted with Cursor-Highlighting_.
 
 
 * Actions:
@@ -862,7 +862,7 @@ Syntax
 
 Improved highlights to indicate document items.
 
-.. [Code_Highlighting]
+.. [Code-Highlighting]
 ..
 
    For the ``code`` directives (also ``sourcecode`` and ``code-block``). 
@@ -884,7 +884,7 @@ Improved highlights to indicate document items.
 
           See http://docutils.sourceforge.net/sandbox/code-block-directive/tools/pygments-enhanced-front-ends/
 
-.. [Cursor_Highlighting]
+.. [Cursor-Highlighting]
 .. 
 
    Some item that could interactive with cursor are highlighted when cursor is on.
@@ -1108,7 +1108,7 @@ The ``bare extension style`` and ``square bracket style``
   + default is 1.
 
 * File link are highlighted and cursor highlighted.
-  See Cursor_Highlighting_
+  See Cursor-Highlighting_
 
 * To delete a local file in project.
 
