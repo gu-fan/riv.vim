@@ -678,7 +678,7 @@ For Grid table, it is auto formatted.
 
     Insert Mode Only:
 
-    To create a table , just insert ``| xxx |`` and press ``<Enter>``.
+    To create a table , just insert ``| xxx |`` and escape insert mode.
 
     It will be autoformatted after Leave Insert Mode 
     or pressing ``<Enter>`` or ``<Tab>`` ::

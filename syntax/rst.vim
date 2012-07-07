@@ -38,13 +38,13 @@ syn region  rstQuotedLiteralBlock   matchgroup=rstDelimiter
 syn region  rstDoctestBlock         display matchgroup=rstDelimiter
       \ start='^>>>\s' end='^\s*$'
 
-syn region  rstTable                transparent start='\%(\_^\s*\n\)\@<=\s*+[-=+]\+' end='^$'
+syn region  rstTable                transparent start='\%(\_^\s*\n\)\@<=\s*+[-=+]\+' end='^\s*$'
       \ contains=rstTableLines,@rstCruft
 syn match   rstTableLines           contained display '|\|+\%(=\+\|-\+\)\='
 
 syn region  rstSimpleTable          transparent
       \ start='\%(\_^\s*\)\@<=\%(\%(=\+\)\@>\%(\s\+\)\@>\)\%(\%(\%(=\+\)\@>\%(\s*\)\@>\)\+\)\@>$'
-      \ end='^$'
+      \ end='^\s*$'
       \ contains=rstSimpleTableLines,@rstCruft
 syn match   rstSimpleTableLines     contained display
       \ '\%(\_^\s*\)\@<=\%(\%(=\+\)\@>\%(\s\+\)\@>\)\%(\%(\%(=\+\)\@>\%(\s*\)\@>\)\+\)\@>$'
