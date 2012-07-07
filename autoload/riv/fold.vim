@@ -8,7 +8,7 @@ let s:cpo_save = &cpo
 set cpo-=C
 
 let s:p = g:_riv_p
-fun! s:init_stat() "{{{
+fun! s:init_stat(...) "{{{
     let len = line('$')
     let b:foldlevel = g:riv_fold_level
     if len > g:riv_auto_fold1_lines && g:riv_auto_fold_force == 1
@@ -17,7 +17,7 @@ fun! s:init_stat() "{{{
         let b:foldlevel = b:foldlevel >= 2 ? 2 : 0 
     endif
 
-    if !exists("b:fdl_list") || len(b:fdl_list)!=len+1 || g:_riv_debug
+    if !exists("b:fdl_list") || len(b:fdl_list)!=len+1 || ( a:0 && a:1 )
         call s:parse_from_start()
     endif
 endfun "}}}
