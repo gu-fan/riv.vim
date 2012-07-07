@@ -48,7 +48,7 @@ exe 'syn match rstTodoPrior `'.s:s.rstTodoPrior.'` contained nextgroup=rstTodoTm
 exe 'syn match rstTodoTmBgn `'.s:s.rstTodoTmBgn.'` contained nextgroup=rstTodoTmEnd'
 exe 'syn match rstTodoTmEnd `'.s:s.rstTodoTmEnd.'` contained'
 
-exe 'syn match rstDoneRegion `' . s:s.rstDoneRegion .'` transparent contains=@rstTodoGroup'
+exe 'syn match rstDoneRegion `' . s:s.rstDoneRegion .'`'
 
 " Highlights: "{{{1
 if &background == 'light'

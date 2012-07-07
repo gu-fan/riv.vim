@@ -109,7 +109,7 @@ Things todo in this version.
 * 0.68:
     
     :Patterns:  DONE 2012-07-07 a2334f7b_ Rewrite the pattern and syntax patterns part. 
-    :Todos_:    DONE 2012-07-07 a2334f7b_ Rewrite todo and todo helper.Add Todo Prior. 
+    :Todos_:    DONE 2012-07-07 a2334f7b_ Rewrite todo and todo helper.Add Todo Priorities. 
     :Syntax_:   DONE 2012-07-07 a2334f7b_ Cursor highlight will highlight the todo item 
     :Syntax_:   DONE 2012-07-07 a2334f7b_ Cursor highlight will check it's valid file
     :Lists_:    DONE 2012-07-07 0a959662_ Add list types 0 ~ 4 
