@@ -2,8 +2,8 @@ Intro
 =====
 
 :Author: Rykka G.Forest
-:Date:   2012-07-01 02:59:36
-:Version: 0.67 
+:Date:   2012-07-07 12:31:41
+:Version: 0.68 
 :Github: https://github.com/Rykka/riv.vim
 
 **Riv** is a vim plugin for managing and writing reStructuredText_ documents.
@@ -141,18 +141,9 @@ Instruction
 
   + If you are not familiar with reStructuredText, see QuickStart_
 
-  + For writing documents,
+  + For writing documents, See detail instruction in `reStructuredText Guide`_
 
-    When editing an reStructuredText document (``*.rst`` ), 
-
-    These settings will be automatically on. 
-    (make sure ``filetype on`` in your vimrc)
-
-    See detail instruction in `reStructuredText Guide`_
-
-  + For managing documents, 
-
-    See detail instruction in `Riv Guide`_
+  + For managing documents, See detail instruction in `Riv Guide`_
 
 * About the mapping
 
@@ -179,7 +170,13 @@ Instruction
 reStructuredText Guide
 ----------------------
 
-These features are in all reStructuredText files.
+Following features are in all reStructuredText files.
+
+When editing an reStructuredText document (``*.rst`` ), 
+
+These settings will be automatically on. 
+
+:NOTE: make sure ``filetype plugin indent on`` and ``syntax on`` is in your vimrc
 
 Sections 
 ~~~~~~~~~
@@ -236,7 +233,7 @@ and showing it's section number (chapter number) as fold info.
     default is ``"-"``
 
 
-See `reStructuredText sections`__
+See `reStructuredText sections`__ for syntax details.
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#sections
 
@@ -364,7 +361,7 @@ Intro of each list type.
 
   It is highlighted, folded. And auto leveled.
 
-  See `Bullet Lists`__ 
+  See `Bullet Lists`__  for syntax details.
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#bullet-lists
 
@@ -375,7 +372,7 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#bullet-lis
 
    It is highlighted, folded. auto numbered and auto leveled.
     
-   See `Enumerated Lists`__ 
+   See `Enumerated Lists`__  for syntax details.
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#enumerated-lists
 
@@ -384,7 +381,7 @@ Definition Lists
 
     It is highlighted, not folded.
 
-    See `Definition Lists`__ 
+    See `Definition Lists`__  for syntax details.
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#definition-lists
 
@@ -395,7 +392,7 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#definition
 
                 Bibliographic Fields items are highlighted in another color.
 
-                See `Field Lists`__ 
+                See `Field Lists`__  for syntax details.
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#field-lists
 
@@ -404,7 +401,7 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#field-list
 
   It is highlighted , not folded.
 
-  See `Option Lists`__ 
+  See `Option Lists`__  for syntax details.
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#option-lists
 
@@ -472,7 +469,7 @@ The Block elements of the document.
 
   It's highlighted and folded.
 
-  See `Literal Blocks`__
+  See `Literal Blocks`__ for syntax details.
     
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#literal-blocks
 
@@ -489,7 +486,7 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#literal-bl
   :Note: for speed considering , the blank line between line blocks are ignored
          as they are a single line block.
 
-  See `Line Blocks`__
+  See `Line Blocks`__ for syntax details.
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#line-blocks
 
@@ -512,7 +509,7 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#line-block
     
   The attribution is highlighted.
 
-  See `Block Quotes`__
+  See `Block Quotes`__ for syntax details.
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#block-quotes
 
@@ -523,7 +520,7 @@ this is a Doctest block
     
   It's highlighted but not folded.
 
-  See `Doctest Blocks`__
+  See `Doctest Blocks`__ for syntax details.
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#doctest-blocks
 
@@ -537,10 +534,10 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#doctest-bl
 
   It's folded , and it's highlighted depending on it's role.
 
-  See `Explicit Markup Blocks`__
+  See `Explicit Markup Blocks`__ for syntax details.
 
   And for the ``code`` directives, syntax highlighting is on. 
-  See `code syntax highlighting`_ 
+  See `code syntax highlighting`_  for syntax details.
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#explicit-markup-blocks
 
@@ -551,7 +548,7 @@ Inline Markup are highlighted.
 
 Maybe an option for conceal in the future.
 
-See `inline markup`__
+See `inline markup`__ for syntax details.
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#inline-markup
 
@@ -627,7 +624,7 @@ And you can jumping with links.
                             Standalone hyperlinks
             xxx@ccc.com     Email adress as mailto:xxx@ccc.com
 
-       See `Hyperlink References`_
+       See `Hyperlink References`_ for syntax details.
 
        There are implicit hyperlink targets and explicit hyperlink targets.
 
@@ -640,7 +637,7 @@ And you can jumping with links.
         .. __: anonymous-hyperlink-target-link-block
         _`an inline hyperlink target`
             
-       See `Hyperlink targets`_
+       See `Hyperlink targets`_ for syntax details.
 
 .. _Hyperlink References:
    http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#hyperlink-references
@@ -695,7 +692,7 @@ For Grid table, it is auto formatted.
     | Cells  | <Tab> and <S-Tab> in table will switch to next/prev cell  |
     +--------+-----------------------------------------------------------+
 
-    See `Grid Tables`__
+    See `Grid Tables`__ for syntax details.
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#grid-tables
 
@@ -730,7 +727,7 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#grid-table
   ===========  ========================
 
 
-    See `Simple Tables`__
+    See `Simple Tables`__ for syntax details.
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#simple-tables
 
@@ -893,6 +890,7 @@ Improved indent in insert mode.
     will goto correct indentation if no preceding non-whitespace character
     and after the indentation's ``&shiftwidth`` position , otherwise ``<BS>``
   
+
 Insert
 ~~~~~~
 
@@ -984,9 +982,9 @@ Some wrapper to convert rst files to html/xml/latex/odt/...
 Riv Guide
 ---------
 
-These features are for documents in a Riv Project, 
-Though some can be used in a document without a project. 
-They have no full support.
+Following features are in documents in a Project.
+
+Some can be used in a document without a project. 
 
 Project
 ~~~~~~~
@@ -1230,7 +1228,7 @@ A window to show something of the project.
 * _`Todo Helper` : A helper to manage todo items of current project.
   When current file is not in a project, will show current file's todo items.
 
-  See Todos_
+  See Todos_ for details.
 
   + ``:RivTodoHelper`` or ``<C-E>ht``
     Open to view all todo-items.
