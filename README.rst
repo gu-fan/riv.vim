@@ -113,7 +113,11 @@ Things todo in this version.
     :Syntax_:   DONE 2012-07-07 a2334f7b_ Cursor highlight will highlight the todo item 
     :Syntax_:   DONE 2012-07-07 a2334f7b_ Cursor highlight will check it's valid file
     :Lists_:    DONE 2012-07-07 0a959662_ Add list types 0 ~ 4 
+    :Todos_:    DONE 2012-07-07 142b6c49_ Add Prior in helpr
 
+
+.. _142b6c49: 
+    https://github.com/Rykka/riv.vim/commit/142b6c496b5050150a6b77eeed48e0ade79fc329
 
 .. _0a959662: 
     https://github.com/Rykka/riv.vim/commit/0a95966247048e11d947fdeb4a2189e17c00d791

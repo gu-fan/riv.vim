@@ -475,9 +475,8 @@ fun! riv#todo#syn_hi() "{{{
 endfun "}}}
 "}}}
 fun! riv#todo#todo_helper() "{{{
-    " TODO: Create more actions.
-    let s:todo = riv#helper#new()
     let All = s:load_todo()
+    let s:todo = riv#helper#new()
     let Todo = filter(copy(All),'v:val!~s:p.help_todo_done ')
     let Done = filter(copy(All),'v:val=~s:p.help_todo_done ') 
     let Prior1 = filter(copy(All),'v:val=~s:p.help_prior1 ') 
