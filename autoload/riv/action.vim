@@ -37,70 +37,61 @@ fun! riv#action#db_click(mouse) "{{{
         endif
     endif
 endfun "}}}
-
 fun! s:is_in_sect_title(row) "{{{
    return exists("b:riv_obj") && has_key(b:riv_obj, a:row)
                \ && b:riv_obj[a:row].type =='sect'
 endfun "}}}
-fun! riv#action#ins_bs() "{{{
-    let [row,col]  = getpos('.')[1:2]
-    let line = getline('.')
 
-    " if it's empty before cursor.
-    if line[:col-1] =~ '^\s*$'
-        let norm_tab = repeat(' ',&sw)
-        let norm_col  = substitute(line[:col-1],'\t', norm_tab ,'g')
-        let norm_col_len  = len(norm_col)
-        let ind = riv#insert#fix_indent(row)
-        call cursor(row,col)
-        if ind < norm_col_len && (ind + &sw) > norm_col_len
-            return repeat("\<Left>\<Del>", (norm_col_len - ind))
-        endif
-    endif
-    return "\<BS>"
+fun! s:cmd_table_new_line(row,col) "{{{
+    let cmd  = "\<C-O>:call riv#table#newline()|"
+    let cmd .= "call cursor(".(a:row+1).",".a:col.")|"
+    let cmd .= "call search(g:_riv_p.cell0,'Wbc')\<CR>"
+    return cmd
 endfun "}}}
+
 fun! riv#action#ins_enter() "{{{
-    let [row,col] = getpos('.')[1:2]
     if getline('.') =~ g:_riv_p.table
-        let cmd  = "\<C-O>:call riv#table#newline()|"
-        let cmd .= "call cursor(".(row+1).",".col.")|"
-        let cmd .= "call search(g:_riv_p.cell0,'Wbc')\<CR>"
-        return cmd
+        let [row,col] = getpos('.')[1:2]
+        return s:cmd_table_new_line(row,col)
     else
         return  "\<Enter>"
     endif
 endfun "}}}
 fun! riv#action#ins_c_enter() "{{{
     let line = getline('.')
-    if line=~ '\S'
-        let cmd = "\<CR>"
-    else
-        let cmd = ''
+    if getline('.') =~ g:_riv_p.table
+        let [row,col] = getpos('.')[1:2]
+        return s:cmd_table_new_line(row,col)
     endif
+    let cmd = line=~ '\S' ? "\<CR>" : ''
     let cmd .= "\<C-O>:call riv#list#new(0)\<CR>\<Esc>A"
     return cmd
 endfun "}}}
 fun! riv#action#ins_s_enter() "{{{
     let line = getline('.')
-    if line=~ '\S'
-        let cmd = "\<CR>\<CR>"
-    else
-        let cmd = ''
+    if getline('.') =~ g:_riv_p.table
+        let [row,col] = getpos('.')[1:2]
+        return s:cmd_table_new_line(row,col)
     endif
+    let cmd = line=~ '\S' ? "\<CR>\<CR>" : ''
     let cmd .= "\<C-O>:call riv#list#new(1)\<CR>\<Esc>A"
     return cmd
 endfun "}}}
 fun! riv#action#ins_m_enter() "{{{
     let line = getline('.')
-    if line=~ '\S'
-        let cmd = "\<CR>\<CR>"
-    else
-        let cmd = ''
+    if getline('.') =~ g:_riv_p.table
+        let [row,col] = getpos('.')[1:2]
+        return s:cmd_table_new_line(row,col)
     endif
+    let cmd = line=~ '\S' ? "\<CR>\<CR>" : ''
     let cmd .= "\<C-O>:call riv#list#new(-1)\<CR>\<Esc>A"
     return cmd
 endfun "}}}
 
+
+fun! riv#action#ins_backspace() "{{{
+    return riv#insert#shiftleft()
+endfun "}}}
 
 fun! riv#action#ins_tab() "{{{
     if riv#table#nextcell()[0] == 0
@@ -111,7 +102,7 @@ fun! riv#action#ins_tab() "{{{
             if col('.') <= matchend(getline('.'), g:_riv_p.all_list)
                 return "\<C-O>:call riv#list#shift('+')\<CR>"
             else
-                return "\<Tab>"
+                return riv#insert#shiftright()
             endif
         endif
     else
@@ -127,7 +118,7 @@ fun! riv#action#ins_stab() "{{{
             if col('.') <= matchend(getline('.'), g:_riv_p.all_list)
                 return "\<C-O>:call riv#list#shift('-')\<CR>"
             else
-                return "\<S-Tab>"
+                return riv#insert#shiftleft()
             endif
         endif
     else

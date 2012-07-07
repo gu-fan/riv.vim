@@ -103,11 +103,6 @@ Prev
 
 See Changelog in doc/riv_log.rst riv_log_
 
-This
-~~~~~
-
-Things todo in this version.
-
 * 0.68:
     
   :Patterns:  DONE 2012-07-07 a2334f7b_ Rewrite the pattern and syntax patterns part. 
@@ -125,6 +120,11 @@ Things todo in this version.
     https://github.com/Rykka/riv.vim/commit/0a95966247048e11d947fdeb4a2189e17c00d791
 .. _a2334f7b:
     https://github.com/Rykka/riv.vim/commit/a2334f7b98e9ce83c06d95e7552a13ac6c2c1cd4
+
+This
+~~~~~
+
+Things todo in this version.
 
 Next 
 ~~~~~
@@ -748,8 +748,12 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#simple-tab
 Folding 
 ~~~~~~~~
 
-**Folding** is a vim feature,
-it allow you to display a section as one line to get an overview.
+**Folding** is a vim feature 
+to display a range of lines as single line.
+
+Then you can get a better overview of the strucutre of documents.
+
+And manage the folded structure with actions like: select, copy, paste... as one line.
 
 Riv fold reStructuredText file with sections, lists, and blocks automatically,
 And provide extra infos of them.
@@ -804,7 +808,6 @@ And provide extra infos of them.
   
     - when set to ``left``, these info will be shown at left side.
     - default is ``right``
-  
   
   
 * Options:
@@ -994,8 +997,12 @@ Some wrapper to convert rst files to html/xml/latex/odt/...
     - Also no local file link will be converted.
 
 :NOTE: When converting, It will first try ``rst2xxxx2.py`` , then try ``rst2xxxx.py``
-       You should install the package of python 2 version .
-       Otherwise errors will occour.
+
+       You'd better install the package of python 2 version. 
+
+       And make sure it's in your ``$PATH``
+
+       Otherwise errors may occour.
 
 .. _docutils: http://docutils.sourceforge.net/
 .. _pygments: http://pygments.org/

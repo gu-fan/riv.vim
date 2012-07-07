@@ -259,7 +259,7 @@ let s:default.buf_maps = {
     \'RivTestInsert'     : ['',  'm',   'ti'],
     \}
 let s:default.buf_imaps = {
-    \'<BS>'         : 'riv#action#ins_bs()'      ,
+    \'<BS>'         : 'riv#action#ins_backspace()',
     \'<CR>'         : 'riv#action#ins_enter()'   ,
     \'<KEnter>'     : 'riv#action#ins_enter()'   ,
     \'<C-CR>'       : 'riv#action#ins_c_enter()' ,

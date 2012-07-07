@@ -104,6 +104,7 @@ TODOS
 13. Publish
 
     + Publish: An option to enable highlighting todo items.
+    + the temp path should be validated.
 
 14. Helpers
 

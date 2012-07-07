@@ -169,7 +169,21 @@ fun! s:buf_get_child(row) "{{{
     endif
     
 endfun "}}}
+
+fun! riv#list#get_all_list(row) "{{{
+    return s:get_all_list(a:row)
+endfun "}}}
+fun! riv#list#get_list(row) "{{{
+    return s:get_list(a:row)
+endfun "}}}
+fun! riv#list#get_older(row) "{{{
+    return s:get_older(a:row)
+endfun "}}}
+fun! riv#list#get_parent(row) "{{{
+    return s:get_parent(a:row)
+endfun "}}}
 "}}}
+
 
 " List: "{{{
 fun! riv#list#new(act) "{{{
@@ -491,52 +505,64 @@ fun! riv#list#toggle_type(i) "{{{
     endif
 endfun "}}}
 
-fun! riv#list#shift(direction) range "{{{
-    " Direction "+" or "-" or "="
-    " 
-    " if firstline is list 
-    "   indent based on parent item when shift -
-    "   indent based on older item when shift +
-    " else
-    "   if it's in list then will fix the idt.
-    "   else based on shiftwidth
-    "   
-    " the list in it will fix it's level and number 
-    " also fix indent as the list changes level will change the sub item's
-    " indent
-    let line = getline(a:firstline) 
-    if a:direction != "="
-        let list = s:get_list(a:firstline)
-        let ln = &shiftwidth
-        if list && list != a:firstline
-            let l_idt = indent(list)
-            let c_idt = indent(a:firstline)
-            let f_idt = matchend(getline(list), s:p.b_e_list)
-            if (a:direction=='+' && c_idt<f_idt && c_idt+ln>f_idt)
-            \ || (a:direction=='-' && c_idt>f_idt && c_idt-ln<f_idt)
-                let ln =  abs(f_idt - c_idt)
-            endif
-        endif
+fun! riv#list#fixed_col(row,col,sft) "{{{
+    
+    let pnb_row = prevnonblank(a:row - 1)
+    if pnb_row == 0
+        return a:col + a:sft
     endif
-    if a:direction=='-' && list == a:firstline
-        let prev = s:get_parent(a:firstline)
-        " shift to parent if has parent, and the sft is smaller or equal than idt
-        if prev 
-            let sft = indent(a:firstline) - indent(prev)
-            if sft <= ln
-                let ln = sft
-            endif
-        endif
-    elseif a:direction == "+" && list == a:firstline
-        let older = s:get_older(a:firstline)
-        if older 
-            " if has older , use older's item length
-            let ln = matchend(getline(older), s:p.b_e_list) - indent(older)
-        endif
+    let f_idts = [indent(pnb_row)+1]
+    
+    let blk_row = riv#ptn#get(g:_riv_p.literal_block, a:row)
+    if blk_row
+        let f_idts += [indent(blk_row)+1+&sw]
     endif
-    let vec = a:direction=="-" ? -ln : a:direction=="+"  ? ln : 0
 
-    " A shifting idt fix list
+    let lst_row = riv#list#get_all_list(a:row)
+    if lst_row 
+        if a:row != lst_row
+            let lst_idt = indent(lst_row)+1
+            let lst_cdt  =riv#list#get_con_idt(getline(lst_row))
+            let f_idts += [lst_idt,lst_cdt]
+        else
+            if a:sft > 0 
+                let old_row = riv#list#get_older(lst_row)
+            elseif a:sft < 0
+                let old_row = riv#list#get_parent(lst_row)
+            endif
+            if exists("old_row") && old_row
+                let old_idt = indent(old_row)+1
+                let old_cdt  =riv#list#get_con_idt(getline(old_row))
+                let f_idts += [old_idt, old_cdt]
+            endif
+        endif
+    else
+        let exp_row = riv#ptn#get(g:_riv_p.exp_mark, a:row)
+        let exp_cdt = riv#ptn#exp_con_idt(getline(exp_row))
+        let f_idts += [exp_cdt]
+    endif
+
+    return riv#ptn#fix_sfts(a:col,f_idts,a:sft)
+endfun "}}}
+fun! riv#list#fixed_sft(row,col,sft) "{{{
+    return riv#list#fixed_col(a:row,a:col,a:sft) - a:col
+endfun "}}}
+
+fun! riv#list#shift(direction) range "{{{
+    " direction "+" or "-" or "="
+    let line = getline(a:firstline) 
+    let [row,col]  = [a:firstline, indent(a:firstline)+1]
+
+    " calculate shifting with a:firstline
+    if a:direction == '+'
+        let vec = riv#list#fixed_sft(row,col,&sw)
+    elseif a:direction == "-"
+        let vec = riv#list#fixed_sft(row,col,-&sw)
+    else
+        let vec = 0
+    endif
+
+    " A fix shift idt list
     " [0,fix1,fix2,....] 
     " each item's index is one indent level,
     " the value is for the line which > the indent.
@@ -550,19 +576,19 @@ fun! riv#list#shift(direction) range "{{{
     "   
     " apply sft_fix[c_idt-1] 
     " if it's a list , calc the new idt (sft_fix[c_idt-1] + n_item_len-p_item_len ) 
-    " 
+    
     let s:sft_fix = [0]
     if a:firstline == a:lastline
-        call s:list_shift_len(a:firstline, vec,0)
+        call s:shift_vec(a:firstline, vec,0)
         call cursor(line('.'), col('.')+vec)
     else
         for line in range(a:firstline,a:lastline)
-            call s:list_shift_len(line, vec,1)
+            call s:shift_vec(line, vec,1)
         endfor
         normal! gv
     endif
 endfun "}}}
-fun! s:list_shift_len(row,vec,...) "{{{
+fun! s:shift_vec(row,vec,...) "{{{
     let line = getline(a:row)
     if line =~ '^\s*$' | return | endif
 
@@ -633,6 +659,10 @@ fun! s:set_idt(line, indent) "{{{
     else
         return substitute(a:line, '^\s*', '', '')
     endif
+endfun "}}}
+
+fun! riv#list#get_con_idt(line) "{{{
+    return matchend(a:line, s:p.all_list)+1  
 endfun "}}}
 
 fun! s:SID() "{{{

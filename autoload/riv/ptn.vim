@@ -401,11 +401,113 @@ fun! riv#ptn#init() "{{{
     let s:s.rstTodoTmEnd = s:s.rivTodoTmEnd
 
     "}}}
-
+    "}}}
 endfun "}}}
 
 fun! riv#ptn#strip(str) "{{{
     return matchstr(a:str, '^\s*\zs.\{-}\ze\s*$')
+endfun "}}}
+
+
+fun! riv#ptn#exp_con_idt(line) "{{{
+    return matchend(a:line, g:_riv_p.exp_mark)+1
+endfun "}}}
+
+fun! riv#ptn#get(ptn,row) "{{{
+    
+    let row = prevnonblank(a:row)
+
+    let save_pos = getpos('.')
+    call cursor(row,1)
+
+    while getline(row) !~ a:ptn && row != 0
+        let idt = indent(row)
+        if idt == 0 
+            let row = 0
+            break
+        endif
+        let idt_ptn = '^\s\{,'.(idt-1).'}\S'
+        let [row, col] = searchpos(idt_ptn, 'b',0,100)
+    endwhile
+    
+    call setpos('.',save_pos)
+
+    return row
+endfun "}}}
+
+fun! s:get_exp(row) "{{{
+    " return the row contain current exp contex 
+    let row = prevnonblank(a:row)
+
+    let save_pos = getpos('.')
+    call cursor(row,1)
+
+    while getline(row) !~ s:p.exp_mark && row != 0
+        let idt = indent(row)
+        if idt == 0 
+            let row = 0
+            break
+        endif
+        let idt_ptn = '^\s\{,'.(idt-1).'}\S'
+        let [row, col] = searchpos(idt_ptn, 'b',0,100)
+    endwhile
+    
+    call setpos('.',save_pos)
+
+    return row
+    
+endfun "}}}
+fun! s:get_block(row) "{{{
+    " return the row contain current block contex
+    
+    let row = prevnonblank(a:row)
+
+    let save_pos = getpos('.')
+    call cursor(row,1)
+
+    while getline(row) !~ s:p.literal_block && row != 0
+        let idt = indent(row)
+        if idt == 0 
+            let row = 0
+            break
+        endif
+        let idt_ptn = '^\s\{,'.(idt-1).'}\S'
+        let [row, col] = searchpos(idt_ptn, 'b',0,100)
+    endwhile
+    
+    call setpos('.',save_pos)
+
+    return row
+endfun "}}}
+
+fun! riv#ptn#fix_sft(c_col,f_col,sft) "{{{
+    if (a:sft > 0 && a:c_col < a:f_col && a:c_col+a:sft >= a:f_col)
+        \|| (a:sft < 0 && a:c_col > a:f_col && a:c_col+a:sft <= a:f_col)
+        return a:f_col
+    else
+        return a:c_col + a:sft
+    endif
+endfun "}}}
+fun! riv#ptn#fix_sfts(col,f_cols,sft) "{{{
+    " find the first f_col close to col
+    let b_col = a:col
+    if a:sft >= 0
+        for f_col in sort(a:f_cols)
+            if a:col < f_col
+                let b_col = f_col
+                break
+            endif
+        endfor
+    else
+        for f_col in reverse(sort(a:f_cols))
+            if a:col > f_col
+                let b_col = f_col
+                break
+            endif
+        endfor
+    endif
+
+    return riv#ptn#fix_sft(a:col,b_col,a:sft)
 endfun "}}}
 
 " Test 
@@ -413,9 +515,6 @@ if expand('<sfile>:p') == expand('%:p')
     echo '-p xxx   efefe' =~ '\v^\s*%(-\w%( \w+)=|--[[:alnum:]_-]+%(\=\w+)=|/\u)%(, %(-\w%( \w+)=|--[[:alnum:]_.-]+%(\=\w+)=|/\u))*%(  |\t)\ze\s*\S'
     call riv#ptn#init()
 endif
-
-
-
 
 let &cpo = s:cpo_save
 unlet s:cpo_save

@@ -10,6 +10,10 @@ set cpo-=C
 let s:p = g:_riv_p
 let s:list_or_nonspace = s:p.all_list.'|^\S'
 
+let s:f_cols = []
+let s:f_row = 0
+let s:f_buf = 0
+
 " for new line's indent
 fun! riv#insert#indent(row) "{{{
     let pnb_num = prevnonblank(a:row - 1)
@@ -81,8 +85,6 @@ endfun "}}}
 " indent for the same line action
 fun! riv#insert#fix_indent(row) "{{{
     
-    " return GetRSTIndent(a:row)
-    " have some fix for insert with GetRSTIndent.
     let pnb_num = prevnonblank(a:row - 1)
     if pnb_num == 0
         return 0
@@ -141,5 +143,81 @@ fun! riv#insert#fix_indent(row) "{{{
     return ind
 endfun "}}}
 
+" indent for the same line action advanced.
+fun! riv#insert#fixed_col(row,col,sft) "{{{
+    " return with fix indentation with row col and direction
+    " context is the item with smaller indentation (parent)
+    " find all possible context of current row
+    if s:f_row == a:row && s:f_buf == bufnr('%')
+        return riv#ptn#fix_sfts(a:col, s:f_cols, a:sft)
+    endif
+    let pnb_row = prevnonblank(a:row - 1)
+    if pnb_row == 0
+        return a:col + a:sft
+    endif
+    let f_idts = [indent(pnb_row)+1]
+
+    let blk_row = riv#ptn#get(g:_riv_p.literal_block, a:row)
+    if blk_row
+        let f_idts += [indent(blk_row)+1+&sw]
+    endif
+    let lst_row = riv#list#get_all_list(a:row)
+    if lst_row 
+        let lst_idt = indent(lst_row)+1
+        let lst_cdt  =riv#list#get_con_idt(getline(lst_row))
+        let f_idts += [lst_idt,lst_cdt]
+        let par_row = riv#list#get_parent(lst_row)
+        if par_row
+            let par_idt = indent(par_row)+1
+            let par_cdt  =riv#list#get_con_idt(getline(par_row))
+            let f_idts += [par_idt, par_cdt]
+        endif
+    else
+        let exp_row = riv#ptn#get(g:_riv_p.exp_mark, a:row)
+        let exp_cdt = riv#ptn#exp_con_idt(getline(exp_row))
+        let f_idts += [exp_cdt]
+    endif
+
+    let s:f_cols = f_idts
+    let s:f_row = a:row
+    let s:f_buf = bufnr('%')
+    return riv#ptn#fix_sfts(a:col,f_idts,a:sft)
+    
+endfun "}}}
+fun! riv#insert#fixed_sft(row,col,sft) "{{{
+    return riv#insert#fixed_col(a:row,a:col,a:sft) - a:col
+endfun "}}}
+fun! riv#insert#get_fidt() "{{{
+    return riv#insert#fixed_col(line('.'),col('.'),&sw)
+endfun "}}}
+
+fun! riv#insert#shiftleft() "{{{
+    let sft =  -&sw
+    let [row,col]  = getpos('.')[1:2]
+    let line = getline('.')
+    if line[:col-2] =~ '^\s*$'
+        let fix_sft = riv#insert#fixed_sft(row,col,sft)
+        if fix_sft != sft && fix_sft!=0
+            return repeat("\<Left>\<Del>", abs(fix_sft))
+        endif
+    endif
+    return "\<BS>"
+endfun "}}}
+                                            
+fun! riv#insert#shiftright() "{{{
+    let sft =  &sw
+    let [row,col]  = getpos('.')[1:2]
+    let line = getline('.')
+    if line[:col-2] =~ '^\s*$'
+        let fix_sft = riv#insert#fixed_sft(row,col,sft)
+        if fix_sft != sft && fix_sft!=0
+            return repeat("\<Space>", abs(fix_sft))
+        endif
+    endif
+    return "\<Tab>"
+endfun "}}}
+if expand('<sfile>:p') == expand('%:p') 
+
+endif
 let &cpo = s:cpo_save
 unlet s:cpo_save
