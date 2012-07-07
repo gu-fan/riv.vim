@@ -30,11 +30,11 @@ Screenshot
 Features
 --------
  
-These features are for all reStructuredText files.
+These features are contained in all reStructuredText files.
 
  :Sections_: Section level and section number auto detected. 
  :Lists_:    Auto Numbered and auto leveled bullet and enumerated list.
- :Blocks_:   Highlighting and folding blocks.
+ :Blocks_:   Highlighted and folded blocks.
  :Links_:    Jumping with links.
  :Table_:    Auto formatted table.
  :Folding_:  Fold document by document structures (Section/List/Block).
@@ -45,7 +45,7 @@ These features are for all reStructuredText files.
             (require python docutils package )
 
 
-These features are for the Riv Project. 
+These features are better working with the project. 
 
  :Project_:  Manage your reStructuredText documents in a wiki way.
  :File_:     Links to local file in rst documents. 
@@ -79,9 +79,9 @@ Install
 * Recommend plugins: 
 
   + Syntastic_  for syntax checking of rst files.
-    (require python docutils package )
+    (require python docutils_ package )
 
-    .. _Syntastic: https://github.com/scrooloose/syntastic
+.. _Syntastic: https://github.com/scrooloose/syntastic
 
 Issues
 ------
@@ -544,7 +544,7 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#doctest-bl
   See `Explicit Markup Blocks`__ for syntax details.
 
   And for the ``code`` directives, syntax highlighting is on. 
-  See `code syntax highlighting`_  for syntax details.
+  See Code_Highlighting_  for details.
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#explicit-markup-blocks
 
@@ -562,7 +562,7 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#inline-mar
 Links
 ~~~~~
 
-Links are highlighted in syntax and highlighted with `cursor highlighting`_.
+Links are highlighted in syntax and highlighted with Cursor_Highlighting_.
 
 And you can jumping with links.
 
@@ -854,7 +854,8 @@ Syntax
 
 Highlights of document items.
 
-*  _`Code Syntax Highlighting`
+.. [Code_Highlighting]
+..
 
    For the ``code`` directives (also ``sourcecode`` and ``code-block``). 
    syntax highlighting is on ::
@@ -875,8 +876,8 @@ Highlights of document items.
 
           See http://docutils.sourceforge.net/sandbox/code-block-directive/tools/pygments-enhanced-front-ends/
 
-*  The local files are highlighted by highlight group ``rstFileLink``, 
-*  _`Cursor Highlighting` 
+.. [Cursor_Highlighting]
+.. 
 
    Some item that could interactive with cursor are highlighted when cursor is on.
 
@@ -884,9 +885,12 @@ Highlights of document items.
 
      - For local file links , if the target is invalid , it will be highlighted by 
        ``hl-DiffChange``
-   + For Todo items, it is highlighted by ``hl-DiffAdd``
+   + Todo items are highlighted by ``hl-DiffAdd``
 
-   Disable it by set ``g:riv_hover_link_hl`` to 0
+   Disable Cursor Highlighting by set ``g:riv_hover_link_hl`` to 0
+
+
+*  Link of local files are highlighted by highlight group ``rstFileLink``.
 *  Todo Item are highlighted only in vim, not in converted files.
 
 Indent
@@ -996,9 +1000,7 @@ Some wrapper to convert rst files to html/xml/latex/odt/...
 Riv Guide
 ---------
 
-Following features are in documents within project.
-
-Some can be used in a document without a project. 
+Following features are better working within a project.
 
 Project
 ~~~~~~~
@@ -1082,7 +1084,7 @@ The ``bare extension style`` and ``square bracket style``
   + default is 1.
 
 * File link are highlighted and cursor highlighted.
-  See `Cursor Highlighting`_
+  See Cursor_Highlighting_
 
 * To delete a local file in project.
 

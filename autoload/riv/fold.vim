@@ -17,7 +17,7 @@ fun! s:init_stat() "{{{
         let b:foldlevel = b:foldlevel >= 2 ? 2 : 0 
     endif
 
-    if !exists("b:fdl_list") || &modified || g:_riv_debug
+    if !exists("b:fdl_list") || len(b:fdl_list)!=len+1 || g:_riv_debug
         call s:parse_from_start()
     endif
 endfun "}}}
