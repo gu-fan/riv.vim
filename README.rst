@@ -99,7 +99,7 @@ Todo
 Prev
 ~~~~
 
-See Changelog in doc/riv_log.rst [riv_log]_
+See Changelog in doc/riv_log.rst riv_log_
 
 This
 ~~~~~
@@ -108,12 +108,12 @@ Things todo in this version.
 
 * 0.68:
     
-    :Patterns:  DONE 2012-07-07 a2334f7b_ Rewrite the pattern and syntax patterns part. 
-    :Todos_:    DONE 2012-07-07 a2334f7b_ Rewrite todo and todo helper.Add Todo Priorities. 
-    :Syntax_:   DONE 2012-07-07 a2334f7b_ Cursor highlight will highlight the todo item 
-    :Syntax_:   DONE 2012-07-07 a2334f7b_ Cursor highlight will check it's valid file
-    :Lists_:    DONE 2012-07-07 0a959662_ Add list types 0 ~ 4 
-    :Todos_:    DONE 2012-07-07 142b6c49_ Add Prior in helpr
+  :Patterns:  DONE 2012-07-07 a2334f7b_ Rewrite the pattern and syntax patterns part. 
+  :Todos_:    DONE 2012-07-07 a2334f7b_ Rewrite todo and todo helper.Add Todo Priorities. 
+  :Syntax_:   DONE 2012-07-07 a2334f7b_ Cursor highlight will highlight the todo item 
+  :Syntax_:   DONE 2012-07-07 a2334f7b_ Cursor highlight will check it's valid file
+  :Lists_:    DONE 2012-07-07 0a959662_ Add list types 0 ~ 4 
+  :Todos_:    DONE 2012-07-07 142b6c49_ Add Prior in helper
 
 
 .. _142b6c49: 
@@ -127,10 +127,10 @@ Things todo in this version.
 Next 
 ~~~~~
 
-See doc/riv_todo.rst [riv_todo]_
+See doc/riv_todo.rst riv_todo_
 
-.. [riv_log] https://github.com/Rykka/riv.vim/blob/master/doc/riv_log.rst
-.. [riv_todo] https://github.com/Rykka/riv.vim/blob/master/doc/riv_todo.rst
+.. _riv_log: https://github.com/Rykka/riv.vim/blob/master/doc/riv_log.rst
+.. _riv_todo: https://github.com/Rykka/riv.vim/blob/master/doc/riv_todo.rst
 
 ----
 
