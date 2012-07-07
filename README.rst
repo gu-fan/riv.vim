@@ -827,15 +827,12 @@ Riv will fold reStructuredText file with sections, lists, and blocks automatical
     
       default is 3000.
     
-  + To set an initial folding level for a file . you can use ``modeline``::
+  + To open some of the fold when opening a file . 
+    You can use ``:set fdls=1`` or use ``modeline`` for some files::
 
-     ..  vim: fdl=0 :
-         This means all fold will be folded when opening files
+     ..  vim: fdls=0 :
 
-
-
-
-:NOTE: Use  ':h folding' in vim to get an overview of folding in vim.
+  + Use  ':h folding' in vim to get an overview of folding in vim.
 
 Syntax
 ~~~~~~

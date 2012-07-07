@@ -445,7 +445,7 @@ fun! riv#list#change(id) "{{{
     if end == -1
         let line = substitute(line, '^\s*', '\0* ', '')
     else
-        let [type , idt , num , attr, space] = riv#list#stat(line, is_roman)
+        let [type , idt , num , attr, space] = riv#list#stat(line)
         let [type,num,attr] = s:level2stat(s:change_levels[a:id])
         let list_str = s:list_str(type,idt,num,attr,space)
         let line = substitute(line, s:p.b_e_list , list_str, '')
