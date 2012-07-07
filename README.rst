@@ -108,15 +108,17 @@ Things todo in this version.
 
 * 0.68:
     
-    :Patterns:  TODO a2334f7b_ Rewrite the pattern and syntax patterns part. 
-    :Todos_:    TODO a2334f7b_ Rewrite todo and todo helper.Add Todo Prior. 
-    :Syntax_:   TODO a2334f7b_ Cursor highlight will highlight the todo item 
-    :Syntax_:   TODO a2334f7b_ Cursor highlight will check if file link is valid
+    :Patterns:  DONE 2012-07-07 a2334f7b_ Rewrite the pattern and syntax patterns part. 
+    :Todos_:    DONE 2012-07-07 a2334f7b_ Rewrite todo and todo helper.Add Todo Prior. 
+    :Syntax_:   DONE 2012-07-07 a2334f7b_ Cursor highlight will highlight the todo item 
+    :Syntax_:   DONE 2012-07-07 a2334f7b_ Cursor highlight will check it's valid file
+    :Lists_:    DONE 2012-07-07 0a959662_ Add list types 0 ~ 4 
 
+
+.. _0a959662: 
+    https://github.com/Rykka/riv.vim/commit/0a95966247048e11d947fdeb4a2189e17c00d791
 .. _a2334f7b:
     https://github.com/Rykka/riv.vim/commit/a2334f7b98e9ce83c06d95e7552a13ac6c2c1cd4
-
-
 
 Next 
 ~~~~~
@@ -322,7 +324,7 @@ The bullet and enumerated list are auto level and auto numbered.
       Insert a new list of current parent list level
     - When it's a field list, only the indent is inserted.
   
-  + Change/Add List type:
+  + Change List Type:
 
     Normal and Insert Mode:
     
@@ -961,11 +963,13 @@ Some wrapper to convert rst files to html/xml/latex/odt/...
   + For the files that not in a project.  
     ``g:riv_temp_path`` is used to determine the output path
   
-    - When it's empty , the converted file is put under the same directory of file ,
+    - When it's empty or ``0``, 
+      the converted file is put under the same directory of file ,
 
-    - Otherwise if the ``g:riv_temp_path`` is ``1``,
+    - if the ``g:riv_temp_path`` is ``1``,
       the converted file is put in the vim temp path,
-      otherwise the converted file is put in the ``g:riv_temp_path``,
+    - Otherwise the converted file is put in the ``g:riv_temp_path``,
+    - default is 1
 
     - Also no local file link will be converted.
 
