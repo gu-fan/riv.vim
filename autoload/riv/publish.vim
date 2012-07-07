@@ -101,6 +101,7 @@ fun! s:auto_mkdir(path) "{{{
 endfun "}}}
 
 let s:tempfile = tempname()
+let s:tempdir = riv#path#directory(fnamemodify(s:tempfile,':h'))
 fun! s:create_tmp(file) "{{{
     update
     let lines = map(readfile(a:file),'s:repl_file_link(v:val)')
@@ -138,21 +139,21 @@ endfun "}}}
 
 " ['s5', 'latex', 'odt', 'xml' , 'pseudoxml', 'html' ]
 fun! riv#publish#file2(ft, browse) "{{{
-    let file_path = expand('%:p')
-    try 
-        call riv#path#rel_to_root(file_path)
-        call riv#publish#2(a:ft , file_path, riv#path#build_ft(a:ft), a:browse)
-    catch 
-        if v:exception == g:_riv_e.NOT_REL_PATH
-            call s:single2(a:ft, file_path, a:browse)
-        endif
-    endtry
+    let file = expand('%:p')
+    if riv#path#is_rel_to_root(file)
+        call riv#publish#2(a:ft , file, riv#path#build_ft(a:ft), a:browse)
+    else
+        call s:single2(a:ft, file, a:browse)
+    endif
 endfun "}}}
 fun! s:single2(ft, file, browse) "{{{
     " A file that is not in a project
     let file = expand(a:file)
-    if g:riv_temp_path == ""
+    if empty(g:riv_temp_path)
         let out_path = riv#path#ext_to(file, a:ft)
+    elseif g:riv_temp_path == 1
+        let temp_path = s:tempdir
+        let out_path = temp_path . riv#path#ext_tail(file, a:ft)
     else
         let temp_path = riv#path#directory(g:riv_temp_path)  
         let out_path = temp_path . riv#path#ext_tail(file, a:ft)
@@ -205,12 +206,9 @@ fun! riv#publish#browse() "{{{
     call s:sys(g:riv_web_browser . ' '. shellescape(path) . ' &')
 endfun "}}}
 fun! riv#publish#open_path() "{{{
-    exe 'sp ' g:_riv_c.p[s:id()]._build_path
+    exe 'sp ' riv#path#build_path()
 endfun "}}}
 
-fun! s:id() "{{{
-    return exists("b:riv_p_id") ? b:riv_p_id : g:riv_p_id
-endfun "}}}
 fun! s:sys(arg) abort "{{{
     return system(a:arg)
 endfun "}}}

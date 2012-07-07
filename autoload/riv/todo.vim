@@ -149,16 +149,6 @@ fun! s:prior_id(prior) "{{{
     endif
 endfun "}}}
 
-fun! s:fix_col(col,item_end,sft) "{{{
-    " fix col pos base on item_end and shift length.
-    if a:col > a:item_end
-        return a:col + a:sft
-    elseif ( a:item_end + a:sft <= a:col && a:item_end >= a:col )
-        return a:item_end + a:sft 
-    else
-        return a:col
-    endif
-endfun "}}}
 
 " Todo Main: "{{{1
 fun! riv#todo#toggle() "{{{
@@ -215,7 +205,7 @@ fun! riv#todo#toggle() "{{{
 
     call setline(row, line)
 
-    call cursor(row, s:fix_col(col, obj.end, (strwidth(line) - prv_len)))
+    call cursor(row, riv#list#fix_col(col, obj.end, (strwidth(line) - prv_len)))
 
 endfun "}}}
 fun! riv#todo#delete() "{{{
@@ -226,9 +216,9 @@ fun! riv#todo#delete() "{{{
     if end != -1
         let line = s:rmv_item(line)
         call setline(row,line)
-        call cursor(row, s:fix_col(col, end, (strwidth(line) - prv_len)))
+        call cursor(row, riv#list#fix_col(col, end, (strwidth(line) - prv_len)))
     else
-        call riv#warning(s:e.NOT_LIST_ITEM)
+        call riv#warning(s:e.NOT_TODO_ITEM)
     endif
 endfun "}}}
 fun! riv#todo#change(grp) "{{{
@@ -245,8 +235,9 @@ fun! riv#todo#change(grp) "{{{
     let prv_len = strwidth(line)
     if empty(obj.td_item)
         let [grp,idx] = [0, 0]
+    else
+        let [grp, idx] = s:item_stat(obj.td_item)
     endif
-    let [grp, idx] = s:item_stat(obj.td_item)
     let line = s:rmv_item(line)
     if a:grp > s:grp_num
         call riv#warning("The keyword group [".a:grp."] is not defined.")
@@ -255,14 +246,14 @@ fun! riv#todo#change(grp) "{{{
 
     let line = s:add_item(line, a:grp, idx)
     call setline(row, line)
-    call cursor(row, s:fix_col(col, obj.end, (strwidth(line) - prv_len)))
+    call cursor(row, riv#list#fix_col(col, obj.end, (strwidth(line) - prv_len)))
 
 endfun "}}}
 
 fun! riv#todo#todo_ask() "{{{
     let grp =  inputlist(s:t.td_ask_keywords)
     if  grp > 0 && grp <= len(s:t.td_keyword_groups)
-        call riv#todo#todo_change_type(grp)
+        call riv#todo#change(grp)
     endif
 endfun "}}}
 
@@ -304,7 +295,7 @@ fun! riv#todo#toggle_prior(del) "{{{
 
     call setline(row,line)
 
-    call cursor(row, s:fix_col(col, obj.end, (strwidth(line) - prv_len)))
+    call cursor(row, riv#list#fix_col(col, obj.end, (strwidth(line) - prv_len)))
 
 endfun "}}}
 
@@ -405,7 +396,6 @@ endfun "}}}
 
 fun! s:load_todo() "{{{
     let file = expand('%:p')
-    echoe riv#path#root()  file
     if riv#path#is_rel_to(riv#path#root(), file ) || &ft!='rst'
         call s:cache_todo(0)
         return readfile(riv#path#root().'.todo_cache')

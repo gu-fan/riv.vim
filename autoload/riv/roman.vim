@@ -4,7 +4,6 @@
 " Summary: convert from roman.py
 "  Author: Rykka G.Forest
 "  Update: 2012-06-14
-" Version: 0.5
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C

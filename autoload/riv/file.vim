@@ -50,5 +50,8 @@ fun! riv#file#split(file) "{{{
 endfun "}}}
 
 
+fun! s:id() "{{{
+    return exists("b:riv_p_id") ? b:riv_p_id : g:riv_p_id
+endfun "}}}
 let &cpo = s:cpo_save
 unlet s:cpo_save

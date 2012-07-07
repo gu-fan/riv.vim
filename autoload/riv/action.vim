@@ -45,11 +45,13 @@ endfun "}}}
 fun! riv#action#ins_bs() "{{{
     let [row,col]  = getpos('.')[1:2]
     let line = getline('.')
+
+    " if it's empty before cursor.
     if line[:col-1] =~ '^\s*$'
         let norm_tab = repeat(' ',&sw)
         let norm_col  = substitute(line[:col-1],'\t', norm_tab ,'g')
         let norm_col_len  = len(norm_col)
-        let ind = riv#insert#indent(row)
+        let ind = riv#insert#fix_indent(row)
         call cursor(row,col)
         if ind < norm_col_len && (ind + &sw) > norm_col_len
             return repeat("\<Left>\<Del>", (norm_col_len - ind))

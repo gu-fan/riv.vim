@@ -12,9 +12,8 @@ let s:slash = has('win32') || has('win64') ? '\' : '/'
 let s:win =  has('win32') || has('win64') ? 1 : 0
 
 " check 'ssl' ?
-
+let s:c = g:_riv_c
 fun! riv#path#root() "{{{
-    echoe s:id()
     return g:_riv_c.p[s:id()]._root_path
 endfun "}}}
 

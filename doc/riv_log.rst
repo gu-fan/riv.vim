@@ -1,6 +1,24 @@
 Changelogs
 ==========
 
+* 0.67:
+
+  :Folding_: DONE 2012-07-05 da03e247_ The line block is folded now.
+  :Table_:   DONE 2012-07-05 da03e247_ Improved row & col count.
+  :Lists_:   DONE 2012-07-05 12bcabf3_ Rewrite the list shifting action and 
+             formatting action.  only fix the indent caused by list-item change. 
+             so it did not change the document structure.
+  :Lists_:   DONE 2012-07-05 When we add parent list,
+             check if there is a prev parent level and item.
+  :Syntax_:  FIXED 2012-07-05 table: not highlighted when after a literal block.
+  :Syntax_:  FIXED 2012-07-05 simple table: Span line is not highlighted with one span.
+
+.. _12bcabf3:
+    https://github.com/Rykka/riv.vim/commit/12bcabf38dee42f65996b23d658bff97d0f353e4
+
+.. _da03e247: 
+   https://github.com/Rykka/riv.vim/commit/da03e247418f86fe423d20961b61716fbea36d9b
+
 * 0.66: 
 
   :Todos:   DONE 2012-06-29 add field list for todo items.
@@ -63,7 +81,7 @@ Changelogs
   + FIXED 2012-06-24 Misc : highlight for hover link change to DiffText
   + FIXED 2012-06-24 Misc : create link now will add an empty line.
 
-* ~ 0.63:
+* 0.63 < :
 
   + DONE 2012-06-20 fix fold line with east_asia char
   + DONE 2012-06-20 multi col/row table
@@ -81,3 +99,9 @@ Changelogs
   + DONE  2012-06-01 Doc Section index Buffer? same as the contents directive
   + FIXED 2012-06-02 wrong highlight of literal block. one blank line need after '::'
 
+
+
+.. _Folding:    README.rst#folding
+.. _Lists:      README.rst#Lists
+.. _Table:      README.rst#Table
+.. _Syntax:     README.rst#Syntax

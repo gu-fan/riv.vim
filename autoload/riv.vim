@@ -93,7 +93,7 @@ let s:default.options = {
     \'hover_link_hl'      : 1,
     \'usr_syn_dir'        : "",
     \'todo_levels'        : " ,o,X",
-    \'todo_priors'        : "ABC",
+    \'todo_priorities'      : "ABC",
     \'todo_default_group' : 0,
     \'todo_datestamp'     : 1,
     \'todo_keywords'      : "TODO,DONE;FIXME,FIXED;START,PROCESS,STOP",
@@ -115,7 +115,7 @@ let s:default.options = {
     \'auto_format_table'  : 1,
     \'fold_info_pos'      : 'right',
     \'ins_super_tab'      : 1,
-    \'temp_path'          : "",
+    \'temp_path'          : 1,
     \'month_names'        : 'January,February,March,April,May,June,July,'
                           \.'August,September,October,November,December',
     \}
@@ -128,15 +128,19 @@ let s:default.maps = {
     \'RivLinkPrev'       : 'call riv#link#finder("b")',
     \'RivLinkDBClick'    : 'call riv#action#db_click(1)',
     \'RivLinkEnter'      : 'call riv#action#db_click(0)',
-    \'RivListShiftRight' : 'call riv#list#shift("+")',
-    \'RivListShiftLeft'  : 'call riv#list#shift("-")',
+    \'RivShiftRight' : 'call riv#list#shift("+")',
+    \'RivShiftLeft'  : 'call riv#list#shift("-")',
     \'RivListFormat'     : 'call riv#list#shift("=")',
     \'RivListNewList'    : 'call riv#list#new(0)',
     \'RivListSubList'    : 'call riv#list#new(1)',
     \'RivListSupList'    : 'call riv#list#new(-1)',
-    \'RivListTypeRemove' : 'call riv#list#toggle_type(0)',
-    \'RivListTypeNext'   : 'call riv#list#toggle_type(1)',
-    \'RivListTypePrev'   : 'call riv#list#toggle_type(-1)',
+    \'RivListDelete'     : 'call riv#list#delete()',
+    \'RivListType0'      : 'call riv#list#change(0)',
+    \'RivListType1'      : 'call riv#list#change(1)',
+    \'RivListType2'      : 'call riv#list#change(2)',
+    \'RivListType3'      : 'call riv#list#change(3)',
+    \'RivListType4'      : 'call riv#list#change(4)',
+    \'RivListType5'      : 'call riv#list#change(5)',
     \'RivTodoToggle'     : 'call riv#todo#toggle()',
     \'RivTodoDel'        : 'call riv#todo#delete()',
     \'RivTodoDate'       : 'call riv#todo#change_datestamp()',
@@ -206,12 +210,16 @@ let s:default.buf_maps = {
     \'RivLinkOpen'       : ['',  'n',  'ko'],
     \'RivLinkNext'       : ['<TAB>',    'n',  'kn'],
     \'RivLinkPrev'       : ['<S-TAB>',  'n',  'kp'],
-    \'RivListShiftRight' : [['>', '<C-ScrollwheelDown>' ],  'mi',  'lu'],
-    \'RivListShiftLeft'  : [['<', '<C-ScrollwheelUp>'],  'mi',  'ld'],
+    \'RivShiftRight' : [['>', '<C-ScrollwheelDown>' ],  'mi',  'lu'],
+    \'RivShiftLeft'  : [['<', '<C-ScrollwheelUp>'],  'mi',  'ld'],
     \'RivListFormat'     : [['='],  'mi',  'l='],
-    \'RivListTypeNext'   : ['',  'mi',  'ln'],
-    \'RivListTypePrev'   : ['',  'mi',  'lp'],
-    \'RivListTypeRemove' : ['',  'mi',  'lx'],
+    \'RivListType0'      : ['',  'mi',  'l`'],
+    \'RivListType1'      : ['',  'mi',  'l1'],
+    \'RivListType2'      : ['',  'mi',  'l2'],
+    \'RivListType3'      : ['',  'mi',  'l3'],
+    \'RivListType4'      : ['',  'mi',  'l4'],
+    \'RivListType5'      : ['',  'mi',  'l5'],
+    \'RivListDelete'     : ['',  'mi',  'lx'],
     \'RivTodoHelper'     : ['',  'm' ,  'ht'],
     \'RivTodoUpdateCache': ['',  'm' ,  'uc'],
     \'RivTodoToggle'     : ['',  'mi',  'ee'],
@@ -264,7 +272,7 @@ let s:default.buf_imaps = {
     \'<S-Tab>'      : 'riv#action#ins_stab()'    ,
     \} 
 "}}}
-"menus "{{{
+" menus "{{{
 let s:default.menus = [
     \['Index'                             , 'ww'                     , 'RivIndex'          ]   ,
     \['Choose\ Index'                     , 'wa'                     , 'RivAsk'            ]   ,
@@ -285,11 +293,15 @@ let s:default.menus = [
     \['Link.-------'                      , '  '                     , '  '                ]   ,
     \['Link.Create\ Link'                 , 'il'                     , 'RivCreateLink'     ]   ,
     \['Link.Create\ Footnote'             , 'if'                     , 'RivCreateFoot'     ]   ,
-    \['List.Shift\ Right'                 , 'lu\ or\ >'              , 'RivListShiftRight' ]   ,
-    \['List.Shift\ Left'                  , 'ld\ or\ <'              , 'RivListShiftLeft'  ]   ,
-    \['List.Previous\ Type'               , 'lp'                     , 'RivListTypePrev'   ]   ,
-    \['List.Next\ Type'                   , 'ln'                     , 'RivListTypeNext'   ]   ,
-    \['List.Remove\ List\ Symbol'         , 'lx'                     , 'RivListTypeRemove' ]   ,
+    \['List.Shift\ Right'                 , 'lu\ or\ >'              , 'RivShiftRight' ]   ,
+    \['List.Shift\ Left'                  , 'ld\ or\ <'              , 'RivShiftLeft'  ]   ,
+    \['List.\ Type0'                      , 'l`'                     , 'RivListType0'      ]   ,
+    \['List.\ Type1'                      , 'l1'                     , 'RivListType1'      ]   ,
+    \['List.\ Type2'                      , 'l2'                     , 'RivListType2'      ]   ,
+    \['List.\ Type3'                      , 'l3'                     , 'RivListType3'      ]   ,
+    \['List.\ Type4'                      , 'l4'                     , 'RivListType4'      ]   ,
+    \['List.\ Type5'                      , 'l5'                     , 'RivListType5'      ]   ,
+    \['List.Delte\ List\ Symbol'          , 'lx'                     , 'RivListDelete'     ]   ,
     \['Todo.Toggle\ Todo'                 , 'ee'                     , 'RivTodoToggle'     ]   ,
     \['Todo.Delete\ Todo'                 , 'ex'                     , 'RivTodoDel'        ]   ,
     \['Todo.Toggle\ Prior'                , 'ep'                     , 'RivTodoPrior'      ]   ,
@@ -319,7 +331,7 @@ let s:default.menus = [
     \['Folding.All'                       , '<Space>m\ or\ zA'       , 'RivFoldAll'        ]   ,
     \]
 "}}}
-"{{{ project options
+" project options " {{{
 let g:riv_proj_temp = {}
 let g:riv_project_list = [ ]
 let g:riv_p_id = 0
@@ -438,7 +450,7 @@ fun! riv#load_conf() "{{{1
     let s:t.list_lvs  =  ["*","+","-"]
     let s:t.highlight_code = s:normlist(split(g:riv_highlight_code,','))
     let s:t.month_names = split(g:riv_month_names,',')
-    let s:t.prior_str = g:riv_todo_priors
+    let s:t.prior_str = g:riv_todo_priorities
     
     let s:c.sect_lvs = split(g:riv_section_levels,'\zs')
     let s:c.sect_lvs_b = split('#*+:.^','\zs')

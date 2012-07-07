@@ -83,10 +83,6 @@ Install
 
     .. _Syntastic: https://github.com/scrooloose/syntastic
 
-  + Calendar_ setting todo-item datestamp. 
-
-    .. _Calendar: https://github.com/mattn/calendar-vim
-
 Issues
 ------
 
@@ -110,21 +106,17 @@ This
 
 Things todo in this version.
 
-* 0.67:
+* 0.68:
+    
+    :Patterns:  TODO a2334f7b_ Rewrite the pattern and syntax patterns part. 
+    :Todos_:    TODO a2334f7b_ Rewrite todo and todo helper.Add Todo Prior. 
+    :Syntax_:   TODO a2334f7b_ Cursor highlight will highlight the todo item 
+    :Syntax_:   TODO a2334f7b_ Cursor highlight will check if file link is valid
 
-  :Folding_: DONE 2012-07-05 da03e247_ The line block is folded now.
-  :Table_:   DONE 2012-07-05 da03e247_ Improved row & col count.
-  :Lists_:   DONE 2012-07-05 Rewrite the list shifting action and 
-             formatting action.  only fix the indent caused by list-item change. 
-             so it did not change the document structure.
-  :Lists_:   DONE 2012-07-05 When we add parent list,
-             check if there is a prev parent level and item.
-  :Syntax_:  FIXED 2012-07-05 table: not highlighted when after a literal block.
-  :Syntax_:  FIXED 2012-07-05 simple table: Span line is not highlighted with one span.
+.. _a2334f7b:
+    https://github.com/Rykka/riv.vim/commit/a2334f7b98e9ce83c06d95e7552a13ac6c2c1cd4
 
 
-.. _da03e247: 
-   https://github.com/Rykka/riv.vim/commit/da03e247418f86fe423d20961b61716fbea36d9b
 
 Next 
 ~~~~~
@@ -150,11 +142,11 @@ Instruction
     These settings will be automatically on. 
     (make sure ``filetype on`` in your vimrc)
 
-    See detail instruction in `For reStructuredText`_
+    See detail instruction in `reStructuredText Guide`_
 
   + For managing documents, 
 
-    See detail instruction in `For Riv`_
+    See detail instruction in `Riv Guide`_
 
 * About the mapping
 
@@ -178,18 +170,22 @@ Instruction
 
 .. _QuickStart: http://docutils.sourceforge.net/docs/user/rst/quickstart.html
 
-For reStructuredText
---------------------
+reStructuredText Guide
+----------------------
 
 These features are in all reStructuredText files.
 
 Sections 
 ~~~~~~~~~
 
-With Riv, Section levels and numbers are auto detected.
+Sections are basic document structure.
 
-It's highlighted , folded by the section level, 
-and section number is shown as fold info.
+Section titles are highlighted. 
+
+Section levels and numbers are auto detected.
+Sections are folded by it's section level, 
+and showing it's section number (chapter number) as fold info.
+
 
 * Actions:
 
@@ -201,6 +197,9 @@ and section number is shown as fold info.
     To create level 1 to level 6 section title from current word.
 
     If it's empty, you will be asked to input one.
+
+    Section title created by Riv is ``underline`` only, 
+    To add an ``overline``, you should copy the ``underline`` and paste it there.
 
   + Folding: 
 
@@ -217,44 +216,140 @@ and section number is shown as fold info.
 
 * Options:
 
-  Although you can define a section title with most punctuations
-  (any non-alphanumeric printable 7-bit ASCII character). 
+  + Although you can define a section title with most punctuations
+    (any non-alphanumeric printable 7-bit ASCII character). 
 
-  Riv use following punctuations for titles: 
+    Riv use following punctuations for titles: 
 
-  ``= - ~ " ' ``` , (HTML has 6 levels)
+    ``= - ~ " ' ``` , (HTML has 6 levels)
 
-  you can change it with ``g:riv_section_levels``
+    you can change it with ``g:riv_section_levels``
 
-:NTOE: **A reStructuredText syntax hint**
-    
-       reStructuredText Section title have two styles. 
-        
-            ``underline`` and ``underline and overline``
+  + Section number are seperated by ``g:riv_fold_section_mark``
 
-       both of them can be used freely. 
+    default is ``"-"``
 
-       As section title created by Riv is ``underline`` only, 
-       To add an ``overline``, you should copy the ``underline`` and paste it there.
 
-       A blank line is need before the title if it's not the first line of document,
-       A blank line after a title is optional. 
-
-       The punctuation lines must begin at column 1.
-
-       The highlighting of it is a hint for it.
-
-       See `reStructuredText sections`__
+See `reStructuredText sections`__
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#sections
 
 Lists
 ~~~~~
 
-There are several List items in reStructuredText
+There are several List items in reStructuredText.
+
+All are highlighted. Most are folded.
+
+The bullet and enumerated list are auto level and auto numbered.
+
+* Auto Level:
+
+  When you shift the list or add child/parent list , 
+  the type of list item will be changed automatically.
+
+  The level sequence is as follows:  
+
+  ``* + - 1. A. a. I. i. 1) A) a) I) i) (1) (A) (a) (I) (i)``
+  
+  You can use any of them as a list item, but the changing sequence is hard coded.
+
+  This means when you shift right or add a child list with a ``-`` list item, 
+  the new one will be ``1.``
+
+  And if you shift left or add a parent list item with a ``a.`` list item , 
+  the new one will be ``A.``
+
+* Auto Number:
+
+  When you adding a new list or shifting an list, 
+  these list items will be auto numbered.
+
+* Actions:
+
+  + Shifting:
+
+    Normal and Visual Mode:
+
+    - Shift right: ``>`` ``:RivShiftRight`` or ``<C-ScrollWheelDown>`` (unix only) 
+  
+      Shift rightwards, And add a level of list.
+  
+    - Shift left: ``<`` ``:RivShiftLeft`` or ``<C-ScrollWheelUp>``  (unix only) 
+
+      Shift leftwards, And minus a level of list.
+
+    - Format:   ``=``
+      Format list's level and number.
+
+    :NOTE: The shifting indentation is dynamic. 
+           if it's a list item,
+           When shifting right, it will indent to the list item's sub list
+           When shifting left, it will indent to the list item's parent list
+
+           otherwise it will use ``shiftwidth`` 
+           and check if it's in a list item to fix the indentation
+
+    :NOTE: As commands not working in Select Mode.
+
+           You should make sure the vim option ``'selectmode'`` not contain ``mouse``,
+           in order to use mouse to start visual mode. 
+
+           Cause this option will be changed by ``:behave mswin``.
+
+    Insert Mode Only: 
+  
+    - ``<Tab>`` when cursor is before an end of a list item.
+      will shift right.
+    
+    - ``<S-Tab>`` when cursor is before an end of a list item.
+      will shift left.
+
+  + New List:
+  
+    Insert Mode Only: 
+
+    - ``<CR>\<KEnter>`` (enter key and keypad enter key)
+      Insert the content of this list.
+  
+      To insert content in new line of this list item. add a blank line before it.
+  
+    - ``<C-CR>\<C-KEnter>`` 
+      Insert a new list of current list level
+    - ``<S-CR>\<S-KEnter>`` 
+      Insert a new list of current child list level
+    - ``<C-S-CR>\<C-S-KEnter>`` 
+      Insert a new list of current parent list level
+    - When it's a field list, only the indent is inserted.
+  
+  + Change/Add List type:
+
+    Normal and Insert Mode:
+    
+    - ``:RivListType0`` ``<C-E>l``` ... ``:RivListType4`` ``<C-E>l4``
+      Change or add list item symbol of type.
+      
+      The list item of each type is:: 
+      
+        ``'*' , '1.' , 'a.' , 'A)' ,'i)'``
+
+      :NOTE:  You should act this on a new list or list with no sub line.
+
+              As list item changes, the indentation of it is changed.
+              But this action does not change the sub items's indent.
+
+              To change a list and it's sub item 
+              with indentation fix , use shifting: ``>`` or ``<``.
+             
+    - ``:RivListDelete`` ``<C-E>lx``
+      Delete current list item symbol
+
+
 
 List items
 """"""""""
+
+Intro of each list type.
 
 * Bullet Lists
 
@@ -306,98 +401,6 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#field-list
   See `Option Lists`__ 
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#option-lists
-
-List flavor
-"""""""""""
-
-The auto level and auto number for bullet list and enumerated list.
-
-* Auto Level:
-
-  When you shift the list or add child/parent list , 
-  the type of list item will be changed automatically.
-
-  The level sequence is as follows:  
-
-  ``* + - 1. A. a. I. i. 1) A) a) I) i) (1) (A) (a) (I) (i)``
-  
-  You can use any of them as a list item, but the changing sequence is hard coded.
-
-  This means when you shift right or add a child list with a ``-`` list item, 
-  the new one will be ``1.``
-
-  And if you shift left or add a parent list item with a ``a.`` list item , 
-  the new one will be ``A.``
-
-* Auto Number:
-
-  When you adding a new list or shifting an list, 
-  these list items will be auto numbered.
-
-* Actions:
-
-  + Shifting:
-
-    Normal and Visual Mode:
-
-    - Shift right: ``>`` or ``<C-ScrollWheelDown>`` (unix only) 
-  
-      Add Indentation, And add a level for list.
-  
-    - Shift left: ``<`` or ``<C-ScrollWheelUp>``  (unix only) 
-
-      Remove Indentation, And remove a level for list.
-    - Format:   ``=``
-      Format list's number.
-
-    :NOTE: The shifting indentation is dynamic. 
-           if it's a list item,
-           When shifting right, it will indent to the list item's sub list
-           When shifting left, it will indent to the list item's parent list
-
-           otherwise it will use ``shiftwidth`` 
-           and check if it's in a list item to fix the indentation
-
-    Insert Mode Only: 
-  
-    - ``<Tab>`` when cursor is before an end of a list item.
-      will shift right.
-    
-    - ``<S-Tab>`` when cursor is before an end of a list item.
-      will shift left.
-
-  + New List:
-  
-    Insert Mode Only: 
-
-    - ``<CR>\<KEnter>`` (enter key and keypad enter key)
-      Insert the content of this list.
-  
-      To insert content in new line of this list item. add a blank line before it.
-  
-    - ``<C-CR>\<C-KEnter>`` 
-      Insert a new list of current list level
-    - ``<S-CR>\<S-KEnter>`` 
-      Insert a new list of current child list level
-    - ``<C-S-CR>\<C-S-KEnter>`` 
-      Insert a new list of current parent list level
-    - When it's a field list, only the indent is inserted.
-  
-  + Change List type:
-
-    Normal and Insert Mode:
-    
-    - ``:RivListTypeNext`` ``<C-E>ln``
-      Change current list item symbol to next type
-    - ``:RivListTyePrev`` ``<C-E>lp``
-      Change current list item symbol to prev type
-    - ``:RivListTypeRemove`` ``<C-E>lx``
-      Delete current list item symbol
-
-
-* List types:
-
-    
 
 
 :NOTE: **A reStructuredText syntax hint**
@@ -531,7 +534,7 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#doctest-bl
   See `Explicit Markup Blocks`__
 
   And for the ``code`` directives, syntax highlighting is on. 
-  See `code block syntax highlighting`_ 
+  See `code syntax highlighting`_ 
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#explicit-markup-blocks
 
@@ -549,10 +552,9 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#inline-mar
 Links
 ~~~~~
 
-With Riv, you can jumping with links.
+Links are highlighted in syntax and highlighted with `cursor highlighting`_.
 
-Links are highlighted in syntax and with `cursor highlighting`_.
-
+And you can jumping with links.
 
 * Actions:
 
@@ -643,7 +645,9 @@ Links are highlighted in syntax and with `cursor highlighting`_.
 Table
 ~~~~~
 
-Auto Format Table 
+Tables are highlighted and folded.
+
+For Grid table, it is auto formatted.
 (Currently require vim compiled with python. )
 
 * Grid Table: 
@@ -727,7 +731,9 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#simple-tab
 Folding 
 ~~~~~~~~
 
-Fold reStructuredText file with sections, lists, and blocks automatically.
+**Folding** is a vim feature to allow you to display a section as one line.
+
+Riv will fold reStructuredText file with sections, lists, and blocks automatically.
 
 * Actions (Normal Mode Only):
 
@@ -824,15 +830,19 @@ Fold reStructuredText file with sections, lists, and blocks automatically.
      ..  vim: fdl=0 :
          This means all fold will be folded when opening files
 
+
+
+
+:NOTE: Use  ':h folding' in vim to get an overview of folding in vim.
+
 Syntax
 ~~~~~~
 
-Improved syntax file. 
+Highlights of document items.
 
-*  Imporoved Section,Lists,Blocks,Links Highlightings 
-*  _`Code Block Syntax Highlighting`
+*  _`Code Syntax Highlighting`
 
-   for the ``code`` directives (also ``sourcecode`` and ``code-block``). 
+   For the ``code`` directives (also ``sourcecode`` and ``code-block``). 
    syntax highlighting is on ::
  
      .. code:: python
@@ -841,8 +851,9 @@ Improved syntax file.
          # github does not support syntax highlighting rendering for rst file yet.
          x = [0 for i in range(100)]
 
-   You can use ``g:riv_highlight_code`` to set which languages to be highlighted.
-   default is ``lua,python,cpp,javascript,vim,sh``
+   + Use ``g:riv_highlight_code`` to set which languages to be highlighted.
+
+     default is ``lua,python,cpp,javascript,vim,sh``
 
    :NOTE: To enable syntax highlighting in converted file, 
           python pygments_  package must installed for ``docutils`` 
@@ -850,13 +861,16 @@ Improved syntax file.
 
           See http://docutils.sourceforge.net/sandbox/code-block-directive/tools/pygments-enhanced-front-ends/
 
-*  The local files are highlighted by ``rstFileLink``, 
-   you can change the color if needed.
+*  The local files are highlighted by highlight group ``rstFileLink``, 
 *  _`Cursor Highlighting` 
-   The links under cursor are highlighted by ``hl-DiffText``
 
-   For local file links , if the target is invalid , it will be highlighted by 
-   ``hl-DiffChange``
+   Some item that could interactive with cursor are highlighted when cursor is on.
+
+   + Links are highlighted by ``hl-DiffText``
+
+     - For local file links , if the target is invalid , it will be highlighted by 
+       ``hl-DiffChange``
+   + For Todo items, it is highlighted by ``hl-DiffAdd``
 
    Disable it by set ``g:riv_hover_link_hl`` to 0
 *  Todo Item are highlighted only in vim, not in converted files.
@@ -864,7 +878,7 @@ Improved syntax file.
 Indent
 ~~~~~~
 
-Improved indent file.
+Improved indent in insert mode.
 
 * Actions:
     
@@ -908,10 +922,6 @@ Publish
 Some wrapper to convert rst files to html/xml/latex/odt/... 
 (require python docutils_  package )
 
-:NOTE: When converting, It will first try ``rst2xxxx2.py`` , then try ``rst2xxxx.py``
-       You should install the package of python 2 version .
-       Otherwise errors will occour.
-
 * Actions:
 
   + ``:Riv2HtmlFile``  ``<C-E>2hf``
@@ -938,8 +948,9 @@ Some wrapper to convert rst files to html/xml/latex/odt/...
 * Options:
 
   + For the files that are in a project. 
-    The path of converted files by default is under ``_build`` in your project directory.
+    The path of converted files by default is under ``build_path`` of your project directory. 
   
+    - default is ``_build``
     - To change the path. Set it in your vimrc::
         
         " Assume you have a project name project 1
@@ -951,17 +962,22 @@ Some wrapper to convert rst files to html/xml/latex/odt/...
     ``g:riv_temp_path`` is used to determine the output path
   
     - When it's empty , the converted file is put under the same directory of file ,
-    - Otherwise the converted file is put in the ``g:riv_temp_path``,
-      make sure it's an absolute path.
+
+    - Otherwise if the ``g:riv_temp_path`` is ``1``,
+      the converted file is put in the vim temp path,
+      otherwise the converted file is put in the ``g:riv_temp_path``,
+
     - Also no local file link will be converted.
 
-
+:NOTE: When converting, It will first try ``rst2xxxx2.py`` , then try ``rst2xxxx.py``
+       You should install the package of python 2 version .
+       Otherwise errors will occour.
 
 .. _docutils: http://docutils.sourceforge.net/
 .. _pygments: http://pygments.org/
 
-For Riv
--------
+Riv Guide
+---------
 
 These features are for documents in a Riv Project, 
 Though some can be used in a document without a project. 
@@ -970,27 +986,42 @@ They have no full support.
 Project
 ~~~~~~~
 
-Manage your reStructuredText documents in a wiki way.
+Project is a place to hold your rst documents. 
 
-* By default. the path of project is at '~/Documents/Riv',
-  you can set it by adding project to ``g:riv_projects`` in your vimrc.::
+Though you can edit reStructuredText documents anywhere.
+There are some convenience with projects.
+
+* File_ :  You can write documents and navigating with local file link. 
+
+  ``index.rst`` is the index for each direcotry.
+
+  An ``index.rst`` will be auto created for a new project.
+* Publish_ : You can convert whole project to html, and view them as wiki.
+* Todos_ : You can manage all the todo items in a project
+* Scratch_ : Writing diary in a project
+* The default project path is ``'~/Documents/Riv'``,
+  you can change it by defining project to ``g:riv_projects`` in your vimrc.::
 
     let project1 = { 'path': '~/Dropbox/rst',}
     let g:riv_projects = [project1]
+
+* You can have multiple projects also::
 
     " You could add multiple projects as well 
     let project2 = { 'path': '~/Dropbox/rst2',}
     let g:riv_projects = [project1, project2]
 
-* Use ``:RivIndex`` ``<C-E>ww`` to open the project index.
+* Use ``:RivIndex`` ``<C-E>ww`` to open the first project index.
 * Use ``:RivAsk`` ``<C-E>wa`` to choose one project to open.
 
 File
 ~~~~
 
+The link to edit local files.
+
 As reStructuredText haven't define a pattern for local files currently.
 
-**Riv**  provides two kinds of style to determine the local file
+Riv provides two kinds of style to determine the local file
 in the rst documents. 
 
 The ``bare extension style`` and ``square bracket style``
@@ -1048,19 +1079,12 @@ The ``bare extension style`` and ``square bracket style``
 Scratch
 ~~~~~~~
   
-The scratches is created auto named by date in '%Y-%m-%d' format.
-It is a place for writing diary or hold idea and thoughts.
-
-Scratches will be put in scratch folder in project directory.
-You can change it with 'scratch_path' of project setting ,default is 'Scratch'::
-    
-    " Use another directory
-    let project1.scratch_path = 'Diary'
-    " Use absolute path, then no todo helper and no converting for it.
-    let project1.scratch_path = '~/Documents/Diary'
+Scratch is a place for writing diary or hold idea and thoughts.
 
 * ``:RivScratchCreate`` ``<C-E>cc``
   Create or jump to the scratch of today.
+
+  Scratches are created auto named by date in '%Y-%m-%d' format.
 
 * ``:RivScratchView`` ``<C-E>cv``
   View Scratch index.
@@ -1072,21 +1096,22 @@ You can change it with 'scratch_path' of project setting ,default is 'Scratch'::
 
       ``January,February,March,April,May,June,July,August,September,October,November,December``
 
+Scratches will be put in scratch folder in project directory.
+You can change it with 'scratch_path' of project setting ,default is 'Scratch'::
+    
+    " Use another directory
+    let project1.scratch_path = 'Diary'
+    " Use absolute path, then no todo helper and no converting for it.
+    let project1.scratch_path = '~/Documents/Diary'
+
 Todos
 ~~~~~
 
-Writing and highlighting todo items in reStructuredText documents.
-It's not the reStructuredText syntax. 
-So no highlighting when converted.
+Todo items to keep track of todo things.
 
-Todo items are todo-box or todo-keywords in bullet/enumerated/field lists.
+It is Todo-box or Todo-keywords in a bullet/enumerated/field list.
 
-Datestamps are supported to show todo items's start/end date.
-
-When list is folded. 
-The statistics of the child items (or this item) todo progress will be shown.
-
-* A Todo item:
+* Todo Box:
 
   + [ ] This is a todo item of initial state.
   + [o] This is a todo item that's in progress.
@@ -1096,9 +1121,33 @@ The statistics of the child items (or this item) todo progress will be shown.
 
     default is ``" ,o,X"``
 
+* Todo Keywords:
+    
+  Todo Keywords are also supported
+
+  + FIXED A todo item of FIXME/FIXED keyword group.
+  + DONE 2012-06-13 ~ 2012-06-23 A todo item of TODO/DONE keyword group.
+  + START A todo item of START/PROCESS/STOP keyword group.
+  + You can define your own keyword group for todo items with ``g:riv_todo_keywords``
+  
+    each keyword is seperated by ',' , each group is seperated by ';'
+  
+    default is ``"TODO,DONE;FIXME,FIXED;START,PROCESS,STOP"``,
+
+    :Note: the end of each group is considered as the 'DONE' keyword
+
+
 * Datestamps:
 
-  + You can set the todo item timestamp style with 'g:riv_todo_timestamp'
+  Todo items's start or end date.
+
+  + [X] 2012-06-23 A todo item with datestamp
+  + Double Click or ``<Enter>`` or ``:RivTodoDate`` on a datestamp to change date. 
+
+    If you have Calendar_ installed , it will use it to choose date.
+
+    .. _Calendar: https://github.com/mattn/calendar-vim
+  + It is controled by ``g:riv_todo_datestamp``
   
     - when set to 2 , will init with a start datestamp.
       and when it's done , will add a finish datestamp.
@@ -1114,42 +1163,69 @@ The statistics of the child items (or this item) todo progress will be shown.
     - when set to 0 , no datestamp
     - Default is 1
   
-* Keyword groups:
-    
-  + FIXED A todo item of FIXME/FIXED keyword group.
-  + DONE 2012-06-13 ~ 2012-06-23 A todo item of TODO/DONE keyword group.
-  + START A todo item of START/PROCESS/STOP keyword group.
-  + You can define your own keyword group for todo items with ``g:riv_todo_keywords``
-  
-    each keyword is seperated by ',' , each group is seperated by ';'
-  
-    default is ``"TODO,DONE;FIXME,FIXED;START,PROCESS,STOP"``,
+* Priorities:
 
-    Note that, the end of each group is considered as the 'DONE' keyword
+  The Priorites of todo item
+
+  + [ ] [#A] priorty A
+  + [ ] [#C] priorty B
+  + Double Click or ``<Enter>`` or ``:RivTodoPrior`` on priorty to change priority. 
+  + You can define the priorty chars by ``g:riv_todo_priorities``
+    Only alphabet or digits are supported.
+
+    default is ``"ABC"``
 
 * Actions:
 
-  + Use ``:RivTodoToggle`` or ``<C-E>ee`` to add or switch the todo status.
-  + Double Click or ``<Enter>`` in the box/keyword to swith the todo status
-  + Double Click or ``<Enter>`` or ``:RivTodoDate`` on a datestamp to change date. 
+  Add Todo Item
   
-    If you have Calendar_ installed , it will use it to choose date.
-  
+  + Use ``:RivTodoToggle`` or ``<C-E>ee`` to add or switch the todo progress.
+    
+    When adding a todo item, todo group is ``g:riv_todo_default_group``
+
+    default is 0, which is the todo box group.
+
   + Use ``:RivTodoType1`` ``<C-E>e1`` ... ``:RivTodoType4`` ``<C-E>e4`` 
     to add or change the todo item by group. 
   + Use ``:RivTodoAsk`` ``<C-E>e``` will show an keyword group list to choose.
+
+  Change Todo Status
+
+  + Double Click or ``<Enter>`` in the box/keyword to swith the todo progress.
+  
+
+ 
+  Delete Item 
+
   + Use ``:RivTodoDel`` ``<C-E>ex`` will delete the todo item
 
-  + Use ``:RivCreateDate`` ``<C-E>id`` to insert a datestamp of today anywhere.
-  + Use ``:RivCreateTime`` ``<C-E>it`` to insert a timestamp of current time anywhere. 
+  Helper
+
   + Use ``:RivTodoHelper`` or ``<C-E>ht`` to open a `Todo Helper`_
   
+* Folding Info:
+
+  When list is folded. 
+  The statistics of the child items (or this item) todo progress will be shown.
+* Highlights:
+   
+  Todo items are highlighted.
+
+  As it's not the reStructuredText syntax. 
+  So highlighted in vim only.
+
+  When cursor are in a Todo Item , current item will be highlighted.
+
 Helpers
 ~~~~~~~
 
 A window to show something of the project.
 
+
 * _`Todo Helper` : A helper to manage todo items of current project.
+  When current file is not in a project, will show current file's todo items.
+
+  See Todos_
 
   + ``:RivTodoHelper`` or ``<C-E>ht``
     Open to view all todo-items.
@@ -1165,3 +1241,10 @@ A window to show something of the project.
     - ``<Enter>`` or Double Click to jump to the todo item.
     - ``<Esc>`` or ``q`` to quit the window
 
+Miscs
+~~~~~
+
+* Insert extra things.
+
+  + Use ``:RivCreateDate`` ``<C-E>id`` to insert a datestamp of today anywhere.
+  + Use ``:RivCreateTime`` ``<C-E>it`` to insert a timestamp of current time anywhere. 

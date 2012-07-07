@@ -138,6 +138,10 @@ fun! riv#ptn#init() "{{{
     let s:p.b_e_list = printf(list_wrap, b_e_list)
     let s:p.all_list = printf(list_wrap, all_list)
 
+
+    let white_wrap = '\v^(\s*)(%s)(\s+)'
+    let s:p.list_white = printf(white_wrap, all_list)
+
     "      (indent)
     " sub1 bullet
     " sub2 #. 1. d)

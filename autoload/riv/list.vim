@@ -8,7 +8,8 @@
 let s:cpo_save = &cpo
 set cpo-=C
 
-
+let s:p = g:_riv_p
+let s:e = g:_riv_e
 " Search Relation: "{{{
 " the searchpos and setpos version
 " it's heavy though.
@@ -18,7 +19,7 @@ fun! s:get_all_list(row) "{{{
     let save_pos = getpos('.')
     call cursor(row,1)
 
-    while getline(row) !~ g:_riv_p.all_list && row != 0
+    while getline(row) !~ s:p.all_list && row != 0
         let idt = indent(row)
         if idt == 0 
             let row = 0
@@ -38,7 +39,7 @@ fun! s:get_list(row) "{{{
     let save_pos = getpos('.')
     call cursor(row,1)
 
-    while getline(row) !~ g:_riv_p.b_e_list && row != 0
+    while getline(row) !~ s:p.b_e_list && row != 0
         let idt = indent(row)
         if idt == 0 
             let row = 0
@@ -70,7 +71,7 @@ fun! s:get_older(row) "{{{
         let [row,col] = searchpos(idt_ptn, 'b',0,100)
         let idt = indent(row)
         
-        while getline(row) !~ g:_riv_p.b_e_list && row != 0
+        while getline(row) !~ s:p.b_e_list && row != 0
             if idt <= c_idt
                 let row = 0
                 break
@@ -105,7 +106,7 @@ fun! s:get_parent(row) "{{{
         let [row,col] = searchpos(idt_ptn, 'b',0,100)
         let idt = indent(row)
         
-        while getline(row) !~ g:_riv_p.b_e_list && row != 0
+        while getline(row) !~ s:p.b_e_list && row != 0
             if idt == 0 
                 let row = 0
                 break
@@ -185,7 +186,7 @@ fun! riv#list#new(act) "{{{
         let line = getline(cur_list)
 
         " if it's field list , then just use it's indent.
-        if line =~ g:_riv_p.field_list
+        if line =~ s:p.field_list
             let idt = repeat(' ', indent(cur_list))
             let line = getline('.')
             let line = substitute(line, '^\s*', idt, '')
@@ -231,7 +232,6 @@ fun! riv#list#new(act) "{{{
     call setline(row, line)
 endfun "}}}
 
-
 fun! s:is_roman(row) "{{{
     let line = getline(a:row)
     if line =~ '^\c\s*(\=[imlcxvd][).]\s'
@@ -248,15 +248,14 @@ fun! s:is_roman(row) "{{{
     endif
 endfun "}}}
 
-
 fun! riv#list#stat(line,...) "{{{
     " return [type , idt , num , attr, space]
     let is_roman = a:0 ? a:1 : 0
-    let ma = matchlist(a:line, g:_riv_p.list_checker)
-    if empty(ma)
-        return [-1,0,0,0,0]
-    endif
+    let ma = matchlist(a:line, s:p.list_checker)
     let idt = matchstr(a:line,'^\s*')
+    if empty(ma)
+        return [-1,idt,0,0,0]
+    endif
     if !empty(ma[1])
         return [1, idt, '' , ma[1], ma[8]]
     elseif !empty(ma[2])
@@ -294,7 +293,7 @@ fun! s:list_str(type,idt,num,attr, space) "{{{
     endif
 endfun "}}}
 
-fun! s:listnum2nr(num,...) "{{{
+fun! s:num2nr(num,...) "{{{
     let is_roman = a:0 ? a:1 : 0
     if a:num == ''
         return 0
@@ -311,7 +310,7 @@ fun! s:listnum2nr(num,...) "{{{
         return riv#roman#to_nr(toupper(a:num))
     endif
 endfun "}}}
-fun! s:nr2listnum(n,type) "{{{
+fun! s:nr2num(n,type) "{{{
     " return alphabet are all '\u'
     if a:type=='1'
         return ''
@@ -347,7 +346,6 @@ fun! s:next_list_num(num,...) "{{{
         endif
     endif
 endfun "}}}
-
 
 " Level and stats "{{{
 "    *   +   -             =>
@@ -403,6 +401,59 @@ endfun "}}}
 "}}}
 "}}}
 
+fun! s:list_object(line) "{{{
+    " groups: indent, attr , white
+    return riv#ptn#match_object(a:line,s:p.list_white)
+endfun "}}}
+fun! s:rmv_list(line) "{{{
+    return substitute(a:line,s:p.list_white, '\1','')
+endfun "}}}
+
+fun! riv#list#fix_col(col,item_end,sft) "{{{
+    " fix col pos base on item_end and shift length.
+    if a:col > a:item_end
+        return a:col + a:sft
+    elseif ( a:item_end + a:sft <= a:col && a:item_end >= a:col )
+        return a:item_end + a:sft 
+    else
+        return a:col
+    endif
+endfun "}}}
+
+fun! riv#list#delete() "{{{
+    let [row, col] = [line('.'), col('.')]
+    let line = getline(row)
+    let prv_len = strwidth(line)
+    let end = matchend(line, s:p.b_e_list)
+    if end!= -1
+        let line = s:rmv_list(line)
+        call setline(row,line)
+        call cursor(row, riv#list#fix_col(col, end, (strwidth(line) - prv_len)))
+    else
+        call riv#warning(s:e.NOT_LIST_ITEM)
+    endif
+endfun "}}}
+" the type are '*' , '1.' , 'a.' , 'A)' ,'i)'
+let s:change_levels = [0,3,5,9,12]
+fun! riv#list#change(id) "{{{
+    let [row, col] = [line('.'), col('.')]
+    let line = getline(row)
+    
+    let prv_len = strwidth(line)
+    let end = matchend(line, g:_riv_p.b_e_list)
+
+    if end == -1
+        let line = substitute(line, '^\s*', '\0* ', '')
+    else
+        let [type , idt , num , attr, space] = riv#list#stat(line, is_roman)
+        let [type,num,attr] = s:level2stat(s:change_levels[a:id])
+        let list_str = s:list_str(type,idt,num,attr,space)
+        let line = substitute(line, s:p.b_e_list , list_str, '')
+    endif
+    call setline(row, line)
+    call cursor(row, riv#list#fix_col(col, end, (strwidth(line) - prv_len)))
+endfun "}}}
+
 fun! riv#list#toggle_type(i) "{{{
     " Change current list type with different level type
     let [row, col]= [line('.'), col('.')]
@@ -420,7 +471,7 @@ fun! riv#list#toggle_type(i) "{{{
         let list_str = s:list_str(1 , '', '' , "*", " ") 
         let line = substitute(line, '^\s*', list_str, '')
     else
-        let prv_ls_end = matchend(line, g:_riv_p.b_e_list)
+        let prv_ls_end = matchend(line, s:p.b_e_list)
         let level = s:stat2level(type, num, attr) 
         if a:i == 0
             let list_str = idt
@@ -428,7 +479,7 @@ fun! riv#list#toggle_type(i) "{{{
             let [type,num,attr] = s:level2stat(level+a:i)
             let list_str = s:list_str(type,idt,num,attr,space)
         endif
-        let line = substitute(line, g:_riv_p.b_e_list , list_str, '')
+        let line = substitute(line, s:p.b_e_list , list_str, '')
     endif
     call setline(row, line)
     let mod_len = strwidth(line)
@@ -454,7 +505,6 @@ fun! riv#list#shift(direction) range "{{{
     " the list in it will fix it's level and number 
     " also fix indent as the list changes level will change the sub item's
     " indent
-    
     let line = getline(a:firstline) 
     if a:direction != "="
         let list = s:get_list(a:firstline)
@@ -462,7 +512,7 @@ fun! riv#list#shift(direction) range "{{{
         if list && list != a:firstline
             let l_idt = indent(list)
             let c_idt = indent(a:firstline)
-            let f_idt = matchend(getline(list), g:_riv_p.b_e_list)
+            let f_idt = matchend(getline(list), s:p.b_e_list)
             if (a:direction=='+' && c_idt<f_idt && c_idt+ln>f_idt)
             \ || (a:direction=='-' && c_idt>f_idt && c_idt-ln<f_idt)
                 let ln =  abs(f_idt - c_idt)
@@ -482,7 +532,7 @@ fun! riv#list#shift(direction) range "{{{
         let older = s:get_older(a:firstline)
         if older 
             " if has older , use older's item length
-            let ln = matchend(getline(older), g:_riv_p.b_e_list) - indent(older)
+            let ln = matchend(getline(older), s:p.b_e_list) - indent(older)
         endif
     endif
     let vec = a:direction=="-" ? -ln : a:direction=="+"  ? ln : 0
@@ -533,7 +583,7 @@ fun! s:list_shift_len(row,vec,...) "{{{
 
     let is_roman = s:is_roman(a:row)
     let [type , idt , num , attr, space] =  riv#list#stat(line, is_roman)
-    let nr = s:listnum2nr(num, is_roman)
+    let nr = s:num2nr(num, is_roman)
 
     if type != -1 && a:vec != 0
         if a:vec > 0
@@ -544,11 +594,10 @@ fun! s:list_shift_len(row,vec,...) "{{{
             let [type,num,attr] = s:level2stat(level-1)
         endif
     
-    
-        let num = num=~'\U' ? tolower(s:nr2listnum(nr,type)) : s:nr2listnum(nr,type)
+        let num = num=~'\U' ? tolower(s:nr2num(nr,type)) : s:nr2num(nr,type)
 
         let p_len = len(line)
-        let line = substitute(line, g:_riv_p.b_e_list,
+        let line = substitute(line, s:p.b_e_list,
                     \ s:list_str(type,idt,num,attr,space), '')
         let s:sft_fix[indent] = s:sft_fix[indent-1] +  len(line) - p_len
     endif
@@ -567,14 +616,14 @@ fun! s:fix_nr(row, indent) "{{{
         let is_roman = s:is_roman(older)
         let [type , idt , num , attr, space] = riv#list#stat(getline(older),
                                                 \is_roman)
-        let nr = s:listnum2nr(num, is_roman) + 1
+        let nr = s:num2nr(num, is_roman) + 1
     else
         let [type , idt , num , attr, space] = riv#list#stat(line, s:is_roman(a:row))
         let nr = 1
     endif
-    let num = num=~'\U' ? tolower(s:nr2listnum(nr,type)) : s:nr2listnum(nr,type)
+    let num = num=~'\U' ? tolower(s:nr2num(nr,type)) : s:nr2num(nr,type)
     let p_len = len(line)
-    let line = substitute(line, g:_riv_p.b_e_list,
+    let line = substitute(line, s:p.b_e_list,
                 \ s:list_str(type,idt,num,attr,space), '')
     let s:sft_fix[a:indent] += len(line) - p_len
     call setline(a:row,line)

@@ -33,11 +33,6 @@ for code in g:_riv_t.highlight_code
             \.'skip=#^$# '
             \.'end=#^\s\@!# contains=@rst_'.code
         exe 'syn cluster rstDirectives add=rstDirective_'.code
-        exe 'syn region rstDirective_hl_'.code.' matchgroup=rstDirective fold '
-            \.'start=#highlights::\s\+'.code.'\_s*# '
-            \.'skip=#^$# '
-            \.'end=#\_^\(..\shighlights::\)\@=# contains=@rst_'.code
-        exe 'syn cluster rstDirectives add=rstDirective_hl_'.code
     endif
     unlet s:{code}path
 endfor
