@@ -538,7 +538,7 @@ fun! s:st_checker(row) "{{{
             call add(b:state.matcher, b:state.st_chk)
             call remove(b:state, 'st_chk')
         endif
-    elseif b:lines[a:row] !~ s:p.spl_span_sep
+    elseif b:lines[a:row] !~ s:p.simple_table_span
         let b:state.st_chk.row += 1
     endif
 endfun "}}}
