@@ -149,7 +149,7 @@ Each references needs a link target.
 
 A link target may be explicit or implicit.
 
-.. _Link: This is a explicit target
+.. _Link: www.python.org
 
 Jumping
     ``<Enter>`` or Double-Click on links , will bring you to the target.
