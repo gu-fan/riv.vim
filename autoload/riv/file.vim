@@ -56,26 +56,22 @@ fun! riv#file#update() "{{{
     let s:prev = expand('%:p')
 endfun "}}}
 
-" Helper Mod: "{{{2
 fun! riv#file#enter() "{{{
     let file = matchstr(getline('.'),  '\S\+$')
-    call s:file.exit()
     let file = s:path.file
-    let win = bufwinnr(s:curr)  
-    if win != -1
-        exe win. 'wincmd w'
+    if s:file.exit()
+        call riv#file#edit(file)
     else
-        exe 'wincmd p'
+        call riv#file#split(file)
     endif
-    call riv#file#edit(file)
 endfun "}}}
 fun! riv#file#syn_hi() "{{{
+    syn clear
     syn match rivFile '\S\+$'
     syn match rivType '^\u\+\s'
     hi link rivFile Function
     hi link rivType Include
 endfun "}}}
-"}}}
 "
 if has("signs") "{{{
     sign define riv_root text=RT texthl=Question
@@ -156,6 +152,78 @@ fun! riv#file#helper() "{{{
     cal s:file.win('vI')
 endfun "}}}
 
+fun! s:find_sect(ptn) "{{{
+    if exists("b:state.sectmatcher")
+        for sect in b:state.sectmatcher
+            let line =  getline(sect.bgn) 
+            if line =~ g:_riv_p.section
+                let line = getline(sect.bgn+1)
+            endif
+            if line =~ a:ptn
+                return sect.bgn
+            endif
+        endfor
+    endif
+endfun "}}}
+fun! riv#file#s_enter() "{{{
+    let sect = matchstr(getline('.'),  ':\s*\zs.*$')
+    if s:sect.exit()
+        let row = s:find_sect(sect)
+        if row > 0
+            call setpos("'`",getpos('.'))
+            call cursor(row,0)
+            normal! zv
+        endif
+    else
+        call riv#warning(g:_riv_e.FILE_NOT_FOUND)
+    endif
+endfun "}}}
+fun! riv#file#s_syn_hi() "{{{
+    syn clear
+    let punc = g:riv_fold_section_mark
+    exe 'syn match rivNumber `^[0-9'.punc.']\+:`'
+    syn match rivSection ':\@<=.*$'
+    hi link rivSection Include
+    hi link rivNumber Function
+endfun "}}}
+fun! s:load_sect() "{{{
+    if !exists("b:state")
+        return []
+    endif
+    let lines = []
+    let s:curr=expand('%:p')
+    for sect in b:state.sectmatcher
+        let line =  getline(sect.bgn) 
+        if line =~ g:_riv_p.section
+            let line = getline(sect.bgn+1)
+        endif
+        let line = printf("%-10s %s",sect.txt.':', line)
+        call add(lines, line)
+    endfor
+    return lines
+endfun "}}}
+
+fun! riv#file#section_helper() "{{{
+    if &ft!='rst'
+        call riv#warning(g:_riv_e.NOT_RST_FILE)
+        return
+    endif
+
+    let sects = s:load_sect()
+    let s:sect = riv#helper#new()
+    let s:sect.content_title = "Section"
+    let s:sect.contents = [sects]
+    let s:sect.contents_name = ['Section']
+    let s:sect.signs = []
+
+    let s:sect.maps['<Enter>'] = 'riv#file#s_enter'
+    let s:sect.maps['<KEnter>'] = 'riv#file#s_enter'
+    let s:sect.maps['<2-leftmouse>'] = 'riv#file#s_enter'
+    let s:sect.syntax_func  = "riv#file#s_syn_hi"
+    let s:sect.input=""
+    cal s:sect.win('vI')
+    
+endfun "}}}
 
 fun! s:id() "{{{
     return exists("b:riv_p_id") ? b:riv_p_id : g:riv_p_id

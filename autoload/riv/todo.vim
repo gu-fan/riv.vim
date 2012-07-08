@@ -400,7 +400,6 @@ fun! s:load_todo() "{{{
         call s:cache_todo(0)
         return readfile(riv#path#root().'.todo_cache')
     else
-        let s:cur_td_file = file
         return s:file2lines(readfile(file), '%', 5)
     endif
 endfun "}}}
@@ -428,18 +427,17 @@ fun! riv#todo#update() "{{{
     call writefile(c_lines+lines , cache)
 endfun "}}}
 
-" Helper Mod: "{{{2
 fun! riv#todo#enter() "{{{
     let [all,file,lnum;rest] = matchlist(getline('.'),  '\v^(\S*)\s+(\d+)\ze |')
-    call s:todo.exit()
     if file !=  '%'
         let file = riv#path#root().file
     else
-        let file = s:cur_td_file
+        let file = s:todo.prev_file
     endif
-    let win = bufwinnr(file)  
-    if win != -1
-        exe win. 'wincmd w'
+    if s:todo.exit()
+        if expand('%:p') != file
+            call riv#file#edit(file)
+        endif
     else
         call riv#file#split(file)
     endif
@@ -447,6 +445,7 @@ fun! riv#todo#enter() "{{{
     normal! zv
 endfun "}}}
 fun! riv#todo#syn_hi() "{{{
+    syn clear
     exe 'syn match rivFile `' . s:s.rivFile .'`'
     exe 'syn match rivLnum `' . s:s.rivLnum .'`'
     exe 'syn match rivTodo `' . s:s.rivTodo .'` transparent contains=@rivTodoGroup'
@@ -473,7 +472,6 @@ fun! riv#todo#syn_hi() "{{{
 
     hi def link rivDone         Comment
 endfun "}}}
-"}}}
 fun! riv#todo#todo_helper() "{{{
     let All = s:load_todo()
     let s:todo = riv#helper#new()

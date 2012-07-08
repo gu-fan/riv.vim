@@ -24,48 +24,50 @@ fun! riv#helper#run() "{{{
 endfun "}}}
 
 " init "{{{
-let s:helper = { 'name' : '_Helper_', 
-            \}
-let s:helper.maps = {
-    \  '<Enter>'  : 'riv#helper#enter',
-    \  '<KEnter>' : 'riv#helper#enter',
-    \  'q'        : 'riv#helper#exit'  ,
-    \  '<Esc>'    : 'riv#helper#exit'  ,
-    \  '<Tab>'    : 'riv#helper#tab'  ,
-    \  '<S-Tab>'  : 'riv#helper#tab'  ,
-    \  '/'        : 'riv#helper#run'  ,
-    \}
-let s:helper.contents = [[]]
-let s:helper.content_title = "Helper"
-let s:helper.lines = []
-let s:helper.clist = []
-let s:helper.input = ""
-let s:helper.syntax_func = ""
-let s:helper.c_id = 0
-let s:helper.signs = []
+let s:helper = {}
+let s:helper = { 'name' : '_Helper_' }
+fun! s:helper.new() dict "{{{
+    let self.maps = {
+        \  '<Enter>'  : 'riv#helper#enter',
+        \  '<KEnter>' : 'riv#helper#enter',
+        \  'q'        : 'riv#helper#exit'  ,
+        \  '<Esc>'    : 'riv#helper#exit'  ,
+        \  '<Tab>'    : 'riv#helper#tab'  ,
+        \  '<S-Tab>'  : 'riv#helper#tab'  ,
+        \  '/'        : 'riv#helper#run'  ,
+        \}
+    let self.contents = [[]]
+    let self.content_title = "Helper"
+    let self.lines = []
+    let self.clist = []
+    let self.input = ""
+    let self.syntax_func = ""
+    let self.c_id = 0
+    let self.signs = []
+    return self
+endfun "}}}
 "}}}
 fun! s:helper.win(...) dict "{{{
+
+    let self.prev_file = expand('%:p')
+
     if a:0 && a:1 =~ 'v'
         let self.vert = 1
+        let sp = 'vert top 25new'
     else
         let self.vert = 0
+        let sp = 'bot 8new'
     endif
-    call self.new()
+
+    if !s:get_buf(self.name)
+        exec 'noa keepa '.sp.' +setl\ nobl '.self.name
+    endif
+
     call self.set()
     if a:0 && a:1 =~ 'I'
         call self.render()
     else
         call self.run()
-    endif
-endfun "}}}
-fun! s:helper.new() dict "{{{
-    if self.vert == 1
-        let sp = 'vert top 25new'
-    else
-        let sp = 'bot 8new'
-    endif
-    if !s:get_buf(self.name)
-        exec 'noa keepa '.sp.' +setl\ nobl '.self.name
     endif
 endfun "}}}
 fun! s:helper.run() dict "{{{
@@ -111,24 +113,31 @@ fun! s:helper.set() dict "{{{
 	if v:version > 702
 		setl nornu noudf cc=0
 	en
+
+	syn clear
     call call(self.syntax_func,[])
 
     call self.map()
 
 endfun "}}}
-fun! s:helper.hi() dict "{{{
-    " let [row,col] = getpos('.')[1:2]
-    " execute '2match' "none"
-    " execute '2match' "DiffText".' /\%'.(row).'l/'
-endfun "}}}
 fun! s:helper.exit() dict "{{{
 	cal s:get_buf(s:helper.name)
+
+    if has("signs")
+        let self.signs = []
+        sign unplace 21
+        sign unplace 22
+    endif
+
 	redraw
 	try 
 	    noa bun!
     catch 
 	    noa close! 
     endtry
+
+    return s:get_buf(self.prev_file)
+
 endfun "}}}
 fun! s:helper.tab() dict "{{{
     let self.c_id = self.c_id == len(self.contents)-1 ? 0 : self.c_id + 1
@@ -211,17 +220,17 @@ endfun "}}}
 fun! s:get_buf(name) "{{{
     """ if buffer exists , go to buffer and return 1
     """ else return 0
-    let n = bufwinnr(bufnr(a:name))
+    let n = bufwinnr(a:name)
     if  n != -1
         exe  n . "wincmd w"
-        return n
+        return 1
     else
         return 0
     endif
 endfun "}}}
 
 fun! riv#helper#new() "{{{
-    return s:helper
+    return s:helper.new()
 endfun "}}}
 let &cpo = s:cpo_save
 unlet s:cpo_save

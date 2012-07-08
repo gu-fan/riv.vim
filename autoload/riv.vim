@@ -176,6 +176,7 @@ let s:default.maps = {
     \'RivHelpTodo'     : 'call riv#todo#todo_helper()',
     \'RivTodoUpdateCache': 'call riv#todo#force_update()',
     \'RivHelpFile'       : 'call riv#file#helper()',
+    \'RivHelpSection'    : 'call riv#file#section_helper()',
     \'RivCreateLink'     : 'call riv#create#link()',
     \'RivCreateGitLink'  : 'call riv#create#git_commit_url()',
     \'RivCreateFoot'     : 'call riv#create#foot()',
@@ -262,6 +263,7 @@ let s:default.buf_maps = {
     \'RivTestInsert'     : ['',  'm',   'ti'],
     \'RivCreateGitLink'  : ['',  'm',   'tg'],
     \'RivHelpFile'       : ['',  'm',   'hf'],
+    \'RivHelpSection'    : ['',  'm',   'hs'],
     \}
 let s:default.buf_imaps = {
     \'<BS>'         : 'riv#action#ins_backspace()',
@@ -478,6 +480,7 @@ fun! riv#load_conf() "{{{1
     let s:e.NOT_LIST_ITEM = "Riv: Not a List Item"
     let s:e.NOT_DATESTAMP = "Riv: Not a Datestamp"
     let s:e.NOT_RST_FILE  = "Riv: NOT A RST FILE"
+    let s:e.FILE_NOT_FOUND = "Riv: Could not find the file"
 
 endfun "}}}
 fun! riv#init() "{{{

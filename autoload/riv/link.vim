@@ -111,7 +111,8 @@ fun! riv#link#open() "{{{
         let [sr,sc] = s:find_ref(mo.str)
         if sr != 0
             call setpos("'`",getpos('.'))
-            call setpos('.',[0,sr,sc,0])
+            call cursor(sr,sc)
+            normal! zv
             return 1
         endif
     elseif !empty(mo.groups[2])
@@ -121,7 +122,8 @@ fun! riv#link#open() "{{{
             let [sr,sc] = s:find_tar(mo.str)
             if sr != 0
                 call setpos("'`",getpos('.'))
-                call setpos('.',[0,sr,sc,0])
+                call cursor(sr,sc)
+                normal! zv
             endif
         else
             sil! exe "!".g:riv_web_browser." ". escape(em,'#%')." &"

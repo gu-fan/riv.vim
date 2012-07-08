@@ -45,6 +45,11 @@ These features are contained in all reStructuredText files.
  :Syntax_:   Improved highlights to indicate document items.
  :Publish_:  Some command wrapper to convert rst files to html/xml/latex/odt/... 
              (require python docutils package )
+ :Helpers_:  A window to help manage the document.
+
+             a. `Section Helper`_: SHowing Section number of current document.
+             b. `Todo Helper`_: Managing todo items of project or document.
+             c. `File Helper`_: Showing rst files of current directory.
 
 These features are better working with the project. 
 
@@ -52,9 +57,6 @@ These features are better working with the project.
  :File_:     Local file link in rst documents. 
  :Scratch_:  A place for writing diary or notes.
  :Todos_:    Keep track of todo things.
- :Helpers_:  A window to help manage the project.
-
-             a. `Todo Helper`_: Managing todo items of project.
 
 * To Install: see `Install`_
 * To Start: see `Instruction`_
@@ -129,13 +131,16 @@ Things todo in this version.
 
   :Indent_: DONE 2012-07-08 8b2c4611_ Rewrite the indent for list and insert.
   :File_:   DONE 2012-07-07 dceab5c1_ Add File helper.
-  :Document: 69e5a86e_ commit links
+  :Document: DONE 2012-07-08 69e5a86e_ commit links
+  :File_:   DONE 2012-07-07 6ae48325_ Add Section helper.
 
+.. _6ae48325: 
+   https://github.com/Rykka/riv.vim/commit/6ae48325a7f431d2652f75a4ad03d081be9ddf92
 
-.. _69e5a86e: 69e5a86e530c09f1472b1d4c79c05854a061f8f3
+.. _69e5a86e: 
+   https://github.com/Rykka/riv.vim/commit/69e5a86e530c09f1472b1d4c79c05854a061f8f3
 .. _dceab5c1: 
    https://github.com/Rykka/riv.vim/commit/dceab5c1b0ae484c44763ff1172fc3d93debf2e6
-
 .. _8b2c4611: 
    https://github.com/Rykka/riv.vim/commit/8b2c4611acf959a28d4413e0131de70b68c9368d
 
@@ -530,9 +535,9 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#block-quot
 >>> print 'this is a Doctest block'
 this is a Doctest block
     
-  It's highlighted, not folded.
+It's highlighted, not folded.
 
-  See `Doctest Blocks`__ for syntax details.
+See `Doctest Blocks`__ for syntax details.
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#doctest-blocks
 
@@ -750,7 +755,7 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#grid-table
   ===========  ========================
 
 
-    See `Simple Tables`__ for syntax details.
+  See `Simple Tables`__ for syntax details.
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#simple-tables
 
@@ -1315,6 +1320,17 @@ also indicating following files if exists::
 
 + ``:RivHelpFile`` or ``<C-E>hf``
   Open File Helper.
+  Default is in normal mode.
+
+
+
+
+Section Helper
+""""""""""""""
+A helper showing current document section numbers
+
++ ``:RivHelpSection`` or ``<C-E>hs``
+  Open Section Helper.
   Default is in normal mode.
 
 Miscs
