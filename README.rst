@@ -2,8 +2,8 @@ Intro
 =====
 
 :Author: Rykka G.Forest
-:Date:   2012-07-07 12:31:41
-:Version: 0.68 
+:Date:   2012-07-08 22:24:32
+:Version: 0.69 
 :Github: https://github.com/Rykka/riv.vim
 
 **Riv** is for writing and managing documents in vim.
@@ -47,7 +47,7 @@ These features are contained in all reStructuredText files.
              (require python docutils package )
  :Helpers_:  A window to help manage the document.
 
-             a. `Section Helper`_: SHowing Section number of current document.
+             a. `Section Helper`_: SHowing section number of current document.
              b. `Todo Helper`_: Managing todo items of project or document.
              c. `File Helper`_: Showing rst files of current directory.
 
@@ -132,11 +132,10 @@ Things todo in this version.
   :Indent_: DONE 2012-07-08 8b2c4611_ Rewrite the indent for list and insert.
   :File_:   DONE 2012-07-07 dceab5c1_ Add File helper.
   :Document: DONE 2012-07-08 69e5a86e_ commit links
-  :File_:   DONE 2012-07-07 6ae48325_ Add Section helper.
+  :File_:   DONE 2012-07-07 a207e1e0_ Add Section helper.
 
-.. _6ae48325: 
-   https://github.com/Rykka/riv.vim/commit/6ae48325a7f431d2652f75a4ad03d081be9ddf92
-
+.. _a207e1e0: 
+   https://github.com/Rykka/riv.vim/commit/a207e1e0de177f6e6bd06fc2fab0151780074320
 .. _69e5a86e: 
    https://github.com/Rykka/riv.vim/commit/69e5a86e530c09f1472b1d4c79c05854a061f8f3
 .. _dceab5c1: 

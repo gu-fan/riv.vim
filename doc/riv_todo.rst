@@ -10,7 +10,9 @@ TODOS
 
 1. Temlates:
 
-   A. A shortcut to create basic file layout for each file in project.
+   A. A Even QuickStarter for reStructuredText quick start.
+
+   B. A shortcut to create basic file layout for each file in project.
 
       for file, shows parent index / index and file: create/modified date.
 
@@ -18,7 +20,7 @@ TODOS
 
       for root , only show file.
 
-   B. HTML templates and CSS styles
+   C. HTML templates and CSS styles
 
 2. Sections:
 
@@ -79,9 +81,10 @@ TODOS
 
 9. Indent 
 
-   + Indent:  <Tab> to indent. improved <BS> indent
-   + Indent:  The content space for field list should align with prev field list.
-   + Indent:  A command to format the indent of lists.
+   + DONE 2012-07-08 Indent:  <Tab> to indent. improved <BS> indent
+   + TODO Indent:  The content space for field list should align with prev field list.
+   + DONE 2012-07-08 Indent:  A command to format the indent of lists.
+     Use '>' '<' to indent list lvel, use '=' to format number only
 
 10. Syntax
 
@@ -91,7 +94,7 @@ TODOS
 
 11. Folding
 
-   A. Sometimes folding did not update correctly.
+   A. XXX Sometimes folding did not update correctly.
 
 12. File
 
@@ -111,8 +114,8 @@ TODOS
     A. Helpers: An option Helper and option cache. 
        Let people use it even without touching ``.vimrc`` .
     B. Helpers: A command helper?
-    C. A file helper : showing file structure
-    D. A documnet helper : showing doucment structure
+    C. DONE 2012-07-08 A file helper : showing file structure
+    D. DONE 2012-07-08 A documnet helper : showing doucment structure
     E. DONE 2012-07-07 Todo Helper : showing document todo for a file not in project.
 
 15. Scratch
