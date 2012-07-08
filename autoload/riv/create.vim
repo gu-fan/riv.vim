@@ -393,6 +393,16 @@ fun! riv#create#auto_mkdir() "{{{
         call mkdir(dir,'p')
     endif
 endfun "}}}
+fun! riv#create#git_commit_url() "{{{
+    if !exists("*fugitive#repo")
+        call riv#warning("NO fugitive")
+        return
+    endif
+    let sha = fugitive#repo().rev_parse('HEAD')
+
+    let [ref, tar] = s:expand_link(sha)
+    call append(line('.'), [ref,"",tar])
+endfun "}}}
 "}}}
 
 " cmd helper "{{{

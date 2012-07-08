@@ -177,6 +177,7 @@ let s:default.maps = {
     \'RivTodoUpdateCache': 'call riv#todo#force_update()',
     \'RivHelpFile'       : 'call riv#file#helper()',
     \'RivCreateLink'     : 'call riv#create#link()',
+    \'RivCreateGitLink'  : 'call riv#create#git_commit_url()',
     \'RivCreateFoot'     : 'call riv#create#foot()',
     \'RivCreateDate'     : 'call riv#create#date()',
     \'RivCreateTime'     : 'call riv#create#date(1)',
@@ -259,6 +260,7 @@ let s:default.buf_maps = {
     \'RivTestObj'        : ['',  'm',   't3'],
     \'RivTestTest'       : ['',  'm',   't4'],
     \'RivTestInsert'     : ['',  'm',   'ti'],
+    \'RivCreateGitLink'  : ['',  'm',   'tg'],
     \'RivHelpFile'       : ['',  'm',   'hf'],
     \}
 let s:default.buf_imaps = {

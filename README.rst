@@ -129,8 +129,10 @@ Things todo in this version.
 
   :Indent_: DONE 2012-07-08 8b2c4611_ Rewrite the indent for list and insert.
   :File_:   DONE 2012-07-07 dceab5c1_ Add File helper.
+  :Document: 69e5a86e_ commit links
 
 
+.. _69e5a86e: 69e5a86e530c09f1472b1d4c79c05854a061f8f3
 .. _dceab5c1: 
    https://github.com/Rykka/riv.vim/commit/dceab5c1b0ae484c44763ff1172fc3d93debf2e6
 
