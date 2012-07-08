@@ -172,7 +172,7 @@ fun! riv#file#s_enter() "{{{
         if row > 0
             call setpos("'`",getpos('.'))
             call cursor(row,0)
-            normal! zv
+            normal! zvzt
         endif
     else
         call riv#warning(g:_riv_e.FILE_NOT_FOUND)

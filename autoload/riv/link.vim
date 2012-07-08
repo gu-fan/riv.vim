@@ -112,7 +112,7 @@ fun! riv#link#open() "{{{
         if sr != 0
             call setpos("'`",getpos('.'))
             call cursor(sr,sc)
-            normal! zv
+            normal! zvz.
             return 1
         endif
     elseif !empty(mo.groups[2])
@@ -123,7 +123,7 @@ fun! riv#link#open() "{{{
             if sr != 0
                 call setpos("'`",getpos('.'))
                 call cursor(sr,sc)
-                normal! zv
+                normal! zvz.
             endif
         else
             sil! exe "!".g:riv_web_browser." ". escape(em,'#%')." &"

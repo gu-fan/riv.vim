@@ -442,7 +442,7 @@ fun! riv#todo#enter() "{{{
         call riv#file#split(file)
     endif
     call cursor(lnum, 1)
-    normal! zv
+    normal! zvz.
 endfun "}}}
 fun! riv#todo#syn_hi() "{{{
     syn clear

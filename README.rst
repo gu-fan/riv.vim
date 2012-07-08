@@ -22,12 +22,21 @@ Screenshot
 **Overview of this Intro**
 
 .. image::  http://i.minus.com/jqyQGm8G9gO9h.png
+   :height: 800px
+   :width: 500 px
 
 **The Folding infos**
 
 .. image::  http://i.minus.com/ibeAAXZxjcyoZ5.png
+   :height: 800px
+   :width: 500 px
 
+**Section Helper**
 
+.. figure::  http://i.minus.com/jbnz0ZNgxVmYCI.jpg
+   :align: right
+   :height: 800px
+   :width: 500 px
 
 Features
 --------
@@ -129,10 +138,10 @@ Things todo in this version.
 
 * 0.69:
 
-  :Indent_: DONE 2012-07-08 8b2c4611_ Rewrite the indent for list and insert.
+  :Indent_: DONE 2012-07-07 8b2c4611_ Rewrite the indent for list and insert.
   :File_:   DONE 2012-07-07 dceab5c1_ Add File helper.
   :Document: DONE 2012-07-08 69e5a86e_ commit links
-  :File_:   DONE 2012-07-07 a207e1e0_ Add Section helper.
+  :File_:   DONE 2012-07-08 a207e1e0_ Add Section helper.
 
 .. _a207e1e0: 
    https://github.com/Rykka/riv.vim/commit/a207e1e0de177f6e6bd06fc2fab0151780074320
