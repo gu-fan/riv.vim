@@ -110,7 +110,6 @@ See Changelog in doc/riv_log.rst riv_log_
   :Syntax_:   DONE 2012-07-07 a2334f7b_ Cursor highlight will check it's valid file
   :Lists_:    DONE 2012-07-07 0a959662_ Add list types 0 ~ 4 
   :Todos_:    DONE 2012-07-07 142b6c49_ Add Prior in helper
-  :File_:     DONE 2012-07-07 142b6c49_ Add File helper.
 
 
 .. _142b6c49: 
@@ -128,7 +127,12 @@ Things todo in this version.
 
 * 0.69:
 
-  :Indent_: 8b2c4611_ Rewrite the indent for list and insert.
+  :Indent_: DONE 2012-07-08 8b2c4611_ Rewrite the indent for list and insert.
+  :File_:   DONE 2012-07-07 dceab5c1_ Add File helper.
+
+
+.. _dceab5c1: 
+   https://github.com/Rykka/riv.vim/commit/dceab5c1b0ae484c44763ff1172fc3d93debf2e6
 
 .. _8b2c4611: 
    https://github.com/Rykka/riv.vim/commit/8b2c4611acf959a28d4413e0131de70b68c9368d
