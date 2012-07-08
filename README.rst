@@ -37,7 +37,7 @@ These features are contained in all reStructuredText files.
  :Sections_: Fold by it's level, and showing it's section number.
  :Lists_:    Auto Numbered and auto leveled lists.
  :Blocks_:   Highlighted and folded blocks.
- :Links_:    Link jumping and cursor-highlighting_
+ :Links_:    Link jumping and `cursor highlighting`_
  :Table_:    Auto formatted table.
  :Folding_:  Folded document structures (Sections/Lists/Blocks).
  :Indent_:   Smarter indent.
@@ -110,6 +110,7 @@ See Changelog in doc/riv_log.rst riv_log_
   :Syntax_:   DONE 2012-07-07 a2334f7b_ Cursor highlight will check it's valid file
   :Lists_:    DONE 2012-07-07 0a959662_ Add list types 0 ~ 4 
   :Todos_:    DONE 2012-07-07 142b6c49_ Add Prior in helper
+  :File_:     DONE 2012-07-07 142b6c49_ Add File helper.
 
 
 .. _142b6c49: 
@@ -546,7 +547,7 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#doctest-bl
   See `Explicit Markup Blocks`__ for syntax details.
 
   And for the ``code`` directives, syntax highlighting is on. 
-  See Code-Highlighting_  for details.
+  See `Code Highlighting`_  for details.
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#explicit-markup-blocks
 
@@ -566,7 +567,7 @@ Links
 
 You can jumping with links.
 
-And it's highlighted with Cursor-Highlighting_.
+And it's highlighted with `Cursor Highlighting`_.
 
 
 * Actions:
@@ -862,44 +863,44 @@ Syntax
 
 Improved highlights to indicate document items.
 
-.. [Code-Highlighting]
-..
-
-   For the ``code`` directives (also ``sourcecode`` and ``code-block``). 
-   syntax highlighting is on ::
- 
-     .. code:: python
-     
-         # python highlighting
-         # github does not support syntax highlighting rendering for rst file yet.
-         x = [0 for i in range(100)]
-
-   + Use ``g:riv_highlight_code`` to set which languages to be highlighted.
-
-     default is ``lua,python,cpp,javascript,vim,sh``
-
-   :NOTE: To enable syntax highlighting in converted file, 
-          python pygments_  package must installed for ``docutils`` 
-          parsing syntax highlighting.
-
-          See http://docutils.sourceforge.net/sandbox/code-block-directive/tools/pygments-enhanced-front-ends/
-
-.. [Cursor-Highlighting]
-.. 
-
-   Some item that could interactive with cursor are highlighted when cursor is on.
-
-   + Links are highlighted by ``hl-DiffText``
-
-     - For local file links , if the target is invalid , it will be highlighted by 
-       ``hl-DiffChange``
-   + Todo items are highlighted by ``hl-DiffAdd``
-
-   Disable Cursor Highlighting by set ``g:riv_hover_link_hl`` to 0
-
-
 *  Link of local files are highlighted by highlight group ``rstFileLink``.
 *  Todo Item are highlighted only in vim, not in converted files.
+
+Code Highlighting
+"""""""""""""""""
+
+For the ``code`` directives (also ``sourcecode`` and ``code-block``). 
+syntax highlighting is on ::
+ 
+  .. code:: python
+     
+      # python highlighting
+      # github does not support syntax highlighting rendering for rst file yet.
+      x = [0 for i in range(100)]
+
+* Use ``g:riv_highlight_code`` to set which languages to be highlighted.
+
+  default is ``lua,python,cpp,javascript,vim,sh``
+
+:NOTE: To enable syntax highlighting in converted file, 
+       python pygments_  package must installed for ``docutils`` 
+       parsing syntax highlighting.
+
+       See http://docutils.sourceforge.net/sandbox/code-block-directive/tools/pygments-enhanced-front-ends/
+
+Cursor Highlighting
+"""""""""""""""""""
+
+Some item that could interactive with cursor are highlighted when cursor is on.
+
+* Links are highlighted by ``hl-DiffText``
+
+  + For local file links , if the target is invalid , it will be highlighted by 
+    ``hl-DiffChange``
+* Todo items are highlighted by ``hl-DiffAdd``
+
+Disable Cursor Highlighting by set ``g:riv_hover_link_hl`` to 0
+
 
 Indent
 ~~~~~~
@@ -930,9 +931,7 @@ If no fix is needed, use ``shiftwidth``
 Insert
 ~~~~~~
 
-Multi actions in different context.
-
-* Most mappings commands can be used in insert mode. like ``<C-E>ee`` ``<C-E>s1`` ...
+Several Mappings have multi actions in different context.
 
 * Enter and KEnter (Keypad Enter): 
   
@@ -953,6 +952,7 @@ Multi actions in different context.
   :NOTE:  ``<S-Tab>`` act as ``<BS>`` when not in a table and no insert-popup menu.
 
 * BackSpace: use fixed indent. see indent_.
+* Most mappings commands can be used in insert mode. like ``<C-E>ee`` ``<C-E>s1`` ...
 
 
 Publish
@@ -1108,7 +1108,7 @@ The ``bare extension style`` and ``square bracket style``
   + default is 1.
 
 * File link are highlighted and cursor highlighted.
-  See Cursor-Highlighting_
+  See `Cursor Highlighting`_
 
 * To delete a local file in project.
 
@@ -1273,27 +1273,43 @@ Helpers
 
 A window to help manage the project.
 
-.. _Todo Helper:
-..
+* Action:
 
-  A helper to manage todo items of current project.
-  When current document is not in a project, will show current file's todo items.
-
-  See Todos_ for details.
-
-  + ``:RivTodoHelper`` or ``<C-E>ht``
-    Open to view all todo-items.
-    Default is in search mode.
-
-    - ``/`` to search todo item matching inputing, ``<Enter>`` or ``<Esc>`` to quit
-      search mode.
+  + ``/`` to enter search mode.
+    search item matching inputing, 
+    ``<Enter>`` or ``<Esc>`` to quit search mode.
       
-      Set ``g:riv_fuzzy_help`` to 1 to enable fuzzy searching in helper.
+    Set ``g:riv_fuzzy_help`` to 1 to enable fuzzy searching in helper.
 
-    - ``<Tab>`` to switch content, 
-      there are 'All/Todo/Done' contents for Todo Helper.
-    - ``<Enter>`` or Double Click to jump to the todo item.
-    - ``<Esc>`` or ``q`` to quit the window
+  + ``<Tab>`` to switch content, 
+  + ``<Enter>`` or Double Click to jump to the item.
+  + ``<Esc>`` or ``q`` to quit the window
+
+Todo Helper
+"""""""""""
+
+A helper to manage todo items of current project.
+When current document is not in a project, will show current file's todo items.
+
++ ``:RivHelpTodo`` or ``<C-E>ht``
+  Open Todo Helper.
+  Default is in search mode.
+
+File Helper
+"""""""""""
+
+A helper to show rst files of current directory.
+
+also indicating following files if exists::
+
+    'ROOT': 'RT' Root of project
+    'INDX': 'IN' Index of current directory
+    'CURR': 'CR' Current file
+    'PREV': 'PR' Previous file
+
++ ``:RivHelpFile`` or ``<C-E>hf``
+  Open File Helper.
+  Default is in normal mode.
 
 Miscs
 ~~~~~

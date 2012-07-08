@@ -33,16 +33,21 @@ endfun "}}}
 fun! riv#path#rel_to(dir, path) "{{{
     " return the related path to 'dir', default is current file's dir
     
-    let dir = riv#path#is_directory(a:dir) ? a:dir : a:dir.'/'
+    let dir = riv#path#is_directory(a:dir) ? a:dir : fnamemodify(a:dir,':h') . '/'
     let dir = fnamemodify(dir, ':gs?\?/?') 
- 
     let path = fnamemodify(a:path, ':gs?\?/?') 
     if match(path, dir) == -1
-        throw g:_riv_e.NOT_REL_PATH
+        let p = riv#path#is_directory(path) ? path : fnamemodify(path,':h') . '/'
+        let tail = fnamemodify(path,':t')
+        if match(dir, p) == -1
+            throw g:_riv_e.NOT_REL_PATH
+        endif
+        let f = substitute(dir, p, '','')
+        let dot = substitute(f,'[^/]\+/','../','g')
+        return dot.tail
     endif
     return substitute(path, dir, '','')
 endfun "}}}
-
 fun! riv#path#is_rel_to(dir, path) "{{{
     
     let dir = riv#path#is_directory(a:dir) ? a:dir : a:dir.'/'
@@ -60,6 +65,20 @@ endfun "}}}
 fun! riv#path#is_rel_to_root(path) "{{{
     return riv#path#is_rel_to(riv#path#root(), a:path)
 endfun "}}}
+
+fun! riv#path#par_to(dir,path) "{{{
+    let dir = riv#path#is_directory(a:dir) ? a:dir : a:dir.'/'
+    let dir = fnamemodify(dir, ':gs?\?/?') 
+ 
+    let path = fnamemodify(a:path, ':gs?\?/?') 
+    if match(dir, path) == -1
+        throw g:_riv_e.NOT_REL_PATH
+    endif
+    let f = substitute(dir, path, '','')
+    let dot = substitute(f,'[^/]\+/','../','g')
+    return dot
+endfun "}}}
+
 
 fun! riv#path#is_relative(name) "{{{
     return a:name !~ '^[~/]\|^[a-zA-Z]:'
@@ -79,5 +98,14 @@ fun! s:id() "{{{
     return exists("b:riv_p_id") ? b:riv_p_id : g:riv_p_id
 endfun "}}}
 
+if expand('<sfile>:p') == expand('%:p') 
+    let arg_lists = [['/a/b/c','/a/b/c/d'],
+                \['/a/b','/a/b/c/d'],
+                \['/a/b/c/','/a/b/'],
+                \['/a/b/c/','/a/b.a'],
+                \]
+
+    call riv#test#func_args("riv#path#rel_to", arg_lists)
+endif
 let &cpo = s:cpo_save
 unlet s:cpo_save

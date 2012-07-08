@@ -485,7 +485,7 @@ fun! riv#todo#todo_helper() "{{{
     let s:todo.contents = [All,Todo,Done,Prior1,Prior2,Prior3]
     let prior_strs = map(range(3), '"#".s:t.prior_str[v:val]')
     let s:todo.contents_name = ['All', 'Todo', 'Done'] + prior_strs
-    let s:todo.content_title = "Todo Helper"
+    let s:todo.content_title = "Todos"
 
     let s:todo.maps['<Enter>'] = 'riv#todo#enter'
     let s:todo.maps['<KEnter>'] = 'riv#todo#enter'

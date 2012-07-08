@@ -173,8 +173,9 @@ let s:default.maps = {
     \'Riv2Latex'         : 'call riv#publish#file2("latex",1)',
     \'Riv2BuildPath'     : 'call riv#publish#open_path()',
     \'RivDelete'         : 'call riv#create#delete()',
-    \'RivTodoHelper'     : 'call riv#todo#todo_helper()',
+    \'RivHelpTodo'     : 'call riv#todo#todo_helper()',
     \'RivTodoUpdateCache': 'call riv#todo#force_update()',
+    \'RivHelpFile'       : 'call riv#file#helper()',
     \'RivCreateLink'     : 'call riv#create#link()',
     \'RivCreateFoot'     : 'call riv#create#foot()',
     \'RivCreateDate'     : 'call riv#create#date()',
@@ -190,7 +191,8 @@ let s:default.g_maps = {
     \'RivAsk'            : ['wa', '<C-W><C-A>'] ,
     \'RivScratchCreate'  : ['cc', '<C-C><C-C>'] ,
     \'RivScratchView'    : ['cv', '<C-C><C-V>'] ,
-    \'RivTodoHelper'     : ['ht', '<C-h><C-t>'] ,
+    \'RivHelpTodo'     : ['ht', '<C-h><C-t>'] ,
+    \'RivHelpFile'       : ['hf', '<C-h><C-f>'] ,
     \}
 let s:default.fold_maps = { 
     \'RivFoldUpdate'     : ['zx', '<Space>j'],
@@ -220,7 +222,7 @@ let s:default.buf_maps = {
     \'RivListType4'      : ['',  'mi',  'l4'],
     \'RivListType5'      : ['',  'mi',  'l5'],
     \'RivListDelete'     : ['',  'mi',  'lx'],
-    \'RivTodoHelper'     : ['',  'm' ,  'ht'],
+    \'RivHelpTodo'     : ['',  'm' ,  'ht'],
     \'RivTodoUpdateCache': ['',  'm' ,  'uc'],
     \'RivTodoToggle'     : ['',  'mi',  'ee'],
     \'RivTodoPrior'      : ['',  'mi',  'ep'],
@@ -257,6 +259,7 @@ let s:default.buf_maps = {
     \'RivTestObj'        : ['',  'm',   't3'],
     \'RivTestTest'       : ['',  'm',   't4'],
     \'RivTestInsert'     : ['',  'm',   'ti'],
+    \'RivHelpFile'       : ['',  'm',   'hf'],
     \}
 let s:default.buf_imaps = {
     \'<BS>'         : 'riv#action#ins_backspace()',
@@ -276,7 +279,8 @@ let s:default.buf_imaps = {
 let s:default.menus = [
     \['Index'                             , 'ww'                     , 'RivIndex'          ]   ,
     \['Choose\ Index'                     , 'wa'                     , 'RivAsk'            ]   ,
-    \['Helper.Todo\ Helper'               , 'th'                     , 'RivTodoHelper'     ]   ,
+    \['Helper.File\ Helper'               , 'hf'                     , 'RivHelpFile'       ]   ,
+    \['Helper.Todo\ Helper'               , 'ht'                     , 'RivHelpTodo'     ]   ,
     \['Helper.Update\ Todo\ Cache'        , 'uc'                     , 'RivTodoUpdateCache']   ,
     \['Scratch.Create\ Scratch'           , 'cc'                     , 'RivScratchCreate'  ]   ,
     \['Scratch.View\ Index'               , 'cv'                     , 'RivScratchView'    ]   ,
@@ -471,6 +475,7 @@ fun! riv#load_conf() "{{{1
     let s:e.NOT_TODO_ITEM = "Riv: Not a Todo Item"
     let s:e.NOT_LIST_ITEM = "Riv: Not a List Item"
     let s:e.NOT_DATESTAMP = "Riv: Not a Datestamp"
+    let s:e.NOT_RST_FILE  = "Riv: NOT A RST FILE"
 
 endfun "}}}
 fun! riv#init() "{{{

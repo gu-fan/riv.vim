@@ -65,6 +65,9 @@ fun! riv#test#assert(val1, val2) "{{{
         echo '  >' a:val2
     endif
 endfun "}}}
+fun! riv#test#func_args(func,arg_list) "{{{
+    call s:test_func(a:func,a:arg_list)
+endfun "}}}
 fun! s:test_func(func,arg_list) "{{{
     echo "Func:" a:func 
     for arg in a:arg_list

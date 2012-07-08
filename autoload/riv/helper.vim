@@ -42,15 +42,30 @@ let s:helper.clist = []
 let s:helper.input = ""
 let s:helper.syntax_func = ""
 let s:helper.c_id = 0
+let s:helper.signs = []
 "}}}
 fun! s:helper.win(...) dict "{{{
+    if a:0 && a:1 =~ 'v'
+        let self.vert = 1
+    else
+        let self.vert = 0
+    endif
     call self.new()
     call self.set()
-    call self.run()
+    if a:0 && a:1 =~ 'I'
+        call self.render()
+    else
+        call self.run()
+    endif
 endfun "}}}
 fun! s:helper.new() dict "{{{
+    if self.vert == 1
+        let sp = 'vert top 25new'
+    else
+        let sp = 'bot 8new'
+    endif
     if !s:get_buf(self.name)
-        exec 'noa keepa bot 5new  +setl\ nobl '.self.name
+        exec 'noa keepa '.sp.' +setl\ nobl '.self.name
     endif
 endfun "}}}
 fun! s:helper.run() dict "{{{
@@ -122,6 +137,7 @@ fun! s:helper.render() dict "{{{
     cal s:helper.content()
     cal s:helper.stats()
     cal s:helper.prompt()
+    call s:helper.sign()
 endfun "}}}
 fun! s:helper.stats() dict "{{{
     let chooser = ""
@@ -131,7 +147,7 @@ fun! s:helper.stats() dict "{{{
     let title = self.content_title
 
     let &l:stl = "%1*".self.content_title .":%* ". chooser
-                \."%=Matching Numbers : ". len(self.clist).""
+                \."%=Num: ". len(self.clist).""
 endfun "}}}
 fun! s:helper.prompt() dict "{{{
     redraw | echohl Comment | echo ">>" | echohl Normal | echon self.input
@@ -155,21 +171,41 @@ fun! s:helper.content() dict "{{{
 
     let self.lines = map(copy(self.clist), 'self.contents[self.c_id][v:val]')
     let len = len(self.clist)
-    if len==0
-        resize 1
-    elseif len <=4
-        exe "resize " len
-    elseif winheight(0)<=5
-        resize 5
+    if self.vert == 0
+        if len==0
+            resize 1
+        elseif len <=4
+            exe "resize " len
+        elseif winheight(0)<=5
+            resize 5
+        endif
     endif
+
     setl ma
-    1,$d_
-    if len==0
-        call setline(1,"=== No Match ===")
-    else
-        call setline(1,self.lines)
-    endif
+        1,$d_
+        if len==0
+            call setline(1,"=== No Match ===")
+        else
+            call setline(1,self.lines)
+        endif
     setl noma
+endfun "}}}
+if has("signs") "{{{
+    sign define riv_conceal text=_ texthl=SignColumn
+endif "}}}
+fun! s:helper.sign() dict "{{{
+    if !has("signs") || empty(self.signs) | return | endif
+    let buf = bufnr('%')
+    exe 'sign place 21 name=riv_conceal line=100 buffer='.buf
+    sign unplace 22
+    for i in range(len(self.signs))
+        let sign = self.signs[i]
+        let num = index(self.clist, i)+1
+        if num
+            exe 'sign place 22 name='.sign. ' line='.num.' buffer='.buf
+        endif
+    endfor
+    sign unplace 21
 endfun "}}}
 
 fun! s:get_buf(name) "{{{

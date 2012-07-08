@@ -78,7 +78,9 @@ aug RIV_BUFFER "{{{
         " clear the highlight before bufwin/winleave
         au! WinLeave,BufWinLeave     <buffer>  2match none
     endif "}}}
-    au! BufWritePost <buffer>  call riv#fold#update() | call riv#todo#update()
+    au  WinLeave,BufWinLeave     <buffer>  call riv#file#update()
+    au! BufWritePost <buffer>  call riv#fold#update() 
+    au  BufWritePost <buffer>  call riv#todo#update()
     au! BufWritePre  <buffer>  call riv#create#auto_mkdir()
 aug END "}}}
 
