@@ -100,7 +100,9 @@ Lists
             indents are auto fixed.
          C. and ``=`` will only update the number.
          D. You can use ``<C-E>l``` ~ ``<C-E>l4`` to add or change list symbol.
-            it will not update the number nor fix the indent.
+            it will not update the number nor fix the indent. 
+
+            So you'd better act on an new line.
 
 
 Todos
@@ -108,9 +110,9 @@ Todos
 
 Todo item is for keep tracking of todo things.
 
+They are some Todo symbols at the beginning of lists.
 It's not reStructuredText syntax, so no highlighting in converted files.
 
-Todo items are some todo symbols on lists.
 
 * [ ] Use ``<C-E>ee`` to init a todo item on a list.
 * [o] Press it again to toggle it's state.
@@ -120,7 +122,7 @@ Todo items are some todo symbols on lists.
   + You can use Keywords as todo items either.
   + TODO Use ``<C-E>e2`` to choose the second keyword group.
     This is TODO/DONE group.
-  + DONE 2012-07-08 It's done.
+  + DONE 2012-07-08 It's done. 
 
 * Priorities also supported. 
 
@@ -129,9 +131,9 @@ Todo items are some todo symbols on lists.
   + [ ] [#C] press it to toggle it's state.
   + [ ] and press it again, it's deleted.
 
-* All todo items can be clicked to toggle state, 
+* All todo items can be clicked or ``<Enter>`` to toggle state, 
   and they are highlighted by cursor highlight.
-* Use ``<C-E>ht`` to ope a todo helper. 
+* Use ``<C-E>ht`` to open the Todo Helper. 
   Which will show all todo items of current project or current file.
 
 Links
@@ -153,13 +155,13 @@ Jumping
     ``<Enter>`` or Double-Click on links , will bring you to the target.
 
     Section title are auto generated as implicit target. 
-    So you can jump with links to sections. e.g:  Sections_
+    So you can create link to sections. e.g:  Sections_
 
 Navitgate
     ``<Tab>`` or ``<S-Tab>`` will bring you to next/prev link.
 
 Cursor highlighting
-    When cursor is putting on a link, whole link will be highlighted a
+    When cursor is putting on a link, whole link will be highlighted
 
 Files
 -----
