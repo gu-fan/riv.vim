@@ -17,9 +17,7 @@ fun! s:init_stat(...) "{{{
         let b:foldlevel = b:foldlevel >= 2 ? 2 : 0 
     endif
 
-    if !exists("b:fdl_list") || len(b:fdl_list)!=len+1 || ( a:0 && a:1 )
-        call s:parse_from_start()
-    endif
+    call s:parse_from_start()
 endfun "}}}
 " Parse "{{{
 fun! s:parse_from_start() "{{{
@@ -706,6 +704,7 @@ fun! riv#fold#update() "{{{
     endif
     normal! zx
 endfun "}}}
+let s:modified = 0
 fun! riv#fold#init() "{{{
     call s:init_stat()
 endfun "}}}

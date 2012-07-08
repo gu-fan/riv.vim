@@ -8,6 +8,17 @@
 let s:cpo_save = &cpo
 set cpo-=C
 
+fun! riv#action#quick_start() "{{{
+    let quick_start = g:_riv_c.doc_pat . 'riv_quickstart.rst'
+    let lines = readfile(quick_start)
+    noa keepa bot new QuickStart
+	setl noswf nolist nospell nocuc wfh
+	setl bt=nofile bh=unload
+    set ft=rst
+    call setline(1,lines)
+    update
+endfun "}}}
+
 fun! riv#action#db_click(mouse) "{{{
     " could not use map <expr>
     " cause it's editing file here.

@@ -184,6 +184,7 @@ let s:default.maps = {
     \'RivCreateTime'     : 'call riv#create#date(1)',
     \'RivScratchCreate'  : 'call riv#create#scratch()',
     \'RivScratchView'    : 'call riv#create#view_scr()',
+    \'RivQuickStart'     : 'call riv#action#quick_start()',
     \}
 "}}}
 
@@ -264,6 +265,7 @@ let s:default.buf_maps = {
     \'RivCreateGitLink'  : ['',  'm',   'tg'],
     \'RivHelpFile'       : ['',  'm',   'hf'],
     \'RivHelpSection'    : ['',  'm',   'hs'],
+    \'RivQuickStart'     : ['',  'm',   'hq'],
     \}
 let s:default.buf_imaps = {
     \'<BS>'         : 'riv#action#ins_backspace()',
@@ -386,6 +388,7 @@ fun! riv#load_conf() "{{{1
     let s:e = g:_riv_e
 
     let s:c.riv_path = s:autoload_path . '/riv/'
+    let s:c.doc_pat  = fnamemodify(s:autoload_path ,':h').'/doc/'
 
     " Python:
     if has("python") "{{{

@@ -19,24 +19,13 @@ or manage documents in a wiki way.
 Screenshot
 ----------
 
-**Overview of this Intro**
-
-.. image::  http://i.minus.com/jqyQGm8G9gO9h.png
-   :height: 800px
-   :width: 500 px
-
-**The Folding infos**
+**Folding infos**
 
 .. image::  http://i.minus.com/ibeAAXZxjcyoZ5.png
-   :height: 800px
-   :width: 500 px
 
 **Section Helper**
 
 .. figure::  http://i.minus.com/jbnz0ZNgxVmYCI.jpg
-   :align: right
-   :height: 800px
-   :width: 500 px
 
 Features
 --------
@@ -111,7 +100,7 @@ Todo
 Prev
 ~~~~
 
-See Changelog in doc/riv_log.rst riv_log_
+See Changelog in  riv_log_ ( doc/riv_log.rst )
 
 * 0.68:
     
@@ -155,7 +144,7 @@ Things todo in this version.
 Next 
 ~~~~~
 
-See doc/riv_todo.rst riv_todo_
+See riv_todo_ ( doc/riv_todo.rst )
 
 .. _riv_log: https://github.com/Rykka/riv.vim/blob/master/doc/riv_log.rst
 .. _riv_todo: https://github.com/Rykka/riv.vim/blob/master/doc/riv_todo.rst
@@ -167,11 +156,13 @@ Instruction
 
 * How to use?
 
-  + If you are not familiar with reStructuredText, see QuickStart_
-
+  + For a quick start, see `QuickStart With Riv`_  ( doc/riv_quickstart.rst )
+    Or use ``:RivQuickStart`` to view and edit it in vim.
   + For writing documents, See detail instruction in `reStructuredText Guide`_
-
   + For managing documents, See detail instruction in `Riv Guide`_
+
+.. _Quickstart With Riv:
+   https://github.com/Rykka/riv.vim/blob/master/doc/riv_quickstart.rst
 
 * About the mapping
 
