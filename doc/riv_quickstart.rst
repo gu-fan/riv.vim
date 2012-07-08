@@ -26,8 +26,9 @@ Project
 Project is a place to hold your documents.
 
 Use ``<C-E>ww`` to open your project index. 
+Split current document first with ``<C-W><C-S>`` to split open it.
 
-By default it's at ``~/Documents/Riv``.
+By default the path is at ``~/Documents/Riv``.
 You can change it by defining project to ``g:riv_projects`` in your vimrc.::
 
     let project1 = { 'path': '~/Dropbox/rst',}
@@ -48,10 +49,25 @@ Then you can view and navigating sections of current document.
 Paragraph
 ---------
 
+Paragraph is the basic document content.
+Each paragraph is seperated by an blank line.
+
 This is a paragraph.
 This is the second line of the paragraph.
 
 This is a new paragraph.
+
+Blocks
+------
+
+Blocks are auto folded::
+
+    This is a literal block.
+      The markup and indents are preserved by parser.
+ 
+.. This is a comment
+   The second line of the comment
+
 
 Lists
 -----
@@ -60,9 +76,9 @@ Lists
 * List item 2
   ``<Enter>`` to insert with continuous paragraph of this list item
 
-  To start a new paragraph , insert a blank line.
+  A new paragraph of the list item.
 
-* ``<C-Enter>`` to create a next list item
+* Use ``<C-Enter>`` to create a next list item
 * '*' , '+' or '-' is for bullet list.
 
   + ``<S-Enter>`` to create a child list item
@@ -78,22 +94,45 @@ Lists
       3. third one
 
          A. This is a enumerated list with alphabet
-         B. You can use ``>`` or ``<`` to shift the list and it's level.
-            numbers are auto generated.
-         C. and ``=`` will only fix the number.
+         B. You can use ``>`` or ``<`` in visual and normal mode 
+            to shift the list and it's level.
+            numbers are auto updated.
+            indents are auto fixed.
+         C. and ``=`` will only update the number.
+         D. You can use ``<C-E>l``` ~ ``<C-E>l4`` to add or change list symbol.
+            it will not update the number nor fix the indent.
 
 
-Blocks
-------
+Todos
+-----
 
-Blocks are auto folded::
+Todo item is for keep tracking of todo things.
 
-    This is a literal block.
-      The markup and indents are preserved by parser.
- 
-.. This is a comment
-   The second line of the comment
+It's not reStructuredText syntax, so no highlighting in converted files.
 
+Todo items are some todo symbols on lists.
+
+* [ ] Use ``<C-E>ee`` to init a todo item on a list.
+* [o] Press it again to toggle it's state.
+* [X] 2012-07-08 When finished, A datestamp is auto added.
+* Use ``<C-E>ex`` to delete it.
+
+  + You can use Keywords as todo items either.
+  + TODO Use ``<C-E>e2`` to choose the second keyword group.
+    This is TODO/DONE group.
+  + DONE 2012-07-08 It's done.
+
+* Priorities also supported. 
+
+  + [ ] [#A] With a todo item. Use ``<C-E>ep`` to add priority
+  + [ ] [#B] press it to toggle it's state.
+  + [ ] [#C] press it to toggle it's state.
+  + [ ] and press it again, it's deleted.
+
+* All todo items can be clicked to toggle state, 
+  and they are highlighted by cursor highlight.
+* Use ``<C-E>ht`` to ope a todo helper. 
+  Which will show all todo items of current project or current file.
 
 Links
 -----
@@ -122,6 +161,34 @@ Navitgate
 Cursor highlighting
     When cursor is putting on a link, whole link will be highlighted a
 
+Files
+-----
+
+As reStructuredText does not define a local file link. 
+Riv use extension to judge it's a local file link or not.
+
+File with extension of ``rst`` or ``py,cpp,...`` are judged as local file links
+
+    e.g. note.rst  hello.py
+
+    Clicking or ``<Enter>`` on it will edit that file.
+
+File end with ``/`` are considered as directories. 
+
+    e.g. Note/    
+
+    CLicking or ``<Enter>`` on it will edit ``index.rst`` in the directory.
+
+    An absolute direcotry will open that direcotry. 
+
+    e.g. ~/Documents/
+
+
+Cursor highlight will show a different color if it's not a valid file.
+
+You can use ``<C-E>ht`` to open a file helper, 
+which will show all rst fils in current directory for editing.
+
 Inline Markup
 -------------
 
@@ -136,66 +203,6 @@ There are some inline markup for reStructuredText.
     ``text`` is inline literal
 
 ``reference_`` is a link reference 
-
-Files
------
-
-As reStructuredText does not define a local file link. 
-Riv use extension to judge it's a local file link or not.
-
-File with extension of ``rst`` or ``py,cpp,...`` are judged as local file links
-
-    e.g. note.rst  hello.py
-
-Clicking or ``<Enter>`` on it will edit that file.
-
-File end with ``/`` are considered as directories. 
-
-    e.g. Note/ 
-
-CLicking or ``<Enter>`` on it will edit ``index.rst`` in the directory.
-
-And the cursor highlight will show a different color if it's not a valid file.
-
-You can use ``<C-E>ht`` to open a file helper, 
-which will show all rst fils in current directory for editing.
-
-Todos
------
-
-Todo item is for keep tracking of todo things.
-
-It's not reStructuredText syntax either. so no highlighting in converted files.
-
-Todo items are some todo symbols on lists.
-
-* [ ] Use ``<C-E>ee`` to init a todo item on a list.
-* [o] Press it again to toggle it's state.
-* [X] 2012-07-08 When finished, A datestamp is auto added.
-
-  + You can use Keywords as todo items either.
-  + TODO Use ``<C-E>e2`` to choose the second keyword group.
-    This is TODO/DONE group.
-  + DONE 2012-07-08 So it's done.
-
-* Priorities also supported. 
-
-  + [ ] [#A] With a todo item. Use ``<C-E>ep`` to add priority
-  + [ ] [#B] press it to toggle it's state.
-  + [ ] [#C] press it to toggle it's state.
-  + [ ] and press it again, it's deleted.
-
-* All todo items can be clicked to toggle state, 
-  and they are highlighted by cursor highlight.
-* Use ``<C-E>ht`` to ope a todo helper. 
-  Which will show all todo items of current project or current file.
-
-
-
-
-
-
-
 
 
 

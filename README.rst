@@ -57,7 +57,8 @@ These features are better working with the project.
  :Todos_:    Keep track of todo things.
 
 * To Install: see `Install`_
-* To Start: see `Instruction`_
+* To Start: see `QuickStart With Riv`_  or ``:RivQuickStart`` for a quickstart in vim.
+* Instucion: see `Instruction`_ 
 
 Install
 -------
