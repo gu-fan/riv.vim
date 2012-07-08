@@ -7,7 +7,7 @@
                       |____|_  / |__|    \___/    ~
                              \/                   ~
 
-                            Version : 0.66        ~
+                            Version : 0.69        ~
 ======================================================================
 CONTENTS                                          *riv-contents*
 
@@ -24,6 +24,11 @@ or writing documents in a neat way.
 .. _reStructuredText: http://docutils.sourceforge.net/rst.html
 
 ----------------------------------------------------------------------
+QUICKSTART                                        *riv-quickstart*
+
+use `:RivQuickStart`. or view riv_quickstart.rst
+
+----------------------------------------------------------------------
 DETAILS                                           *riv-details*
 
 See riv.rst (open it with |gf|)
@@ -32,6 +37,7 @@ See riv.rst (open it with |gf|)
 CHANGELOG                                         *riv-changelog*
 
 See riv_log.rst
+Also riv_todo.rst
 
 ======================================================================
 vim:ft=help:tw=76
