@@ -686,23 +686,28 @@ For Grid table, it is auto formatted.
 
   + Actions:
 
+    - Format: Use ``<C-E>tf`` or ``:RivFormatTable`` to format table.
+
+      It will be auto formatted after leaving insert mode,
+      or pressing ``<Enter>`` or ``<Tab>`` in insert mode.
+
     Insert Mode Only:
 
     To create a table , just insert ``| xxx |`` and escape insert mode.
 
-    It will be autoformatted after Leave Insert Mode 
-    or pressing ``<Enter>`` or ``<Tab>`` ::
+    - In the Table ::
 
-        +--------+-----------------------------------------------------------+
-        | 4x2    | Grid Table                                                |
-        +========+===========================================================+
-        | Lines  | - <Enter> in column to add a new line of column           |
-        |        | - This is the second line of in same row of table.        |
-        +--------+-----------------------------------------------------------+
-        | Rows   | <Enter> in seperator to add a new row                     |
-        +--------+-----------------------------------------------------------+
-        | Cells  | <Tab> and <S-Tab> in table will switch to next/prev cell  |
-        +--------+-----------------------------------------------------------+
+        +--------+--------------------------------------------------------------+
+        | 4x2    | Grid Table                                                   |
+        +========+==============================================================+
+        | Lines  | - <Enter> in column to add a new line of column              |
+        |        | - This is the second line of in same row of table.           |
+        +--------+--------------------------------------------------------------+
+        | Rows   | <Enter> in seperator to add a new row                        |
+        +--------+--------------------------------------------------------------+
+        | Cell   | <C-E>tn or <Tab> or RivTableNextCell, switch to next cell    |
+        |        | <C-E>tp or <S-Tab> or RivTablePrevCell, switch to prev cell  |
+        +--------+--------------------------------------------------------------+
 
 
     +--------+-----------------------------------------------------------+
@@ -969,6 +974,10 @@ Super ``<Tab>`` and Super ``<Enter>`` in insert mode.
       - else act as ``<Tab>`` and ``<BS>``.
     
   :NOTE:  ``<S-Tab>`` is acting as ``<BS>`` when not in list or table .
+  
+  :NOTE: to disable mapping ``<Tab>`` in insert mode.
+
+         set ``g:riv_no_imap_tab`` to 1.
 
 * BackSpace: indent with fixed indent. see indent_.
 * Most commands can be used in insert mode. like ``<C-E>ee`` ``<C-E>s1`` ...

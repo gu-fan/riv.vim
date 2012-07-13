@@ -118,6 +118,7 @@ let s:default.options = {
     \'i_tab_pum_next'     : 1,
     \'i_tab_user_cmd'     : "",
     \'i_stab_user_cmd'    : "",
+    \'no_imap_tab'        : 1,
     \'month_names'        : 'January,February,March,April,May,June,July,'
                           \.'August,September,October,November,December',
     \}
@@ -165,6 +166,8 @@ let s:default.maps = {
     \'RivTestTest'       : 'call riv#test#test()',
     \'RivTestObj'        : 'call riv#test#show_obj()',
     \'RivTableFormat'    : 'call riv#table#format()',
+    \'RivTableNextCell'  : 'call cursor(riv#table#nextcell())',
+    \'RivTablePrevCell'  : 'call cursor(riv#table#prevcell())',
     \'Riv2HtmlIndex'     : 'call riv#publish#browse()',
     \'Riv2HtmlAndBrowse' : 'call riv#publish#file2("html",1)',
     \'Riv2HtmlFile'      : 'call riv#publish#file2("html",0)',
@@ -244,7 +247,9 @@ let s:default.buf_maps = {
     \'RivTitle4'         : ['',  'mi',  's4'],
     \'RivTitle5'         : ['',  'mi',  's5'],
     \'RivTitle6'         : ['',  'mi',  's6'],
-    \'RivTableFormat'    : ['',  'n',   'ft'],
+    \'RivTableFormat'    : ['',  'mi',  'tf'],
+    \'RivTableNextCell'  : ['',  'mi',  'tn'],
+    \'RivTablePrevCell'  : ['',  'mi',  'tp'],
     \'Riv2HtmlFile'      : ['',  'm',   '2hf'],
     \'Riv2HtmlProject'   : ['',  'm',   '2hp'],
     \'Riv2HtmlAndBrowse' : ['',  'm',   '2hh'],
@@ -336,7 +341,9 @@ let s:default.menus = [
     \['Convert.to\ S5'                    , '2ss'                    , 'Riv2S5'            ]   ,
     \['Convert.to\ Xml'                   , '2xx'                    , 'Riv2Xml'           ]   ,
     \['--Format---'                       , '  '                     , '  '                ]   ,
-    \['Table.Format'                      , 'ft'                     , 'RivTableFormat'    ]   ,
+    \['Table.Format'                      , 'tf'                     , 'RivTableFormat'    ]   ,
+    \['Table.NextCell'                    , 'tp\ or\ i_<Tab>'        , 'RivTableNextCell'  ]   ,
+    \['Table.PrevCell'                    , 'tn\ or\ i_<S-Tab>'      , 'RivTablePrevCell'  ]   ,
     \['--Fold---'                         , '  '                     , '  '                ]   ,
     \['Folding.Update'                    , '<Space>j\ or\ zx'       , 'RivFoldUpdate'     ]   ,
     \['Folding.Toggle'                    , '<Space><Space>\ or\ za' , 'RivFoldToggle'     ]   ,
@@ -481,6 +488,11 @@ fun! riv#load_conf() "{{{1
         exe 'let s:c.i_stab_user_cmd = "' . g:riv_i_stab_user_cmd . '"'
     else
         let s:c.i_stab_user_cmd = g:riv_i_stab_user_cmd
+    endif
+
+    if g:riv_no_imap_tab
+        call remove(g:riv_default.buf_imaps, "<Tab>")
+        call remove(g:riv_default.buf_imaps, "<S-Tab>")
     endif
 
     if empty(g:riv_ft_browser) "{{{

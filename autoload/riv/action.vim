@@ -125,7 +125,9 @@ endfun "}}}
 fun! s:is_in_table(line) "{{{
     return a:line =~ g:_riv_p.table
 endfun "}}}
-
+fun! riv#action#nor_tab() "{{{
+    call cursor(riv#table#nextcell())
+endfun "}}}
 fun! riv#action#ins_tab() "{{{
 " tab for insert mode.
 " to support other command. 
@@ -165,7 +167,7 @@ fun! riv#action#ins_stab() "{{{
 
     if pumvisible() && g:riv_i_tab_pum_next
         return "\<C-P>"
-    elseif s:is_in_table(line)
+    elseif s:is_in_table(line) && g:riv_i_tab_tbl_next
         " Format the table and find the cell.
         return "\<C-O>:call cursor(riv#table#prevcell())\<CR>"
     elseif s:is_in_list_item(col, line)
