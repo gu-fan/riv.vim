@@ -65,7 +65,7 @@ fun! riv#action#ins_enter() "{{{
         let [row,col] = getpos('.')[1:2]
         return s:cmd_table_new_line(row,col)
     else
-        return  "\<Enter>"
+        return  "\<C-G>u\<Enter>"
     endif
 endfun "}}}
 fun! riv#action#ins_c_enter() "{{{
@@ -74,7 +74,8 @@ fun! riv#action#ins_c_enter() "{{{
         let [row,col] = getpos('.')[1:2]
         return s:cmd_table_new_line(row,col)
     endif
-    let cmd = line=~ '\S' ? "\<CR>" : ''
+    let cmd = "\<C-G>u"
+    let cmd .= line=~ '\S' ? "\<CR>" : ''
     let cmd .= "\<C-O>:call riv#list#new(0)\<CR>\<Esc>A"
     return cmd
 endfun "}}}
@@ -84,7 +85,8 @@ fun! riv#action#ins_s_enter() "{{{
         let [row,col] = getpos('.')[1:2]
         return s:cmd_table_new_line(row,col)
     endif
-    let cmd = line=~ '\S' ? "\<CR>\<CR>" : ''
+    let cmd = "\<C-G>u"
+    let cmd .= line=~ '\S' ? "\<CR>\<CR>" : ''
     let cmd .= "\<C-O>:call riv#list#new(1)\<CR>\<Esc>A"
     return cmd
 endfun "}}}
@@ -94,7 +96,8 @@ fun! riv#action#ins_m_enter() "{{{
         let [row,col] = getpos('.')[1:2]
         return s:cmd_table_new_line(row,col)
     endif
-    let cmd = line=~ '\S' ? "\<CR>\<CR>" : ''
+    let cmd = "\<C-G>u"
+    let cmd .= line=~ '\S' ? "\<CR>\<CR>" : ''
     let cmd .= "\<C-O>:call riv#list#new(-1)\<CR>\<Esc>A"
     return cmd
 endfun "}}}

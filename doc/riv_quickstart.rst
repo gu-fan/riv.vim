@@ -37,7 +37,7 @@ You can change it by defining project to ``g:riv_projects`` in your vimrc.::
 Sections
 --------
 
-Section is a line with ``underline`` punctuations.
+Section is defined by a line with ``underline`` punctuations.
 
 Use ``<C-E>s1`` ~ ``<C-E>s6`` to create section level from 1 to 6.
 
@@ -111,15 +111,18 @@ Todos
 Todo item is for keep tracking of todo things.
 
 They are some Todo symbols at the beginning of lists.
+
 It's not reStructuredText syntax, so no highlighting in converted files.
 
+* A Todo box is used by default.
 
-* [ ] Use ``<C-E>ee`` to init a todo item on a list.
-* [o] Press it again to toggle it's state.
-* [X] 2012-07-08 When finished, A datestamp is auto added.
-* Use ``<C-E>ex`` to delete it.
+  + [ ] Use ``<C-E>ee`` to init a todo item on a list.
+  + [o] Press it again to toggle it's state.
+  + [X] 2012-07-08 When finished, A datestamp is auto added.
+  + Use ``<C-E>ex`` to delete whole todo items.
 
-  + You can use Keywords as todo items either.
+* You can use Keywords as todo items either.
+
   + TODO Use ``<C-E>e2`` to choose the second keyword group.
     This is TODO/DONE group.
   + DONE 2012-07-08 It's done. 
@@ -127,9 +130,11 @@ It's not reStructuredText syntax, so no highlighting in converted files.
 * Priorities also supported. 
 
   + [ ] [#A] With a todo item. Use ``<C-E>ep`` to add priority
-  + [ ] [#B] press it to toggle it's state.
-  + [ ] [#C] press it to toggle it's state.
-  + [ ] and press it again, it's deleted.
+  + [ ] [#B] press again to toggle it's state.
+  + [ ] [#C] press again to toggle it's state.
+  + [ ] and again, it's deleted.
+
+  :NOTE: Press ``<Enter>`` or click on the prior item will not delete it.
 
 * All todo items can be clicked or ``<Enter>`` to toggle state, 
   and they are highlighted by cursor highlight.
@@ -166,8 +171,9 @@ Cursor highlighting
 Files
 -----
 
-As reStructuredText does not define a local file link. 
-Riv use extension to judge it's a local file link or not.
+As reStructuredText does not define syntax for local file link. 
+
+Riv use file's extension to judge if it's a local file link or not.
 
 File with extension of ``rst`` or ``py,cpp,...`` are judged as local file links
 
@@ -205,6 +211,4 @@ There are some inline markup for reStructuredText.
     ``text`` is inline literal
 
 ``reference_`` is a link reference 
-
-
 

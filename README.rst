@@ -16,6 +16,38 @@ or manage documents in a wiki way.
 
 .. _reStructuredText: http://docutils.sourceforge.net/rst.html
 
+Features
+--------
+ 
+These features are contained in all reStructuredText files.
+
+ :Sections_: Reveal section level and section number.
+ :Lists_:    Creating lists that's auto numbered, auto leveled and auto indented.
+ :Blocks_:   Highlighted and folded blocks.
+ :Links_:    Jumping with links. Highlighted hovering links.
+ :Table_:    Creating table that auto formatted. 
+ :Folding_:  Fold document element and showing extra info.
+ :Indent_:   Smarter indent.
+ :Insert_:   Super ``<Tab>`` and Super ``<Enter>`` ...
+ :Syntax_:   Clearer syntax highlighting.
+ :Publish_:  Convert rst files to html/xml/latex/odt/... (docutils_ required)
+ :Helpers_:  A document/project manager.
+
+             a. `Section Helper`_: Showing section number of current document.
+             b. `Todo Helper`_: Managing todo items of project or document.
+             c. `File Helper`_: Showing rst files of current directory.
+ :File_:     Local file link in rst documents. 
+ :Todos_:    Keep track of todo things. (non-reStructuredText syntax)
+
+These features are better working with the project. 
+
+ :Project_:  Hold your rst documents in place.
+ :Scratch_:  A place for writing diary or notes.
+
+* To Install: see `Install`_
+* To Start: see `QuickStart With Riv`_  or ``:RivQuickStart`` for a quickstart in vim.
+* Instucion: see `Instruction`_ 
+
 Screenshot
 ----------
 
@@ -26,39 +58,6 @@ Screenshot
 **Section Helper**
 
 .. figure::  http://i.minus.com/jbnz0ZNgxVmYCI.jpg
-
-Features
---------
- 
-These features are contained in all reStructuredText files.
-
- :Sections_: Fold by it's level, and showing it's section number.
- :Lists_:    Auto Numbered and auto leveled lists.
- :Blocks_:   Highlighted and folded blocks.
- :Links_:    Link jumping and `cursor highlighting`_
- :Table_:    Auto formatted table.
- :Folding_:  Folded document structures (Sections/Lists/Blocks).
- :Indent_:   Smarter indent.
- :Insert_:   Multi actions in different context.
- :Syntax_:   Improved highlights to indicate document items.
- :Publish_:  Some command wrapper to convert rst files to html/xml/latex/odt/... 
-             (require python docutils package )
- :Helpers_:  A window to help manage the document.
-
-             a. `Section Helper`_: SHowing section number of current document.
-             b. `Todo Helper`_: Managing todo items of project or document.
-             c. `File Helper`_: Showing rst files of current directory.
-
-These features are better working with the project. 
-
- :Project_:  Hold your rst documents in place.
- :File_:     Local file link in rst documents. 
- :Scratch_:  A place for writing diary or notes.
- :Todos_:    Keep track of todo things.
-
-* To Install: see `Install`_
-* To Start: see `QuickStart With Riv`_  or ``:RivQuickStart`` for a quickstart in vim.
-* Instucion: see `Instruction`_ 
 
 Install
 -------
