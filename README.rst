@@ -1062,7 +1062,7 @@ Riv Guide
 Following features are provided by **Riv**.
 
 * Project_, Scratch_, Helpers_ are extra function for managing rst documents.
-* File_, Todos_ are extra syntax to provide more function in rst document.
+* File_, Todos_ are extra syntax items for writing rst document.
 
 Project
 ~~~~~~~
