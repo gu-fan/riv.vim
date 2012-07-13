@@ -6,10 +6,9 @@ Intro
 :Version: 0.69 
 :Github: https://github.com/Rykka/riv.vim
 
-**Riv** is for writing and managing documents in vim.
+**Riv** is for writing and managing reStructuredText documents in vim.
 
 Short for 'reStructuredText in Vim'. 
-As it uses reStructuredText_ syntax.
 
 It is for people either want to writing documents in a neat way,
 or manage documents in a wiki way.
@@ -19,7 +18,7 @@ or manage documents in a wiki way.
 Features
 --------
  
-These features are contained in all reStructuredText files.
+These features are for all reStructuredText files.
 
  :Sections_: Reveal section level and section number.
  :Lists_:    Creating lists that's auto numbered, auto leveled and auto indented.
@@ -39,7 +38,7 @@ These features are contained in all reStructuredText files.
  :File_:     Local file link in rst documents. 
  :Todos_:    Keep track of todo things. (non-reStructuredText syntax)
 
-These features are better working with the project. 
+These features are for working with project. 
 
  :Project_:  Hold your rst documents in place.
  :Scratch_:  A place for writing diary or notes.
@@ -132,7 +131,7 @@ Things todo in this version.
   :Document: DONE 2012-07-08 69e5a86e_ commit links
   :File_:   DONE 2012-07-08 a207e1e0_ Add Section helper.
   :Intro_:  DONE 2012-07-09 add Riv quickstart
-  :Insert_: DONE 2012-07-13 rewrite and add options about ``i_tab``.
+  :Insert_: DONE 2012-07-13 rewrite and add options about ``i_tab``. 
 
 .. _a207e1e0: 
    https://github.com/Rykka/riv.vim/commit/a207e1e0de177f6e6bd06fc2fab0151780074320
