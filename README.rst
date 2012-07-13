@@ -975,12 +975,18 @@ Super ``<Tab>`` and Super ``<Enter>`` in insert mode.
     
   :NOTE:  ``<S-Tab>`` is acting as ``<BS>`` when not in list or table .
   
-  :NOTE: to disable mapping ``<Tab>`` in insert mode.
-
-         set ``g:riv_no_imap_tab`` to 1.
 
 * BackSpace: indent with fixed indent. see indent_.
 * Most commands can be used in insert mode. like ``<C-E>ee`` ``<C-E>s1`` ...
+
+:NOTE: to disaple mapping of ``<Tab>`` etc. in insert mode.
+
+       set it in ``g:riv_ignored_imaps`` , split with ``,``.  e.g. ::
+        
+        " no <Tab> and <S-Tab>
+        let g:riv_ignored_imaps = "<Tab>,<S-Tab>"
+
+       You can view default mappings with ``g:riv_default.buf_imaps``
 
 
 Publish

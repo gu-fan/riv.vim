@@ -118,7 +118,7 @@ let s:default.options = {
     \'i_tab_pum_next'     : 1,
     \'i_tab_user_cmd'     : "",
     \'i_stab_user_cmd'    : "",
-    \'no_imap_tab'        : 1,
+    \'ignored_imaps'      : "",
     \'month_names'        : 'January,February,March,April,May,June,July,'
                           \.'August,September,October,November,December',
     \}
@@ -489,11 +489,10 @@ fun! riv#load_conf() "{{{1
     else
         let s:c.i_stab_user_cmd = g:riv_i_stab_user_cmd
     endif
-
-    if g:riv_no_imap_tab
-        call remove(g:riv_default.buf_imaps, "<Tab>")
-        call remove(g:riv_default.buf_imaps, "<S-Tab>")
-    endif
+    
+    for key in split(g:riv_ignored_imaps,',')
+        call remove(g:riv_default.buf_imaps, key)
+    endfor
 
     if empty(g:riv_ft_browser) "{{{
         if has('win32') || has('win64')
