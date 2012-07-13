@@ -131,6 +131,8 @@ Things todo in this version.
   :File_:   DONE 2012-07-07 dceab5c1_ Add File helper.
   :Document: DONE 2012-07-08 69e5a86e_ commit links
   :File_:   DONE 2012-07-08 a207e1e0_ Add Section helper.
+  :Intro_:  DONE 2012-07-09 add Riv quickstart
+  :Insert_: DONE 2012-07-13 rewrite and add options about ``i_tab``.
 
 .. _a207e1e0: 
    https://github.com/Rykka/riv.vim/commit/a207e1e0de177f6e6bd06fc2fab0151780074320
@@ -981,7 +983,7 @@ Super ``<Tab>`` and Super ``<Enter>`` in insert mode.
 
 :NOTE: to disaple mapping of ``<Tab>`` etc. in insert mode.
 
-       set it in ``g:riv_ignored_imaps`` , split with ``,``.  e.g. ::
+       set it in ``g:riv_ignored_imaps`` , each item is split with ``,``. ::
         
         " no <Tab> and <S-Tab>
         let g:riv_ignored_imaps = "<Tab>,<S-Tab>"
