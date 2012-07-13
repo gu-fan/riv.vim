@@ -114,8 +114,10 @@ let s:default.options = {
     \'fuzzy_help'         : 0,
     \'auto_format_table'  : 1,
     \'fold_info_pos'      : 'right',
-    \'ins_super_tab'      : 1,
     \'temp_path'          : 1,
+    \'i_tab_pum_next'     : 1,
+    \'i_tab_user_cmd'     : "",
+    \'i_stab_user_cmd'    : "",
     \'month_names'        : 'January,February,March,April,May,June,July,'
                           \.'August,September,October,November,December',
     \}
@@ -466,6 +468,20 @@ fun! riv#load_conf() "{{{1
     
     let s:c.sect_lvs = split(g:riv_section_levels,'\zs')
     let s:c.sect_lvs_b = split('#*+:.^','\zs')
+
+    if !empty(g:riv_i_tab_user_cmd) && g:riv_i_tab_user_cmd =~ '\\<'
+        " it's literal string and is '\<xx>'
+        exe 'let s:c.i_tab_user_cmd = "' . g:riv_i_tab_user_cmd . '"'
+    else
+        let s:c.i_tab_user_cmd = g:riv_i_tab_user_cmd
+    endif
+    
+    if !empty(g:riv_i_stab_user_cmd) && g:riv_i_stab_user_cmd =~ '\\<'
+        " it's not literal string
+        exe 'let s:c.i_stab_user_cmd = "' . g:riv_i_stab_user_cmd . '"'
+    else
+        let s:c.i_stab_user_cmd = g:riv_i_stab_user_cmd
+    endif
 
     if empty(g:riv_ft_browser) "{{{
         if has('win32') || has('win64')

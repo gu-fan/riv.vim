@@ -25,13 +25,13 @@ endfun "}}}
 
 fun! riv#table#nextcell() "{{{
     if getline('.') =~ g:_riv_p.table
-        return searchpos(g:_riv_p.cell,'Wn')   
+        return searchpos(g:_riv_p.cell.'|^\s*$' ,'Wn')   
     endif
     return [0,0]
 endfun "}}}
 fun! riv#table#prevcell() "{{{
     if getline('.') =~ g:_riv_p.table
-        return searchpos(g:_riv_p.cell,'Wbn')   
+        return searchpos(g:_riv_p.cell.'|^\s*$','Wbn')   
     endif
     return [0,0]
 endfun "}}}

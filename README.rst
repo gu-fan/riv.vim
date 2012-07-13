@@ -189,11 +189,8 @@ Instruction
 reStructuredText Guide
 ----------------------
 
-Following features are in all reStructuredText files.
-
-When editing an reStructuredText document (``*.rst`` ), 
-
-These settings will be automatically on. 
+Following features are for all reStructuredText (``*.rst``) documents.
+And follows reStructedText syntax.
 
 :NOTE: make sure ``filetype plugin indent on`` and ``syntax on`` is in your vimrc
 
@@ -941,28 +938,40 @@ If no fix is needed, use ``shiftwidth``
 Insert
 ~~~~~~
 
-Several Mappings have multi actions in different context.
+Super ``<Tab>`` and Super ``<Enter>`` in insert mode.
 
 * Enter and KEnter (Keypad Enter): 
   
   + When in a table_, ``<Enter>`` to create a new line
-
   + When not in a table, will start new line with correct indentation
 
 * Tab and Shift-Tab:  
   
+  * If insert-popup-menu is visible, will act as ``<C-N>`` or ``<C-P>``
+
+    disable it by setting ``g:riv_i_tab_pum_next`` to 0.
   * When in a table , ``<Tab>`` to next cell , ``<S-Tab>`` to previous one.
   * When not in a table, 
 
-    + If insert-popup-menu is visible, will act as ``<C-N>`` or ``<C-P>`` 
-    + If it's a list, and cursor is before the list symbol, will shift the list. 
-    + if have fixed indent, use it. see indent_.
-    + Otherwise act as ``<Tab>`` and ``<BS>``.
-    
-  :NOTE:  ``<S-Tab>`` act as ``<BS>`` when not in a table and no insert-popup menu.
+    + If it's a list, and cursor is before the list item, will shift the list. 
+    + if have fixed indent, will indent with fixed indent. see indent_.
+    + Otherwise:
+      
+      - if ``g:riv_i_tab_user_cmd`` is not empty , executing it. 
 
-* BackSpace: use fixed indent. see indent_.
-* Most mappings commands can be used in insert mode. like ``<C-E>ee`` ``<C-E>s1`` ...
+        It's for the user who want different behavior with ``<Tab>`` ::
+
+          " For snipmate user. 
+          let g:riv_i_tab_pum_next = 0
+          " quote cmd with '"', special key must contain '\'
+          let g:riv_i_tab_user_cmd = "\<c-g>u\<c-r>=snipMate#TriggerSnippet()\<cr>"
+
+      - else act as ``<Tab>`` and ``<BS>``.
+    
+  :NOTE:  ``<S-Tab>`` is acting as ``<BS>`` when not in list or table .
+
+* BackSpace: indent with fixed indent. see indent_.
+* Most commands can be used in insert mode. like ``<C-E>ee`` ``<C-E>s1`` ...
 
 
 Publish
@@ -1034,7 +1043,10 @@ Some command wrapper to convert rst files to html/xml/latex/odt/...
 Riv Guide
 ---------
 
-Following features are better working within a project.
+Following features are provided by **Riv**.
+
+* Project_, Scratch_, Helpers_ are extra function for managing rst documents.
+* File_, Todos_ are extra syntax to provide more function in rst document.
 
 Project
 ~~~~~~~

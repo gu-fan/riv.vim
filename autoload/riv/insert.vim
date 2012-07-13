@@ -129,30 +129,26 @@ fun! riv#insert#get_fidt() "{{{
     return riv#insert#fixed_col(line('.'),col('.'),&sw)
 endfun "}}}
 
-fun! riv#insert#shiftleft() "{{{
-    let sft =  -&sw
-    let [row,col]  = getpos('.')[1:2]
-    let line = getline('.')
-    if line[:col-2] =~ '^\s*$'
-        let fix_sft = riv#insert#fixed_sft(row,col,sft)
-        if fix_sft != sft && fix_sft!=0
-            return repeat("\<Left>\<Del>", abs(fix_sft))
-        endif
+fun! riv#insert#shiftleft(row,col) "{{{
+    " shift in insert mode.
+    " should in blank line.
+    let sft = -&sw
+    let fix_sft = riv#insert#fixed_sft(a:row,a:col,sft)
+    if fix_sft != sft && fix_sft!=0
+        return repeat("\<Left>\<Del>", abs(fix_sft))
+    else
+        return ""
     endif
-    return "\<BS>"
 endfun "}}}
                                             
-fun! riv#insert#shiftright() "{{{
-    let sft =  &sw
-    let [row,col]  = getpos('.')[1:2]
-    let line = getline('.')
-    if line[:col-2] =~ '^\s*$'
-        let fix_sft = riv#insert#fixed_sft(row,col,sft)
-        if fix_sft != sft && fix_sft!=0
-            return repeat("\<Space>", abs(fix_sft))
-        endif
+fun! riv#insert#shiftright(row,col) "{{{
+    let sft = &sw
+    let fix_sft = riv#insert#fixed_sft(a:row,a:col,sft)
+    if fix_sft != sft && fix_sft!=0
+        return repeat("\<Space>", abs(fix_sft))
+    else
+        return ""
     endif
-    return "\<Tab>"
 endfun "}}}
 if expand('<sfile>:p') == expand('%:p') 
 

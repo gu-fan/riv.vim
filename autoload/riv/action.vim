@@ -104,39 +104,87 @@ endfun "}}}
 
 
 fun! riv#action#ins_backspace() "{{{
-    return riv#insert#shiftleft()
+    let [row,col] = getpos('.')[1:2]
+    let line = getline('.')
+    if s:is_in_bgn_blank(col, line)
+        let cmd = riv#insert#shiftleft(row,col)
+    else
+        let cmd = ""
+    endif
+    return  !empty(cmd) ? cmd : "\<BS>"
+endfun "}}}
+
+fun! s:is_in_list_item(col,line) "{{{
+    " it's the col before last space in list-item
+    return a:col <= matchend(a:line, g:_riv_p.all_list)
+endfun "}}}
+fun! s:is_in_bgn_blank(col,line) "{{{
+    " it's the col include last space in a line
+    return a:col <= matchend(a:line, '^\s*') + 1
+endfun "}}}
+fun! s:is_in_table(line) "{{{
+    return a:line =~ g:_riv_p.table
 endfun "}}}
 
 fun! riv#action#ins_tab() "{{{
-    if riv#table#nextcell()[0] == 0
-        if g:riv_ins_super_tab == 1 && pumvisible()
-            return "\<C-N>"
-        else
-            " if it's before the list item position. indent list.
-            if col('.') <= matchend(getline('.'), g:_riv_p.all_list)
-                return "\<C-O>:call riv#list#shift('+')\<CR>"
-            else
-                return riv#insert#shiftright()
-            endif
-        endif
-    else
-        " NOTE: Find the cell after table get formated.
+" tab for insert mode.
+" to support other command. 
+" the g:riv_i_tab_pum_next is used to act as '<C-N>' when pumvisible
+" the g:riv_i_tab_user_cmd is used to execute user defined command or '\<Tab>'
+" the g:riv_i_stab_user_cmd is used to execute user defined command 
+
+    let [row,col] = getpos('.')[1:2]
+    let line = getline('.')
+
+    if pumvisible() && g:riv_i_tab_pum_next
+        return "\<C-N>"
+    elseif s:is_in_table(line)
+        " Format the table and find the cell.
         return "\<C-O>:call cursor(riv#table#nextcell())\<CR>"
+    elseif s:is_in_list_item(col, line)
+        " before the list item, shift the list
+        return "\<C-O>:call riv#list#shift('+')\<CR>"
+    elseif s:is_in_bgn_blank(col, line)
+        let cmd = riv#insert#shiftright(row,col)
+    else
+        let cmd = ''
+    endif
+    if !empty(cmd)
+        return cmd
+    else
+        if !empty(g:riv_i_tab_user_cmd) 
+            return g:riv_i_tab_user_cmd
+        else
+            return "\<Tab>"
+        endif
     endif
 endfun "}}}
 fun! riv#action#ins_stab() "{{{
-    if riv#table#prevcell()[0] == 0
-        if g:riv_ins_super_tab == 1 && pumvisible()
-            return "\<C-P>"
-        else
-            if col('.') <= matchend(getline('.'), g:_riv_p.all_list)
-                return "\<C-O>:call riv#list#shift('-')\<CR>"
-            else
-                return riv#insert#shiftleft()
-            endif
-        endif
-    else
+    let [row,col] = getpos('.')[1:2]
+    let line = getline('.')
+
+    if pumvisible() && g:riv_i_tab_pum_next
+        return "\<C-P>"
+    elseif s:is_in_table(line)
+        " Format the table and find the cell.
         return "\<C-O>:call cursor(riv#table#prevcell())\<CR>"
+    elseif s:is_in_list_item(col, line)
+        " before the list item, shift the list
+        return "\<C-O>:call riv#list#shift('-')\<CR>"
+    elseif s:is_in_bgn_blank(col, line)
+        let cmd = riv#insert#shiftleft(row,col)
+    else
+        let cmd = '' 
+    endif
+
+    if !empty(cmd)
+        return cmd
+    else
+        if !empty(g:riv_i_stab_user_cmd) 
+            return g:riv_i_stab_user_cmd
+        else
+            return "\<BS>"
+        endif
     endif
 endfun "}}}
 
