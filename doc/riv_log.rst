@@ -1,6 +1,42 @@
 Changelogs
 ==========
 
+* 0.69:
+
+  :Indent_: DONE 2012-07-07 8b2c4611_ Rewrite the indent for list and insert.
+  :File_:   DONE 2012-07-07 dceab5c1_ Add File helper.
+  :Document: DONE 2012-07-08 69e5a86e_ commit links
+  :File_:   DONE 2012-07-08 a207e1e0_ Add Section helper.
+  :Intro_:  DONE 2012-07-09 add Riv quickstart
+  :Insert_: DONE 2012-07-13 rewrite and add options about ``i_tab``. 
+
+.. _a207e1e0: 
+   https://github.com/Rykka/riv.vim/commit/a207e1e0de177f6e6bd06fc2fab0151780074320
+.. _69e5a86e: 
+   https://github.com/Rykka/riv.vim/commit/69e5a86e530c09f1472b1d4c79c05854a061f8f3
+.. _dceab5c1: 
+   https://github.com/Rykka/riv.vim/commit/dceab5c1b0ae484c44763ff1172fc3d93debf2e6
+.. _8b2c4611: 
+   https://github.com/Rykka/riv.vim/commit/8b2c4611acf959a28d4413e0131de70b68c9368d
+
+* 0.68:
+    
+  :Patterns:  DONE 2012-07-07 a2334f7b_ Rewrite the pattern and syntax patterns part. 
+  :Todos_:    DONE 2012-07-07 a2334f7b_ Rewrite todo and todo helper.Add Todo Priorities. 
+  :Syntax_:   DONE 2012-07-07 a2334f7b_ Cursor highlight will highlight the todo item 
+  :Syntax_:   DONE 2012-07-07 a2334f7b_ Cursor highlight will check it's valid file
+  :Lists_:    DONE 2012-07-07 0a959662_ Add list types 0 ~ 4 
+  :Todos_:    DONE 2012-07-07 142b6c49_ Add Prior in helper
+
+
+.. _142b6c49: 
+    https://github.com/Rykka/riv.vim/commit/142b6c496b5050150a6b77eeed48e0ade79fc329
+
+.. _0a959662: 
+    https://github.com/Rykka/riv.vim/commit/0a95966247048e11d947fdeb4a2189e17c00d791
+.. _a2334f7b:
+    https://github.com/Rykka/riv.vim/commit/a2334f7b98e9ce83c06d95e7552a13ac6c2c1cd4
+
 * 0.67:
 
   :Folding_: DONE 2012-07-05 da03e247_ The line block is folded now.
@@ -100,8 +136,12 @@ Changelogs
   + FIXED 2012-06-02 wrong highlight of literal block. one blank line need after '::'
 
 
-
-.. _Folding:    README.rst#folding
-.. _Lists:      README.rst#Lists
-.. _Table:      README.rst#Table
-.. _Syntax:     README.rst#Syntax
+.. _Folding: riv.rst#folding
+.. _Lists:   riv.rst#Lists
+.. _Table:   riv.rst#Table
+.. _Syntax:  riv.rst#Syntax
+.. _Indent:  riv.rst#Indent
+.. _File:    riv.rst#File
+.. _Intro:   riv.rst#Intro
+.. _Insert:  riv.rst#Insert
+.. _Todos:   riv.rst#Todos
