@@ -146,7 +146,7 @@ fun! riv#link#open() "{{{
         endif
         return 3
     elseif !empty(mo.groups[5])
-        if g:riv_localfile_linktype == 2
+        if g:riv_file_link_style == 2
             let mo.str = matchstr(mo.str, '^\[\zs.*\ze\]$')
         endif
         if riv#path#is_relative(mo.str)
@@ -154,7 +154,7 @@ fun! riv#link#open() "{{{
             let file = dir . mo.str
             if riv#path#is_directory(file)
                 let file = file . 'index.rst'
-            elseif g:riv_localfile_linktype == 2 && fnamemodify(file, ':e') == ''
+            elseif g:riv_file_link_style == 2 && fnamemodify(file, ':e') == ''
                 let file = file . '.rst'
             endif
         else
@@ -202,7 +202,7 @@ fun! riv#link#hi_hover() "{{{
                     " if link invalid
                     if (is_dir && !isdirectory(file) ) 
                         \ || (!is_dir && !filereadable(file) )
-                        execute '2match' "DiffChange".' /\%'.(row)
+                        execute '2match '.g:riv_file_link_invalid_hl.' /\%'.(row)
                                     \.'l\%>'.(bgn-1) .'c\%<'.(end+1).'c/'
                         return
                     endif

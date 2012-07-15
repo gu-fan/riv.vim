@@ -72,7 +72,7 @@ aug RIV_BUFFER "{{{
     if exists("g:riv_auto_format_table") "{{{
         au! InsertLeave <buffer> call riv#table#format_pos()
     endif "}}}
-    if exists("g:riv_hover_link_hl") "{{{
+    if exists("g:riv_link_cursor_hl") "{{{
         " cursor_link_highlight
         au! CursorMoved,CursorMovedI <buffer>  call riv#link#hi_hover()
         " clear the highlight before bufwin/winleave

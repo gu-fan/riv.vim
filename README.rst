@@ -604,7 +604,7 @@ And it's highlighted with `Cursor Highlighting`_.
 
       Find and Jump to the nearest reference , backward.
 
-    - A local file (if ``g:riv_localfile_linktype`` is not 0):
+    - A local file (if ``g:riv_file_link_style`` is not 0):
 
       Edit the file. 
 
@@ -699,7 +699,7 @@ For Grid table, it is auto formatted.
     - In the Table ::
 
         +--------+--------------------------------------------------------------+
-        | 4x2    | Grid Table                                                   |
+        | 6x2    | Grid Table                                                   |
         +========+==============================================================+
         | Lines  | - <Enter> in column to add a new line of column              |
         |        | - This is the second line of in same row of table.           |
@@ -711,16 +711,17 @@ For Grid table, it is auto formatted.
         +--------+--------------------------------------------------------------+
 
 
-    +--------+-----------------------------------------------------------+
-    | 4x2    | Grid Table                                                |
-    +========+===========================================================+
-    | Lines  | - <Enter> in column to add a new line of column           |
-    |        | - This is the second line of in same row of table.        |
-    +--------+-----------------------------------------------------------+
-    | Rows   | <Enter> in seperator to add a new row                     |
-    +--------+-----------------------------------------------------------+
-    | Cells  | <Tab> and <S-Tab> in table will switch to next/prev cell  |
-    +--------+-----------------------------------------------------------+
+    +--------+--------------------------------------------------------------+
+    | 6x2    | Grid Table                                                   |
+    +========+==============================================================+
+    | Lines  | - <Enter> in column to add a new line of column              |
+    |        | - This is the second line of in same row of table.           |
+    +--------+--------------------------------------------------------------+
+    | Rows   | <Enter> in seperator to add a new row                        |
+    +--------+--------------------------------------------------------------+
+    | Cell   | <C-E>tn or <Tab> or RivTableNextCell, switch to next cell    |
+    |        | <C-E>tp or <S-Tab> or RivTablePrevCell, switch to prev cell  |
+    +--------+--------------------------------------------------------------+
 
     See `Grid Tables`__ for syntax details.
 
@@ -764,12 +765,12 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#simple-tab
 Folding 
 ~~~~~~~~
 
-**Folding** is a vim feature 
-to display a range of lines as single line.
+**Folding** is a vim feature to display a range of lines as a single line.
 
-Then you can get a better overview of the strucutre of documents.
+Thus you can get a better overview of the strucutre of documents.
 
-And manage the folded structure with actions like: select, copy, paste... as one line.
+And you can manage the folded lines with actions as one line, 
+like: select, copy, paste ... etc.
 
 Riv fold reStructuredText file with sections, lists, and blocks automatically,
 And provide extra infos of them.
@@ -909,10 +910,10 @@ Some item that could interactive with cursor are highlighted when cursor is on.
 * Links are highlighted by ``hl-DiffText``
 
   + For local file links , if the target is invalid , it will be highlighted by 
-    ``hl-DiffChange``
+    ``g:riv_link_invalid_hl``, default is ``"ErrorMsg"``
 * Todo items are highlighted by ``hl-DiffAdd``
 
-Disable Cursor Highlighting by set ``g:riv_hover_link_hl`` to 0
+Disable Cursor Highlighting by set ``g:riv_link_cursor_hl`` to 0
 
 
 Indent
@@ -1107,11 +1108,11 @@ As reStructuredText haven't define a pattern for local files currently.
 Riv provides two kinds of style to determine the local file
 in the rst documents. 
 
-The ``bare extension style`` and ``square bracket style``
+The ``bare extension`` and ``square bracket``
 
-* You can switch the style with ``g:riv_localfile_linktype``
+* You can switch the style with ``g:riv_file_link_style``
 
-  + when set to 1, use ``bare extension style``:
+  + when set to 1, use ``bare extension``:
 
     words like ``xxx.rst`` ``xxx.py`` ``xxx.cpp`` will be detected as file link.
 
@@ -1129,7 +1130,7 @@ The ``bare extension style`` and ``square bracket style``
     which default is ``vim,cpp,c,py,rb,lua,pl`` ,
     meaning these files will be recongized.
 
-  + when set to 2, ``square bracket style``: 
+  + when set to 2, ``square bracket``: 
     
     words like ``[xxx]`` ``[xxx.vim]`` will be detected as file link. 
 

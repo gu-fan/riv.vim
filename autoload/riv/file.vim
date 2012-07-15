@@ -15,7 +15,7 @@ fun! riv#file#from_str(str) "{{{
     " parse file name from string
     " return [file , is_dir]
     let file = a:str
-    if g:riv_localfile_linktype == 2
+    if g:riv_file_link_style == 2
         let file = matchstr(file, '^\[\zs.*\ze\]$')
     endif
     if !riv#path#is_relative(file)
@@ -30,7 +30,7 @@ fun! riv#file#from_str(str) "{{{
         let f = matchstr(file, '.*\ze\.rst$')
         if !empty(f)
             return [file, 0]
-        elseif  g:riv_localfile_linktype == 2 && fnamemodify(file, ':e') == ''
+        elseif  g:riv_file_link_style == 2 && fnamemodify(file, ':e') == ''
             return [file.'.rst', 0]
         else
             return [file, 0]

@@ -38,7 +38,7 @@ fun! s:repl_file_link(line) "{{{
     let file = matchstr(line, g:_riv_p.link_file)
     let idx = matchend(line, g:_riv_p.link_file)
     while !empty(file)
-        if g:riv_localfile_linktype == 2
+        if g:riv_file_link_style == 2
             let file = matchstr(file, '^\[\zs.*\ze\]$')
         endif
         let file = s:escape(file)
@@ -53,7 +53,7 @@ fun! s:repl_file_link(line) "{{{
             if !empty(f)
                 let title = f
                 let path = title.'.html'
-            elseif g:riv_localfile_linktype == 2 && fnamemodify(file, ':e') == ''
+            elseif g:riv_file_link_style == 2 && fnamemodify(file, ':e') == ''
                 let title = file
                 let path = title.'.html'
             else
@@ -73,7 +73,7 @@ fun! s:get_rst_file(file) "{{{
     return matchstr(a:file, '.*\ze\.rst$')
 endfun "}}}
 fun! s:escape_file_ptn(file) "{{{
-    if g:riv_localfile_linktype == 2
+    if g:riv_file_link_style == 2
         return   '\%(^\|\s\)\zs\[' . a:file . '\]\ze\%(\s\|$\)'
     else
         return   '\%(^\|\s\)\zs' . a:file . '\ze\%(\s\|$\)'
@@ -83,7 +83,7 @@ fun! s:escape(txt) "{{{
     return escape(a:txt, '~.*\[]^$')
 endfun "}}}
 fun! s:gen_embed_link(title, path) "{{{
-    if g:riv_localfile_linktype == 2
+    if g:riv_file_link_style == 2
         return  '`['.a:title.'] <'.a:path.'>`_'
     else
         return  '`'.a:title.' <'.a:path.'>`_'

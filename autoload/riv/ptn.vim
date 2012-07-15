@@ -269,7 +269,7 @@ fun! riv#ptn#init() "{{{
     let g:_riv_t.file_ext_lst = s:normlist(split(g:riv_file_link_ext,','))
 
     let file_end = '%($|\s)'
-    if g:riv_localfile_linktype == 1
+    if g:riv_file_link_style == 1
         " *.rst *.vim xxx/
         let file_name = '[[:alnum:]~./][[:alnum:]~:./\\_-]*'
         let file_start = '%(\_^|\s)'
@@ -277,7 +277,7 @@ fun! riv#ptn#init() "{{{
         let link_file  = file_start . '@<=' . file_name
                     \.'%(\.%('. s:p.file_ext_ptn .')|/)\ze'. file_end
         let s:p.link_file = '\v' . link_file
-    elseif g:riv_localfile_linktype == 2
+    elseif g:riv_file_link_style == 2
         " [*]  [xxx/] [*.vim]
         let s:p.file_ext_ptn = join(g:_riv_t.file_ext_lst,'|')
         " we should make sure it's not citation, footnote (with preceding '..')
