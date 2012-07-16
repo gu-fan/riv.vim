@@ -35,12 +35,12 @@ These features are for all reStructuredText files.
              a. `Section Helper`_: Showing section number of current document.
              b. `Todo Helper`_: Managing todo items of project or document.
              c. `File Helper`_: Showing rst files of current directory.
- :File_:     Local file link in rst documents. 
+ :File_:     Local file link in rst documents. (non-reStructuredText syntax)
  :Todos_:    Keep track of todo things. (non-reStructuredText syntax)
 
 These features are for working with project. 
 
- :Project_:  Hold your rst documents in place.
+ :Project_:  Hold your rst documents in one place.
  :Scratch_:  A place for writing diary or notes.
 
 * To Install: see `Install`_
@@ -596,6 +596,8 @@ And it's highlighted with `Cursor Highlighting`_.
 
       To split editing , you could split the document first:
       ``<C-W><C-S>`` or ``<C-W><C-V>``
+
+  + You can jump back to origin position with `````` or ``''``
 
   Navigate(Normal Mode):
     
