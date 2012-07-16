@@ -126,9 +126,13 @@ Things todo in this version.
 
 * 0.70:
 
-  :Table_:  DONE 2012-07-17 a table parser of vim version.
-  :Table_:  DONE 2012-07-17 rewrite the table actions. 
-  :Table_:  DONE 2012-07-17 add create table action.
+  :Table_:  DONE 2012-07-17 7b407b4b_ a table parser of vim version.
+  :Table_:  DONE 2012-07-17 7b407b4b_ rewrite the table actions. 
+  :Table_:  DONE 2012-07-17 a1f112d1_ add create table action.
+
+
+.. _a1f112d1: https://github.com/Rykka/riv.vim/commit/a1f112d1e3f7b52130db1a4eeea7ef94c92d9c92
+.. _7b407b4b: https://github.com/Rykka/riv.vim/commit/7b407b4b5ff07467e1cdd78415984ee987e03f49
 
 Next 
 ~~~~~
@@ -809,11 +813,11 @@ And provide extra infos of them.
   
   + The table_ will show it's rows and columns.
   
-    +-------+----+
-    | a     | b  |
-    +-------+----+
-    | c     | d  |
-    +-------+----+
+    +----+---+
+    | a  | b |
+    +----+---+
+    | c  | d |
+    +----+---+
   
   + You can use ``g:riv_fold_info_pos`` to change the info position.
   

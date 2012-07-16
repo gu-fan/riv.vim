@@ -103,9 +103,7 @@ function! riv#table#nextline() "{{{
     endif
 endfunction "}}}
 
-" table parse" {{{
-" parse the row and get a table object.
-
+" table parse " {{{
 
 fun! s:get_table_range(row) "{{{
     let row = a:row
@@ -157,7 +155,6 @@ fun! s:table_in_range(bgn,end) "{{{
     return s:grid_table.new(rows)
 endfun "}}}
 
-
 let s:get_table = {}
 fun! s:get_table.new(...)  dict "{{{
     " get the table object of row
@@ -172,7 +169,6 @@ fun! s:get_table.new(...)  dict "{{{
     let [self.bgn, self.end] = [bgn, end]
     return self
 endfun "}}}
-
 fun! s:get_table.format_table() dict "{{{
     if empty(self.table) | return -1 | endif
 
@@ -209,7 +205,7 @@ fun! s:get_table.add_line(type) dict "{{{
     call self.table.add_line(idx, a:type)
     call self.format_table()
 endfun "}}}
-
+"}}}
 fun! s:balance_table_col(list) "{{{
     let balanced_list = []
     let max_cols = 0
@@ -245,7 +241,8 @@ fun! s:balance_table_col(list) "{{{
     endfor "}}}
     return balanced_list
 endfun "}}}
-" grid table object.
+
+" grid table object. "{{{
 let s:grid_table = {}
 fun! s:grid_table.new(list) dict "{{{
 
@@ -339,11 +336,11 @@ fun! s:grid_table.add_line(idx, type) dict "{{{
     call insert(self.list, map(range(self.col), '" "'), c)
     
 endfun "}}}
+"}}}
 
 fun! s:rstrip(str) "{{{
     return matchstr(a:str, '.\{-}\ze\s*$')
 endfun "}}}
-
 fun! s:zip(list) "{{{
     " return a zipped list
     " [1,2,3],[4,5,6] to [1,4] ,[2,5] ,[3,6]
@@ -363,7 +360,6 @@ fun! s:zip(list) "{{{
     return zipped
 endfun "}}}
 
-" }}}
 
 if expand('<sfile>:p') == expand('%:p') "{{{
     echo s:zip([[1,2,3],[4,5,6],[7,8]])
