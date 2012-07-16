@@ -127,7 +127,8 @@ Things todo in this version.
 * 0.70:
 
   :Table_:  DONE 2012-07-17 a table parser of vim version.
-  :Table_:  rewrite the table actions. now <C-Enter>  to create new row
+  :Table_:  DONE 2012-07-17 rewrite the table actions. 
+  :Table_:  DONE 2012-07-17 add create table action.
 
 Next 
 ~~~~~
@@ -675,16 +676,15 @@ For Grid table, it is auto formatted.
 
   + Actions:
 
-    - Format: Use ``<C-E>tf`` or ``:RivFormatTable`` to format table.
+    - Create: Use ```<C-E>tc`` or ``:RivTableCreate`` to create table
+    - Format: Use ``<C-E>tf`` or ``:RivTableFormat`` to format table.
 
       It will be auto formatted after leaving insert mode,
       or pressing ``<Enter>`` or ``<Tab>`` in insert mode.
 
     Insert Mode Only:
 
-    To create a table , just insert ``| xxx |`` and escape insert mode.
-
-    - In the Table ::
+    - Inside the Table ::
 
         +-------+-----------------------------------------------------------+
         |       | Grid Table (No column or row span supported yet)          |
@@ -1016,7 +1016,7 @@ Some command wrapper to convert rst files to html/xml/latex/odt/...
   
   + ``:Riv2Xml`` ``<C-E>2xx`` convert to xml file and browse by web browser
   + ``:Riv2S5`` ``<C-E>2ss`` convert to s5 file and browse by web browser
-  + ``:Riv2Latex`` ``<C-E>2ll`` convert to latex file and edit by gvim
+  + ``:Riv2Latex`` ``<C-E>2ll`` convert to latex file and edit in vim
   
 * Options:
 

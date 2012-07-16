@@ -65,7 +65,6 @@ class RestTable:
                 row[i] = col.rstrip()
                 if not row[i].startswith(" "):
                     row[i] = " " + row[i]
-        
 
     def parse_col_max_width(self):
         '''
@@ -80,6 +79,8 @@ class RestTable:
         for v_cols in v_tbl:
             max_len = 0         # two space
             for col in v_cols:
+                if re.match(' \|S| \|H',col):
+                    continue
                 c_len = wstr_len(col)
                 if c_len > max_len:
                     max_len = c_len

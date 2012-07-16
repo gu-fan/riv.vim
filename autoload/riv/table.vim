@@ -26,6 +26,32 @@ fun! riv#table#newline(type) "{{{
     endif
 endfun "}}}
 
+fun! riv#table#create() "{{{
+
+    let row = str2nr(input('Input row number of table:'))
+    let col = str2nr(input('Input column number of table:'))
+    let cont = map(range(col),'" "')
+    let sep = ['|S']
+
+    let list = map(range(2*row),'cont')
+    for i in range(len(list))
+        if i % 2 == 0
+            let list[i] = sep
+        endif
+    endfor
+    
+    let table = s:grid_table.new(list)
+    
+    let lines = table.lines(0) 
+    if getline('.') !~ '^\s*$'
+        let lines = [""] + lines
+    endif
+    if getline(line('.')+1) !~ '^\s*$'
+        let lines = lines + [""]
+    endif
+    call append(line('.'),lines)
+
+endfun "}}}
 
 fun! riv#table#format_pos() "{{{
     let pos = getpos('.')
@@ -130,6 +156,7 @@ fun! s:table_in_range(bgn,end) "{{{
     
     return s:grid_table.new(rows)
 endfun "}}}
+
 
 let s:get_table = {}
 fun! s:get_table.new(...)  dict "{{{
@@ -251,6 +278,9 @@ fun! s:grid_table.parse_col_max_width() dict "{{{
     for v_cols in v_tbl
         let max_len = 0
         for col in v_cols
+            if col =~ '^ |S\|^ |H'
+                continue
+            endif
             let c_len = strwidth(col)
             if c_len > max_len
                 let max_len = c_len
