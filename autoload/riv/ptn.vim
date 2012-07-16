@@ -132,7 +132,7 @@ fun! riv#ptn#init() "{{{
     let s:p.table  =  printf(tbl_wrap, tbl_all)
     let s:p.table_cell = '\v\|@<=[^|]+\|@='
 
-    let s:p.cell  = '\v%(^|\s)\|\s\zs'
+    let s:p.cell  = '\v\|\s\zs'
     let s:p.cell0 = '\v^\s*\|\s\zs'
 
     " ======  ===============
