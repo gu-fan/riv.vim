@@ -129,7 +129,8 @@ riv_ptn.table_all = re.compile(r"""
                             |^\s*
                                 (?P<sep>\+[-=+]+\+)
                             \s*$""", re.U | re.X)
-riv_ptn.table_sep = re.compile(r'^\s*(?:\+([-=])\1*)+\+\s*$')
+riv_ptn.table_sepr = re.compile(r'^\s*(?:\+-+)+\+\s*$')
+riv_ptn.table_head = re.compile(r'^\s*(?:\+=+)+\+\s*$')
 riv_ptn.table_con = re.compile(r'^\s*\|.*\|\s*$')
 riv_ptn.table_cel = re.compile(r'(?<=\|)([^|]+)(?=\|)')
 

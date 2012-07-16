@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import vim
+import re
 
 from rivlib.utils import wstr_len
 from rivlib.pattern import riv_ptn
@@ -40,18 +41,31 @@ class RestTable:
         '''
         receive a 2D list and init the table
         '''
-        self.table = balance_tbl_col(lst)
+        self.list = balance_tbl_col(lst)
 
-        self.row = len(self.table)
+        self.row = len(self.list)
         if self.row > 0:
-            self.col = len(self.table[0])
+            self.col = len(self.list[0])
         else:
             self.col = 0
-
+        
+        self.norm_col()
         self.parse_col_max_width()
 
     def __repr__(self):
         return "<RestTable: %d Row %d Col>" % (self.row, self.col)
+
+    def norm_col(self):
+        '''
+        remove last space of each col,
+        and add a preceding space if not exists
+        '''
+        for row in self.list:
+            for i,col in enumerate(row):
+                row[i] = col.rstrip()
+                if not row[i].startswith(" "):
+                    row[i] = " " + row[i]
+        
 
     def parse_col_max_width(self):
         '''
@@ -61,12 +75,12 @@ class RestTable:
             | ee    | eee | e  |
         will set col_max_w to  [5 , 3 ,2]
         '''
-        v_tbl = zip(*self.table)
+        v_tbl = zip(*self.list)
         col_max_w = []
         for v_cols in v_tbl:
             max_len = 0         # two space
             for col in v_cols:
-                c_len = wstr_len(col.rstrip())
+                c_len = wstr_len(col)
                 if c_len > max_len:
                     max_len = c_len
             col_max_w.append(max_len)
@@ -75,42 +89,50 @@ class RestTable:
     def update(self):
         pass
 
-    def add_line(self,idx):
-        ''' add a empty line in table with specified idx'''
-        if idx< self.row:
-            if self.table[idx][0] == "|+++|":
-                self.table.insert(idx+1, ["|+++|"])
-            self.table.insert(idx+1, [ " " for i in range(self.col)])
-            # self.table = balance_tbl_col(self.table)
+    # def add_line(self,idx):
+    #     ''' add a empty line in table with specified idx'''
+    #     if idx< self.row:
+    #         if self.list[idx][0] == "|S":
+    #             self.list.insert(idx+1, ["|S"])
+    #         self.list.insert(idx+1, [ " " for i in range(self.col)])
+    #         # self.list = balance_tbl_col(self.list)
             
-
+    def add_line(self,idx,typ):
+        if typ == 'cont' or self.list[idx][0] == " |S" or self.list[idx][0] == " |H":
+            c = idx+1
+        else:
+            c = idx+2
+        if typ == 'sepr':
+            self.list.insert(idx+1, [" |S"])
+        elif typ == 'head':
+            self.list.insert(idx+1, [" |H"])
+        self.list.insert(c, [ " " for i in range(self.col)])
         
         
-    def output(self, indent=0):
+    def lines(self, indent=0):
         """
             indent: the number of preceding whitespace.
 
-            return the drawing of table.
+            return the lines of table.
         """
         # reverse the table and get the max_len of cols.
     
         idt = " " * indent
-        s_sep = "".join(["+" + ("-" * (l + 2)) for l in self.col_max_w])
-        s_hed = "".join(["+" + ("=" * (l + 2)) for l in self.col_max_w])
+        s_sep = "".join(["+" + ("-" * (l + 1)) for l in self.col_max_w])
         line_sep = idt + s_sep + "+"
-        line_head = idt + s_hed + "+"
+        line_head = re.sub('-','=',line_sep)
 
         lines = []
-        for row in self.table:
-            if row[0] == "|+++|":
+        for row in self.list:
+            if row[0] == " |S":
                 lines.append(line_sep)
+            elif row[0] == " |H":
+                lines.append(line_head)
             else:
                 s_col = ""
                 for i , cell in enumerate(row):
-                    c = cell.rstrip()
-                    t = "" if c.startswith(" ") else " "
-                    b = "" if t ==" " else " "
-                    s_col += "|" + t + c + (" " * (self.col_max_w[i] - wstr_len(c))) + b+ " "
+                    c = cell
+                    s_col += "|" + c + (" " * (self.col_max_w[i] - wstr_len(c))) + " "
                 line_con = idt + s_col + "|"
                 lines.append(line_con)
 
@@ -119,14 +141,6 @@ class RestTable:
                 lines.append(line_sep)
             if lines[0] != line_sep:
                 lines.insert(0,line_sep)
-
-        s = 0 
-        for i,line in enumerate(lines):
-            if line == line_sep:
-                s += 1
-                if s == 2 and len(lines)>i+1:
-                    lines[i] = line_head
-                    break
 
         return lines
 
@@ -149,11 +163,11 @@ class GetTable:
         if bgn == 0 and end == 0:
             self.table = None
         else:
-            self.table = self.parse_range_to_table(bgn, end)
+            self.table = self.table_in_range(bgn, end)
             indent = riv_ptn.indent.match(self.buf[lnum - 1]).end()
             self.indent = indent
 
-    def parse_range_to_table(self, start, end):
+    def table_in_range(self, start, end):
         '''
         parse line from start to end
         +---------------------+---------------+-------------+
@@ -179,6 +193,7 @@ class GetTable:
         if  we want to add multi col cell. we must record cell 's sep pos
         '''
         max_col = 0
+
         rows = []
         for i in range(start - 1, end):
             if riv_ptn.table_con.match(self.buf[i]):
@@ -187,8 +202,11 @@ class GetTable:
                 if max_col < c_len:
                     max_col = c_len
                 rows.append(cols)
-            elif riv_ptn.table_sep.match(self.buf[i]) :
-                rows.append(['|+++|'])      # A sep_str workround
+            elif riv_ptn.table_sepr.match(self.buf[i]) :
+                # this will cause min col_len to 2
+                rows.append(['|S'])      # A sep_str workround
+            elif riv_ptn.table_head.match(self.buf[i]) :
+                rows.append(['|H'])
         
         return RestTable(rows)
 
@@ -211,24 +229,27 @@ class GetTable:
 
     def format_table(self):
         if self.table:
-            lines = self.table.output(self.indent)
+            lines = self.table.lines(self.indent)
             bgn,end = self.bgn, self.end
             buf = self.buf
+            d_bgn = 0
             for row in range(bgn-1,end):
                 if buf[row] != lines[0]:
                     buf[row] = lines[0]
                 if lines:
                     del lines[0]
                 elif riv_ptn.table_all.match(buf[row]):
-                    del buf[row]
+                    d_bgn = row
+            if d_bgn:
+                del buf[d_bgn:end]
             if lines:
                 buf.append(lines, end)
                            
-    def add_line(self,row="1"):
+    def add_line(self,typ="cont"):
         if self.table:
             idx = vim.current.window.cursor[0] - self.bgn
             # if row=="1":
-            self.table.add_line(idx)
+            self.table.add_line(idx,typ)
             # else:
             #     self.table.add_line(idx,2)
             self.format_table()
@@ -253,7 +274,7 @@ if __name__ == "__main__":
     buftable = GetTable(259)
     buftable.table.add_line(3)
     print buftable.table
-    print "\n".join(buftable.table.output())
+    print "\n".join(buftable.table.lines())
     # GetTable().add_row()
     # string = '当当当当当当'
     # print wstr_len(string)

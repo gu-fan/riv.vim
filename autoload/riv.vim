@@ -179,7 +179,7 @@ let s:default.maps = {
     \'Riv2Latex'         : 'call riv#publish#file2("latex",1)',
     \'Riv2BuildPath'     : 'call riv#publish#open_path()',
     \'RivDelete'         : 'call riv#create#delete()',
-    \'RivHelpTodo'     : 'call riv#todo#todo_helper()',
+    \'RivHelpTodo'       : 'call riv#todo#todo_helper()',
     \'RivTodoUpdateCache': 'call riv#todo#force_update()',
     \'RivHelpFile'       : 'call riv#file#helper()',
     \'RivHelpSection'    : 'call riv#file#section_helper()',

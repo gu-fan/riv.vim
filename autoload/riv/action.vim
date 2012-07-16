@@ -8,6 +8,7 @@
 let s:cpo_save = &cpo
 set cpo-=C
 
+let s:p = g:_riv_p
 fun! riv#action#quick_start() "{{{
     let quick_start = g:_riv_c.doc_pat . 'riv_quickstart.rst'
     let lines = readfile(quick_start)
@@ -53,26 +54,30 @@ fun! s:is_in_sect_title(row) "{{{
                \ && b:riv_obj[a:row].type =='sect'
 endfun "}}}
 
-fun! s:cmd_table_new_line(row,col) "{{{
-    let cmd  = "\<C-O>:call riv#table#newline()|"
-    let cmd .= "call cursor(".(a:row+1).",".a:col.")|"
-    let cmd .= "call search(g:_riv_p.cell0,'Wbc')\<CR>"
+fun! s:table_newline_cmd(row,col,typ) "{{{
+    let cmd  = "\<C-G>u\<C-O>:call riv#table#newline('".a:typ."')|"
+    if a:typ == 'cont'
+        let cmd .= "call cursor(".(a:row+1).",".a:col.")|"
+    else
+        let cmd .= "call cursor(".(a:row+2).",".a:col.")|"
+    endif
+    let cmd .= "call search(g:_riv_p.cell.'|^\s*$' ,'Wbc')\<CR>"
     return cmd
 endfun "}}}
 
 fun! riv#action#ins_enter() "{{{
-    if getline('.') =~ g:_riv_p.table
+    if getline('.') =~ s:p.table
         let [row,col] = getpos('.')[1:2]
-        return s:cmd_table_new_line(row,col)
+        return s:table_newline_cmd(row,col,'cont')
     else
         return  "\<C-G>u\<Enter>"
     endif
 endfun "}}}
 fun! riv#action#ins_c_enter() "{{{
     let line = getline('.')
-    if getline('.') =~ g:_riv_p.table
+    if getline('.') =~ s:p.table
         let [row,col] = getpos('.')[1:2]
-        return s:cmd_table_new_line(row,col)
+        return s:table_newline_cmd(row,col,'sepr')
     endif
     let cmd = "\<C-G>u"
     let cmd .= line=~ '\S' ? "\<CR>" : ''
@@ -81,9 +86,10 @@ fun! riv#action#ins_c_enter() "{{{
 endfun "}}}
 fun! riv#action#ins_s_enter() "{{{
     let line = getline('.')
-    if getline('.') =~ g:_riv_p.table
-        let [row,col] = getpos('.')[1:2]
-        return s:cmd_table_new_line(row,col)
+    if getline('.') =~ s:p.table
+        " let [row,col] = getpos('.')[1:2]
+        " return s:table_newline_cmd(row,col,'cont')
+        return "\<C-O>:call cursor(riv#table#nextline())\<CR>"
     endif
     let cmd = "\<C-G>u"
     let cmd .= line=~ '\S' ? "\<CR>\<CR>" : ''
@@ -92,9 +98,9 @@ fun! riv#action#ins_s_enter() "{{{
 endfun "}}}
 fun! riv#action#ins_m_enter() "{{{
     let line = getline('.')
-    if getline('.') =~ g:_riv_p.table
+    if getline('.') =~ s:p.table
         let [row,col] = getpos('.')[1:2]
-        return s:cmd_table_new_line(row,col)
+        return s:table_newline_cmd(row,col,'head')
     endif
     let cmd = "\<C-G>u"
     let cmd .= line=~ '\S' ? "\<CR>\<CR>" : ''
@@ -116,14 +122,14 @@ endfun "}}}
 
 fun! s:is_in_list_item(col,line) "{{{
     " it's the col before last space in list-item
-    return a:col <= matchend(a:line, g:_riv_p.all_list)
+    return a:col <= matchend(a:line, s:p.all_list)
 endfun "}}}
 fun! s:is_in_bgn_blank(col,line) "{{{
     " it's the col include last space in a line
     return a:col <= matchend(a:line, '^\s*') + 1
 endfun "}}}
 fun! s:is_in_table(line) "{{{
-    return a:line =~ g:_riv_p.table
+    return a:line =~ s:p.table
 endfun "}}}
 fun! riv#action#nor_tab() "{{{
     call cursor(riv#table#nextcell())
@@ -167,7 +173,7 @@ fun! riv#action#ins_stab() "{{{
 
     if pumvisible() && g:riv_i_tab_pum_next
         return "\<C-P>"
-    elseif s:is_in_table(line) && g:riv_i_tab_tbl_next
+    elseif s:is_in_table(line)
         " Format the table and find the cell.
         return "\<C-O>:call cursor(riv#table#prevcell())\<CR>"
     elseif s:is_in_list_item(col, line)

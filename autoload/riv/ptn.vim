@@ -47,6 +47,21 @@ fun! riv#ptn#match_object(str,ptn,...) "{{{
     let s.end    = s.start + len(s.str)
     return s
 endfun "}}}
+fun! riv#ptn#match_obj_list(str,ptn) "{{{
+    " return a list contain all match object in str.
+    let obj_list =[]
+    let idx = 0
+    while idx != -1
+        let obj = riv#ptn#match_object(a:str,a:ptn,idx)
+        if empty(obj)
+            break
+        else
+            call add(obj_list, obj)
+            let idx = obj.end
+        endif
+    endwhile
+    return obj_list
+endfun "}}}
 
 fun! riv#ptn#get_WORD_idx(line, col) "{{{
     " if cursor is in a WORD ,return it's idx , else return -1
@@ -100,14 +115,19 @@ fun! riv#ptn#init() "{{{
     " +----+---+
     "                ^\s*\%(|\s.\{-}\)\=+\%([-=]\++\)\+\%(.\{-}\s|\)\=\s*$
     let tbl_fence = '%(\|\s.{-})=\+%([-=]+\+)+%(.{-}\s\|)='
+    let tbl_sepr  = '%(\|\s.{-})=\+%(-+\+)+%(.{-}\s\|)='
+    let tbl_head  = '%(\|\s.{-})=\+%(\=+\+)+%(.{-}\s\|)='
     let tbl_line  = '\|\s.{-}\s\|'
     let tbl_all   = tbl_fence . '|' . tbl_line
 
     let tbl_wrap = '\v^\s*%s\s*$'
 
     let s:p.table_fence = printf(tbl_wrap, tbl_fence)
+    let s:p.table_sepr = printf(tbl_wrap, tbl_sepr)
+    let s:p.table_head = printf(tbl_wrap, tbl_head)
     let s:p.table_line  = printf(tbl_wrap, tbl_line)
     let s:p.table  =  printf(tbl_wrap, tbl_all)
+    let s:p.table_cell = '\v\|@<=[^|]+\|@='
 
     let s:p.cell  = '\v%(^|\s)\|\s\zs'
     let s:p.cell0 = '\v^\s*\|\s\zs'
@@ -512,8 +532,9 @@ endfun "}}}
 
 " Test 
 if expand('<sfile>:p') == expand('%:p') 
-    echo '-p xxx   efefe' =~ '\v^\s*%(-\w%( \w+)=|--[[:alnum:]_-]+%(\=\w+)=|/\u)%(, %(-\w%( \w+)=|--[[:alnum:]_.-]+%(\=\w+)=|/\u))*%(  |\t)\ze\s*\S'
+    " echo '-p xxx   efefe' =~ '\v^\s*%(-\w%( \w+)=|--[[:alnum:]_-]+%(\=\w+)=|/\u)%(, %(-\w%( \w+)=|--[[:alnum:]_.-]+%(\=\w+)=|/\u))*%(  |\t)\ze\s*\S'
     call riv#ptn#init()
+    " echo riv#ptn#match_obj_list("hello3fefew34",'\d')
 endif
 
 let &cpo = s:cpo_save

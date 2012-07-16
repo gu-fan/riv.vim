@@ -126,7 +126,8 @@ Things todo in this version.
 
 * 0.70:
 
-  :Table_:  TODO a table parser in vim version.
+  :Table_:  DONE 2012-07-17 a table parser of vim version.
+  :Table_:  rewrite the table actions. now <C-Enter>  to create new row
 
 Next 
 ~~~~~
@@ -664,7 +665,6 @@ Table
 Tables are highlighted and folded.
 
 For Grid table, it is auto formatted.
-(Currently require vim compiled with python. )
 
 * Grid Table: 
 
@@ -686,30 +686,36 @@ For Grid table, it is auto formatted.
 
     - In the Table ::
 
-        +--------+--------------------------------------------------------------+
-        | 6x2    | Grid Table                                                   |
-        +========+==============================================================+
-        | Lines  | - <Enter> in column to add a new line of column              |
-        |        | - This is the second line of in same row of table.           |
-        +--------+--------------------------------------------------------------+
-        | Rows   | <Enter> in seperator to add a new row                        |
-        +--------+--------------------------------------------------------------+
-        | Cell   | <C-E>tn or <Tab> or RivTableNextCell, switch to next cell    |
-        |        | <C-E>tp or <S-Tab> or RivTablePrevCell, switch to prev cell  |
-        +--------+--------------------------------------------------------------+
+        +-------+-----------------------------------------------------------+
+        |       | Grid Table (No column or row span supported yet)          |
+        +-------+-----------------------------------------------------------+
+        | Lines | - <Enter> in column to add a new line                     |
+        |       | - This is the second line of in same row of table.        |
+        +-------+-----------------------------------------------------------+
+        | Rows  | - <C-Enter> to add a seperator and a new row              |
+        |       | - <C-S-Enter> to add a header seperator and a new row     |
+        |       |   (There could be only one header seperator in a table)   |
+        |       | - <S-Enter> to jump to next line                          |
+        +-------+-----------------------------------------------------------+
+        | Cell  | <C-E>tn or <Tab> or RivTableNextCell, jump to next cell   |
+        |       | <C-E>tp or <S-Tab> or RivTablePrevCell, jump to prev cell |
+        +-------+-----------------------------------------------------------+
 
 
-    +--------+--------------------------------------------------------------+
-    | 6x2    | Grid Table                                                   |
-    +========+==============================================================+
-    | Lines  | - <Enter> in column to add a new line of column              |
-    |        | - This is the second line of in same row of table.           |
-    +--------+--------------------------------------------------------------+
-    | Rows   | <Enter> in seperator to add a new row                        |
-    +--------+--------------------------------------------------------------+
-    | Cell   | <C-E>tn or <Tab> or RivTableNextCell, switch to next cell    |
-    |        | <C-E>tp or <S-Tab> or RivTablePrevCell, switch to prev cell  |
-    +--------+--------------------------------------------------------------+
+      +-------+-----------------------------------------------------------+
+      |       | Grid Table (No column or row span supported yet)          |
+      +-------+-----------------------------------------------------------+
+      | Lines | - <Enter> in column to add a new line                     |
+      |       | - This is the second line of in same row of table.        |
+      +-------+-----------------------------------------------------------+
+      | Rows  | - <C-Enter> to add a seperator and a new row              |
+      |       | - <C-S-Enter> to add a header seperator and a new row     |
+      |       |   (There could be only one header seperator in a table)   |
+      |       | - <S-Enter> to jump to next line                          |
+      +-------+-----------------------------------------------------------+
+      | Cell  | <C-E>tn or <Tab> or RivTableNextCell, jump to next cell   |
+      |       | <C-E>tp or <S-Tab> or RivTablePrevCell, jump to prev cell |
+      +-------+-----------------------------------------------------------+
 
     See `Grid Tables`__ for syntax details.
 
@@ -723,7 +729,7 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#grid-table
   No auto formatting. ::
 
       ===========  ========================
-            A 6x2 Simple Table
+            A Simple Table
       -------------------------------------
       Col 1        Col 2
       ===========  ========================
@@ -735,7 +741,7 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#grid-table
 
 
   ===========  ========================
-        A 6x2 Simple Table
+        A Simple Table
   -------------------------------------
   Col 1        Col 2
   ===========  ========================
@@ -935,12 +941,16 @@ Insert
 
 Super ``<Tab>`` and Super ``<Enter>`` in insert mode.
 
-* Enter and KEnter (Keypad Enter): 
+* ``Enter`` and ``KEnter`` (Keypad Enter) (with ctrl and shift): 
   
-  + When in a table_, ``<Enter>`` to create a new line
-  + When not in a table, will start new line with correct indentation
+  + When in a grid table, it's actions is creating table lines.
+    
+    See Table_ for details.
+  + When in a list , it's action is creating list lines.
+    
+    See Lists_ for details.
 
-* Tab and Shift-Tab:  
+* ``Tab`` and ``Shift-Tab``:  
   
   * If insert-popup-menu is visible, will act as ``<C-N>`` or ``<C-P>``
 
