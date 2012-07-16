@@ -2,8 +2,8 @@ Intro
 =====
 
 :Author: Rykka G.Forest
-:Date:   2012-07-08 22:24:32
-:Version: 0.69 
+:Date:   2012-07-17 00:20:19
+:Version: 0.70 
 :Github: https://github.com/Rykka/riv.vim
 
 **Riv** is for writing and managing reStructuredText documents in vim.
@@ -20,7 +20,7 @@ Features
  
 These features are for all reStructuredText files.
 
- :Sections_: Reveal section level and section number.
+ :Sections_: Showing section level and section number.
  :Lists_:    Creating lists that's auto numbered, auto leveled and auto indented.
  :Blocks_:   Highlighted and folded blocks.
  :Links_:    Jumping with links. Highlighted hovering links.
@@ -247,6 +247,8 @@ There are several List items in reStructuredText.
 All are highlighted. Most are folded.
 
 The bullet and enumerated list are auto level and auto numbered.
+
+The bullet and enumerated list and field list are auto indented.
 
 * Auto Level:
 
