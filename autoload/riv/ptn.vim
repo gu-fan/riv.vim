@@ -26,6 +26,9 @@ fun! s:escape_v2m(ptn) "{{{
     return ptn
 endfun "}}}
 
+fun! riv#ptn#escape(str)
+    return escape(a:str, '.^$*[]\@+=~')
+endfun
 fun! s:normlist(list,...) "{{{
     " return list with words
     return filter(map(a:list,'matchstr(v:val,''\w\+'')'), ' v:val!=""')

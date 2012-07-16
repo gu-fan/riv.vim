@@ -155,7 +155,7 @@ endfun "}}}
 fun! s:find_sect(ptn) "{{{
     if exists("b:state.sectmatcher")
         for sect in b:state.sectmatcher
-            let line =  getline(sect.bgn) 
+            let line = getline(sect.bgn) 
             if line =~ g:_riv_p.section
                 let line = getline(sect.bgn+1)
             endif
@@ -168,7 +168,9 @@ endfun "}}}
 fun! riv#file#s_enter() "{{{
     let sect = matchstr(getline('.'),  ':\s*\zs.*$')
     if s:sect.exit()
-        let row = s:find_sect(sect)
+        let text = substitute(riv#ptn#escape(sect),'\s\+','\\s+','g')
+        let ptn = '^\v\c\s*'.text.'\s*$'
+        let row = s:find_sect(ptn)
         if row > 0
             call setpos("'`",getpos('.'))
             call cursor(row,0)

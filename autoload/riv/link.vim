@@ -28,14 +28,11 @@ fun! riv#link#finder(dir) "{{{
         call cursor(srow, scol)
     endif
 endfun "}}}
-fun! s:escape(str) "{{{
-    return escape(a:str, '.^$*[]\@+=~')
-endfun "}}}
 fun! s:normal_ptn(text) "{{{
     let text = substitute(a:text ,'\v(^__=|_=_$)','','g')
     let text = substitute(text ,'\v(^`|`$)','','g')
     let text = substitute(text ,'\v(^\[|\]$)','','g')
-    let text = substitute(s:escape(text),'\s\+','\\s+','g')
+    let text = substitute(riv#ptn#escape(text),'\s\+','\\s+','g')
     return text
 endfun "}}}
 
@@ -57,7 +54,8 @@ fun! s:find_tar(text) "{{{
     let [c_row,c_col] = getpos('.')[1:2]
 
     " The section title are implicit targets.
-    let row = s:find_sect('\v\c^'.norm_ptn.'$')
+    echo norm_ptn
+    let row = s:find_sect('\v\c^\s*'.norm_ptn.'\s*$')
     if row > 0
         return [row, c_col]
     endif
@@ -82,7 +80,11 @@ endfun "}}}
 fun! s:find_sect(ptn) "{{{
     if exists("b:state.sectmatcher")
         for sect in b:state.sectmatcher
-            if getline(sect.bgn) =~ a:ptn
+            let line = getline(sect.bgn) 
+            if line =~ g:_riv_p.section
+                let line = getline(sect.bgn+1)
+            endif
+            if line =~ a:ptn
                 return sect.bgn
             endif
         endfor
