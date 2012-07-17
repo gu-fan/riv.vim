@@ -12,18 +12,18 @@ set cpo-=C
 let s:p = g:_riv_p
 
 fun! riv#table#format() "{{{
-    if g:_riv_c.has_py
-        exe g:_riv_c.py ."GetTable().format_table()"
-    else
-        call s:get_table.new().format_table()
-    endif
+    " if g:_riv_c.has_py
+        " exe g:_riv_c.py ."GetTable().format_table()"
+    " else
+        call s:get_table().format_table()
+    " endif
 endfun "}}}
 fun! riv#table#newline(type) "{{{
-    if g:_riv_c.has_py
-        exe g:_riv_c.py ."GetTable().add_line(typ='".a:type."')"
-    else
-        call s:get_table.new().add_line(a:type)
-    endif
+    " if g:_riv_c.has_py
+        " exe g:_riv_c.py ."GetTable().add_line(typ='".a:type."')"
+    " else
+        call s:get_table().add_line(a:type)
+    " endif
 endfun "}}}
 
 fun! riv#table#create() "{{{
@@ -103,7 +103,7 @@ function! riv#table#nextline() "{{{
     endif
 endfunction "}}}
 
-" table parse " {{{
+" table parse "{{{
 
 fun! s:get_table_range(row) "{{{
     let row = a:row
@@ -152,12 +152,16 @@ fun! s:table_in_range(bgn,end) "{{{
         endif
     endfor
     
-    return s:grid_table.new(rows)
+    return s:grid_table(rows)
 endfun "}}}
 
 let s:get_table = {}
+fun! s:get_table(...) "{{{
+    return a:0 ? s:get_table.new(a:1) : s:get_table.new()
+endfun "}}}
 fun! s:get_table.new(...)  dict "{{{
     " get the table object of row
+    
     let row = a:0 ? a:1 : line('.')
     let [bgn, end] = s:get_table_range(row)
     if bgn == 0
@@ -206,44 +210,12 @@ fun! s:get_table.add_line(type) dict "{{{
     call self.format_table()
 endfun "}}}
 "}}}
-fun! s:balance_table_col(list) "{{{
-    let balanced_list = []
-    let max_cols = 0
-
-    " get the max max_cols of the list
-    for row in a:list "{{{
-        if type(row) == type([])
-            let row_len = len(row)
-            if row_len > max_cols 
-                let max_cols = row_len
-            endif
-        endif
-    endfor "}}}
-
-    if max_cols == 0
-        return balanced_list
-    endif
-    
-    " add a ' ' to each row
-    for i in range(len(a:list)) "{{{
-        let row = a:list[i]
-        if type(row) == type([])
-            let row_len = len(row)
-            let tmp = row[:]
-            if max_cols > row_len
-                call extend(tmp, map(range(max_cols - row_len), '" "'))
-            endif
-        else
-            let tmp = [row]
-            call extend(tmp, map(range(max_cols - 1), '" "'))
-        endif
-        call add(balanced_list, tmp)
-    endfor "}}}
-    return balanced_list
-endfun "}}}
 
 " grid table object. "{{{
 let s:grid_table = {}
+fun! s:grid_table(list) "{{{
+    return s:grid_table.new(a:list)
+endfun "}}}
 fun! s:grid_table.new(list) dict "{{{
 
    let self.list = s:balance_table_col(a:list)
@@ -338,6 +310,41 @@ fun! s:grid_table.add_line(idx, type) dict "{{{
 endfun "}}}
 "}}}
 
+fun! s:balance_table_col(list) "{{{
+    let balanced_list = []
+    let max_cols = 0
+
+    " get the max max_cols of the list
+    for row in a:list "{{{
+        if type(row) == type([])
+            let row_len = len(row)
+            if row_len > max_cols 
+                let max_cols = row_len
+            endif
+        endif
+    endfor "}}}
+
+    if max_cols == 0
+        return balanced_list
+    endif
+    
+    " add a ' ' to each row
+    for i in range(len(a:list)) "{{{
+        let row = a:list[i]
+        if type(row) == type([])
+            let row_len = len(row)
+            let tmp = row[:]
+            if max_cols > row_len
+                call extend(tmp, map(range(max_cols - row_len), '" "'))
+            endif
+        else
+            let tmp = [row]
+            call extend(tmp, map(range(max_cols - 1), '" "'))
+        endif
+        call add(balanced_list, tmp)
+    endfor "}}}
+    return balanced_list
+endfun "}}}
 fun! s:rstrip(str) "{{{
     return matchstr(a:str, '.\{-}\ze\s*$')
 endfun "}}}

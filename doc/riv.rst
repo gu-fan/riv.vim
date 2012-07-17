@@ -131,8 +131,10 @@ Things todo in this version.
   :Table_:  DONE 2012-07-17 a1f112d1_ add create table action.
 
 
-.. _a1f112d1: https://github.com/Rykka/riv.vim/commit/a1f112d1e3f7b52130db1a4eeea7ef94c92d9c92
-.. _7b407b4b: https://github.com/Rykka/riv.vim/commit/7b407b4b5ff07467e1cdd78415984ee987e03f49
+.. _a1f112d1: 
+   https://github.com/Rykka/riv.vim/commit/a1f112d1e3f7b52130db1a4eeea7ef94c92d9c92
+.. _7b407b4b: 
+   https://github.com/Rykka/riv.vim/commit/7b407b4b5ff07467e1cdd78415984ee987e03f49
 
 Next 
 ~~~~~
