@@ -28,13 +28,13 @@ let s:helper = {}
 let s:helper = { 'name' : '_Helper_' }
 fun! s:helper.new() dict "{{{
     let self.maps = {
-        \  '<Enter>'  : 'riv#helper#enter',
-        \  '<KEnter>' : 'riv#helper#enter',
-        \  'q'        : 'riv#helper#exit'  ,
-        \  '<Esc>'    : 'riv#helper#exit'  ,
-        \  '<Tab>'    : 'riv#helper#tab'  ,
-        \  '<S-Tab>'  : 'riv#helper#tab'  ,
-        \  '/'        : 'riv#helper#run'  ,
+        \  '<Enter>'  : ':cal riv#helper#enter()<CR>',
+        \  '<KEnter>' : ':cal riv#helper#enter()<CR>',
+        \  'q'        : ':cal riv#helper#exit()<CR>'  ,
+        \  '<Esc>'    : ':cal riv#helper#exit()<CR>'  ,
+        \  '<Tab>'    : ':cal riv#helper#tab()<CR>'  ,
+        \  '<S-Tab>'  : ':cal riv#helper#tab()<CR>'  ,
+        \  '/'        : ':cal riv#helper#run()<CR>'  ,
         \}
     let self.contents = [[]]
     let self.content_title = "Helper"
@@ -95,7 +95,7 @@ endfun "}}}
 fun! s:helper.map() dict "{{{
     abcl <buffer>
     mapc <buffer>
-    let cmd = 'nn <buffer><silent> %s :cal %s()<CR>'
+    let cmd = 'nn <buffer><silent> %s %s'
     for [lhs,rhs] in items(self.maps)
         exe printf(cmd,lhs,rhs)
     endfor
@@ -106,7 +106,7 @@ fun! s:helper.map() dict "{{{
 endfun "}}}
 fun! s:helper.set() dict "{{{
 	setl noswf nonu nowrap nolist nospell nocuc wfh
-	setl fdc=0 fdl=99 tw=0 bt=nofile bh=unload
+	setl fdc=0 fdl=99 tw=0 bt=nofile bh=unload fdm=manual
 	setl noma
 	setl ft=riv
 	setl cul

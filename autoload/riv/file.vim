@@ -144,10 +144,10 @@ fun! riv#file#helper() "{{{
 
     let s:file.signs = signs
 
-    let s:file.maps['<Enter>'] = 'riv#file#enter'
-    let s:file.maps['<KEnter>'] = 'riv#file#enter'
-    let s:file.maps['<2-leftmouse>'] = 'riv#file#enter'
-    let s:file.syntax_func  = "riv#file#syn_hi"
+    let s:file.maps['<Enter>'] = ':cal riv#file#enter()<CR>'
+    let s:file.maps['<KEnter>'] = ':cal riv#file#enter()<CR>'
+    let s:file.maps['<2-leftmouse>'] = ':cal riv#file#enter()<CR>'
+    let s:file.syntax_func  = 'riv#file#syn_hi'
     let s:file.input=""
     cal s:file.win('vI')
 endfun "}}}
@@ -166,6 +166,10 @@ fun! s:find_sect(ptn) "{{{
     endif
 endfun "}}}
 fun! riv#file#s_enter() "{{{
+    if foldclosed('.') != -1
+        normal! zv
+        return
+    endif
     let sect = matchstr(getline('.'),  ':\s*\zs.*$')
     if s:sect.exit()
         let text = substitute(riv#ptn#escape(sect),'\s\+','\\s+','g')
@@ -187,7 +191,16 @@ fun! riv#file#s_syn_hi() "{{{
     syn match rivSection ':\@<=.*$'
     hi link rivSection Include
     hi link rivNumber Function
+    
+    setl foldmethod=expr fdl=0 foldexpr=riv#file#s_fold(v:lnum)
+    setl foldtext=getline(v:foldstart)
 endfun "}}}
+function! riv#file#s_fold(row) "{{{
+    let sect_txt = matchstr(getline(a:row),  '^\S*\ze:')
+    let level = len(split(sect_txt, g:riv_fold_section_mark))
+    return '>'.level
+endfunction "}}}
+
 fun! s:load_sect() "{{{
     if !exists("b:state")
         return []
@@ -218,9 +231,9 @@ fun! riv#file#section_helper() "{{{
     let s:sect.contents_name = ['Section']
     let s:sect.signs = []
 
-    let s:sect.maps['<Enter>'] = 'riv#file#s_enter'
-    let s:sect.maps['<KEnter>'] = 'riv#file#s_enter'
-    let s:sect.maps['<2-leftmouse>'] = 'riv#file#s_enter'
+    let s:sect.maps['<Enter>'] = ':cal riv#file#s_enter()<CR>'
+    let s:sect.maps['<KEnter>'] = ':cal riv#file#s_enter()<CR>'
+    let s:sect.maps['<2-leftmouse>'] = ':cal riv#file#s_enter()<CR>'
     let s:sect.syntax_func  = "riv#file#s_syn_hi"
     let s:sect.input=""
     cal s:sect.win('vI')

@@ -485,10 +485,10 @@ fun! riv#todo#todo_helper() "{{{
     let s:todo.contents_name = ['All', 'Todo', 'Done'] + prior_strs
     let s:todo.content_title = "Todos"
 
-    let s:todo.maps['<Enter>'] = 'riv#todo#enter'
-    let s:todo.maps['<KEnter>'] = 'riv#todo#enter'
-    let s:todo.maps['<2-leftmouse>'] = 'riv#todo#enter'
-    let s:todo.syntax_func  = "riv#todo#syn_hi"
+    let s:todo.maps['<Enter>'] = ':cal riv#todo#enter()<CR>'
+    let s:todo.maps['<KEnter>'] = ':cal riv#todo#enter()<CR>'
+    let s:todo.maps['<2-leftmouse>'] = ':cal riv#todo#enter()<CR>'
+    let s:todo.syntax_func  = 'riv#todo#syn_hi'
     let s:todo.input=""
     cal s:todo.win()
 endfun "}}}
