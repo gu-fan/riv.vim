@@ -5,16 +5,14 @@ QuickStart With Riv
 :Author: Rykka
 :Date: 2012-07-08 22:58:41
 
-Riv use reStructuredText__ syntax to manage documents.
-
-which is an easy-to-read, 
-what-you-see-is-what-you-get plaintext markup syntax and parser system.
+Riv is for writing and managing reStructuredText__ documents.
 
 __ http://docutils.sourceforge.net/rst.html
 
-This is an quick guide for both reStructuredText and Riv features.
+This is an quick guide for Riv features, 
+and include a simple intro of reStructuredText syntax.
 
-If you have installed ``Riv``
+If you have installed ``Riv``, 
 Use ``:RivQuickStart`` or ``<C-E>hq`` to get view and edit it in vim.
 
 You can edit it freely as it's not to be written to disk.

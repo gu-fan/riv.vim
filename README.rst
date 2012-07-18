@@ -6,7 +6,7 @@ Intro
 :Version: 0.70 
 :Github: https://github.com/Rykka/riv.vim
 
-**Riv** is for writing and managing reStructuredText documents in vim.
+**Riv** is for writing and managing reStructuredText_ documents in vim.
 
 Short for 'reStructuredText in Vim'. 
 

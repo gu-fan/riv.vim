@@ -455,8 +455,9 @@ fun! riv#list#change(id) "{{{
     
     let prv_len = strwidth(line)
     let end = matchend(line, g:_riv_p.b_e_list)
-
-    let [type,num,attr] = s:level2stat(s:change_levels[a:id])
+    
+    let id = a:id>=len(s:change_levels) ? len(s:change_levels)-1 : a:id
+    let [type,num,attr] = s:level2stat(s:change_levels[id])
     let list_str = s:list_str(type,'',num,attr,'')
     if end == -1
         let line = substitute(line, '^\s*', '\0'.list_str.' ', '')
@@ -602,16 +603,18 @@ fun! s:shift_vec(row,vec,...) "{{{
 
     let indent = indent(a:row)
     
-    " change the sft_fix list length to current indent + 1
-    let len = len(s:sft_fix) - 1
-    if indent > len
-        let l = map(range(indent-len), 's:sft_fix[-1]')
+    " change the sft_fix list length to current indent + 2
+    " s:sft_fix[indent] is the fix indent for same indent with current row
+    " s:sft_fix[indent+1] for indent > current row
+    let len = len(s:sft_fix)
+    if indent > len - 2 
+        let l = map(range(indent-len+2), 's:sft_fix[-1]')
         call extend(s:sft_fix, l )
-    elseif indent < len
-        call remove(s:sft_fix, (indent+1), -1)
+    elseif indent < len - 2 
+        call remove(s:sft_fix, (indent+2), -1)
     endif
     " apply the indent fix
-    let cur_indent = indent + a:vec + s:sft_fix[indent-1]
+    let cur_indent = indent + a:vec + s:sft_fix[indent]
     let line = s:set_idt(line, cur_indent)
 
     let is_roman = s:is_roman(a:row)
@@ -632,7 +635,7 @@ fun! s:shift_vec(row,vec,...) "{{{
         let p_len = len(line)
         let line = substitute(line, s:p.b_e_list,
                     \ s:list_str(type,idt,num,attr,space), '')
-        let s:sft_fix[indent] = s:sft_fix[indent-1] +  len(line) - p_len
+        let s:sft_fix[indent+1] = s:sft_fix[indent] +  len(line) - p_len
     endif
 
     call setline(a:row,line)
@@ -658,7 +661,7 @@ fun! s:fix_nr(row, indent) "{{{
     let p_len = len(line)
     let line = substitute(line, s:p.b_e_list,
                 \ s:list_str(type,idt,num,attr,space), '')
-    let s:sft_fix[a:indent] += len(line) - p_len
+    let s:sft_fix[a:indent+1] += len(line) - p_len
     call setline(a:row,line)
 endfun "}}}
 fun! s:set_idt(line, indent) "{{{
