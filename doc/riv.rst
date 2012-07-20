@@ -1109,7 +1109,7 @@ Some command wrapper to convert rst files to html/xml/latex/odt/...
 With Riv 
 --------
 
-Following features are provided by **Riv**.
+Following features are for better working with reStructuredText documents.
 
 * Project_, Scratch_, Helpers_ are extra function for managing rst documents.
 * File_, Todos_ are extra syntax items for writing rst document.
