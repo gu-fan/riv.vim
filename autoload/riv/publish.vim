@@ -27,46 +27,102 @@ fun! s:repl_file_link(line) "{{{
     " Dont' convert links in table. which will made table malformed.
     "
     " Also links in same line of explicit mark are not converted.
+    " 
+    " DONE: dont' convert the line in explicit mark or literal blocks
+    "       As this is based on line, should use a parser or 
+    "       read this into buffer.
+    "       
+    "       A simple buffer parse solution: 
+    "       record the block / explicit mark and indent
+    " TODO: not convert the link in a inline markup
+    " TODO: not convert the link in a section title
     
     
     let line = a:line
     
-    if line =~ g:_riv_p.table || line =~ g:_riv_p.exp_mark
+    " not convert in line_block and table
+    if line =~ g:_riv_p.table || line =~ g:_riv_p.line_block
         return line
     endif
 
-    let file = matchstr(line, g:_riv_p.link_file)
-    let idx = matchend(line, g:_riv_p.link_file)
+    " explicit mark and literal block will end with a smaller indent
+    let indent = riv#fold#indent(line)
+    if line =~ g:_riv_p.exp_mark || line =~ g:_riv_p.literal_block
+        let s:repl_file_idt = indent
+        return line
+    endif
+    if s:repl_file_idt != -1 && indent > s:repl_file_idt
+        return line
+    else
+        let s:repl_file_idt = -1
+    endif
+    
+    " doctest block will end with a blank line
+    if line =~ g:_riv_p.doctest_block
+        let s:repl_file_doctest = 1
+    endif
+    
+    if s:repl_file_doctest 
+        if line =~ '^\s*$'
+            let s:repl_file_doctest = 0
+        endif
+        return line
+    endif
+
+    let o_line = line
+    let file = matchstr(o_line, g:_riv_p.link_file)
+    let pre_idx = 0           " for the inline markup column check
+    let idx = matchend(o_line, g:_riv_p.link_file)
     while !empty(file)
-        if g:riv_file_link_style == 2
-            let file = matchstr(file, '^\[\zs.*\ze\]$')
-        endif
-        let file = s:escape(file)
-        if !riv#path#is_relative(file)
-                let title = file
-                let path = file
-        elseif riv#path#is_directory(file)
-            let title = file
-            let path = title . 'index.html'
-        else
-            let f = s:get_rst_file(file)
-            if !empty(f)
-                let title = f
-                let path = title.'.html'
-            elseif g:riv_file_link_style == 2 && fnamemodify(file, ':e') == ''
-                let title = file
-                let path = title.'.html'
-            else
-                let title = file
-                let path = file
+        let obj =riv#ptn#get_inline_markup_obj(o_line, idx+1, pre_idx)
+        " it's not in a inline markup
+        if empty(obj)
+            " substitute process
+            if g:riv_file_link_style == 2
+                let file = matchstr(file, '^\[\zs.*\ze\]$')
             endif
+            let file = s:escape(file)
+            if !riv#path#is_relative(file)
+                    let title = file
+                    let path = file
+            elseif riv#path#is_directory(file)
+                let title = file
+                let path = title . 'index.html'
+            else
+                let f = s:get_rst_file(file)
+                if !empty(f)
+                    let title = f
+                    let path = title.'.html'
+                elseif g:riv_file_link_style == 2 && fnamemodify(file, ':e') == ''
+                    let title = file
+                    let path = title.'.html'
+                else
+                    let title = file
+                    let path = file
+                endif
+            endif
+            let line = substitute(line, s:escape_file_ptn(file), 
+                            \s:gen_embed_link(title, path), 'g')
+
         endif
-        let line = substitute(line, s:escape_file_ptn(file), 
-                    \s:gen_embed_link(title, path), 'g')
-        let file = matchstr(line, g:_riv_p.link_file,idx)
-        let idx = matchend(line, g:_riv_p.link_file,idx)
+
+        " prepare next match
+        let file = matchstr(o_line, g:_riv_p.link_file,idx)
+        let pre_idx = idx
+        let idx = matchend(o_line, g:_riv_p.link_file,idx)
     endwhile
     return line
+endfun "}}}
+
+let s:tempfile = tempname()
+let s:tempdir = riv#path#directory(fnamemodify(s:tempfile,':h'))
+fun! s:create_tmp(file) "{{{
+    update
+    let s:repl_file_idt = -1
+    let s:repl_file_doctest = 0
+    let lines = map(readfile(a:file),'s:repl_file_link(v:val)')
+    call writefile(lines, s:tempfile)       " not all system can pipe
+    return s:tempfile
 endfun "}}}
 
 fun! s:get_rst_file(file) "{{{
@@ -98,15 +154,6 @@ fun! s:auto_mkdir(path) "{{{
     if !isdirectory(fnamemodify(a:path,':h')) 
         call mkdir(fnamemodify(a:path,':h'),'p')
     endif
-endfun "}}}
-
-let s:tempfile = tempname()
-let s:tempdir = riv#path#directory(fnamemodify(s:tempfile,':h'))
-fun! s:create_tmp(file) "{{{
-    update
-    let lines = map(readfile(a:file),'s:repl_file_link(v:val)')
-    call writefile(lines, s:tempfile)       " not all system can pipe
-    return s:tempfile
 endfun "}}}
 
 fun! riv#publish#copy2proj(file,html_path) abort "{{{
@@ -176,7 +223,12 @@ fun! riv#publish#2(ft, file, path, browse) "{{{
     let out_path = a:path . riv#path#rel_to_root(file)
     let file_path = riv#path#ext_to(out_path, a:ft)
     call s:auto_mkdir(out_path)
-    call s:convert(a:ft, s:create_tmp(file), file_path, s:rst_args(a:ft))
+    if g:riv_file_link_convert == 2
+        \|| (g:riv_file_link_convert == 1 && fnamemodify(file,':t') == 'index.rst')
+        call s:convert(a:ft, s:create_tmp(file), file_path, s:rst_args(a:ft))
+    else
+        call s:convert(a:ft, file, file_path, s:rst_args(a:ft))
+    endif
     if a:browse
         if a:ft == "latex"
             exe 'sp ' file_path

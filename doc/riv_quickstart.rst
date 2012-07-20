@@ -5,13 +5,14 @@ QuickStart With Riv
 :Author: Rykka
 :Date: 2012-07-08 22:58:41
 
-Riv is for writing and managing reStructuredText__ documents.
+This is an quick guide for Riv_ 
+and include a simple intro of reStructuredText_ syntax.
 
-__ http://docutils.sourceforge.net/rst.html
+.. _Riv: https://github.com/Rykka/riv.vim
+.. _reStructuredText: http://docutils.sourceforge.net/rst.html
 
-This is an quick guide for Riv features, 
-and include a simple intro of reStructuredText syntax.
 
+Use it in Vim.
 If you have installed ``Riv``, 
 Use ``:RivQuickStart`` or ``<C-E>hq`` to get view and edit it in vim.
 

@@ -90,6 +90,7 @@ let s:default.options = {
     \'file_link_ext'      : 'vim,cpp,c,py,rb,lua,pl',
     \'file_link_invalid_hl' : 'ErrorMsg',
     \'file_link_style'    : 1,
+    \'file_link_convert'  : 1,
     \'highlight_code'     : "lua,python,cpp,javascript,vim,sh",
     \'link_cursor_hl'     : 1,
     \'todo_levels'        : " ,o,X",

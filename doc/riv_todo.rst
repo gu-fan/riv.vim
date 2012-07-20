@@ -66,14 +66,14 @@ TODOS
    + DONE 2012-07-07 Rethiking the todo item
    + the name of todo cache.
 
-7. _`Table`
+7. Table
 
   :Table_: FIXME  malformed when pressing ``enter`` sometimes
   :Table_: Support simple table format?
   :Table_: Support column span?
   :Table_: A vim table parser for compatible?
   :Table_: A shortcut or command to create table with row * col.
-  :Table_: DONE 2012-07-05 Improved row & col count.
+  :Table_: DONE 2012-07-20 Improved row & col count.
 
 8. Folding
 
@@ -103,6 +103,7 @@ TODOS
     + A file tag jump like ``:xxx:`xxxx``` for sphinx docs
     + for bare style, a method/syntax to escape file that not convert to links
     + an option for not converting links
+    + hack the docutils parser with local file link.
 
 13. Publish
 
@@ -135,3 +136,5 @@ TODOS
    B. sync with calendar?
 
 
+
+.. _Table: riv.rst#table

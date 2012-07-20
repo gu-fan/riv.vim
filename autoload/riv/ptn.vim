@@ -80,6 +80,12 @@ fun! riv#ptn#get_phase_idx(line, col) "{{{
     let ptn = printf('`[^`]*\%%%dc[^`]*`__\?\|\%%%dc`[^`]*`__\?', a:col, a:col)
     return match(a:line, ptn)
 endfun "}}}
+fun! riv#ptn#get_inline_markup_obj(line, col, bgn) "{{{
+    " if cursor is in a phase ,return it's idx , else return -1
+    let ptn = '\v%<'.a:col.'c%(^|\s)([`*])\S.{-}%(\S)@<=\1_{,1}' . g:_riv_p.ref_end .   '%>'.a:col.'c'
+    return riv#ptn#match_object(a:line, ptn, a:bgn)
+endfun "}}}
+
 fun! riv#ptn#get_WORD_obj(line,col) "{{{
     let ptn = printf('\%%%dc.',a:col)
     if matchstr(a:line, ptn)=~'\S'
@@ -324,6 +330,7 @@ fun! riv#ptn#init() "{{{
     let ref_end = '%($|\s|[''")\]}>/:.,;!?\\-])'
 
     let s:p.ref_name = ref_name
+    let s:p.ref_end = ref_end
     
     let ref_normal = '<'.ref_name.'_\ze'
     let ref_phase  = '`[^`\\]*%(\\.[^`\\]*)*`_\ze'

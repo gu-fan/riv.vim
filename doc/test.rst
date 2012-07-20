@@ -1,12 +1,10 @@
 Test
 ====
-
-For testing github rendering
+.. note:: For testing github rendering
  
 * list 1
 * list 2
 
-  for testing
 :Sections:  Section level and section number auto detected.
 
 
