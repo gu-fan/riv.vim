@@ -1256,7 +1256,9 @@ Scratch is a place for writing diary or notes.
 * ``:RivScratchView`` ``<C-E>cv``
   View Scratch index.
 
-  The index is auto created. You can change the month name using 
+  The index is auto created. Seperate scratches by years and month
+  
+  You can change the month name using 
   ``g:riv_month_names``. 
 
   default is:
