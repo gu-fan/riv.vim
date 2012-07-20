@@ -65,7 +65,7 @@ Screenshot
 .. image:: http://i.minus.com/iqILF1JxkLgXG.png 
    :alt: overview of the document
 
-**Section Helper**
+**Lists**
 
 .. figure:: http://i.minus.com/iFbYab5lsoMka.png 
 
