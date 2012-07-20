@@ -1150,7 +1150,7 @@ There are some convenience with projects.
 File
 ~~~~
 
-The link to edit local files.
+The link to edit local files.  ``non-reStructuredText syntax``
 
 As reStructuredText haven't define a pattern for local files currently.
 
@@ -1273,11 +1273,10 @@ You can change it with 'scratch_path' of project setting ,default is 'Scratch'::
 Todos
 ~~~~~
 
-Todo items to keep track of todo things.
+Todo items to keep track of todo things.  ``non-reStructuredText syntax``
 
 It is Todo-box or Todo-keywords in a bullet/enumerated/field list.
 
-It is not defined by reStructuredText syntax.
 
 * Todo Box:
 
