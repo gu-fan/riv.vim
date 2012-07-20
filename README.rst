@@ -1225,8 +1225,9 @@ Except in following situation:
     + In a literal block or line block or doctest block.
     + In a inline markup 
 
+explicit markup, block , inline markup could not include links. 
 file links in table should use ``:RivCreateLink`` or ``<C-E>il`` to 
-create it manually. no link can be done in other places ::
+create it manually. ::
    
  file.rst_
 
