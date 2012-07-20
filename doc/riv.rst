@@ -1237,9 +1237,10 @@ The option ``g:riv_file_link_convert`` can be used to control the converting.
     + when set to 2, link in all rst file in a project will be converted.
     + when set to 1, link only in ``index.rst`` will be converted.
     + when set to 0, no link will be converted.
+    + default is 2
 
 For now it's overhead with substitude by a temp file.
-A parser for docutils is needed in the future.
+A parser for docutils_ is needed in the future.
 
 Scratch
 ~~~~~~~
