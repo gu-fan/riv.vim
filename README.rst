@@ -961,42 +961,43 @@ For Grid table, it is auto formatted.
 
     - Inside the Table ::
 
-        +-------+-----------------------------------------------------------+
-        |       | Grid Table (No column or row span supported yet)          |
-        +-------+-----------------------------------------------------------+
-        | Lines | - <Enter> in column to add a new line                     |
-        |       | - This is the second line of in same row of table.        |
-        +-------+-----------------------------------------------------------+
-        | Rows  | - <C-Enter> to add a seperator and a new row              |
-        |       | - <C-S-Enter> to add a header seperator and a new row     |
-        |       |   (There could be only one header seperator in a table)   |
-        |       | - <S-Enter> to jump to next line                          |
-        +-------+-----------------------------------------------------------+
-        | Cell  | <C-E>tn or <Tab> or RivTableNextCell, jump to next cell   |
-        |       | <C-E>tp or <S-Tab> or RivTablePrevCell, jump to prev cell |
-        +-------+-----------------------------------------------------------+
-        | Multi | MultiByte characters are ok                               |
-        |       | 一二三四五  かきくけこ                                    |
-        +-------+-----------------------------------------------------------+
+        +-------+-------------------------------------------------------------+
+        |       | Grid Table (No column or row span supported yet)            |
+        +-------+-------------------------------------------------------------+
+        | Lines | - <Enter> in column to add a new line                       |
+        |       | - This is the second line of in same row of table.          |
+        +-------+-------------------------------------------------------------+
+        | Rows  | - <C-Enter> to add a seperator and a new row                |
+        |       | - <C-S-Enter> to add a header seperator and a new row       |
+        |       |   (There could be only one header seperator in a table)     |
+        |       | - <S-Enter> to jump to next line                            |
+        +-------+-------------------------------------------------------------+
+        | Cell  | - <C-E>tn or <Tab> or RivTableNextCell, jump to next cell   |
+        |       | - <C-E>tp or <S-Tab> or RivTablePrevCell, jump to prev cell |
+        +-------+-------------------------------------------------------------+
+        | Multi | - MultiByte characters are OK                               |
+        |       | - 一二三四五  かきくけこ                                    |
+        +-------+-------------------------------------------------------------+
 
 
-      +-------+-----------------------------------------------------------+
-      |       | Grid Table (No column or row span supported yet)          |
-      +-------+-----------------------------------------------------------+
-      | Lines | - <Enter> in column to add a new line                     |
-      |       | - This is the second line of in same row of table.        |
-      +-------+-----------------------------------------------------------+
-      | Rows  | - <C-Enter> to add a seperator and a new row              |
-      |       | - <C-S-Enter> to add a header seperator and a new row     |
-      |       |   (There could be only one header seperator in a table)   |
-      |       | - <S-Enter> to jump to next line                          |
-      +-------+-----------------------------------------------------------+
-      | Cell  | <C-E>tn or <Tab> or RivTableNextCell, jump to next cell   |
-      |       | <C-E>tp or <S-Tab> or RivTablePrevCell, jump to prev cell |
-      +-------+-----------------------------------------------------------+
-      | Multi | MultiByte characters are ok                               |
-      |       | 一二三四五  かきくけこ                                    |
-      +-------+-----------------------------------------------------------+
+
+      +-------+-------------------------------------------------------------+
+      |       | Grid Table (No column or row span supported yet)            |
+      +-------+-------------------------------------------------------------+
+      | Lines | - <Enter> in column to add a new line                       |
+      |       | - This is the second line of in same row of table.          |
+      +-------+-------------------------------------------------------------+
+      | Rows  | - <C-Enter> to add a seperator and a new row                |
+      |       | - <C-S-Enter> to add a header seperator and a new row       |
+      |       |   (There could be only one header seperator in a table)     |
+      |       | - <S-Enter> to jump to next line                            |
+      +-------+-------------------------------------------------------------+
+      | Cell  | - <C-E>tn or <Tab> or RivTableNextCell, jump to next cell   |
+      |       | - <C-E>tp or <S-Tab> or RivTablePrevCell, jump to prev cell |
+      +-------+-------------------------------------------------------------+
+      | Multi | - MultiByte characters are OK                               |
+      |       | - 一二三四五  かきくけこ                                    |
+      +-------+-------------------------------------------------------------+
 
     See `Grid Tables`__ for syntax details.
 
