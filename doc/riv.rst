@@ -46,7 +46,7 @@ For Managing
              a. `Section Helper`_: Showing section number of current document.
              b. `Todo Helper`_: Managing todo items of project or document.
              c. `File Helper`_: Showing rst files of current directory.
- :File_:     Local file link in rst documents. (non-reStructuredText syntax)
+ :File_:     Local file link in rst documents, wiki style. (non-reStructuredText syntax)
  :Todos_:    Keep track of todo things. (non-reStructuredText syntax)
 
 * To get a breif view of Riv features , see `QuickIntro For Riv`_.
@@ -1154,7 +1154,6 @@ in the rst documents.
 The ``bare extension`` (detected by file extension, convenient for just read in vim)
 
 and ``square bracket`` (like some other markup syntax)
-
 
 * You can switch the style with ``g:riv_file_link_style``
 
