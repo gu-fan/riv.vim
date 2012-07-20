@@ -55,7 +55,7 @@ For Managing
   
   or ``:RivQuickStart`` in vim.
 * Instucion: see `Instruction`_ 
-* Also Issues_ and Todos_ for Riv.
+* Also Issues_ and Todo_ for Riv.
 
 Screenshot
 ----------
