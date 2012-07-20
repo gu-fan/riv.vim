@@ -602,7 +602,7 @@ The bullet and enumerated list and field list are auto indented.
 
     Normal and Insert Mode:
     
-    - ``:RivListType0`` ``<C-E>l``` ... ``:RivListType4`` ``<C-E>l4``
+    - ``:RivListType0`` ``<C-E>l1`` ... ``:RivListType4`` ``<C-E>l5``
       Change or add list item symbol of type.
       
       The list item of each type is:: 
