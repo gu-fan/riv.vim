@@ -22,12 +22,12 @@ Features
  
 For Reading
 
- :Folding_:  Fold document element and showing extra info.
- :Syntax_:   Clearer syntax highlighting.
+ :Folding_:  Get the overview of a document.
+ :Syntax_:   Clearer syntax item highlighting.
 
 For Writing
 
- :Sections_: Showing section level and section number.
+ :Sections_: Create and view sections with ease.
  :Lists_:    Creating lists that's auto numbered, auto leveled and auto indented.
  :Blocks_:   Highlighted and folded blocks.
  :Links_:    Jumping with links. Highlighted hovering links.
@@ -82,10 +82,12 @@ Install
 * Using downloaded file. 
   Just extract to your ``.vim`` folder .
 
-:NOTE: Make sure your .vim folder in option ``runtimepath`` 
-       is before the $VIMRUNTIME. 
+:NOTE: Make sure your ``.vim`` folder in option ``runtimepath`` 
+       is before the ``$VIMRUNTIME``. 
 
        Otherwise the syntax/indent files for rst file will using the vim built-in one.
+
+       By default, it is before the ``$VIMRUNTIME``.
 
 * Recommend plugins: 
 
@@ -455,7 +457,9 @@ with standard reStructuredText syntax.
 Sections 
 ~~~~~~~~~
 
-Fold sections by it's level, and showing it's section number.
+Section level and numbers are auto detected.
+
+And it's folded by it's level.
 
 * Actions:
 
@@ -1296,7 +1300,7 @@ It is not defined by reStructuredText syntax.
   
     default is ``"TODO,DONE;FIXME,FIXED;START,PROCESS,STOP"``,
 
-    :Note: the end of each group is considered as the 'DONE' keyword
+    :Note: the last one of each group is considered as the finish keyword.
 
 
 * Datestamps:
