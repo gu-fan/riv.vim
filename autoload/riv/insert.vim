@@ -2,7 +2,7 @@
 "    Name: restin/insert.vim
 "    File: restin/insert.vim
 "  Author: Rykka G.Forest
-"  Update: 2012-07-07
+"  Update: 2012-08-07
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -26,21 +26,27 @@ fun! riv#insert#indent(row) "{{{
     let pnb_line = getline(pnb_num)
     let ind = indent(pnb_num)
     
-    " list
+    " lists: bullet,enum,field
+    " preceding blank lines:
     " 1~2:start of list content
     " 3:  indent of list  
     " 4:  start of prev list left edge.
     let l_ind = matchend(pnb_line, s:p.all_list)
-    if l_ind != -1 &&  a:row <= pnb_num+2 
-        return (ind + l_ind - matchend(pnb_line, '^\s*'))
-    elseif l_ind != -1 &&  a:row <= pnb_num+3 
-        return ind
-    elseif l_ind != -1 &&  a:row >= pnb_num+4 
-        call cursor(pnb_num,1)
-        let p_lnum = searchpos(s:list_or_nonspace, 'bW')[0]
-        let p_ind  = matchend(getline(p_lnum),s:p.all_list)
-        if p_ind != -1
-            return indent(p_lnum)
+    if l_ind != -1 
+        if a:row <= pnb_num+2 
+            return (ind + l_ind - matchend(pnb_line, '^\s*'))
+        elseif a:row <= pnb_num+3 
+            return ind
+        elseif a:row >= pnb_num+4 
+            " find previous list item's indent
+            " XXX: should use parent's list, which indent should 
+            " be less than current one
+            call cursor(pnb_num,1)
+            let p_lnum = searchpos(s:list_or_nonspace, 'bW')[0]
+            let p_ind  = matchend(getline(p_lnum),s:p.all_list)
+            if p_ind != -1
+                return indent(p_lnum)
+            endif
         endif
     endif
     
