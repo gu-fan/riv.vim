@@ -101,9 +101,17 @@ TODOS
     + File:    A template or snippet or shortcut for adding ``./`` and ``../`` 
       and files.  Maybe a sphinx doc ref as well.
     + A file tag jump like ``:xxx:`xxxx``` for sphinx docs
+    + A file tag jump like ``[[xxx]]`` like moinmoin and most other wikis.
     + for bare style, a method/syntax to escape file that not convert to links
     + an option for not converting links
     + hack the docutils parser with local file link.
+
+
+    THOUGHT::
+
+        The file jumping in vim uses bare style and moinmoin or sphinx style.
+        And only the '[[xxx]]' or  ':doc:`../people`' will be changed to link
+
 
 13. Publish
 

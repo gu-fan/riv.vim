@@ -262,6 +262,7 @@ fun! riv#publish#open_path() "{{{
 endfun "}}}
 
 fun! s:sys(arg) abort "{{{
+    " XXX: error in windows tmp files
     return system(a:arg)
 endfun "}}}
 fun! s:SID() "{{{

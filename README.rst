@@ -13,7 +13,7 @@ Short for 'reStructuredText in Vim'.
 
 It is for people either want to reading documents in a clear way,
 or writing documents in a neat way,
-or manage documents in a wiki way.
+or managing documents in a wiki way.
 
 .. _reStructuredText: http://docutils.sourceforge.net/rst.html
 
@@ -153,6 +153,8 @@ Things todo in this version.
 
 Next 
 ~~~~~
+
+Redefine the local document pattern. support sphinx's role.
 
 See riv_todo_ ( doc/riv_todo.rst )
 

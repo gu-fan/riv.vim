@@ -9,8 +9,6 @@
 let s:cpo_save = &cpo
 set cpo-=C
 
-
-
 fun! riv#file#from_str(str) "{{{
     " parse file name from string
     " return [file , is_dir]
@@ -48,8 +46,6 @@ fun! riv#file#split(file) "{{{
     exe "split ".a:file
     let b:riv_p_id = id
 endfun "}}}
-
-
 
 " Helper:  "{{{1
 fun! riv#file#update() "{{{
