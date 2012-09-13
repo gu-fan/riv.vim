@@ -2,8 +2,8 @@
 "    Name: ptn.vim
 "    File: ptn.vim
 " Summary: for all the patterns
-"  Author: Rykka G.Forest
-"  Update: 2012-07-07
+"  Author: Rykka G.F
+"  Update: 2012-09-13
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -295,31 +295,66 @@ fun! riv#ptn#init() "{{{
 
 
     " File:  "{{{4
+
+    " 1. The local link that only works in vim. No converting.
+    " It's file name with specified extensions in a word(blank,parenthe)
+    " xxx.vim xxx.rst ~/xxx.vim ~/.xxx.rst xxx/xxx.vim xxx/  ~/xxx/
+    "
+    " 2. The file link for converting. also works in vim.
+    "     
+    "    1. moinmoin style
+    "       [[xxx]] => xxx.rst
+    "       [[xxx/]] => xxx.rst
+    "       [[/xxx]] => DOC_ROOT/xxx.rst
+    "       [[/xxx/]] => DOC_ROOT/xxx/index.rst
+    "
+    "    2. sphinx style
+    "       :doc:`xxx.rst`   
+    "       :file:`/xxx/xxx.rst`
+    "
+    " NOTE:  the [[/xxx.rst]] for converting are not the same with 
+    "        /xxx.rst for linking which will link to xxx.rst in the
+    "        root of your disk.
+    "        This first one is DOC_ROOT for Compatibility with the sphinx and
+    "        moinmoin style.
+    
+    let fname_bgn = '%(^|\s|[''"([{<,;!?])'
+    let fname_end = '%($|\s|[''")\]}>:.,;!?])'
+    
     let g:_riv_t.file_ext_lst = s:normlist(split(g:riv_file_link_ext,','))
 
-    let file_end = '%($|\s)'
-    if g:riv_file_link_style == 1
-        " *.rst *.vim xxx/
-        let file_name = '[[:alnum:]~./][[:alnum:]~:./\\_-]*'
-        let file_start = '%(\_^|\s)'
-        let s:p.file_ext_ptn = 'rst|'.join(g:_riv_t.file_ext_lst,'|')
-        let link_file  = file_start . '@<=' . file_name
-                    \.'%(\.%('. s:p.file_ext_ptn .')|/)\ze'. file_end
-        let s:p.link_file = '\v' . link_file
-    elseif g:riv_file_link_style == 2
-        " [*]  [xxx/] [*.vim]
-        let s:p.file_ext_ptn = join(g:_riv_t.file_ext_lst,'|')
-        " we should make sure it's not citation, footnote (with preceding '..')
-        " and not a todo box. (a single char)
-        let file_name = '[[:alnum:]~./][[:alnum:]~:./\\_-]+'
-        let file_start = '%(\_^|(\_^\.\.)@<!\s)'
-        let link_file  = '\v'.file_start.'@<=\['. file_name .'\]\ze'. file_end
-        let s:p.link_file = '\v' . link_file
+    " let file_end = '%($|\s)'
+
+    let s:p.file_ext_ptn = 'rst|'.join(g:_riv_t.file_ext_lst,'|')
+    let file_name = '[[:alnum:]~./][[:alnum:]~:./\\_-]*'
+    
+    " The link for ext file, for in vim only.
+    if g:riv_file_ext_link_hl == 1
+        let ext_file_link  = '\v' . fname_bgn
+                    \. '@<=' . file_name
+                    \.'%(\.%('. s:p.file_ext_ptn .')|/)\ze'
+                    \.fname_end 
     else
-        " NONE
-        let g:_riv_t.file_ext_lst = s:normlist(split(g:riv_file_link_ext,','))
-        let s:p.link_file = '^^'
+        let ext_file_link  = '^^'
     endif
+    let s:p.ext_file_link  = '\v'. ext_file_link
+
+    if g:riv_file_link_style == 1
+        " moinmoin style
+        " [[*]]  [[xxx/]] [[*.vim]]
+        let link_file = fname_bgn.'@<=\[\[' 
+                    \. file_name .'\]\]@='. fname_end 
+    elseif g:riv_file_link_style == 2 
+        " sphinx style
+        " :doc:`file` for rst document
+        " :file:`file.vim` for file link
+        let link_file = fname_bgn.'@<=:%(doc|file):`' 
+                    \. file_name .'`\ze'. fname_end 
+    else
+        let link_file = '^^'
+    endif
+
+    let s:p.link_file = '\v'. link_file
 
     " Reference: "{{{4
     "  xxx_
@@ -381,6 +416,7 @@ fun! riv#ptn#init() "{{{
                 \ . ')|(' . link_reference
                 \ . ')|(' . link_uri 
                 \ . ')|(' . link_file
+                \ . ')|(' . ext_file_link
                 \. ')'
     "}}}4
     "
@@ -420,6 +456,7 @@ fun! riv#ptn#init() "{{{
     
     " Syntax After: "{{{3
     let s:s.rstFileLink = s:p.link_file
+    let s:s.rstFileExtLink = s:p.ext_file_link
 
     let s:s.rstTodoRegion = '\v\C'.td_list .'@<='. td_b_k . td_prior . '=%(' 
                 \. td_tms . td_tms_end . '=)='

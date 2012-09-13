@@ -2,8 +2,8 @@ Intro
 =====
 
 :Author: Rykka G.Forest
-:Date:   2012-07-21
-:Version: 0.70 
+:Update: 2012-09-13
+:Version: 0.71 
 :Github: https://github.com/Rykka/riv.vim
 
 **Riv** is for reading , writing and managing reStructuredText_ 
@@ -114,42 +114,25 @@ Prev
 
 See Changelog in  riv_log_ ( doc/riv_log.rst )
 
-* 0.69:
-
-  :Indent_: DONE 2012-07-07 8b2c4611_ Rewrite the indent for list and insert.
-  :File_:   DONE 2012-07-07 dceab5c1_ Add File helper.
-  :Document: DONE 2012-07-08 69e5a86e_ commit links
-  :File_:   DONE 2012-07-08 a207e1e0_ Add Section helper.
-  :Intro_:  DONE 2012-07-09 add Riv quickstart
-  :Insert_: DONE 2012-07-13 rewrite and add options about ``i_tab``. 
-
-.. _a207e1e0: 
-   https://github.com/Rykka/riv.vim/commit/a207e1e0de177f6e6bd06fc2fab0151780074320
-.. _69e5a86e: 
-   https://github.com/Rykka/riv.vim/commit/69e5a86e530c09f1472b1d4c79c05854a061f8f3
-.. _dceab5c1: 
-   https://github.com/Rykka/riv.vim/commit/dceab5c1b0ae484c44763ff1172fc3d93debf2e6
-.. _8b2c4611: 
-   https://github.com/Rykka/riv.vim/commit/8b2c4611acf959a28d4413e0131de70b68c9368d
-
 This
 ~~~~~
 
 Things todo in this version.
 
-* 0.70:
+* 0.71:
 
-  :Table_:  DONE 2012-07-17 7b407b4b_ a table parser of vim version.
-  :Table_:  DONE 2012-07-17 7b407b4b_ rewrite the table actions. 
-  :Table_:  DONE 2012-07-18 a1f112d1_ add create table action.
-  :Lists_:  FIXED 2012-07-19 fix list shifting with indent 0
-  :Helpers_: DONE 2012-07-19 add folding to section helper
-  :File_:   DONE 2012-07-21 improved link converting. add option
-
-.. _a1f112d1: 
-   https://github.com/Rykka/riv.vim/commit/a1f112d1e3f7b52130db1a4eeea7ef94c92d9c92
-.. _7b407b4b: 
-   https://github.com/Rykka/riv.vim/commit/7b407b4b5ff07467e1cdd78415984ee987e03f49
+  :File_: DONE 2012-09-13 extension style show in vim only.
+  :File_: DONE 2012-09-13 now squre style (moinmoin) use ``[[xxx]]``. 
+          easier for regxp match
+  :File_: DONE 2012-09-13 Support Sphinx style  :file:, :doc:
+  :Sections_: Use sphinx section default markup style
+  :Sections_: section create shortcut will check if it's 
+              a section title undercursor and repl it.
+  :Sections_: A shortcut to create a document tree.
+  :Publish_: DONE 2012-09-13 remove ``g:riv_file_link_convert`` 
+  :Publish_: support sphinx make and browse
+  :Publish_: different Themes 
+  :Publish_: section folding .js for html 
 
 Next 
 ~~~~~
@@ -1154,52 +1137,83 @@ The link to edit local files.  ``non-reStructuredText syntax``
 
 As reStructuredText haven't define a pattern for local files currently.
 
-Riv provides two kinds of style to determine the local file
-in the rst documents. 
+Riv provides some convenient way to link to other local files in
+the rst documents. 
 
-The ``bare extension`` (detected by file extension, convenient for just read in vim)
+* For linking with local file in vim easily,
+  The filename with extension , 
+  like ``xxx.rst``  ``~/Documents/xxx.py``,
+  will be highlighted and linked, only in vim.
 
-and ``square bracket`` (like some other markup syntax)
+  And you can disable highlighting it with 
+  setting ``g:riv_file_ext_link_hl`` to 0.
 
-* You can switch the style with ``g:riv_file_link_style``
+* Two types for linking file while converting to other format.
 
-  + when set to 1, use ``bare extension``:
+  :MoinMoin: use ``[[xxx]]`` to link to a local file.
+  :Sphinx: use ``:doc:`xxx``` and ``:file:`xxx.rst``` to link to local
+           file and local document.
 
-    words like ``xxx.rst`` ``xxx.py`` ``xxx.cpp`` will be detected as file link.
+           See Sphinx_Role_Doc_.
+           
+           It will be not changed to link with Riv.
+           You'd better use it with Sphinx's tool set.
 
-    words like ``xxx/`` will be considered as directory , 
-    and link to ``xxx/index.rst``
+  + You can switch style with ``g:riv_file_link_style``
 
-    words like ``/xxxx/xxx.rst`` ``~/xxx/xxx.rst`` ``x:/xxx.rst``
-    will be considered as external file links
-
-    words like ``/xxxx/xxx/`` ``~/xxx/xxx/`` 
-    will be considered as external directory links, 
-    and link to the directory.
-
-    You can add other extensions with ``g:riv_file_link_ext``.
-    which default is ``vim,cpp,c,py,rb,lua,pl`` ,
-    meaning these files will be recongized.
-
-  + when set to 2, ``square bracket``: 
+    - when set to 1, ``MoinMoin``: 
     
-    words like ``[xxx]`` ``[xxx.vim]`` will be detected as file link. 
+      words like ``[[xxx]]`` ``[[xxx.vim]]`` will be detected as file link. 
 
-    words like ``[xxx/]' will link to ``xxx/index.rst``
+      words like ``[[xxx/]]' will link to ``xxx/index.rst``
 
-    words like ``[/xxxx/xxx.rst]`` ``[~/xxx/xxx.rst]``  ``[x:/xxx/xxx.rst]``
-    will be considered as external file links
+      words like ``[[/xxxx/xxx.rst]]`` 
+      will link to ``DOC_ROOT/xxx/xxx.rst``
 
-    words like ``[/xxxx/xxx/]`` ``[~/xxx/xxx/]`` 
-    will be considered as external directory links, 
-    and link to the directory.
+      words like ``[[~/xxx/xxx.rst]]``  ``[[x:/xxx/xxx.rst]]``
+      will be considered as external file links
 
-  + when set to 0, no local file link.
-  + default is 1.
+      words like ``[[/xxxx/xxx/]]`` ``[[~/xxx/xxx/]]`` 
+      will be considered as external directory links, 
+      and link to the directory.
 
-* File link are highlighted and cursor highlighted.
-  See `Cursor Highlighting`_
+    - when set to 2, use ``Sphinx``:
 
+      words like ``:doc:`xxx.rst``` ``:doc:`xxx.py``` ``:doc:`xxx.cpp``` will be detected as file link.
+
+      words like ``:doc:`xxx/``` will be considered as directory , 
+      and link to ``xxx/index.rst``
+
+      words like ``:doc:`/xxxx/xxx.rst```
+      will link to ``DOC_ROOT/xxx/xxx.rst``
+    
+      words like ``:file:`~/xxx/xxx.py``` ``:file:`x:/xxx.rst```
+      will be considered as external file links
+
+      words like ``:doc:`/xxxx/xxx/``` 
+      will link to ``DOC_ROOT/xxxx/xxx.rst``
+
+      words like ``:file:`~/xxx/xxx/``` 
+      will be considered as external directory links, 
+      and link to the directory.
+
+      You can add other extensions with ``g:riv_file_link_ext``.
+      which default is ``vim,cpp,c,py,rb,lua,pl`` ,
+      meaning these files will be recongized.
+
+    - when set to 0, no local file link.
+    - default is 1.
+
+  
+  :NOTE: Diffenence between extension and link style.
+         The ``[[/xxx]]`` and ``:doc:`/xxx``` 
+         are linked to Document Root ``DOC_ROOT/xxx.rst``
+         both with MoinMoin and sphinx style(?).
+
+         But the ``/xxx/xxx.rst`` detected with extension
+         will be linked to ``/xxx/xxx.rst`` in your disk 
+
+* The file links are highlighted. See `Cursor Highlighting`_
 * To delete a local file in project.
 
   ``:RivDelete`` ``<C-E>df``
@@ -1218,30 +1232,20 @@ in this form::
 
  `xxx.rst <xxx.html>`_ `xxx.py <xxx.py>`_
 
-Except in following situation:
+:NOTE: link converting in a table will make the table error format.
+       So you'd better convert it to a link manually.
+       use ``:RivCreateLink`` or ``<C-E>il`` to 
+       create it manually. ::
    
-    + In a grid table.
-    + In an explicit markup.
-    + In a literal block or line block or doctest block.
-    + In a inline markup 
+           file.rst_
 
-explicit markup, block , inline markup could not include links. 
-file links in table should use ``:RivCreateLink`` or ``<C-E>il`` to 
-create it manually. ::
-   
- file.rst_
-
- .. _file.rst:: file.html   
-
-The option ``g:riv_file_link_convert`` can be used to control the converting.  
-    
-    + when set to 2, link in all rst file in a project will be converted.
-    + when set to 1, link only in ``index.rst`` will be converted.
-    + when set to 0, no link will be converted.
-    + default is 2
+           .. _file.rst:: file.html   
 
 For now it's overhead with substitude by a temp file.
 A parser for docutils_ is needed in the future.
+
+And for ``Sphinx``.
+you should use Sphinx's tool set to convert it.
 
 Scratch
 ~~~~~~~
@@ -1459,4 +1463,6 @@ This is an incompleting list.
 
   + Use ``:RivCreateDate`` ``<C-E>id`` to insert a datestamp of today anywhere.
   + Use ``:RivCreateTime`` ``<C-E>it`` to insert a timestamp of current time anywhere. 
+
+.. _Sphinx_role_doc: http://sphinx.pocoo.org/markup/inline.html#role-doc
 

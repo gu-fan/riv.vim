@@ -9,65 +9,13 @@ let s:cpo_save = &cpo
 set cpo-=C
 fun! s:repl_file_link(line) "{{{
     " File              Title   Path
-    " index.rst     => `index <index.html>`_
-    " test.rst      => `test <test.html>`_
-    " test.py       => `test.py <test.py>`_
-    " Html/         => `Html/   <Html/index.html>`_
-    " /home/a.rst   => `/home/a.rst  </home/a.rst>`_    ?
-    " ~/a.rst       => `~/a.rst  <~/a.rst>`_            ?
-    " ./index.rst   => `./index  <./index.html>`_
-    " ../           => `../      <../index.html>`_
-    " index.rst#RIV => `index#RIV <index.html#RIV>`_     ToDo
-    " [index]       => `[index] <index.html>`_
-    " [index.rst]   => `[index] <index.html>`_
-    " [index.vim]   => `[index.vim] <index.vim>`_
-    " [index/]      => `[index/] <index/index.rst>`_
-    " [/home/a.rst] => `[/home/a.rst]  </home/a.rst>`_    ?
-    
-    " Dont' convert links in table. which will made table malformed.
-    "
-    " Also links in same line of explicit mark are not converted.
-    " 
-    " DONE: dont' convert the line in explicit mark or literal blocks
-    "       As this is based on line, should use a parser or 
-    "       read this into buffer.
-    "       
-    "       A simple buffer parse solution: 
-    "       record the block / explicit mark and indent
-    " TODO: not convert the link in a inline markup
-    " TODO: not convert the link in a section title
-    
+    " [[index]]       => `index <index.html>`_
+    " [[index.rst]]   => `index <index.html>`_
+    " [[index.vim]]   => `index.vim <index.vim>`_
+    " [[index/]]      => `index/ <index/index.rst>`_
+    " [[/xxx/a.rst]]  => `/xxx/a.rst  <DOC_ROOT/xxx/a.rst>`_    ?
     
     let line = a:line
-    
-    " not convert in line_block and table
-    if line =~ g:_riv_p.table || line =~ g:_riv_p.line_block
-        return line
-    endif
-
-    " explicit mark and literal block will end with a smaller indent
-    let indent = riv#fold#indent(line)
-    if line =~ g:_riv_p.exp_mark || line =~ g:_riv_p.literal_block
-        let s:repl_file_idt = indent
-        return line
-    endif
-    if s:repl_file_idt != -1 && indent > s:repl_file_idt
-        return line
-    else
-        let s:repl_file_idt = -1
-    endif
-    
-    " doctest block will end with a blank line
-    if line =~ g:_riv_p.doctest_block
-        let s:repl_file_doctest = 1
-    endif
-    
-    if s:repl_file_doctest 
-        if line =~ '^\s*$'
-            let s:repl_file_doctest = 0
-        endif
-        return line
-    endif
 
     let o_line = line
     let file = matchstr(o_line, g:_riv_p.link_file)
@@ -78,32 +26,42 @@ fun! s:repl_file_link(line) "{{{
         " it's not in a inline markup
         if empty(obj)
             " substitute process
-            if g:riv_file_link_style == 2
-                let file = matchstr(file, '^\[\zs.*\ze\]$')
-            endif
+            let file = matchstr(file, '^\[\[\zs.*\ze\]\]$')
             let file = s:escape(file)
-            if !riv#path#is_relative(file)
-                    let title = file
-                    let path = file
+            if !riv#path#is_relative(file) && file !~ '^/'
+                let title = file
+                let path = file
             elseif riv#path#is_directory(file)
                 let title = file
+                if file =~ '^/'
+                    let title = riv#path#rel_to_root(title) . file[1:]
+                endif
                 let path = title . 'index.html'
             else
                 let f = s:get_rst_file(file)
                 if !empty(f)
                     let title = f
+                    if file =~ '^/'
+                        let title = riv#path#rel_to_root(title) . file[1:]
+                    endif
                     let path = title.'.html'
-                elseif g:riv_file_link_style == 2 && fnamemodify(file, ':e') == ''
+                elseif fnamemodify(file, ':e') == ''
                     let title = file
+                    if file =~ '^/'
+                        let title = riv#path#rel_to_root(title) . file[1:]
+                    endif
                     let path = title.'.html'
                 else
                     let title = file
+                    if file =~ '^/'
+                        let title = riv#path#rel_to_root(title) . file[1:]
+                    endif
                     let path = file
                 endif
             endif
+
             let line = substitute(line, s:escape_file_ptn(file), 
                             \s:gen_embed_link(title, path), 'g')
-
         endif
 
         " prepare next match
@@ -129,11 +87,7 @@ fun! s:get_rst_file(file) "{{{
     return matchstr(a:file, '.*\ze\.rst$')
 endfun "}}}
 fun! s:escape_file_ptn(file) "{{{
-    if g:riv_file_link_style == 2
-        return   '\%(^\|\s\)\zs\[' . a:file . '\]\ze\%(\s\|$\)'
-    else
-        return   '\%(^\|\s\)\zs' . a:file . '\ze\%(\s\|$\)'
-    endif
+    return   '\%(^\|\s\)\zs' . a:file . '\ze\%(\s\|$\)'
 endfun "}}}
 fun! s:escape(txt) "{{{
     return escape(a:txt, '~.*\[]^$')
@@ -223,8 +177,7 @@ fun! riv#publish#2(ft, file, path, browse) "{{{
     let out_path = a:path . riv#path#rel_to_root(file)
     let file_path = riv#path#ext_to(out_path, a:ft)
     call s:auto_mkdir(out_path)
-    if g:riv_file_link_convert == 2
-        \|| (g:riv_file_link_convert == 1 && fnamemodify(file,':t') == 'index.rst')
+    if g:riv_file_link_style == 1
         call s:convert(a:ft, s:create_tmp(file), file_path, s:rst_args(a:ft))
     else
         call s:convert(a:ft, file, file_path, s:rst_args(a:ft))

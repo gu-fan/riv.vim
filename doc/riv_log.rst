@@ -1,6 +1,20 @@
 Changelogs
 ==========
 
+* 0.70:
+
+  :Table_:  DONE 2012-07-17 7b407b4b_ a table parser of vim version.
+  :Table_:  DONE 2012-07-17 7b407b4b_ rewrite the table actions. 
+  :Table_:  DONE 2012-07-18 a1f112d1_ add create table action.
+  :Lists_:  FIXED 2012-07-19 fix list shifting with indent 0
+  :Helpers_: DONE 2012-07-19 add folding to section helper
+  :File_:   DONE 2012-07-21 improved link converting. add option
+
+.. _a1f112d1: 
+   https://github.com/Rykka/riv.vim/commit/a1f112d1e3f7b52130db1a4eeea7ef94c92d9c92
+.. _7b407b4b: 
+   https://github.com/Rykka/riv.vim/commit/7b407b4b5ff07467e1cdd78415984ee987e03f49
+
 * 0.69:
 
   :Indent_: DONE 2012-07-07 8b2c4611_ Rewrite the indent for list and insert.
@@ -145,3 +159,4 @@ Changelogs
 .. _Intro:   riv.rst#Intro
 .. _Insert:  riv.rst#Insert
 .. _Todos:   riv.rst#Todos
+.. _Helpers: riv.rst#Helpers

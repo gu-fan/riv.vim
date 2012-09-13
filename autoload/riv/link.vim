@@ -2,8 +2,8 @@
 "    Name: link.vim
 "    File: link.vim
 " Summary: link ref and targets.
-"  Author: Rykka G.Forest
-"  Update: 2012-07-07
+"  Author: Rykka G.F
+"  Update: 2012-09-13
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -148,24 +148,68 @@ fun! riv#link#open() "{{{
         endif
         return 3
     elseif !empty(mo.groups[5])
-        if g:riv_file_link_style == 2
-            let mo.str = matchstr(mo.str, '^\[\zs.*\ze\]$')
-        endif
+        call riv#file#edit(riv#link#path(mo.groups[5]))
+        return 4
+    elseif !empty(mo.groups[6])
         if riv#path#is_relative(mo.str)
             let dir = expand('%:p:h').'/'
             let file = dir . mo.str
-            if riv#path#is_directory(file)
+            if riv#path#is_directory(file) &&
+                \ riv#path#is_rel_to_root(file)
                 let file = file . 'index.rst'
-            elseif g:riv_file_link_style == 2 && fnamemodify(file, ':e') == ''
-                let file = file . '.rst'
             endif
         else
             let file = expand(mo.str)
         endif
         update
         call riv#file#edit(file)
-        return 4
+        return 5
     endif
+endfun "}}}
+
+
+fun! riv#link#path(str) "{{{
+    " return the local file path contained in the string.
+    " style 1 
+    " [[xxx]] => xxx.rst
+    " [[xxx.vim]] => xxx.vim
+    " [[xxx/]] => xxx/index.rst
+    " [[/xxx]]  => DOC_ROOT/xxx.rst
+    " [[/xxx/]]  => DOC_ROOT/xxx/index.rst
+    " [[~/xxx]] => ~/xxx
+    " style 2
+    " :doc:`xxx` => xxx.rst
+    " :doc:`xxx/` => xxx/index.rst
+    " :file:`xxx` => xxx
+    " :file:`/xxx` => /xxx
+    
+    if g:riv_file_link_style == 1
+        let f = matchstr(a:str, '^\[\[\zs.*\ze\]\]$')
+        let t = f =~ '^([~]|[a-zA-Z]:)' ? 'file' : 'doc'
+    elseif g:riv_file_link_style == 2 
+        let f = matchstr(a:str, '^:\%(doc\|file\):`\zs.*\ze`$')
+        let t = matchstr(a:str,'^:\zs\%(doc\|file\)\ze:')
+    endif
+    if riv#path#is_relative(f)
+        let file = expand('%:p:h').'/' . f
+    else
+        " if it have '/' at start. 
+        " it is the doc root for sphinx and moinmoin 
+        if f =~ '^/'
+            let file = riv#path#root() . f[1:]
+        else
+            let file = expand(f)
+            return file
+        endif
+    endif
+
+    if riv#path#is_directory(file) && t == 'doc'
+        let file = file . 'index.rst'
+    elseif fnamemodify(file, ':e') == '' && t == 'doc'
+        let file = file . '.rst'
+    endif
+    
+    return file
 endfun "}}}
 
 fun! s:get_P_or_W_idx(line, col) "{{{
@@ -183,7 +227,7 @@ fun! riv#link#hi_hover() "{{{
     let [row,col] = getpos('.')[1:2]
 
     " if col have not move out prev hl region , skip
-    if !&modified &&  row == s:hl_row && col >= s:hl_bgn && col <= s:hl_end
+    if !&modified && row == s:hl_row && col >= s:hl_bgn && col <= s:hl_end
         return
     endif
     let [s:hl_row, s:hl_bgn,s:hl_end] = [row, 0 , 0]
@@ -198,18 +242,21 @@ fun! riv#link#hi_hover() "{{{
             let end = obj.end
             if col <= end+1
                 let [s:hl_row, s:hl_bgn,s:hl_end] = [row, bgn, end]
-                if !empty(obj.groups[5]) 
-                    let [file, is_dir] = riv#file#from_str(obj.str)
-                    
+                if !empty(obj.groups[5]) || !empty(obj.groups[6]) 
+                    if !empty(obj.groups[5]) 
+                        let file = riv#link#path(obj.str)
+                    else
+                        let file = obj.str
+                    endif
                     " if link invalid
-                    if (is_dir && !isdirectory(file) ) 
-                        \ || (!is_dir && !filereadable(file) )
+                    if ( riv#path#is_directory(file) && !isdirectory(file) ) 
+                        \ ||( !riv#path#is_directory(file) && !filereadable(file) )
                         execute '2match '.g:riv_file_link_invalid_hl.' /\%'.(row)
                                     \.'l\%>'.(bgn-1) .'c\%<'.(end+1).'c/'
                         return
                     endif
                 endif
-                execute '2match' "DiffText".' /\%'.(row)
+                execute '2match' "IncSearch".' /\%'.(row)
                             \.'l\%>'.(bgn-1) .'c\%<'.(end+1).'c/'
                 return
             endif

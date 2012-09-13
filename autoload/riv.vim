@@ -72,7 +72,7 @@ fun! riv#load_menu(menu_list) "{{{
     endfor
 endfun "}}}
 fun! riv#show_menu() "{{{
-    if !exists("b:current_syntax") || b:current_syntax != 'rst'
+    if expand('%:e') != 'rst'
         menu disable Riv.*
         menu enable Riv.Index
     else
@@ -88,6 +88,7 @@ let s:default.options = {
     \'buf_leader'         : '<C-E>',
     \'buf_ins_leader'     : '<C-E>',
     \'file_link_ext'      : 'vim,cpp,c,py,rb,lua,pl',
+    \'file_ext_link_hl'   : 1,
     \'file_link_invalid_hl' : 'ErrorMsg',
     \'file_link_style'    : 1,
     \'file_link_convert'  : 1,
@@ -200,7 +201,7 @@ let s:default.g_maps = {
     \'RivAsk'            : ['wa', '<C-W><C-A>'] ,
     \'RivScratchCreate'  : ['cc', '<C-C><C-C>'] ,
     \'RivScratchView'    : ['cv', '<C-C><C-V>'] ,
-    \'RivHelpTodo'      : ['ht', '<C-h><C-t>'] ,
+    \'RivHelpTodo'       : ['ht', '<C-h><C-t>'] ,
     \'RivHelpFile'       : ['hf', '<C-h><C-f>'] ,
     \}
 let s:default.fold_maps = { 
