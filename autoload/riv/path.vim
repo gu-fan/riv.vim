@@ -2,8 +2,8 @@
 "    Name: path.vim
 "    File: path.vim
 " Summary: calc the path of files
-"  Author: Rykka G.Forest
-"  Update: 2012-07-07
+"  Author: Rykka G.F
+"  Update: 2012-09-13
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -78,7 +78,6 @@ fun! riv#path#par_to(dir,path) "{{{
     let dot = substitute(f,'[^/]\+/','../','g')
     return dot
 endfun "}}}
-
 
 fun! riv#path#is_relative(name) "{{{
     return a:name !~ '^[~/]\|^[a-zA-Z]:'

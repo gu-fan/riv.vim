@@ -3,12 +3,13 @@
 "    File: file.vim
 " Summary: file operation
 "          find /match/delete/
-"  Author: Rykka G.Forest
-"  Update: 2012-07-07
+"  Author: Rykka G.F
+"  Update: 2012-09-13
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
 
+<<<<<<< HEAD
 fun! riv#file#from_str(str) "{{{
     " parse file name from string
     " return [file , is_dir]
@@ -36,6 +37,8 @@ fun! riv#file#from_str(str) "{{{
     endif
 endfun "}}}
 
+=======
+>>>>>>> devel
 fun! riv#file#edit(file) "{{{
     let id = s:id()
     exe "edit ".a:file

@@ -107,16 +107,30 @@ TODOS
     + hack the docutils parser with local file link.
 
 
+<<<<<<< HEAD
     THOUGHT::
 
         The file jumping in vim uses bare style and moinmoin or sphinx style.
         And only the '[[xxx]]' or  ':doc:`../people`' will be changed to link
+=======
+    :Think: Made it less confuse with different patterns
+
+            1. bare style only show in vim. and not converted.
+            2. you can choose moinmoin wiki style ``[[xxx]]``
+
+               or the sphinx style ``:doc:`xxx``` ``:file:`xxx```
+               :doc:`riv_quickstart`
+
+
+>>>>>>> devel
 
 
 13. Publish
 
     + Publish: An option to enable highlighting todo items.
     + the temp path should be validated.
+    + javascript for HTML with folding sections.
+    + templating? jinja?
 
 14. Helpers
 
