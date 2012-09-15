@@ -4,12 +4,11 @@
 " Summary: file operation
 "          find /match/delete/
 "  Author: Rykka G.F
-"  Update: 2012-09-13
+"  Update: 2012-09-15
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
 
-<<<<<<< HEAD
 fun! riv#file#from_str(str) "{{{
     " parse file name from string
     " return [file , is_dir]
@@ -37,8 +36,6 @@ fun! riv#file#from_str(str) "{{{
     endif
 endfun "}}}
 
-=======
->>>>>>> devel
 fun! riv#file#edit(file) "{{{
     let id = s:id()
     exe "edit ".a:file
