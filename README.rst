@@ -49,7 +49,12 @@ Features
              b. `Todo Helper`_: Managing todo items of project or document.
              c. `File Helper`_: Showing rst files of current directory.
  :File_:     Link local file in rst documents. (non-reStructuredText syntax)
- :Todos_:    Keep track of todo things. (non-reStructuredText syntax)
+
+             But you can choose ``Sphinx`` or ``MoinMoin`` style.
+ :Todos_:    Keep track of todo things. (non-reStructuredText syntax)    
+             
+             And it's similar with Emacs's Org-Mode_ style.
+
 
 * To get a breif view of Riv features , see `QuickIntro For Riv`_.
 * To Install: see `Install`_
@@ -135,7 +140,7 @@ Things todo in this version.
   :Publish_: support sphinx make and browse
   :Publish_: different style.css
   :Publish_: section folding .js for html 
-  :Links_: Add g:riv_create_link_pos
+  :Links_: DONE 2012-09-17 Add g:riv_create_link_pos
 
 Next 
 ~~~~~
@@ -1481,3 +1486,5 @@ This is an incompleting list.
 
 .. _Sphinx: http://sphinx.pocoo.org/
 .. _Sphinx_role_doc: http://sphinx.pocoo.org/markup/inline.html#role-doc
+
+.. _Org-Mode: http://orgmode.org/
