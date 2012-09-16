@@ -20,7 +20,6 @@ With it, you can::
 .. Contents::
 .. Sectnum::
 
-
 Features
 --------
  
@@ -57,26 +56,20 @@ Features
              
              And it's similar with Emacs's Org-Mode_ style.
 
+Get Start
+---------
 
-* To get a breif view of Riv features , see `QuickIntro For Riv`_.
 * To Install: see `Install`_
 * To Start: see `QuickStart With Riv`_  
-  
   or ``:RivQuickStart`` in vim.
-* Instucion: see `Instruction`_ 
-* Also Issues_ and Todo_ for Riv.
+* Detail Instucion: see `Instruction`_ 
+* Also Issues_ and Todo_.
 
-Screenshot
+On Screen
 ----------
 
-**an overview of a document**
-
-.. image:: http://i.minus.com/iqILF1JxkLgXG.png 
-   :alt: overview of the document
-
-**Lists**
-
-.. figure:: http://i.minus.com/iFbYab5lsoMka.png 
+:ScreenShot: TODO
+:ScreenCast: TODO
 
 Install
 -------
@@ -103,7 +96,8 @@ Install
   + Syntastic_  for syntax checking of rst files.
     (require python docutils_ package )
 
-.. _Syntastic: https://github.com/scrooloose/syntastic
+    But if you are using Sphinx_'s tools set, you'd better not using it.
+
 
 Issues
 ------
@@ -246,7 +240,7 @@ And provide extra infos of them.
 
 * Extra Infos:
   When folded, some extra info of the item will be shown at the foldline.
-  also the number of folded lines will be shown. See screenshot_
+  also the number of folded lines will be shown. See `On Screen`_
 
   + The sections_ will show it's section number
   + The lists_ will show todos_ progress : 
@@ -505,6 +499,11 @@ And it's folded by it's level.
 See `reStructuredText sections`__ for syntax details.
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#sections
+
+* Miscs:
+
+  The Page-break ``^L`` (Ctrl-L in insert mode) will break current section. 
+
 
 Lists
 ~~~~~
@@ -1110,8 +1109,6 @@ Some command wrapper to convert rst files to html/xml/latex/odt/...
 
        Otherwise errors may occour.
 
-.. _docutils: http://docutils.sourceforge.net/
-.. _pygments: http://pygments.org/
 
 With Riv 
 --------
@@ -1469,7 +1466,6 @@ A helper showing current document section numbers
 Miscs
 ~~~~~
 
-The Page-breaker ``^L`` (Ctrl-L in insert mode) will break current section.
 
 Some useful plugins.
 This is an incompleting list.
@@ -1492,3 +1488,6 @@ This is an incompleting list.
 .. _Sphinx_role_doc: http://sphinx.pocoo.org/markup/inline.html#role-doc
 .. _Org-Mode: http://orgmode.org/
 .. _reStructuredText: http://docutils.sourceforge.net/rst.html
+.. _Syntastic: https://github.com/scrooloose/syntastic
+.. _docutils: http://docutils.sourceforge.net/
+.. _pygments: http://pygments.org/
