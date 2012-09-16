@@ -94,6 +94,7 @@ let s:default.options = {
     \'file_link_convert'  : 1,
     \'highlight_code'     : "lua,python,cpp,javascript,vim,sh",
     \'link_cursor_hl'     : 1,
+    \'create_link_pos'    : '$',
     \'todo_levels'        : " ,o,X",
     \'todo_priorities'    : "ABC",
     \'todo_default_group' : 0,
@@ -155,12 +156,13 @@ let s:default.maps = {
     \'RivTodoType3'      : 'call riv#todo#change(2)',
     \'RivTodoType4'      : 'call riv#todo#change(3)',
     \'RivViewScratch'    : 'call riv#create#view_scr()',
-    \'RivTitle1'         : 'call riv#create#title(1)',
-    \'RivTitle2'         : 'call riv#create#title(2)',
-    \'RivTitle3'         : 'call riv#create#title(3)',
-    \'RivTitle4'         : 'call riv#create#title(4)',
-    \'RivTitle5'         : 'call riv#create#title(5)',
-    \'RivTitle6'         : 'call riv#create#title(6)',
+    \'RivTitle1'         : 'call riv#section#title(1)',
+    \'RivTitle2'         : 'call riv#section#title(2)',
+    \'RivTitle3'         : 'call riv#section#title(3)',
+    \'RivTitle4'         : 'call riv#section#title(4)',
+    \'RivTitle5'         : 'call riv#section#title(5)',
+    \'RivTitle6'         : 'call riv#section#title(6)',
+    \'RivTitle0'         : 'call riv#section#title(0)',
     \'RivTestReload'     : 'call riv#test#reload()',
     \'RivTestFold0'      : 'call riv#test#fold(0)',
     \'RivTestFold1'      : 'call riv#test#fold(1)',
@@ -242,6 +244,7 @@ let s:default.buf_maps = {
     \'RivTodoType2'      : ['',  'mi',  'e2'],
     \'RivTodoType3'      : ['',  'mi',  'e3'],
     \'RivTodoType4'      : ['',  'mi',  'e4'],
+    \'RivTitle0'         : ['',  'mi',  's0'],
     \'RivTitle1'         : ['',  'mi',  's1'],
     \'RivTitle2'         : ['',  'mi',  's2'],
     \'RivTitle3'         : ['',  'mi',  's3'],
@@ -300,6 +303,7 @@ let s:default.menus = [
     \['Scratch.Create\ Scratch'           , 'cc'                     , 'RivScratchCreate'  ]   ,
     \['Scratch.View\ Index'               , 'cv'                     , 'RivScratchView'    ]   ,
     \['--Action--'                        , '  '                     , '  '                ]   ,
+    \['Title.Create\ level0\ Title'       , 's0'                     , 'RivTitle0'         ]   ,
     \['Title.Create\ level1\ Title'       , 's1'                     , 'RivTitle1'         ]   ,
     \['Title.Create\ level2\ Title'       , 's2'                     , 'RivTitle2'         ]   ,
     \['Title.Create\ level3\ Title'       , 's3'                     , 'RivTitle3'         ]   ,
@@ -477,6 +481,10 @@ fun! riv#load_conf() "{{{1
     
     let s:c.sect_lvs = split(g:riv_section_levels,'\zs')
     let s:c.sect_lvs_b = split('#*+:.^','\zs')
+    let s:c.sect_lvs_style = [
+            \[3,"#"], [2,"="], [2,"-"], [2,"~"],
+            \[2,"\""], [2,"'"], [2,"."],
+            \]
 
     if !empty(g:riv_i_tab_user_cmd) && g:riv_i_tab_user_cmd =~ '\\<'
         " it's literal string and is '\<xx>'

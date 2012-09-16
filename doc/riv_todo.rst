@@ -119,7 +119,6 @@ TODOS
 
                or the sphinx style ``:doc:`xxx``` ``:file:`xxx```
 
-
 13. Publish
 
     + Publish: An option to enable highlighting todo items.

@@ -1,7 +1,7 @@
 "=============================================
 "    Name: fold.vim
 "    File: fold.vim
-"  Author: Rykka G.Forest
+"  Author: Rykka G.F
 "  Update: 2012-07-07
 "=============================================
 let s:cpo_save = &cpo
@@ -128,6 +128,7 @@ endfun "}}}
 " Set "{{{
 let s:sect_sep = g:riv_fold_section_mark
 fun! s:set_obj_dict() "{{{
+    " Set the b:riv_obj dict which contains structure infos.
     
     let stat = b:state
     let mat = stat.matcher
@@ -197,7 +198,7 @@ fun! s:set_obj_dict() "{{{
             if m['title_rows'] == 3
                 let b:riv_obj[m.bgn+2] = m
             endif
-            " Stop Sect Part "}}}
+            " End Sect Part "}}}
         elseif m.type== 'list'
             " The List Part "{{{
             let lst_lv = m.level
@@ -224,7 +225,7 @@ fun! s:set_obj_dict() "{{{
             let p_lst_lv = lst_lv
                 
             let b:riv_obj[m.bgn] = m
-            " Stop List Part "}}}
+            " End List Part "}}}
         elseif m.type == 'trans'
             let lst_lv = 0
             let b:riv_obj[m.bgn] = m

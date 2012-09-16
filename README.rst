@@ -1,52 +1,54 @@
 Intro
 =====
 
-:Author: Rykka G.Forest
-:Update: 2012-09-13
+:Author: Rykka G.F
+:Update: 2012-09-17
 :Version: 0.71 
 :Github: https://github.com/Rykka/riv.vim
 
-**Riv** is for reading , writing and managing reStructuredText_ 
-(a simple and powerful plaintext markup syntax) documents in vim.
+**Riv** is for reading, writing and managing reStructuredText_ 
+(a simple and powerful plain text markup) in vim.
 
 Short for 'reStructuredText in Vim'. 
 
-It is for people either want to reading documents in a clear way,
-or writing documents in a neat way,
-or managing documents in a wiki way.
+With it, you can::
+
+    Read documents clearer.
+    Write documents neater.
+    Manage documents easier.
 
 .. _reStructuredText: http://docutils.sourceforge.net/rst.html
 
 Features
 --------
  
-For Reading
+**Reading**
 
- :Folding_:  Get the overview of a document.
- :Syntax_:   Clearer syntax item highlighting.
+ :Folding_:  View the document strucutre
+ :Syntax_:   Clearer highlighting and hinting.
 
-For Writing
+**Writing**
 
- :Sections_: Create and view sections with ease.
- :Lists_:    Creating lists that's auto numbered, auto leveled and auto indented.
- :Blocks_:   Highlighted and folded blocks.
- :Links_:    Jumping with links. Highlighted hovering links.
- :Table_:    Creating table that auto formatted. 
+ :Sections_: Easy create, easy view.
+ :Lists_:    Auto numbered, auto leveled and auto indented.
+ :Blocks_:   Highlighted and folded 
+ :Links_:    Jumping and Highlighting.
+ :Table_:    Auto formatted. 
 
  :Indent_:   Smarter indent.
- :Insert_:   Super ``<Tab>`` and Super ``<Enter>`` ...
+ :Insert_:   Speed up the input!
 
-For Managing
+**Managing**
 
- :Publish_:  Convert rst files to html/xml/latex/odt/... (docutils_ required)
- :Project_:  Put your rst documents in one place.
- :Scratch_:  A place for writing diary or notes.
+ :Publish_:  Convert to html/xml/latex/odt/... (docutils_ required)
+ :Project_:  Hold your rst documents in one place.
+ :Scratch_:  writing diary or notes.
  :Helpers_:  A document/project manager.
 
              a. `Section Helper`_: Showing section number of current document.
              b. `Todo Helper`_: Managing todo items of project or document.
              c. `File Helper`_: Showing rst files of current directory.
- :File_:     Local file link in rst documents, wiki style. (non-reStructuredText syntax)
+ :File_:     Link local file in rst documents. (non-reStructuredText syntax)
  :Todos_:    Keep track of todo things. (non-reStructuredText syntax)
 
 * To get a breif view of Riv features , see `QuickIntro For Riv`_.
@@ -122,17 +124,18 @@ Things todo in this version.
 * 0.71:
 
   :File_: DONE 2012-09-13 extension style show in vim only.
-  :File_: DONE 2012-09-13 now squre style (moinmoin) use ``[[xxx]]``. 
+  :File_: DONE 2012-09-13 now square style (moinmoin) use ``[[xxx]]``. 
           easier for regxp match
   :File_: DONE 2012-09-13 Support Sphinx style  :file:, :doc:
-  :Sections_: Use sphinx section default markup style
-  :Sections_: section create shortcut will check if it's 
+  :Sections_: DONE 2012-09-17 Use sphinx section default markup style?
+  :Sections_: DONE 2012-09-17 section create shortcut will check if it's 
               a section title undercursor and repl it.
   :Sections_: A shortcut to create a document tree.
   :Publish_: DONE 2012-09-13 remove ``g:riv_file_link_convert`` 
   :Publish_: support sphinx make and browse
-  :Publish_: different Themes 
+  :Publish_: different style.css
   :Publish_: section folding .js for html 
+  :Links_: Add g:riv_create_link_pos
 
 Next 
 ~~~~~
@@ -450,7 +453,7 @@ And it's folded by it's level.
 
   Normal and Insert Mode
 
-  + Create: 
+  + Create and Modify: 
 
     Use ``:RivTitle1`` ``<C-E>s1`` ...  ``:RivTitle6`` ``<C-E>s6`` ,
     To create level 1 to level 6 section title from current word.
@@ -459,6 +462,9 @@ And it's folded by it's level.
 
     Section title created by Riv is ``underline`` only, 
     To add an ``overline``, you should copy the ``underline`` and paste it there.
+
+    And ``:RivTitle0`` ``<C-E>s0`` will create a section title
+    with an overline.
 
   + Folding: 
 
@@ -872,6 +878,14 @@ And it's highlighted with `Cursor Highlighting`_.
 
     If it's empty, you will be asked to input one.
 
+    If the link is not Anonymous References,
+    The target will be put at the end of file by default.
+
+    ``g:riv_create_link_pos`` can be set to ``'.'``
+    to make it put below current line.
+
+    default is ``'$'``
+
   + ``:RivCreateFoot`` ``<C-E>if``
     create a auto numbered footnote. 
     And append the footnote target to the end of file.
@@ -1159,7 +1173,7 @@ the rst documents.
            See Sphinx_Role_Doc_.
            
            It will be not changed to link with Riv.
-           You'd better use it with Sphinx's tool set.
+           You'd better use it with Sphinx_'s tool set.
 
   + You can switch style with ``g:riv_file_link_style``
 
@@ -1179,7 +1193,7 @@ the rst documents.
       will be considered as external directory links, 
       and link to the directory.
 
-    - when set to 2, use ``Sphinx``:
+    - when set to 2, ``Sphinx``:
 
       words like ``:doc:`xxx.rst``` ``:doc:`xxx.py``` ``:doc:`xxx.cpp``` will be detected as file link.
 
@@ -1187,13 +1201,10 @@ the rst documents.
       and link to ``xxx/index.rst``
 
       words like ``:doc:`/xxxx/xxx.rst```
-      will link to ``DOC_ROOT/xxx/xxx.rst``
-    
-      words like ``:file:`~/xxx/xxx.py``` ``:file:`x:/xxx.rst```
-      will be considered as external file links
-
-      words like ``:doc:`/xxxx/xxx/``` 
       will link to ``DOC_ROOT/xxxx/xxx.rst``
+    
+      words like ``:file:`~/xxx/xxx.py``` ``:file:`/xxx/xxx.py``` ``:file:`x:/xxx.rst```
+      will be considered as external file links
 
       words like ``:file:`~/xxx/xxx/``` 
       will be considered as external directory links, 
@@ -1207,7 +1218,8 @@ the rst documents.
     - default is 1.
 
   
-  :NOTE: Diffenence between extension and link style.
+  :NOTE: **Diffenence between extension and link style.**
+
          The ``[[/xxx]]`` and ``:doc:`/xxx``` 
          are linked to Document Root ``DOC_ROOT/xxx.rst``
          both with MoinMoin and sphinx style(?).
@@ -1466,5 +1478,6 @@ This is an incompleting list.
   + Use ``:RivCreateDate`` ``<C-E>id`` to insert a datestamp of today anywhere.
   + Use ``:RivCreateTime`` ``<C-E>it`` to insert a timestamp of current time anywhere. 
 
+
+.. _Sphinx: http://sphinx.pocoo.org/
 .. _Sphinx_role_doc: http://sphinx.pocoo.org/markup/inline.html#role-doc
-
