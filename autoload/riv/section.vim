@@ -111,7 +111,7 @@ fun! s:del_line(row,...) "{{{
     endif
 endfun "}}}
 
-fun! riv#section#title(level,...)
+fun! riv#section#title(level,...) "{{{
     " Create the section with the level at current row.
     "
     " If it's empty , ask the title.
@@ -142,7 +142,7 @@ fun! riv#section#title(level,...)
         if title == '' | return | endif
     else
         let [rows,idx] = s:is_section(row)
-        if rows == 0    " it's not a section title. use the line as title.
+        if rows == 0    " not in a section title. use it as title.
             let title = line
             call s:del_line(row)
         else
@@ -164,8 +164,8 @@ fun! riv#section#title(level,...)
     endif
     
     " as the cursor is put at the line after the heading
-    " So no need to move.
-endfun
+    " So no need to move anymore.
+endfun "}}}
 
 let &cpo = s:cpo_save
 unlet s:cpo_save

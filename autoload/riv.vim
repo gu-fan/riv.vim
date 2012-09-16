@@ -483,7 +483,7 @@ fun! riv#load_conf() "{{{1
     let s:c.sect_lvs_b = split('#*+:.^','\zs')
     let s:c.sect_lvs_style = [
             \[3,"#"], [2,"="], [2,"-"], [2,"~"],
-            \[2,"\""], [2,"'"], [2,"."],
+            \[2,'"'], [2,"'"], [2,"`"],
             \]
 
     if !empty(g:riv_i_tab_user_cmd) && g:riv_i_tab_user_cmd =~ '\\<'

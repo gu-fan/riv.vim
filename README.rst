@@ -17,7 +17,8 @@ With it, you can::
     Write documents neater.
     Manage documents easier.
 
-.. _reStructuredText: http://docutils.sourceforge.net/rst.html
+.. Contents::
+
 
 Features
 --------
@@ -1486,5 +1487,5 @@ This is an incompleting list.
 
 .. _Sphinx: http://sphinx.pocoo.org/
 .. _Sphinx_role_doc: http://sphinx.pocoo.org/markup/inline.html#role-doc
-
 .. _Org-Mode: http://orgmode.org/
+.. _reStructuredText: http://docutils.sourceforge.net/rst.html
