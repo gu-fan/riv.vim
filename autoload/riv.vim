@@ -3,7 +3,7 @@
 "    File: riv.vim
 " Summary: Riv autoload main
 "  Author: Rykka G.Forest
-"  Update: 2012-07-07
+"  Update: 2012-09-17
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -102,7 +102,7 @@ let s:default.options = {
     \'todo_keywords'      : "TODO,DONE;FIXME,FIXED;START,PROCESS,STOP",
     \'fold_blank'         : 2,
     \'fold_level'         : 3,
-    \'fold_section_mark'  : "-",
+    \'fold_section_mark'  : ".",
     \'auto_fold_force'    : 1,
     \'auto_fold1_lines'   : 5000,
     \'auto_fold2_lines'   : 3000,

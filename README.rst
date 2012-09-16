@@ -18,6 +18,7 @@ With it, you can::
     Manage documents easier.
 
 .. Contents::
+.. Sectnum::
 
 
 Features
@@ -228,7 +229,7 @@ And provide extra infos of them.
     use ``zo`` ``zO`` or ``zv`` will open it either.
 
     :NOTE: To use mouse to control all folding. 
-           use vim option ``foldcolumn`` with ``set fdc=1`` or more
+           use vim option ``foldcolumn`` with ``set fdc=1`` or more, And click in the foldcolumn.
 
   + Close Folding:  use ``zc`` or ``zC`` will close it.
 
@@ -1467,6 +1468,8 @@ A helper showing current document section numbers
 
 Miscs
 ~~~~~
+
+The Page-breaker ``^L`` (Ctrl-L in insert mode) will break current section.
 
 Some useful plugins.
 This is an incompleting list.
