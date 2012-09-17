@@ -164,7 +164,7 @@ endfun "}}}
 "}}}
 " scratch "{{{
 fun! riv#create#scratch() "{{{
-    call riv#file#split(riv#path#scratch_path . strftime("%Y-%m-%d") . '.rst')
+    call riv#file#split(riv#path#scratch_path() . strftime("%Y-%m-%d") . '.rst')
 endfun "}}}
 fun! s:format_src_index() "{{{
     " category scratch by month and format it 4 items a line

@@ -24,7 +24,7 @@ fun! s:parse_from_start() "{{{
     redraw
     echo "Parsing buf ..."
     let len = line('$')
-    let b:state = { 'l_chk':[], 
+    let b:riv_state = { 'l_chk':[], 
                 \'matcher':[], 'sectmatcher':[], 
                 \'sect_root': { 'parent': 'None'  , 'child':[] ,
                 \  'bgn': 'sect_root'} ,
@@ -33,9 +33,9 @@ fun! s:parse_from_start() "{{{
                 \  'None': { 'parent': 'None'  , 'child':[] ,
                 \ 'bgn': 'None'} ,
                 \}
-    let b:riv_obj = {'sect_root':b:state.sect_root, 
-                \ 'list_root':b:state.list_root,
-                \ 'None': b:state.None }
+    let b:riv_obj = {'sect_root':b:riv_state.sect_root, 
+                \ 'list_root':b:riv_state.list_root,
+                \ 'None': b:riv_state.None }
     " 3%
     let b:fdl_list = map(range(len+1),'0')
     let b:lines= ['']+getline(1,line('$'))+['']     " [-1] and [0] are blank
@@ -44,11 +44,11 @@ fun! s:parse_from_start() "{{{
         call s:check(i)
     endfor
     " 20%
-    call sort(b:state.matcher,"s:sort_match")
+    call sort(b:riv_state.matcher,"s:sort_match")
     call s:set_obj_dict()
     call s:set_sect_end()
     call s:set_fdl_list()
-    call s:set_td_child(b:state.list_root)
+    call s:set_td_child(b:riv_state.list_root)
     call garbagecollect(1)
     echon "Done"
 endfun "}}}
@@ -130,7 +130,7 @@ let s:sect_sep = g:riv_fold_section_mark
 fun! s:set_obj_dict() "{{{
     " Set the b:riv_obj dict which contains structure infos.
     
-    let stat = b:state
+    let stat = b:riv_state
     let mat = stat.matcher
 
     let sec_punc_list = []      " the punctuation list used by section
@@ -240,7 +240,8 @@ fun! s:set_obj_dict() "{{{
     
 endfun "}}}
 fun! s:set_sect_end() "{{{
-    let stat = b:state
+    " Set the end line of each section.
+    let stat = b:riv_state
     let smat = stat.sectmatcher
     for i in range(len(smat))
         let m = smat[i]
@@ -289,7 +290,8 @@ fun! s:set_sect_end() "{{{
     endfor
 endfun "}}}
 fun! s:set_fdl_list() "{{{
-    let stat = b:state
+    " Set folding list's bgn and end
+    let stat = b:riv_state
     let mat = stat.matcher
 
     " fold_blank: 0,1,2 (default:0)
@@ -344,13 +346,13 @@ fun! s:check(row) "{{{
         call s:st_checker(row)
         call s:lb_checker(row)
 
-        if !has_key(b:state, 'e_chk') && !has_key(b:state, 'b_chk')  
+        if !has_key(b:riv_state, 'e_chk') && !has_key(b:riv_state, 'b_chk')  
             \ && line=~s:p.literal_block && b:lines[a:row+1]=~ '^\s*$'
             if line=~s:p.exp_mark
-                let b:state.e_chk= {'type': 'exp', 'bgn':a:row,}
+                let b:riv_state.e_chk= {'type': 'exp', 'bgn':a:row,}
                 return 1
             else
-                let b:state.b_chk = {'type': 'block', 'bgn': a:row+1, 
+                let b:riv_state.b_chk = {'type': 'block', 'bgn': a:row+1, 
                             \ 'indent': riv#fold#indent(line)}
                 " the block line may be other item, so not return
             endif
@@ -360,7 +362,7 @@ fun! s:check(row) "{{{
 
     if line=~'^\s*[[:alnum:]]\+\_s'
         return
-    elseif b:foldlevel > 1 && !has_key(b:state, 'e_chk')
+    elseif b:foldlevel > 1 && !has_key(b:riv_state, 'e_chk')
                 \ && line=~s:p.all_list
 
         let idt = riv#fold#indent(line)
@@ -372,52 +374,52 @@ fun! s:check(row) "{{{
 
         if row == line('$')
             let l_item.end = a:row
-            call add(b:state.matcher,l_item)
+            call add(b:riv_state.matcher,l_item)
         else
-            call insert(b:state.l_chk, l_item, 0)
+            call insert(b:riv_state.l_chk, l_item, 0)
         endif
         return 1
     elseif line=~s:p.section  && line !~ '^\.\.\_s*$'
-        let b:state.s_chk =  {'type': 'sect' , 'bgn': row, 'attr': line[0]}
+        let b:riv_state.s_chk =  {'type': 'sect' , 'bgn': row, 'attr': line[0]}
         return 1
     elseif line=~ '^__\s'
         " it's anonymous link
-        let b:state.e_chk= {'type': 'exp', 'bgn':a:row,}
+        let b:riv_state.e_chk= {'type': 'exp', 'bgn':a:row,}
         return 1
     elseif line=~'^\s*\w'
         return
     elseif b:foldlevel > 2 && (line=~s:p.exp_mark )
         if  (line=~'^\.\.\s*$' && a:row!=line('$') 
                             \ && b:lines[a:row+1]=~'^\s*$')
-            call add(b:state.matcher,{'type': 'exp', 'mark': 'ignored', 
+            call add(b:riv_state.matcher,{'type': 'exp', 'mark': 'ignored', 
                     \ 'bgn': a:row, 'end': a:row})
         else
-            let b:state.e_chk= {'type': 'exp', 'bgn':a:row,}
+            let b:riv_state.e_chk= {'type': 'exp', 'bgn':a:row,}
         endif
         return 1
-    elseif b:foldlevel > 2 && !has_key(b:state, 'st_chk') && line =~ s:p.simple_table 
+    elseif b:foldlevel > 2 && !has_key(b:riv_state, 'st_chk') && line =~ s:p.simple_table 
                 \ && row != line('$') && b:lines[row+1] !~ '^\s*$'
-        let b:state.st_chk =  {'type': 'simple_table' , 'bgn': a:row, 'row': 0,
+        let b:riv_state.st_chk =  {'type': 'simple_table' , 'bgn': a:row, 'row': 0,
                     \ 'col': len(split(line)) }
         return 1
-    elseif b:foldlevel > 2 && !has_key(b:state, 'lb_chk') && line=~s:p.line_block 
-        let b:state.lb_chk= {'type': 'line_block' , 'bgn': a:row}
+    elseif b:foldlevel > 2 && !has_key(b:riv_state, 'lb_chk') && line=~s:p.line_block 
+        let b:riv_state.lb_chk= {'type': 'line_block' , 'bgn': a:row}
         return 1
-    elseif b:foldlevel > 2 && !has_key(b:state, 't_chk') 
+    elseif b:foldlevel > 2 && !has_key(b:riv_state, 't_chk') 
                 \ && line=~s:p.table
-        let b:state.t_chk= {'type': 'table' , 'bgn': a:row, 'row': 0,
+        let b:riv_state.t_chk= {'type': 'table' , 'bgn': a:row, 'row': 0,
                     \ 'col': len(split(line, '+',1)) - 2 }
         return 1
     elseif b:foldlevel > 2 && line=~'^'
-        call add(b:state.matcher,{'type':'trans', 'bgn':a:row,'end':a:row})
+        call add(b:riv_state.matcher,{'type':'trans', 'bgn':a:row,'end':a:row})
         return 1
     endif
 
 endfun "}}}
 
 fun! s:s_checker(row) "{{{
-    if !has_key(b:state, 's_chk') | return | endif
-    let chk = b:state.s_chk
+    if !has_key(b:riv_state, 's_chk') | return | endif
+    let chk = b:riv_state.s_chk
     if a:row == chk.bgn+1
         let line = b:lines[a:row]
         let blank = '^\s*$'
@@ -428,17 +430,17 @@ fun! s:s_checker(row) "{{{
             let chk.title_rows = 3
             let chk.child = []
             let chk.parent = 'sect_root'
-            call add(b:state.matcher, chk)
-            call add(b:state.sectmatcher, chk)
-            call remove(b:state, 's_chk')
+            call add(b:riv_state.matcher, chk)
+            call add(b:riv_state.sectmatcher, chk)
+            call remove(b:riv_state, 's_chk')
             return 1
         elseif line =~ blank && b:lines[a:row-2]=~ blank && len(b:lines[a:row-1])>=4
             " transition : blank, section ,blank(cur) ,len>4
             let chk.type = 'trans'
             let chk.bgn = a:row - 1
             let chk.end = a:row - 1
-            call add(b:state.matcher, chk)
-            call remove(b:state, 's_chk')
+            call add(b:riv_state.matcher, chk)
+            call remove(b:riv_state, 's_chk')
             return 
         elseif b:lines[a:row-2] !~ blank && b:lines[a:row-3] =~ blank
                     \ && b:lines[a:row-1] != b:lines[a:row-2]
@@ -447,9 +449,9 @@ fun! s:s_checker(row) "{{{
             let chk.title_rows = 2
             let chk.child = []
             let chk.parent = 'sect_root'
-            call add(b:state.matcher, chk)
-            call add(b:state.sectmatcher, chk)
-            call remove(b:state, 's_chk')
+            call add(b:riv_state.matcher, chk)
+            call add(b:riv_state.sectmatcher, chk)
+            call remove(b:riv_state, 's_chk')
             return 1
         endif
     endif
@@ -457,20 +459,20 @@ endfun "}}}
 fun! s:l_checker(row) "{{{
     " a list contain all lists.
     " the final order should be sorted.
-    if empty(b:state.l_chk) | return | endif
+    if empty(b:riv_state.l_chk) | return | endif
     " List can contain Explicit Markup items.
-    if has_key(b:state, 'e_chk') | return | endif
-    let l = b:state.l_chk
+    if has_key(b:riv_state, 'e_chk') | return | endif
+    let l = b:riv_state.l_chk
     let idt = riv#fold#indent(b:lines[a:row]) 
     let end = line('$')
     while !empty(l)
         if (idt <= l[0].indent ) 
             let l[0].end = a:row-1
-            call add(b:state.matcher,l[0])
+            call add(b:riv_state.matcher,l[0])
             call remove(l , 0)
         elseif a:row==end
             let l[0].end = a:row
-            call add(b:state.matcher,l[0])
+            call add(b:riv_state.matcher,l[0])
             call remove(l , 0)
         else
             break
@@ -478,67 +480,67 @@ fun! s:l_checker(row) "{{{
     endwhile
 endfun "}}}
 fun! s:e_checker(row) "{{{
-    if !has_key(b:state, 'e_chk') | return | endif
+    if !has_key(b:riv_state, 'e_chk') | return | endif
     if (  b:lines[a:row] =~ '^\S' )
-        let b:state.e_chk.end = a:row-1
-        call add(b:state.matcher,b:state.e_chk)
-        call remove(b:state, 'e_chk')
+        let b:riv_state.e_chk.end = a:row-1
+        call add(b:riv_state.matcher,b:riv_state.e_chk)
+        call remove(b:riv_state, 'e_chk')
     elseif  a:row==line('$')
-        let b:state.e_chk.end = a:row
-        call add(b:state.matcher,b:state.e_chk)
-        call remove(b:state, 'e_chk')
+        let b:riv_state.e_chk.end = a:row
+        call add(b:riv_state.matcher,b:riv_state.e_chk)
+        call remove(b:riv_state, 'e_chk')
     endif
 endfun "}}}
 fun! s:b_checker(row) "{{{
-    if !has_key(b:state, 'b_chk') | return | endif
-    if (  riv#fold#indent(b:lines[a:row]) <= b:state.b_chk.indent )
-        let b:state.b_chk.end = a:row-1
-        call add(b:state.matcher, b:state.b_chk)
-        call remove(b:state, 'b_chk')
-    elseif a:row==line('$') && b:state.b_chk.bgn < a:row
-        let b:state.b_chk.end = a:row
-        call add(b:state.matcher, b:state.b_chk)
-        call remove(b:state, 'b_chk')
+    if !has_key(b:riv_state, 'b_chk') | return | endif
+    if (  riv#fold#indent(b:lines[a:row]) <= b:riv_state.b_chk.indent )
+        let b:riv_state.b_chk.end = a:row-1
+        call add(b:riv_state.matcher, b:riv_state.b_chk)
+        call remove(b:riv_state, 'b_chk')
+    elseif a:row==line('$') && b:riv_state.b_chk.bgn < a:row
+        let b:riv_state.b_chk.end = a:row
+        call add(b:riv_state.matcher, b:riv_state.b_chk)
+        call remove(b:riv_state, 'b_chk')
     endif
 endfun "}}}
 fun! s:lb_checker(row) "{{{
-    if !has_key(b:state, 'lb_chk') | return | endif
+    if !has_key(b:riv_state, 'lb_chk') | return | endif
     if b:lines[a:row] !~ s:p.line_block && b:lines[a:row-1] =~ '^\s*$'
-        let b:state.lb_chk.end = a:row-1
-        call add(b:state.matcher, b:state.lb_chk)
-        call remove(b:state, 'lb_chk')
+        let b:riv_state.lb_chk.end = a:row-1
+        call add(b:riv_state.matcher, b:riv_state.lb_chk)
+        call remove(b:riv_state, 'lb_chk')
     elseif a:row==line('$')
-        let b:state.t_chk.end = a:row
-        call add(b:state.matcher, b:state.lb_chk)
-        call remove(b:state, 'lb_chk')
+        let b:riv_state.t_chk.end = a:row
+        call add(b:riv_state.matcher, b:riv_state.lb_chk)
+        call remove(b:riv_state, 'lb_chk')
     endif
 endfun "}}}
 fun! s:t_checker(row) "{{{
-    if !has_key(b:state, 't_chk') | return | endif
+    if !has_key(b:riv_state, 't_chk') | return | endif
     if b:lines[a:row] =~ g:_riv_p.table_fence
-        let b:state.t_chk.row += 1
+        let b:riv_state.t_chk.row += 1
     elseif (b:lines[a:row] !~ s:p.table_line )
-        let b:state.t_chk.end = a:row-1
-        call add(b:state.matcher, b:state.t_chk)
-        call remove(b:state, 't_chk')
+        let b:riv_state.t_chk.end = a:row-1
+        call add(b:riv_state.matcher, b:riv_state.t_chk)
+        call remove(b:riv_state, 't_chk')
     elseif a:row==line('$')
-        let b:state.t_chk.end = a:row
-        call add(b:state.matcher, b:state.t_chk)
-        call remove(b:state, 't_chk')
+        let b:riv_state.t_chk.end = a:row
+        call add(b:riv_state.matcher, b:riv_state.t_chk)
+        call remove(b:riv_state, 't_chk')
     endif
 endfun "}}}
 fun! s:st_checker(row) "{{{
-    if !has_key(b:state, 'st_chk') 
+    if !has_key(b:riv_state, 'st_chk') 
         return 
     endif
     if  b:lines[a:row] =~ s:p.simple_table
         if b:lines[a:row+1] =~ '^\s*$'
-            let b:state.st_chk.end = a:row
-            call add(b:state.matcher, b:state.st_chk)
-            call remove(b:state, 'st_chk')
+            let b:riv_state.st_chk.end = a:row
+            call add(b:riv_state.matcher, b:riv_state.st_chk)
+            call remove(b:riv_state, 'st_chk')
         endif
     elseif b:lines[a:row] !~ s:p.simple_table_span
-        let b:state.st_chk.row += 1
+        let b:riv_state.st_chk.row += 1
     endif
 endfun "}}}
 

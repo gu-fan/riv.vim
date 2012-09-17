@@ -167,5 +167,76 @@ fun! riv#section#title(level,...) "{{{
     " So no need to move anymore.
 endfun "}}}
 
+fun! s:trim(str) "{{{
+    return matchstr(a:str,'^\s*\zs.*\ze\s*$')
+endfun "}}}
+fun! s:reflize(str) "{{{
+    " referenceizing the string
+    " trim whitespace and add '_' or '`..`_'
+    let title = s:trim(a:str)
+    return len(split(title)) == 1 ?  title.'_' 
+                \ : '`'.title.'`'.'_'
+endfun "}}}
+fun! s:content_line(row) "{{{
+    " content line is composed with three objects.
+    " '%i' indent by it's level
+    " '%n' the section number
+    " '%t' the section title
+    if !exists('b:riv_obj[a:row]') | return '' | endif
+    let rows = b:riv_obj[a:row].title_rows
+    let bgn = b:riv_obj[a:row].bgn
+    let title_row = s:title_row(rows,1,bgn)
+
+    let idt = repeat('  ', b:riv_obj[a:row].level)
+    let txt =  b:riv_obj[a:row].txt
+    
+    let title = s:reflize(getline(title_row))
+
+    let line = g:riv_content_format
+    let line = substitute(line, '%i', idt,'g')
+    let line = substitute(line, '%l', '+ ','g')
+    let line = substitute(line, '%n', txt,'g')
+    let line = substitute(line, '%t', title,'g')
+    return line
+endfun "}}}
+fun! s:get_all_sect() "{{{
+    " Return a list of all section row number
+    let list = []
+    let sects = b:riv_state.sectmatcher
+    for s in sects
+        call add(list, s.bgn)
+    endfor
+    return list
+endfun "}}}
+
+fun! riv#section#content() "{{{
+    " Create a simple content table of current document.
+
+    update
+    call riv#fold#init()
+    
+    let lines = ['* Contents:']
+    let t = 0
+    for s in b:riv_state.sectmatcher 
+        " When not same level with previous one.
+        " add a blank line
+        if s.level != t
+            call add(lines, '')
+            let t = s.level
+        endif
+        call add(lines, s:content_line(s.bgn))
+    endfor
+    
+    " Add a blank ending if next line is not blank
+    if !s:is_blank(getline(line('.')+1) )
+        call add(lines, '')
+    endif
+    
+    call append(line('.'),lines)
+    update
+    call riv#fold#init()
+
+endfun "}}}
+
 let &cpo = s:cpo_save
 unlet s:cpo_save

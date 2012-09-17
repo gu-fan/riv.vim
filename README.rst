@@ -6,8 +6,8 @@ Intro
 :Version: 0.71 
 :Github: https://github.com/Rykka/riv.vim
 
-**Riv** is for reading, writing and managing reStructuredText_ 
-(a simple and powerful plain text markup) in vim.
+**Riv** is a vim plugin for reading, writing and managing reStructuredText_ 
+(a simple and powerful plain text markup).
 
 Short for 'reStructuredText in Vim'. 
 
@@ -17,35 +17,35 @@ With it, you can::
     Write documents neater.
     Manage documents easier.
 
-.. Contents::
 .. Sectnum::
 
 Features
 --------
  
-**Reading**
+**Reading and Writing**
+
+ Functions.
 
  :Folding_:  View the document strucutre
  :Syntax_:   Clearer highlighting and hinting.
+ :Indent_:   Smarter indent.
+ :Insert_:   Speed up the input!
+ :Publish_:  Convert to html/xml/latex/odt... (docutils_ required)
 
-**Writing**
+ Document Structures.
 
  :Sections_: Easy create, easy view.
  :Lists_:    Auto numbered, auto leveled and auto indented.
  :Blocks_:   Highlighted and folded 
+ :Inline_:   Highlighted.
  :Links_:    Jumping and Highlighting.
  :Table_:    Auto formatted. 
 
- :Indent_:   Smarter indent.
- :Insert_:   Speed up the input!
-
 **Managing**
 
- :Publish_:  Convert to html/xml/latex/odt/... (docutils_ required)
  :Project_:  Hold your rst documents in one place.
  :Scratch_:  writing diary or notes.
- :Helpers_:  A document/project manager.
-
+ :Helpers_: 
              a. `Section Helper`_: Showing section number of current document.
              b. `Todo Helper`_: Managing todo items of project or document.
              c. `File Helper`_: Showing rst files of current directory.
@@ -59,10 +59,12 @@ Features
 Get Start
 ---------
 
-* To Install: see `Install`_
-* To Start: see `QuickStart With Riv`_  
-  or ``:RivQuickStart`` in vim.
-* Detail Instucion: see `Instruction`_ 
+
+* Install: see `Install`_
+* Start: see `QuickStart With Riv`_  
+  or use ``:RivQuickStart`` in vim.
+* Instucion: see `Instruction`_ 
+* Snapshots: `On Screen`_
 * Also Issues_ and Todo_.
 
 On Screen
@@ -91,21 +93,25 @@ Install
 
        By default, it is before the ``$VIMRUNTIME``.
 
-* Recommend plugins: 
+* Related tools: 
 
-  + Syntastic_  for syntax checking of rst files.
-    (require python docutils_ package )
+  + docutils_ for converting to other format.
+  + pygments_ for syntax highlighting in other format.
+  + Sphinx_ for the Sphinx users.
+  + vim: Syntastic_  for syntax checking of rst files.
+    (it require python docutils_ package )
 
     But if you are using Sphinx_'s tools set, you'd better not using it.
-
+    Cause it could not recongize the sphinx's markups.
 
 Issues
 ------
-
 * Currently it's a developing version. 
+
   So things may change quickly.Keep up-to-date.
 
 * Both bug reports and feature request are welcome. 
+
   Please Post issues at https://github.com/Rykka/riv.vim/issues
 
 
@@ -131,7 +137,8 @@ Things todo in this version.
   :Sections_: DONE 2012-09-17 Use sphinx section default markup style?
   :Sections_: DONE 2012-09-17 section create shortcut will check if it's 
               a section title undercursor and repl it.
-  :Sections_: A shortcut to create a document tree.
+  :Sections_: DONE 2012-09-17 A shortcut to create a document tree.
+  :Sections_: DONE 2012-09-17 Add g:riv_content_format
   :Publish_: DONE 2012-09-13 remove ``g:riv_file_link_convert`` 
   :Publish_: support sphinx make and browse
   :Publish_: different style.css
@@ -141,38 +148,29 @@ Things todo in this version.
 Next 
 ~~~~~
 
-Redefine the local document pattern. support sphinx's role.
-
 See riv_todo_ ( doc/riv_todo.rst )
 
-.. _riv_log: https://github.com/Rykka/riv.vim/blob/master/doc/riv_log.rst
-.. _riv_todo: https://github.com/Rykka/riv.vim/blob/master/doc/riv_todo.rst
 
 ----
 
 Instruction
 ===========
 
-* Where to start?
+* Get start
 
-  + To get a breif view of Riv features , see `QuickIntro For Riv`_ 
+  + To get a quick go through of Riv features , see `QuickIntro For Riv`_ 
     ( doc/riv_quickintro.rst )
   + For a quick start, see `QuickStart With Riv`_  
     ( doc/riv_quickstart.rst )
 
     Or use ``:RivQuickStart`` in vim.
   + For writing and reading documents, 
-    See detail instruction in `In Vim`_ and `By reStructuredText`_ 
-  + For managing documents, See detail instruction in `With Riv`_
+    See detail instruction in `reStructuredText`_ 
+  + For managing documents, See detail instruction in `Riv`_
 
-.. _Quickstart With Riv:
-   https://github.com/Rykka/riv.vim/blob/master/doc/riv_quickstart.rst
-.. _Quickintro For Riv:
-   https://github.com/Rykka/riv.vim/blob/master/doc/riv_quickintro.rst
+* The mappings
 
-* About the mapping
-
-  The mapping and commands are described in each section.
+  The mappings and commands are described in each section.
 
   Default leader map for Riv is ``<C-E>``.
   You can change it by following options.
@@ -181,7 +179,7 @@ Instruction
 
     - ``:RivIndex`` ``<C-E>ww`` to open the project index.
     - ``:RivAsk`` ``<C-E>wa`` to choose one project to open.
-    - ``:RivScratchCreate`` ``<C-E>cc`` Create or jump to the scratch of today.
+    - ``:RivScratchCreate`` ``<C-E>sc`` Create or jump to the scratch of today.
     - ``:RivScratchView`` ``<C-E>cv`` View Scratch index.
 
   + ``g:riv_buf_leader`` : leader map for reStructuredText buffers.
@@ -190,17 +188,21 @@ Instruction
         
         map <C-E>wi    :RivIndex<CR> 
 
-.. _QuickStart: http://docutils.sourceforge.net/docs/user/rst/quickstart.html
 
-In Vim
---------
 
-These features are imporved than origin scripts for rst files.
+reStructuredText
+----------------
+
+Following features are for all ``*.rst`` documents 
+with standard reStructuredText syntax.
 
 :NOTE: Make sure your .vim folder in option ``runtimepath`` 
        is before the $VIMRUNTIME. 
 
        Otherwise the syntax/indent files for rst file will using the vim built-in one.
+
+
+:NOTE: Make sure ``filetype plugin indent on`` and ``syntax on`` is in your vimrc
 
 Folding 
 ~~~~~~~~
@@ -435,13 +437,6 @@ Super ``<Tab>`` and Super ``<Enter>`` in insert mode.
        You can view default mappings with ``g:riv_default.buf_imaps``
 
 
-By reStructuredText
--------------------
-
-Following features are for all ``*.rst`` documents 
-with standard reStructuredText syntax.
-
-:NOTE: make sure ``filetype plugin indent on`` and ``syntax on`` is in your vimrc
 
 Sections 
 ~~~~~~~~~
@@ -480,6 +475,27 @@ And it's folded by it's level.
 
     e.g. Features_ link will bring you to the `Feature` Section (in vim)
 
+  + Create a content table:
+    
+    Use ``:RivCreateContent`` or ``<C-E>ic`` to create it.
+
+    It's similar with the ``content`` directive,
+    except it create the content table into the document.
+
+    The advantage is you can navigate by it in vim.
+
+    The disadvantage is you must update it every time after you have changed the document.
+
+    You can set ``g:riv_content_format`` to change it's
+    format::
+        
+        %i is the indent of each line
+        %l is the list symbol '+'
+        %n is the section number
+        %t is the section title
+
+        by default , it's '%i%l%n %t'
+    
 * Options:
 
   + Although you can define a section title with most punctuations
@@ -819,12 +835,12 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#doctest-bl
 
 __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#explicit-markup-blocks
 
-Inline Markup
-~~~~~~~~~~~~~~
+Inline
+~~~~~~~
 
 Inline Markup are highlighted.
 
-Maybe an option for conceal in the future.
+:In The Future: an option for conceal?
 
 See `inline markup`__ for syntax details.
 
@@ -1110,13 +1126,13 @@ Some command wrapper to convert rst files to html/xml/latex/odt/...
        Otherwise errors may occour.
 
 
-With Riv 
---------
+Riv 
+-----
 
-Following features are for better working with reStructuredText documents.
+Following features provides more functions for rst documents.
 
 * Project_, Scratch_, Helpers_ are extra function for managing rst documents.
-* File_, Todos_ are extra syntax items for writing rst document.
+* File_, Todos_ are extended syntax items for writing rst document.
 
 Project
 ~~~~~~~
@@ -1270,7 +1286,7 @@ Scratch
   
 Scratch is a place for writing diary or notes.
 
-* ``:RivScratchCreate`` ``<C-E>cc``
+* ``:RivScratchCreate`` ``<C-E>sc``
   Create or jump to the scratch of today.
 
   Scratches are created auto named by date in '%Y-%m-%d' format.
@@ -1491,3 +1507,11 @@ This is an incomplete list.
 .. _Syntastic: https://github.com/scrooloose/syntastic
 .. _docutils: http://docutils.sourceforge.net/
 .. _pygments: http://pygments.org/
+
+.. _riv_log: https://github.com/Rykka/riv.vim/blob/master/doc/riv_log.rst
+.. _riv_todo: https://github.com/Rykka/riv.vim/blob/master/doc/riv_todo.rst
+.. _QuickStart: http://docutils.sourceforge.net/docs/user/rst/quickstart.html
+.. _Quickstart With Riv:
+   https://github.com/Rykka/riv.vim/blob/master/doc/riv_quickstart.rst
+.. _Quickintro For Riv:
+   https://github.com/Rykka/riv.vim/blob/master/doc/riv_quickintro.rst

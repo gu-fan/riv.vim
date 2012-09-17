@@ -54,7 +54,6 @@ fun! s:find_tar(text) "{{{
     let [c_row,c_col] = getpos('.')[1:2]
 
     " The section title are implicit targets.
-    echo norm_ptn
     let row = s:find_sect('\v\c^\s*'.norm_ptn.'\s*$')
     if row > 0
         return [row, c_col]
@@ -78,8 +77,8 @@ fun! s:find_ref(text) "{{{
     return [a_row, a_col]
 endfun "}}}
 fun! s:find_sect(ptn) "{{{
-    if exists("b:state.sectmatcher")
-        for sect in b:state.sectmatcher
+    if exists("b:riv_state.sectmatcher")
+        for sect in b:riv_state.sectmatcher
             let line = getline(sect.bgn) 
             if line =~ g:_riv_p.section
                 let line = getline(sect.bgn+1)
