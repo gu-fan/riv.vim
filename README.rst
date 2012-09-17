@@ -17,7 +17,7 @@ With it, you can::
     Write documents neater.
     Manage documents easier.
 
-.. Sectnum::
+.. contents::
 
 Features
 --------
