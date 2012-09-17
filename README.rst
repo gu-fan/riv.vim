@@ -1222,7 +1222,7 @@ the rst documents.
     - default is 1.
 
   
-  :NOTE: **Diffenence between extension and link style.**
+  :NOTE: **Difference between extension and link style.**
 
          The ``[[/xxx]]`` and ``:doc:`/xxx``` 
          are linked to Document Root ``DOC_ROOT/xxx.rst``
@@ -1468,9 +1468,9 @@ Miscs
 
 
 Some useful plugins.
-This is an incompleting list.
+This is an incomplete list.
     
-    + Sninpate: snippet
+    + Snipmate: snippet
     + neocomplcache: auto complete and snippet
     + calendar: set datestamp with it
     + fugitive: git control
