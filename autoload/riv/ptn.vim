@@ -304,7 +304,7 @@ fun! riv#ptn#init() "{{{
     "     
     "    1. moinmoin style
     "       [[xxx]] => xxx.rst
-    "       [[xxx/]] => xxx.rst
+    "       [[xxx/]] => xxx/index.rst
     "       [[/xxx]] => DOC_ROOT/xxx.rst
     "       [[/xxx/]] => DOC_ROOT/xxx/index.rst
     "

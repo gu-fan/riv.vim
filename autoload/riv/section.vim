@@ -138,9 +138,12 @@ fun! riv#section#title(level,...) "{{{
             echon txt
             echohl Normal
         endif
-        let title = input("Input the Title of a level ".a:level." Section: ")
+        let title = input("Input the title of level ".a:level)
         if title == '' | return | endif
     else
+        " prevent del the whole section.
+        exe row 'foldopen'
+
         let [rows,idx] = s:is_section(row)
         if rows == 0    " not in a section title. use it as title.
             let title = line

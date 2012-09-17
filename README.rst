@@ -59,7 +59,6 @@ Features
 Get Start
 ---------
 
-
 * Install: see `Install`_
 * Start: see `QuickStart With Riv`_  
   or use ``:RivQuickStart`` in vim.

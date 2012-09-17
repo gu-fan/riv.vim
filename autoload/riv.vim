@@ -23,12 +23,14 @@ fun! s:normlist(list,...) "{{{
 endfun "}}}
 fun! riv#error(msg) "{{{
     echohl ErrorMsg
-    echo a:msg
+    echo '[Error:]'
+    echon a:msg
     echohl Normal
 endfun "}}}
 fun! riv#warning(msg) "{{{
     echohl WarningMsg
-    echo a:msg
+    echo '[Warnging]'
+    echon a:msg
     echohl Normal
 endfun "}}}
 "}}}
@@ -525,6 +527,7 @@ fun! riv#load_conf() "{{{1
     let s:e.NOT_DATESTAMP = "Riv: Not a Datestamp"
     let s:e.NOT_RST_FILE  = "Riv: NOT A RST FILE"
     let s:e.FILE_NOT_FOUND = "Riv: Could not find the file"
+    let s:e.REF_NOT_FOUND = "Riv: Could not find the reference"
 
 endfun "}}}
 fun! riv#init() "{{{

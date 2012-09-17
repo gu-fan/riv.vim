@@ -16,12 +16,13 @@ fun! s:repl_file_link(line) "{{{
     " [[/xxx/a.rst]]  => `/xxx/a.rst  <DOC_ROOT/xxx/a.rst>`_    ?
     
     let line = a:line
-
+    
+    " we will get the idx and find the pattern from origin line.
     let o_line = line
-    let file = matchstr(o_line, g:_riv_p.link_file)
     let pre_idx = 0           " for the inline markup column check
     let idx = matchend(o_line, g:_riv_p.link_file)
-    while !empty(file)
+    while idx != -1
+        let file = matchstr(o_line, g:_riv_p.link_file)
         let obj =riv#ptn#get_inline_markup_obj(o_line, idx+1, pre_idx)
         " it's not in a inline markup
         if empty(obj)
@@ -87,7 +88,7 @@ fun! s:get_rst_file(file) "{{{
     return matchstr(a:file, '.*\ze\.rst$')
 endfun "}}}
 fun! s:escape_file_ptn(file) "{{{
-    return   '\%(^\|\s\)\zs' . a:file . '\ze\%(\s\|$\)'
+    return  '\v%(^|\s|[''"([{<,;!?])\zs\[\[' . a:file . '\]\]\ze%($|\s|[''")\]}>:.,;!?])'
 endfun "}}}
 fun! s:escape(txt) "{{{
     return escape(a:txt, '~.*\[]^$')

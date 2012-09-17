@@ -115,6 +115,9 @@ fun! riv#link#open() "{{{
             call cursor(sr,sc)
             normal! zvz.
             return 1
+        else
+            call riv#warning(g:_riv_e.REF_NOT_FOUND)
+            return 101
         endif
     elseif !empty(mo.groups[2])
         " check if it's embbed link
@@ -125,6 +128,9 @@ fun! riv#link#open() "{{{
                 call setpos("'`",getpos('.'))
                 call cursor(sr,sc)
                 normal! zvz.
+            else
+                call riv#warning(g:_riv_e.REF_NOT_FOUND)
+                return 102
             endif
         else
             sil! exe "!".g:riv_web_browser." ". escape(em,'#%')." &"
@@ -245,7 +251,7 @@ fun! riv#link#hi_hover() "{{{
                     if !empty(obj.groups[5]) 
                         let file = riv#link#path(obj.str)
                     else
-                        let file = obj.str
+                        let file = expand(obj.str)
                     endif
                     " if link invalid
                     if ( riv#path#is_directory(file) && !isdirectory(file) ) 
