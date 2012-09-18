@@ -221,10 +221,10 @@ fun! riv#test#repl_link() "{{{
                 \'[/home/index] ' ,
                 \]
     let g:_riv_debug=1
-    let g:riv_file_link_style = 1
+    " let g:riv_file_link_style = 1
     call riv#init()
     call s:test_func(func, arg_list)
-    let g:riv_file_link_style = 2
+    " let g:riv_file_link_style = 2
     call riv#init()
     call s:test_func(func, arg_list)
 endfun "}}}
@@ -290,10 +290,10 @@ fun! riv#test#link_expand() "{{{
                 \ "[aaaa.py]", "[/efe/aaaa.py]", "aaaa/aaa/aa.rst",
                 \ "/aaaa/aaa/aa.rst", "~/aaaa/aaa/aa.rst", "../aaaa/aaa/aa.rst",
                 \]
-    let g:riv_file_link_style = 1
+    " let g:riv_file_link_style = 1
     call riv#init()
     call s:test_func(func, arg_list)
-    let g:riv_file_link_style = 2
+    " let g:riv_file_link_style = 2
     call riv#init()
     call s:test_func(func, arg_list)
 endfun "}}}

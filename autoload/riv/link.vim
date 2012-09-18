@@ -117,7 +117,7 @@ fun! riv#link#open() "{{{
             return 1
         else
             call riv#warning(g:_riv_e.REF_NOT_FOUND)
-            return 101
+            return -1
         endif
     elseif !empty(mo.groups[2])
         " check if it's embbed link
@@ -130,7 +130,7 @@ fun! riv#link#open() "{{{
                 normal! zvz.
             else
                 call riv#warning(g:_riv_e.REF_NOT_FOUND)
-                return 102
+                return -2
             endif
         else
             sil! exe "!".g:riv_web_browser." ". escape(em,'#%')." &"
@@ -210,7 +210,7 @@ fun! riv#link#path(str) "{{{
 
     if riv#path#is_directory(file) && t == 'doc'
         let file = file . 'index.rst'
-    elseif fnamemodify(file, ':e') == '' && t == 'doc'
+    elseif fnamemodify(file, ':e') =~ '^$\|^rst$' && t == 'doc'
         let file = file . '.rst'
     endif
     

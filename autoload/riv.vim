@@ -117,6 +117,7 @@ let s:default.options = {
     \'rst2s5_args'        : "",
     \'rst2latex_args'     : "",
     \'section_levels'     : '=-~"''`',
+    \'html_code_hl_style' : 'default',
     \'fuzzy_help'         : 0,
     \'auto_format_table'  : 1,
     \'fold_info_pos'      : 'right',

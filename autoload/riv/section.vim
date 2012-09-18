@@ -8,6 +8,7 @@
 let s:cpo_save = &cpo
 set cpo-=C
 
+" {{{1 Create/Modify Title
 fun! s:is_title(str) "{{{
     return a:str =~ '\S' && a:str !~ g:_riv_p.section
 endfun "}}}
@@ -23,7 +24,7 @@ fun! s:is_section(row) "{{{
     " return [total_rows, row_index], row index start from 1.
     " if it's not , return [0,0]
     "
-    " The section should have :
+    " The section heading should have :
     "   a blank line
     "   a optional sect-line, 
     "   a title line
@@ -141,8 +142,8 @@ fun! riv#section#title(level,...) "{{{
         let title = input("Input the title of level ".a:level)
         if title == '' | return | endif
     else
-        " prevent del the whole section.
-        exe row 'foldopen'
+        " prevent del the whole folded section.
+        sil! exe row 'foldopen!'
 
         let [rows,idx] = s:is_section(row)
         if rows == 0    " not in a section title. use it as title.
@@ -170,6 +171,7 @@ fun! riv#section#title(level,...) "{{{
     " So no need to move anymore.
 endfun "}}}
 
+" {{{1 Create Content table
 fun! s:trim(str) "{{{
     return matchstr(a:str,'^\s*\zs.*\ze\s*$')
 endfun "}}}
@@ -240,6 +242,7 @@ fun! riv#section#content() "{{{
     call riv#fold#init()
 
 endfun "}}}
+"}}}
 
 let &cpo = s:cpo_save
 unlet s:cpo_save

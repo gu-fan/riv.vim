@@ -1,10 +1,12 @@
-Intro
-=====
-
 :Author: Rykka G.F
-:Update: 2012-09-17
+:Update: 2012-09-19
 :Version: 0.71 
 :Github: https://github.com/Rykka/riv.vim
+
+.. contents::
+
+Intro
+=====
 
 **Riv** is a vim plugin for reading, writing and managing reStructuredText_ 
 (a simple and powerful plain text markup).
@@ -16,8 +18,6 @@ With it, you can::
     Read documents clearer.
     Write documents neater.
     Manage documents easier.
-
-.. contents::
 
 Features
 --------
@@ -56,13 +56,13 @@ Features
              
              And it's similar with Emacs's Org-Mode_ style.
 
-Get Start
----------
+Getting Started
+---------------
 
-* Install: see `Install`_
-* Start: see `QuickStart With Riv`_  
+* Installation: see `Install`_
+* Quick Start: see `QuickStart With Riv`_  
   or use ``:RivQuickStart`` in vim.
-* Instucion: see `Instruction`_ 
+* Instucion: see `Instructions`_ 
 * Snapshots: `On Screen`_
 * Also Issues_ and Todo_.
 
@@ -74,7 +74,7 @@ On Screen
 
 Install
 -------
-* Using Vundle_  (Recommend)
+* Using Vundle_  (Recommended)
 
   Add this line to your vimrc::
  
@@ -82,8 +82,8 @@ Install
 
 .. _Vundle: https://www.github.com/gmarik/vundle
 
-* Using downloaded file. 
-  Just extract to your ``.vim`` folder .
+* Using downloaded zip/tar.gz file. 
+  Just extract it to your ``.vim`` folder .
 
 :NOTE: Make sure your ``.vim`` folder in option ``runtimepath`` 
        is before the ``$VIMRUNTIME``. 
@@ -94,18 +94,17 @@ Install
 
 * Related tools: 
 
-  + docutils_ for converting to other format.
-  + pygments_ for syntax highlighting in other format.
-  + Sphinx_ for the Sphinx users.
-  + vim: Syntastic_  for syntax checking of rst files.
-    (it require python docutils_ package )
+  + python: docutils_ , required for converting to other format.
+  + python: pygments_ for syntax highlighting in other format.
+  + python: Sphinx_ for Sphinx users.
+  + vim: Syntastic_  for syntax checking. docutils_ required.
 
     But if you are using Sphinx_'s tools set, you'd better not using it.
     Cause it could not recongize the sphinx's markups.
 
 Issues
 ------
-* Currently it's a developing version. 
+* It's a developing version. 
 
   So things may change quickly.Keep up-to-date.
 
@@ -139,35 +138,45 @@ Things todo in this version.
   :Sections_: DONE 2012-09-17 A shortcut to create a document tree.
   :Sections_: DONE 2012-09-17 Add g:riv_content_format
   :Publish_: DONE 2012-09-13 remove ``g:riv_file_link_convert`` 
-  :Publish_: support sphinx make and browse
-  :Publish_: different style.css
-  :Publish_: section folding .js for html 
+  :Publish_: DONE 2012-09-18 different style.css for syntax highlighting in html
+  :Publish_: DONE 2012-09-19 Fix link repl errors while converting to html.
   :Links_: DONE 2012-09-17 Add g:riv_create_link_pos
 
 Next 
 ~~~~~
 
+* 0.72 
+  - a google group for discussing
+  - refactoring codes.
+  - document
+  - screencast and screenshot
+
 See riv_todo_ ( doc/riv_todo.rst )
 
 
+Q & A
+-----
+
+TODO
+
 ----
 
-Instruction
-===========
+Instructions
+============
 
-* Get start
+* Getting started
 
-  + To get a quick go through of Riv features , see `QuickIntro For Riv`_ 
+  + To get a quick overview of Riv features , see `QuickIntro For Riv`_ 
     ( doc/riv_quickintro.rst )
   + For a quick start, see `QuickStart With Riv`_  
     ( doc/riv_quickstart.rst )
 
     Or use ``:RivQuickStart`` in vim.
   + For writing and reading documents, 
-    See detail instruction in `reStructuredText`_ 
-  + For managing documents, See detail instruction in `Riv`_
+    See detailed instructions in `reStructuredText`_ 
+  + For managing documents, See detailed instructions in `Riv`_
 
-* The mappings
+* Mappings
 
   The mappings and commands are described in each section.
 
@@ -183,7 +192,7 @@ Instruction
 
   + ``g:riv_buf_leader`` : leader map for reStructuredText buffers.
   + ``g:riv_buf_ins_leader`` : leader map for reStructuredText buffers's insert mode.
-  + To remap one mapping, use the ``map`` commands ::
+  + To remap a single mapping, use ``map`` in your vimrc::
         
         map <C-E>wi    :RivIndex<CR> 
 
@@ -192,14 +201,12 @@ Instruction
 reStructuredText
 ----------------
 
-Following features are for all ``*.rst`` documents 
-with standard reStructuredText syntax.
+The following features apply for all ``*.rst`` documents 
+having standard reStructuredText syntax.
 
 :NOTE: Make sure your .vim folder in option ``runtimepath`` 
-       is before the $VIMRUNTIME. 
-
-       Otherwise the syntax/indent files for rst file will using the vim built-in one.
-
+       is before the $VIMRUNTIME, otherwise the syntax/indent files
+       for rst files will use vim's built-in one.
 
 :NOTE: Make sure ``filetype plugin indent on`` and ``syntax on`` is in your vimrc
 
@@ -1063,21 +1070,25 @@ Publish
 ~~~~~~~
 
 Some command wrapper to convert rst files to html/xml/latex/odt/... 
-(require python docutils_  package )
+(docutils_  required)
 
 * Actions:
 
-  + ``:Riv2HtmlFile``  ``<C-E>2hf``
-    convert to html file.
+  + Convert to Html
+
+    - ``:Riv2HtmlIndex``  ``<C-E>wi``
+      browse the html index page.
+    - ``:Riv2HtmlFile``  ``<C-E>2hf``
+      convert to html file.
   
-  + ``:Riv2HtmlAndBrowse``  ``<C-E>2hh``
-    convert to html file and browse. 
-    default is 'firefox'
+    - ``:Riv2HtmlAndBrowse``  ``<C-E>2hh``
+      convert to html file and browse. 
+      default is 'firefox'
   
-    the browser is set by ``g:riv_web_browser``, default is ``firefox``
+      the browser is set by ``g:riv_web_browser``, default is ``firefox``
   
-  + ``:Riv2HtmlProject`` ``<C-E>2hp`` converting whole project into html.
-    And will ask you to copy all the file with extension in ``g:riv_file_link_ext`` 
+    - ``:Riv2HtmlProject`` ``<C-E>2hp`` converting whole project into html.
+      And will ask you to copy all the file with extension in ``g:riv_file_link_ext`` 
   
   + ``:Riv2Odt`` ``<C-E>2oo`` convert to odt file and browse by ft browser
   
@@ -1089,6 +1100,20 @@ Some command wrapper to convert rst files to html/xml/latex/odt/...
   + ``:Riv2Latex`` ``<C-E>2ll`` convert to latex file and edit in vim
   
 * Options:
+
+  + If you have installed Pygments_ , code will be highlighted
+    in html as the syntax highlight stylesheet have been embedded
+    in it.
+
+    You can change the stylesheet with ``g:riv_html_code_hl_style``
+
+    - When set to 'default', 'emacs', or 'friendly'
+      it will use pygments_'s relevant built-in style.
+    - You can also use your own stylesheet.
+      The full path should be provided.
+    - default is 'default'
+    
+    - Syntax highlight for other formatting are not supported yet.
 
   + For the files that are in a project. 
     The path of converted files by default is under ``build_path`` of your project directory. 
@@ -1122,7 +1147,7 @@ Some command wrapper to convert rst files to html/xml/latex/odt/...
 
        And make sure it's in your ``$PATH``
 
-       Otherwise errors may occour.
+       Otherwise errors may occour as py3 version uses 'bytes'.
 
 
 Riv 
@@ -1216,7 +1241,7 @@ the rst documents.
 
       words like ``:doc:`xxx.rst``` ``:doc:`xxx.py``` ``:doc:`xxx.cpp``` will be detected as file link.
 
-      words like ``:doc:`xxx/``` will be considered as directory , 
+      NOTE: words like ``:doc:`xxx/``` are illegal in sphinx, You should use ``:doc:`xxx/index```  , 
       and link to ``xxx/index.rst``
 
       words like ``:doc:`/xxxx/xxx.rst```

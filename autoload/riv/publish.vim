@@ -1,92 +1,13 @@
 "=============================================
 "    Name: publish.vim
 "    File: publish.vim
-" Summary: publish to html/pdf.
-"  Author: Rykka G.Forest
-"  Update: 2012-07-07
+" Summary: publish to html/pdf...
+"  Author: Rykka G.F
+"  Update: 2012-09-17
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
-fun! s:repl_file_link(line) "{{{
-    " File              Title   Path
-    " [[index]]       => `index <index.html>`_
-    " [[index.rst]]   => `index <index.html>`_
-    " [[index.vim]]   => `index.vim <index.vim>`_
-    " [[index/]]      => `index/ <index/index.rst>`_
-    " [[/xxx/a.rst]]  => `/xxx/a.rst  <DOC_ROOT/xxx/a.rst>`_    ?
-    
-    let line = a:line
-    
-    " we will get the idx and find the pattern from origin line.
-    let o_line = line
-    let pre_idx = 0           " for the inline markup column check
-    let idx = matchend(o_line, g:_riv_p.link_file)
-    while idx != -1
-        let file = matchstr(o_line, g:_riv_p.link_file)
-        let obj =riv#ptn#get_inline_markup_obj(o_line, idx+1, pre_idx)
-        " it's not in a inline markup
-        if empty(obj)
-            " substitute process
-            let file = matchstr(file, '^\[\[\zs.*\ze\]\]$')
-            let file = s:escape(file)
-            if !riv#path#is_relative(file) && file !~ '^/'
-                let title = file
-                let path = file
-            elseif riv#path#is_directory(file)
-                let title = file
-                if file =~ '^/'
-                    let title = riv#path#rel_to_root(title) . file[1:]
-                endif
-                let path = title . 'index.html'
-            else
-                let f = s:get_rst_file(file)
-                if !empty(f)
-                    let title = f
-                    if file =~ '^/'
-                        let title = riv#path#rel_to_root(title) . file[1:]
-                    endif
-                    let path = title.'.html'
-                elseif fnamemodify(file, ':e') == ''
-                    let title = file
-                    if file =~ '^/'
-                        let title = riv#path#rel_to_root(title) . file[1:]
-                    endif
-                    let path = title.'.html'
-                else
-                    let title = file
-                    if file =~ '^/'
-                        let title = riv#path#rel_to_root(title) . file[1:]
-                    endif
-                    let path = file
-                endif
-            endif
 
-            let line = substitute(line, s:escape_file_ptn(file), 
-                            \s:gen_embed_link(title, path), 'g')
-        endif
-
-        " prepare next match
-        let file = matchstr(o_line, g:_riv_p.link_file,idx)
-        let pre_idx = idx
-        let idx = matchend(o_line, g:_riv_p.link_file,idx)
-    endwhile
-    return line
-endfun "}}}
-
-let s:tempfile = tempname()
-let s:tempdir = riv#path#directory(fnamemodify(s:tempfile,':h'))
-fun! s:create_tmp(file) "{{{
-    update
-    let s:repl_file_idt = -1
-    let s:repl_file_doctest = 0
-    let lines = map(readfile(a:file),'s:repl_file_link(v:val)')
-    call writefile(lines, s:tempfile)       " not all system can pipe
-    return s:tempfile
-endfun "}}}
-
-fun! s:get_rst_file(file) "{{{
-    return matchstr(a:file, '.*\ze\.rst$')
-endfun "}}}
 fun! s:escape_file_ptn(file) "{{{
     return  '\v%(^|\s|[''"([{<,;!?])\zs\[\[' . a:file . '\]\]\ze%($|\s|[''")\]}>:.,;!?])'
 endfun "}}}
@@ -101,52 +22,112 @@ fun! s:gen_embed_link(title, path) "{{{
     endif
 endfun "}}}
 
-fun! s:rst_args(ft) "{{{
-    return exists("g:riv_rst2".a:ft."_args") ? !empty(g:riv_rst2{a:ft}_args)
-                \ ? g:riv_rst2{a:ft}_args : '' : ''
-endfun "}}}
-fun! s:auto_mkdir(path) "{{{
-    if !isdirectory(fnamemodify(a:path,':h')) 
-        call mkdir(fnamemodify(a:path,':h'),'p')
-    endif
-endfun "}}}
+fun! riv#publish#path(str) "{{{
+    " return the html path converted from string.
+    " [[xxx]] => _build/xxx.html
+    " [[xxx.vim]] => _build/xxx.vim
+    " [[xxx/]] => _build/xxx/index.html
+    " [[/xxx]]  => _build/DOC_ROOT/xxx.html
+    " [[/xxx/]]  => _build/DOC_ROOT/xxx/index.html
+    " [[~/xxx]] => ~/xxx
 
-fun! riv#publish#copy2proj(file,html_path) abort "{{{
-    let out_path = a:html_path . riv#path#rel_to_root(expand(a:file))
-    call s:auto_mkdir(out_path)
-    call s:sys( 'cp -f '. a:file. ' '.  fnamemodify(out_path, ':h'))
-endfun "}}}
-fun! riv#publish#proj2(ft) abort "{{{
-    let ft_path = riv#path#build_ft(a:ft)
-    let root = riv#path#root()
-    let files = filter(split(glob(root.'**/*.rst')), 'v:val !~ ''_build''')
-    echohl Function
-    echon 'Convert: '
-    for file in files
-        call riv#publish#2(a:ft,file, ft_path, 0)
-        echon '>'
-    endfor
-    let copy_ext = '{'.join(g:_riv_t.file_ext_lst,',').'}'
-    if a:ft == "html" 
-        \ && input("Copy all file of extension: ".copy_ext."\n(Y/n):")!~?'n'
-        let files = filter(split(glob(root.'**/*'.copy_ext)), 'v:val !~ ''_build''')
-        for file in files
-            call riv#publish#copy2proj(file, ft_path)
-            echon '>'
-        endfor
-    endif
-    echon ' Done.'
-    echohl Normal
-endfun "}}}
+    let f = matchstr(a:str, '^\[\[\zs.*\ze\]\]$')
+    " absolute path are files. no html link
+    let t = f =~ '^([~]|[a-zA-Z]:)' ? 'file' : 'doc'
 
-" ['s5', 'latex', 'odt', 'xml' , 'pseudoxml', 'html' ]
-fun! riv#publish#file2(ft, browse) "{{{
-    let file = expand('%:p')
-    if riv#path#is_rel_to_root(file)
-        call riv#publish#2(a:ft , file, riv#path#build_ft(a:ft), a:browse)
+    if riv#path#is_relative(f)
+        let file = f
     else
-        call s:single2(a:ft, file, a:browse)
+        " if it have '/' at start. 
+        " it is the doc root for sphinx and moinmoin 
+        if f =~ '^/'
+            let file = riv#path#build_ft('html') . f[1:]
+        else
+            let file = expand(f)
+            return file
+        endif
     endif
+    if riv#path#is_directory(file) && t == 'doc'
+        let file = file . 'index.html'
+    elseif fnamemodify(file, ':e') == '' && t == 'doc'
+        let file = file . '.html'
+    elseif fnamemodify(file, ':e') == 'rst' && t == 'doc'
+        let file = fnamemodify(file, ':r') . '.html'
+    endif
+    
+    return file
+endfun "}}}
+
+fun! s:repl_file_link(line) "{{{
+    " File              Title   Path
+    " [[index]]       => `index <index.html>`_
+    " [[index.rst]]   => `index <index.html>`_
+    " [[index.vim]]   => `index.vim <index.vim>`_
+    " [[index/]]      => `index/ <index/index.rst>`_
+    " [[/xxx/a.rst]]  => `/xxx/a.rst  <DOC_ROOT/xxx/a.rst>`_    ?
+    
+    let line = a:line
+    
+    " we will get the idx and find the pattern from origin line.
+    let o_line = line
+    let pre_idx = 0           " for the inline markup column check
+    let idx = matchend(o_line, g:_riv_p.link_file)
+    let str = matchstr(o_line, g:_riv_p.link_file)
+    while idx != -1
+        let obj = riv#ptn#get_inline_markup_obj(o_line, idx+1, pre_idx)
+        " it's not in a inline markup
+        if empty(obj)
+            " substitute process
+            let title = s:escape(matchstr(str, '^\[\[\zs.*\ze\]\]$'))
+            let path = riv#publish#path(str)
+            let line = substitute(line, s:escape_file_ptn(title), 
+                            \s:gen_embed_link(title, path), 'g')
+        endif
+        let idx = matchend(o_line, g:_riv_p.link_file,idx)
+        let str = matchstr(o_line, g:_riv_p.link_file,idx)
+        let pre_idx = idx
+    endwhile
+    return line
+endfun "}}}
+
+let s:tempfile = tempname()
+let s:tempdir = riv#path#directory(fnamemodify(s:tempfile,':h'))
+fun! s:create_tmp(file) "{{{
+    update
+    let lines = map(readfile(a:file),'s:repl_file_link(v:val)')
+    call writefile(lines, s:tempfile)       " not all OS can pipe
+    return s:tempfile
+endfun "}}}
+
+let s:css_default = g:_riv_c.riv_path.'html/default.css'
+let s:css_emacs = g:_riv_c.riv_path.'html/emacs.css'
+let s:css_friendly = g:_riv_c.riv_path.'html/friendly.css'
+let s:css_html = g:_riv_c.riv_path.'html/html4css1.css'
+
+fun! s:convert(ft, input, output, ...) "{{{
+    " try 2 first , for py3 version should decode to 'bytes'.
+    let exe = 'rst2'.a:ft.'2.py'
+    if !executable(exe)
+        let exe = 'rst2'.a:ft.'.py'
+        if !executable(exe)
+            call riv#error('Could not find '.exe)
+            return -1
+        endif
+    endif
+    let args = a:0 ? a:1 : ''
+    let style = ''
+    if a:ft == 'html' 
+        if g:riv_html_code_hl_style == 'default'
+            let style = ' --stylesheet='.s:css_html.','.s:css_default
+        elseif g:riv_html_code_hl_style == 'emacs'
+            let style = ' --stylesheet='.s:css_html.','.s:css_emacs
+        elseif g:riv_html_code_hl_style == 'friendly'
+            let style = ' --stylesheet='.s:css_html.','.s:css_friendly
+        elseif filereadable(g:riv_html_code_hl_style)
+            let style = ' --stylesheet='.g:riv_html_code_hl_style
+        endif
+    endif
+    call s:sys( exe." ". style . args .' '. shellescape(a:input) . " > " . shellescape(a:output) )
 endfun "}}}
 fun! s:single2(ft, file, browse) "{{{
     " A file that is not in a project
@@ -173,6 +154,19 @@ fun! s:single2(ft, file, browse) "{{{
         endif
     endif
 endfun "}}}
+" ['s5', 'latex', 'odt', 'xml' , 'pseudoxml', 'html' ]
+fun! riv#publish#file2(ft, browse) "{{{
+    let file = expand('%:p')
+    echohl Function
+    echo "Convert:"
+    echohl Normal
+    echon file
+    if riv#path#is_rel_to_root(file)
+        call riv#publish#2(a:ft , file, riv#path#build_ft(a:ft), a:browse)
+    else
+        call s:single2(a:ft, file, a:browse)
+    endif
+endfun "}}}
 fun! riv#publish#2(ft, file, path, browse) "{{{
     let file = expand(a:file)
     let out_path = a:path . riv#path#rel_to_root(file)
@@ -193,19 +187,6 @@ fun! riv#publish#2(ft, file, path, browse) "{{{
         endif
     endif
 endfun "}}}
-fun! s:convert(ft, input, output, ...) "{{{
-    " try 2 first , for py3 version should decode to 'bytes'.
-    let exe = 'rst2'.a:ft.'2.py'
-    if !executable(exe)
-        let exe = 'rst2'.a:ft.'.py'
-        if !executable(exe)
-            call riv#error('Could not find '.exe)
-            return -1
-        endif
-    endif
-    let args = a:0 ? a:1 : ''
-    call s:sys( exe." ". args .' '. shellescape(a:input) . " > " . shellescape(a:output) )
-endfun "}}}
 
 fun! riv#publish#browse() "{{{
     let path = riv#path#build_ft('html') .  'index.html'
@@ -213,6 +194,43 @@ fun! riv#publish#browse() "{{{
 endfun "}}}
 fun! riv#publish#open_path() "{{{
     exe 'sp ' riv#path#build_path()
+endfun "}}}
+
+fun! riv#publish#copy2proj(file,html_path) abort "{{{
+    let out_path = a:html_path . riv#path#rel_to_root(expand(a:file))
+    call s:auto_mkdir(out_path)
+    call s:sys( 'cp -f '. a:file. ' '.  fnamemodify(out_path, ':h'))
+endfun "}}}
+fun! riv#publish#proj2(ft) abort "{{{
+    let ft_path = riv#path#build_ft(a:ft)
+    let root = riv#path#root()
+    let files = filter(split(glob(root.'**/*.rst'),'\n'), 'v:val !~ ''_build''')
+    for i in range(len(files))
+        call riv#publish#2(a:ft,files[i], ft_path, 0)
+        redraw
+        echohl Function
+        echo i.'/'.len(files) 
+        echohl Normal
+        echon files[i]
+    endfor
+    let copy_ext = '{'.join(g:_riv_t.file_ext_lst,',').'}'
+    if a:ft == "html" 
+        \ && input("Copy all file of extension: ".copy_ext."\n(Y/n):")!~?'n'
+        let files = filter(split(glob(root.'**/*'.copy_ext)), 'v:val !~ ''_build''')
+        for file in files
+            call riv#publish#copy2proj(file, ft_path)
+        endfor
+    endif
+endfun "}}}
+
+fun! s:rst_args(ft) "{{{
+    return exists("g:riv_rst2".a:ft."_args") ? !empty(g:riv_rst2{a:ft}_args)
+                \ ? g:riv_rst2{a:ft}_args : '' : ''
+endfun "}}}
+fun! s:auto_mkdir(path) "{{{
+    if !isdirectory(fnamemodify(a:path,':h')) 
+        call mkdir(fnamemodify(a:path,':h'),'p')
+    endif
 endfun "}}}
 
 fun! s:sys(arg) abort "{{{

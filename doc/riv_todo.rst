@@ -1,9 +1,7 @@
-Riv TODOs
-============
+Riv TODO
+==========
 
-Things TODOs in the future. 
-
-Any suggestion and advice is welcome.
+Things TODO or NOT in the future 
 
 TODOS
 -----
@@ -55,8 +53,6 @@ TODOS
       f. the shiftwidth and shift length
       g. should the indent use the list's shift setting?
 
-
-
    C. DONE 2012-07-05 When we add parent list , check if there is a prev parent level and item.
 
 6. Todos
@@ -82,7 +78,7 @@ TODOS
 9. Indent 
 
    + DONE 2012-07-08 Indent:  <Tab> to indent. improved <BS> indent
-   + TODO Indent:  The content space for field list should align with prev field list.
+   + DONE 2012-08-18 Indent:  The content space for field list should align with prev field list.
    + DONE 2012-07-08 Indent:  A command to format the indent of lists.
      Use '>' '<' to indent list lvel, use '=' to format number only
 
@@ -100,12 +96,13 @@ TODOS
 
     + File:    A template or snippet or shortcut for adding ``./`` and ``../`` 
       and files.  Maybe a sphinx doc ref as well.
-    + A file tag jump like ``:xxx:`xxxx``` for sphinx docs
-    + A file tag jump like ``[[xxx]]`` like moinmoin and most other wikis.
-    + for bare style, a method/syntax to escape file that not convert to links
-    + an option for not converting links
+    + [X] 2012-09-17 A file tag jump like ``:xxx:`xxxx``` for sphinx docs
+    + [X] 2012-09-17 A file tag jump like ``[[xxx]]`` like moinmoin and most other wikis.
+    + [X] 2012-09-18 for bare style, a method/syntax to escape file that not convert to links
     + hack the docutils parser with local file link.
-
+    + add ``:download:`` 
+    + update the sphinx link rule.
+    + sphinx link support embedded style.
 
     THOUGHT::
 
@@ -125,6 +122,7 @@ TODOS
     + the temp path should be validated.
     + javascript for HTML with folding sections.
     + templating? jinja?
+    + support sphinx make and browse
 
 14. Helpers
 
