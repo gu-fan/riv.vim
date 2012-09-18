@@ -142,7 +142,7 @@ fun! riv#section#title(level,...) "{{{
         let title = input("Input the title of level ".a:level)
         if title == '' | return | endif
     else
-        " prevent del the whole folded section.
+        " prevent del the whole section.
         sil! exe row 'foldopen!'
 
         let [rows,idx] = s:is_section(row)
