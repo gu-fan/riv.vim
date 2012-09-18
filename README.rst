@@ -56,10 +56,10 @@ Features
              
              And it's similar with Emacs's Org-Mode_ style.
 
-Get Start
----------
+Getting Started
+---------------
 
-* Install: see `Install`_
+* Installation: see `Install`_
 * Start: see `QuickStart With Riv`_  
   or use ``:RivQuickStart`` in vim.
 * Instucion: see `Instruction`_ 
@@ -74,7 +74,7 @@ On Screen
 
 Install
 -------
-* Using Vundle_  (Recommend)
+* Using Vundle_  (Recommended)
 
   Add this line to your vimrc::
  
@@ -82,7 +82,7 @@ Install
 
 .. _Vundle: https://www.github.com/gmarik/vundle
 
-* Using downloaded file. 
+* Directly downloading the file. 
   Just extract to your ``.vim`` folder .
 
 :NOTE: Make sure your ``.vim`` folder in option ``runtimepath`` 
@@ -97,8 +97,7 @@ Install
   + docutils_ for converting to other format.
   + pygments_ for syntax highlighting in other format.
   + Sphinx_ for the Sphinx users.
-  + vim: Syntastic_  for syntax checking of rst files.
-    (it require python docutils_ package )
+  + Syntastic_ (vim plugin) for syntax checking of rst files (requires python's docutils_ package).
 
     But if you are using Sphinx_'s tools set, you'd better not using it.
     Cause it could not recongize the sphinx's markups.
@@ -152,22 +151,22 @@ See riv_todo_ ( doc/riv_todo.rst )
 
 ----
 
-Instruction
-===========
+Instructions
+============
 
-* Get start
+* Getting started
 
-  + To get a quick go through of Riv features , see `QuickIntro For Riv`_ 
+  + To get a quick overview of Riv features , see `QuickIntro For Riv`_ 
     ( doc/riv_quickintro.rst )
   + For a quick start, see `QuickStart With Riv`_  
     ( doc/riv_quickstart.rst )
 
     Or use ``:RivQuickStart`` in vim.
   + For writing and reading documents, 
-    See detail instruction in `reStructuredText`_ 
-  + For managing documents, See detail instruction in `Riv`_
+    see detailed instructions in `reStructuredText`_ 
+  + For managing documents, see detailed instructions in `Riv`_
 
-* The mappings
+* Mappings
 
   The mappings and commands are described in each section.
 
@@ -183,7 +182,7 @@ Instruction
 
   + ``g:riv_buf_leader`` : leader map for reStructuredText buffers.
   + ``g:riv_buf_ins_leader`` : leader map for reStructuredText buffers's insert mode.
-  + To remap one mapping, use the ``map`` commands ::
+  + To remap a mapping, use ``map`` ::
         
         map <C-E>wi    :RivIndex<CR> 
 
@@ -192,13 +191,12 @@ Instruction
 reStructuredText
 ----------------
 
-Following features are for all ``*.rst`` documents 
-with standard reStructuredText syntax.
+The following features apply for all ``*.rst`` documents 
+having standard reStructuredText syntax.
 
 :NOTE: Make sure your .vim folder in option ``runtimepath`` 
-       is before the $VIMRUNTIME. 
-
-       Otherwise the syntax/indent files for rst file will using the vim built-in one.
+       is before the $VIMRUNTIME, otherwise the syntax/indent files
+       for rst files will use vim's built-in one.
 
 
 :NOTE: Make sure ``filetype plugin indent on`` and ``syntax on`` is in your vimrc
