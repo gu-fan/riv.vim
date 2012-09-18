@@ -2,6 +2,7 @@
 :Update: 2012-09-19
 :Version: 0.71 
 :Github: https://github.com/Rykka/riv.vim
+:Google Group: https://groups.google.com/forum/#!forum/vim_riv
 
 .. contents::
 
@@ -62,7 +63,7 @@ Getting Started
 * Installation: see `Install`_
 * Quick Start: see `QuickStart With Riv`_  
   or use ``:RivQuickStart`` in vim.
-* Instucion: see `Instructions`_ 
+* Instruction: see `Instructions`_ 
 * Snapshots: `On Screen`_
 * Also Issues_ and Todo_.
 
@@ -141,12 +142,12 @@ Things todo in this version.
   :Publish_: DONE 2012-09-18 different style.css for syntax highlighting in html
   :Publish_: DONE 2012-09-19 Fix link repl errors while converting to html.
   :Links_: DONE 2012-09-17 Add g:riv_create_link_pos
+  :Miscs_: DONE 2012-09-19 A google group
 
 Next 
 ~~~~~
 
 * 0.72 
-  - a google group for discussing
   - refactoring codes.
   - document
   - screencast and screenshot
@@ -915,7 +916,7 @@ And it's highlighted with `Cursor Highlighting`_.
     ``g:riv_create_link_pos`` can be set to ``'.'``
     to make it put below current line.
 
-    default is ``'$'``
+    default is ``'$'``, means at the file end.
 
   + ``:RivCreateFoot`` ``<C-E>if``
     create a auto numbered footnote. 
