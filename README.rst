@@ -340,9 +340,12 @@ syntax highlighting is on ::
       # github does not support syntax highlighting rendering for rst file yet.
       x = [0 for i in range(100)]
 
+The ``highlights`` directives in Sphinx_ could also be used.
+
 * Use ``g:riv_highlight_code`` to set which languages to be highlighted.
 
   default is ``lua,python,cpp,javascript,vim,sh``
+
 
 :NOTE: To enable syntax highlighting in converted file, 
        python pygments_  package must installed for ``docutils`` 

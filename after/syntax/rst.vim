@@ -1,9 +1,9 @@
 "=============================================
 "    Name: rst.vim
 "    File: after/syntax/rst.vim
-"  Author: Rykka G.Forest
+"  Author: Rykka G.F
 " Summary: syntax file with options.
-"  Update: 2012-06-12
+"  Update: 2012-09-19
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
