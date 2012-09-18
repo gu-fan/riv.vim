@@ -2,8 +2,8 @@
 "    Name: test.vim
 "    File: test.vim
 " Summary: test 
-"  Author: Rykka G.Forest
-"  Update: 2012-07-07
+"  Author: Rykka G.F
+"  Update: 2012-09-19
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -198,8 +198,8 @@ fun! riv#test#reload() "{{{
     echo "Riv Reloaded."
 endfun "}}}
 fun! riv#test#show_obj() "{{{
-    echo b:fdl_list[line('.')]
-    if exists("b:riv_obj")
+    echo b:riv_flist[line('.')]
+    if exists("b:riv_obj"g
         echo b:riv_obj[line('.')]
     endif
 endfun "}}}

@@ -2,8 +2,8 @@
 "    Name: riv.vim
 "    File: riv.vim
 " Summary: Riv autoload main
-"  Author: Rykka G.Forest
-"  Update: 2012-09-17
+"  Author: Rykka G.F
+"  Update: 2012-09-19
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -75,10 +75,10 @@ fun! riv#load_menu(menu_list) "{{{
 endfun "}}}
 fun! riv#show_menu() "{{{
     if expand('%:e') != 'rst'
-        menu disable Riv.*
-        menu enable Riv.Index
+        sil! menu disable Riv.*
+        sil! menu enable Riv.Index
     else
-        menu enable Riv.*
+        sil! menu enable Riv.*
     endif
 endfun "}}}
 "}}}

@@ -37,7 +37,7 @@ fun! s:parse_from_start() "{{{
                 \ 'list_root':b:riv_state.list_root,
                 \ 'None': b:riv_state.None }
     " 3%
-    let b:fdl_list = map(range(len+1),'0')
+    let b:riv_flist = map(range(len+1),'0')
     let b:lines= ['']+getline(1,line('$'))+['']     " [-1] and [0] are blank
     " 75%
     for i in range(len+1)
@@ -94,7 +94,7 @@ fun! s:add_change_range(change_list) "{{{
 endfun "}}}
 fun! s:add_in_len(bgn,len) "{{{
     call s:add_d_len(b:riv_obj, a:bgn, a:len)
-    call s:add_l_len(b:fdl_list, a:bgn, a:len)
+    call s:add_l_len(b:riv_flist, a:bgn, a:len)
 endfun "}}}
 fun! s:add_d_len(dict, bgn, len) "{{{
     let changed = {}
@@ -307,9 +307,9 @@ fun! s:set_fdl_list() "{{{
         elseif g:riv_fold_blank==0 && b:lines[end] =~ '^\s*$'
             let end = prevnonblank(end) + 1
         endif
-        let  b:fdl_list[bgn : bgn] = map(b:fdl_list[bgn : bgn],'">".fdl')
+        let  b:riv_flist[bgn : bgn] = map(b:riv_flist[bgn : bgn],'">".fdl')
         if bgn+1 <= end
-            let b:fdl_list[bgn+1 : end] = map(b:fdl_list[bgn+1 : end],'fdl')
+            let b:riv_flist[bgn+1 : end] = map(b:riv_flist[bgn+1 : end],'fdl')
         endif
     endfor
 endfun "}}}
@@ -644,7 +644,7 @@ fun! riv#fold#expr(row) "{{{
     if a:row == 1
         call s:init_stat()
     endif
-    return b:fdl_list[a:row]
+    return b:riv_flist[a:row]
 endfun "}}}
 fun! riv#fold#text() "{{{
     let lnum = v:foldstart
