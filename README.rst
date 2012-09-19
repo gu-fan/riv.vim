@@ -57,21 +57,29 @@ Features
              
              And it's similar with Emacs's Org-Mode_ style.
 
-Getting Started
----------------
-
-* Installation: see `Install`_
-* Quick Start: see `QuickStart With Riv`_  
-  or use ``:RivQuickStart`` in vim.
-* Instruction: see `Instructions`_ 
-* Snapshots: `On Screen`_
-* Also Issues_ and Todo_.
-
 On Screen
 ----------
 
 :ScreenShot: TODO
 :ScreenCast: TODO
+
+Getting Started
+---------------
+
+* If this is your first exposure to reStructuredText, 
+  please read `A ReStructuredText Primer`_ and the
+  `Quick reStructuredText`_ user reference first.
+
+* To get a quick overview of Riv features , see `QuickIntro For Riv`_ 
+    ( doc/riv_quickintro.rst )
+
+* Installation: see `Install`_
+* Quick Start: see `QuickStart With Riv`_  
+  or use ``:RivQuickStart`` in vim.
+* Instruction: see `Instructions`_ 
+* To change mappings and commands. see Commands_
+* Snapshots: `On Screen`_
+* Also Issues_ and Todo_.
 
 Install
 -------
@@ -86,12 +94,14 @@ Install
 * Using downloaded zip/tar.gz file. 
   Just extract it to your ``.vim`` folder .
 
-:NOTE: Make sure your ``.vim`` folder in option ``runtimepath`` 
-       is before the ``$VIMRUNTIME``. 
 
-       Otherwise the syntax/indent files for rst file will using the vim built-in one.
+:NOTE: Make sure your .vim folder in option ``runtimepath`` 
+       is before the $VIMRUNTIME, otherwise the syntax/indent files
+       for rst files will use vim's built-in one.
 
-       By default, it is before the ``$VIMRUNTIME``.
+       Default is before $VIMRUNTIME.
+
+:NOTE: Make sure ``filetype plugin indent on`` and ``syntax on`` is in your vimrc
 
 * Related tools: 
 
@@ -112,7 +122,6 @@ Issues
 * Both bug reports and feature request are welcome. 
 
   Please Post issues at https://github.com/Rykka/riv.vim/issues
-
 
 Todo  
 ---------
@@ -138,7 +147,7 @@ Things todo in this version.
               a section title undercursor and repl it.
   :Sections_: DONE 2012-09-17 A shortcut to create a document tree.
   :Sections_: DONE 2012-09-17 Add g:riv_content_format
-  :Publish_: DONE 2012-09-13 remove ``g:riv_file_link_convert`` 
+  :Publish_: DONE 2012-09-13 remove '_`g:riv_file_link_convert`' 
   :Publish_: DONE 2012-09-18 different style.css for syntax highlighting in html
   :Publish_: DONE 2012-09-19 Fix link repl errors while converting to html.
   :Links_: DONE 2012-09-17 Add g:riv_create_link_pos
@@ -155,49 +164,10 @@ Next
 See riv_todo_ ( doc/riv_todo.rst )
 
 
-Q & A
------
-
-TODO
-
 ----
 
 Instructions
 ============
-
-* Getting started
-
-  + To get a quick overview of Riv features , see `QuickIntro For Riv`_ 
-    ( doc/riv_quickintro.rst )
-  + For a quick start, see `QuickStart With Riv`_  
-    ( doc/riv_quickstart.rst )
-
-    Or use ``:RivQuickStart`` in vim.
-  + For writing and reading documents, 
-    See detailed instructions in `reStructuredText`_ 
-  + For managing documents, See detailed instructions in `Riv`_
-
-* Mappings
-
-  The mappings and commands are described in each section.
-
-  Default leader map for Riv is ``<C-E>``.
-  You can change it by following options.
-  
-  + ``g:riv_global_leader`` : leader map for Riv global mapping.
-
-    - ``:RivIndex`` ``<C-E>ww`` to open the project index.
-    - ``:RivAsk`` ``<C-E>wa`` to choose one project to open.
-    - ``:RivScratchCreate`` ``<C-E>sc`` Create or jump to the scratch of today.
-    - ``:RivScratchView`` ``<C-E>cv`` View Scratch index.
-
-  + ``g:riv_buf_leader`` : leader map for reStructuredText buffers.
-  + ``g:riv_buf_ins_leader`` : leader map for reStructuredText buffers's insert mode.
-  + To remap a single mapping, use ``map`` in your vimrc::
-        
-        map <C-E>wi    :RivIndex<CR> 
-
-
 
 reStructuredText
 ----------------
@@ -205,80 +175,67 @@ reStructuredText
 The following features apply for all ``*.rst`` documents 
 having standard reStructuredText syntax.
 
-:NOTE: Make sure your .vim folder in option ``runtimepath`` 
-       is before the $VIMRUNTIME, otherwise the syntax/indent files
-       for rst files will use vim's built-in one.
-
-:NOTE: Make sure ``filetype plugin indent on`` and ``syntax on`` is in your vimrc
-
 Folding 
 ~~~~~~~~
 
-**Folding** is a vim feature to display a range of lines as a single line.
+**Folding** is a vim feature.
 
-Thus you can get a better overview of the strucutre of documents.
+It shows a range of lines as a single line.
+Thus you can get a better overview of the document strucutres.
 
-And you can manage the folded lines with actions as one line, 
-like: select, copy, paste ... etc.
+And you can operate the folded lines with one line actions, 
+like: select(V), copy(yy), paste(p) ... etc.
 
-Riv fold reStructuredText file with sections, lists, and blocks automatically,
-And provide extra infos of them.
+See ``:h folding`` for more infos.
 
-* Actions (Normal Mode Only):
+Sections, lists, and blocks are folded automatically,
+And extra infos are provided.
 
-  + Open Folding: Pressing ``<Enter>`` or double clicking on folded lines 
-    will open that fold. 
+* Commands:
 
-    use ``zo`` ``zO`` or ``zv`` will open it either.
+  **Normal Mode**
 
-    :NOTE: To use mouse to control all folding. 
-           use vim option ``foldcolumn`` with ``set fdc=1`` or more, And click in the foldcolumn.
+  These 'z' folding commands can be used.
+  like 'zo' 'zc' ...
 
-  + Close Folding:  use ``zc`` or ``zC`` will close it.
+  Also Some extra commands are provided.
 
-    Also pressing ``<Enter>`` or double clicking the section title
-    will close the section.
+  + Open/Close Folding: ``zo``, ``zc``, ``zM``, ``zR``
+  + Update Folding: ``zx``
 
-  + Update Folding: use ``zx`` or ``<C-E><Space>j``
+    Also Foldings will be auto updated whilst writing buffer to file, like ``:write``
 
-    Folding will be auto updated after you write buffer to file.
+  + Toggle Folding: ``za``, ``zA``...
 
-  + Toggle Folding: use ``za`` or ``<C-E><Space><Space>`` 
-  + Toggle all Folding: use ``zA`` or ``<C-E><Space>m``
+    You can define your own mappings for folding in your vimrc,
+    I use ``<Space><Space>`` to toggle folding::
 
+        nno <silent> <Space><Space> @=(foldclosed('.')>0?'zv':'zc')<CR>
+
+
+  + Toggle folding with Cursor.
+
+    Pressing ``<Enter>`` or double clicking on folded lines 
+    will open the fold. like ``zo``
+
+    Pressing ``<Enter>`` or double clicking on section heading
+    will close the fold of the section. like ``zc``
 
 * Extra Infos:
-  When folded, some extra info of the item will be shown at the foldline.
-  also the number of folded lines will be shown. See `On Screen`_
 
-  + The sections_ will show it's section number
-  + The lists_ will show todos_ progress : 
-    ( 0 + 50 + 100+ 0 + 0 + 50 ) / 6 ≈ 33
+  Some extra info of folded lines will be shown at the first line.
+  And the number of folded lines will be shown. 
   
-    - [ ]  a todo box of start. 0%
-    - [o]  a todo box of in progress. 50%
-    - [X] 2012-06-29  a todo box of finish. 100%
-    - TODO a todo/done keyword group of start. 0%
-    - FIXME a fixme/fixed keyword group of start. 0%
-    - PROCESS a start/process/stop keyword group of progress. 50%
-  
-  + The table_ will show it's rows and columns.
-  
-    +----+---+
-    | a  | b |
-    +----+---+
-    | c  | d |
-    +----+---+
-  
-  + You can use ``g:riv_fold_info_pos`` to change the info position.
-  
+  + Sections_ folding will show it's section number.
+  + Todos_ folding will show the Todo progress : 
+  + Table_ will show number of rows and columns.
+  + '_`g:riv_fold_info_pos`' can be used to change info's side.
     - when set to ``left``, these info will be shown at left side.
-    - default is ``right``
-  
+    - default is ``right``, means shown at right side.
   
 * Options:
 
-  + To show the blank lines in the end of a folding, use ``g:riv_fold_blank``.
+  + To show the blank lines in the end of a folding, use '_`g:riv_fold_blank`'.
 
     - when set to 2 , will fold all blank lines.
     - when set to 1 , will fold all blank lines,
@@ -290,7 +247,7 @@ And provide extra infos of them.
   + For large files. calculate folding may cost time. 
     So there are some options about it.
 
-    - ``g:riv_fold_level`` set which structures to be fold. 
+    - '_`g:riv_fold_level`' set which structures to be fold. 
     
       1. when set to 3 , means 'sections,lists and blocks'.
       2. when set to 2 , means 'sections and lists'
@@ -298,36 +255,33 @@ And provide extra infos of them.
       4. when set to 0 , means 'None'
       5. default is 3.
     
-    - ``g:riv_auto_fold_force``, enable reducing fold level when editing large files.
+    - '_`g:riv_auto_fold_force`', enable reducing fold level when editing large files.
     
       1. when set to 1 , means 'On'.
       2. default is 1.
     
-    - ``g:riv_auto_fold1_lines``, the minimum lines file containing,
+    - '_`g:riv_auto_fold1_lines`', the minimum lines file containing,
       to force set fold_level to section only.
     
       default is 5000.
     
-    - ``g:riv_auto_fold2_lines``, the minimum lines file containing,
+    - '_`g:riv_auto_fold2_lines`', the minimum lines file containing,
       to force set fold_level to section and list only.
     
       default is 3000.
     
-  + To open some of the fold when opening a file . 
+  + To open some of the fold when entering a file . 
     You can use ``:set fdls=1`` or use ``modeline`` for some files::
 
      ..  vim: fdls=0 :
 
-  + Use  ':h folding' in vim to get an overview of folding in vim.
-
-
 Syntax
 ~~~~~~
 
-Improved highlights to indicate document items.
+Improved highlights for syntax items.
 
-*  Link of local files are highlighted by highlight group ``rstFileLink``.
-*  Todo Item are highlighted only in vim, not in converted files.
+*  Local file with extension (xxx.rst) are highlighted.
+*  Todo Item are highlighted. 
 
 Code Highlighting
 """""""""""""""""
@@ -341,31 +295,31 @@ syntax highlighting is on ::
       # github does not support syntax highlighting rendering for rst file yet.
       x = [0 for i in range(100)]
 
-The ``highlights`` directives in Sphinx_ could also be used.
+The ``highlights`` directives in Sphinx_ could also be used to
+highlight big block of codes.
 
-* Use ``g:riv_highlight_code`` to set which languages to be highlighted.
+* Use '_`g:riv_highlight_code`' to set which languages to be highlighted.
 
   default is ``lua,python,cpp,javascript,vim,sh``
 
-
-:NOTE: To enable syntax highlighting in converted file, 
-       python pygments_  package must installed for ``docutils`` 
-       parsing syntax highlighting.
+:NOTE: To highlighting codes in converted file, 
+       pygments_ package must installed for docutils_ to
+       parse syntax highlighting.
 
        See http://docutils.sourceforge.net/sandbox/code-block-directive/tools/pygments-enhanced-front-ends/
 
 Cursor Highlighting
 """""""""""""""""""
 
-Some item that could interactive with cursor are highlighted when cursor is on.
+Some item that could operate by cursor are highlighted when cursor is on.
 
-* Links are highlighted by ``hl-DiffText``
+* Links are highlighted in ``hl-incSearch``
 
-  + For local file links , if the target is invalid , it will be highlighted by 
-    ``g:riv_link_invalid_hl``, default is ``"ErrorMsg"``
-* Todo items are highlighted by ``hl-DiffAdd``
+  + if the target fiel is invalid, it will be highlighted by 
+    '_`g:riv_link_invalid_hl`', default is ``"ErrorMsg"``
+* Todo items are highlighted in ``hl-DiffAdd``
 
-Disable Cursor Highlighting by set ``g:riv_link_cursor_hl`` to 0
+You can disable Cursor Highlighting by set '_`g:riv_link_cursor_hl`' to 0
 
 
 Indent
@@ -373,16 +327,15 @@ Indent
 
 Smarter indent in insert mode.
 
-The indenting in reStructuredText is complicated. 
-
+As indenting in reStructuredText is complicated. 
 Riv will fixed indent for lines in the context of 
 blocks, list, explicit marks. 
 
-If no fix is needed, use ``shiftwidth``
+If no fix is needed, ``shiftwidth`` will be used for the indenting.
 
-* Actions:
+* Commands:
     
-  Insert Mode Only
+  **Insert Mode**
 
   + Newline (``<Enter>`` or ``o`` in Normal mode):
     will start newline with fixed indentation 
@@ -399,12 +352,13 @@ Insert
 
 Super ``<Tab>`` and Super ``<Enter>`` in insert mode.
 
-* ``Enter`` and ``KEnter`` (Keypad Enter) (with ctrl and shift): 
+* ``Enter`` and ``KEnter`` (Keypad Enter) 
+  (with modifier 'ctrl' and 'shift'): 
   
-  + When in a grid table, it's actions is creating table lines.
+  + When in a grid table: creating table lines.
     
     See Table_ for details.
-  + When in a list , it's action is creating list lines.
+  + When in a list context: creating list lines.
     
     See Lists_ for details.
 
@@ -412,7 +366,7 @@ Super ``<Tab>`` and Super ``<Enter>`` in insert mode.
   
   * If insert-popup-menu is visible, will act as ``<C-N>`` or ``<C-P>``
 
-    disable it by setting ``g:riv_i_tab_pum_next`` to 0.
+    disable it by setting '_`g:riv_i_tab_pum_next`' to 0.
   * When in a table , ``<Tab>`` to next cell , ``<S-Tab>`` to previous one.
   * When not in a table, 
 
@@ -420,9 +374,9 @@ Super ``<Tab>`` and Super ``<Enter>`` in insert mode.
     + if have fixed indent, will indent with fixed indent. see indent_.
     + Otherwise:
       
-      - if ``g:riv_i_tab_user_cmd`` is not empty , executing it. 
+      - if '_`g:riv_i_tab_user_cmd`' is not empty , executing it. 
 
-        It's for the user who want different behavior with ``<Tab>`` ::
+        It's for users who want different behavior with ``<Tab>``::
 
           " For snipmate user. 
           let g:riv_i_tab_pum_next = 0
@@ -432,20 +386,23 @@ Super ``<Tab>`` and Super ``<Enter>`` in insert mode.
       - else act as ``<Tab>`` and ``<BS>``.
     
   :NOTE:  ``<S-Tab>`` is acting as ``<BS>`` when not in list or table .
-  
 
 * BackSpace: indent with fixed indent. see indent_.
 * Most commands can be used in insert mode. like ``<C-E>ee`` ``<C-E>s1`` ...
 
 :NOTE: to disaple mapping of ``<Tab>`` etc. in insert mode.
 
-       set it in ``g:riv_ignored_imaps`` , each item is split with ``,``. ::
+       set it in '_`g:riv_ignored_imaps`' , each item is split with ``,``. ::
         
         " no <Tab> and <S-Tab>
         let g:riv_ignored_imaps = "<Tab>,<S-Tab>"
 
-       You can view default mappings with ``g:riv_default.buf_imaps``
+       You can view default mappings with '_`g:riv_default.buf_imaps`'
 
+* Insert extra things.
+
+  + Use ``:RivCreateDate`` ``<C-E>id`` to insert a datestamp of today anywhere.
+  + Use ``:RivCreateTime`` ``<C-E>it`` to insert a timestamp of current time anywhere. 
 
 
 Sections 
@@ -455,35 +412,34 @@ Section level and numbers are auto detected.
 
 And it's folded by it's level.
 
-* Actions:
+* Commands:
 
-  Normal and Insert Mode
+  **Normal and Insert Mode**
 
-  + Create and Modify: 
+  + Create and Modify titles: 
 
     Use ``:RivTitle1`` ``<C-E>s1`` ...  ``:RivTitle6`` ``<C-E>s6`` ,
     To create level 1 to level 6 section title from current word.
 
-    If it's empty, you will be asked to input one.
-
-    Section title created by Riv is ``underline`` only, 
-    To add an ``overline``, you should copy the ``underline`` and paste it there.
+    If the line empty, you will be asked to input a title.
 
     And ``:RivTitle0`` ``<C-E>s0`` will create a section title
     with an overline.
 
+    Other commands is ``underline`` only, 
+
   + Folding: 
 
-    Pressing ``<Enter>`` or double clicking on section title will toggle the folding
-    of the section.
+    Pressing ``<Enter>`` or double clicking on the section title 
+    will toggle the folding of the section.
 
     The section number will be shown when folded.
 
   + Jumping:
 
-    Clicking on the section reference will bring you to the section title.
+    ``<Enter>`` or Clicking on the section reference will bring you to the section title.
 
-    e.g. Features_ link will bring you to the `Feature` Section (in vim)
+    e.g.: click the link of Features_ will bring you to the ``Features`` Section (in vim)
 
   + Create a content table:
     
@@ -492,11 +448,11 @@ And it's folded by it's level.
     It's similar with the ``content`` directive,
     except it create the content table into the document.
 
-    The advantage is you can navigate by it in vim.
+    The advantage is you can jumping with it in vim.
 
     The disadvantage is you must update it every time after you have changed the document.
 
-    You can set ``g:riv_content_format`` to change it's
+    You can set '_`g:riv_content_format`' to change it's
     format::
         
         %i is the indent of each line
@@ -515,11 +471,13 @@ And it's folded by it's level.
 
     ``= - ~ " ' ``` , (HTML has 6 levels)
 
-    you can change it with ``g:riv_section_levels``
+    you can change it with '_`g:riv_section_levels`'
 
-  + Section number are seperated by ``g:riv_fold_section_mark``
+    The ``:RivTitle0`` will use ``#``
 
-    default is ``"-"``
+  + Section number are seperated by '_`g:riv_fold_section_mark`'
+
+    default is ``"."``
 
 
 See `reStructuredText sections`__ for syntax details.
@@ -528,21 +486,20 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#sections
 
 * Miscs:
 
-  The Page-break ``^L`` (Ctrl-L in insert mode) will break current section. 
+  For convenience, Page-break ``^L`` (Ctrl-L in insert mode) was made to break current section in vim, works like transitions__.
 
+__  http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#transitions
 
 Lists
 ~~~~~
 
-There are several List items in reStructuredText.
+There are several types of list items in reStructuredText.
 
-All are highlighted. Most are folded.
+They are highlighted. Some are folded.
 
-The bullet and enumerated list are auto level and auto numbered.
+* Auto Leveled:
 
-The bullet and enumerated list and field list are auto indented.
-
-* Auto Level:
+  Bullet and enumerated list.
 
   When you shift the list or add child/parent list , 
   the type of list item will be changed automatically.
@@ -559,50 +516,68 @@ The bullet and enumerated list and field list are auto indented.
   And if you shift left or add a parent list item with a ``a.`` list item , 
   the new one will be ``A.``
 
-* Auto Number:
+* Auto Numbered:
+
+  Bullet and enumerated list.
 
   When you adding a new list or shifting an list, 
   these list items will be auto numbered.
 
-* Actions:
+* Auto Indented:
+
+  Bullet and enumerated list and field list.
+
+  When you adding a new list or shifting an list, 
+  these list items will be auto indented.
+
+* Commands:
 
   + Shifting:
 
-    Normal and Visual Mode:
+    **Normal and Visual Mode**
 
-    - Shift right: ``>`` ``:RivShiftRight`` or ``<C-ScrollWheelDown>`` (unix only) 
+    - Shift right: ``>`` ``:RivShiftRight`` or ``<S-ScrollWheelDown>`` (unix only) 
   
-      Shift rightwards, And add a level of list.
-  
-    - Shift left: ``<`` ``:RivShiftLeft`` or ``<C-ScrollWheelUp>``  (unix only) 
+      Shift rightwards with ``ShiftWidth``
 
-      Shift leftwards, And minus a level of list.
+      if it's a list item,
+      When shifting right, it will indent to the list item's sub list
+  
+    - Shift left: ``<`` ``:RivShiftLeft`` or ``<S-ScrollWheelUp>``  (unix only) 
+
+      Shift leftwards with ``ShiftWidth``
+
+      if it's a list item,
+      When shifting left, it will indent to the list item's parent list
 
     - Format:   ``=``
       Format list's level and number.
+    - To act as the vim's original ``<`` ``>`` and ``=``,
+      just preceding a ``<C-E>``.  as ``<C-E><`` , ``<C-E>>`` and ``<C-E>=``
 
-    :NOTE: The shifting indentation is dynamic. 
-           if it's a list item,
-           When shifting right, it will indent to the list item's sub list
-           When shifting left, it will indent to the list item's parent list
-
-           otherwise it will use ``shiftwidth`` 
-           and check if it's in a list item to fix the indentation
-
-    :NOTE: As commands not working in Select Mode.
+    :Tips: To make shifting with mouse more easier.
 
            You should make sure the vim option ``'selectmode'`` not contain ``mouse``,
-           in order to use mouse to start visual mode. 
+           in order to use mouse to start visual mode, not select mode
+           As commands not working in Select Mode.
 
-           Cause this option will be changed by ``:behave mswin``.
+           And this option will be reset by ``:behave mswin``.
+           So you should put it behind that.
 
-    Insert Mode Only: 
+    **Insert Mode**
   
-    - ``<Tab>`` when cursor is before an end of a list item.
+    - ``<Tab>`` when cursor is before the list's content
       will shift right.
     
-    - ``<S-Tab>`` when cursor is before an end of a list item.
+    - ``<S-Tab>`` when cursor is before the list's content.
       will shift left.
+
+    :NOTE: As this will break the ``<Tab>`` inserting operation 
+           in ``visual block insert``. 
+
+           You should use ``<Space>`` instead of ``<Tab>``
+
+           See ``:h v_b_i``
 
   + New List:
   
@@ -648,7 +623,7 @@ The bullet and enumerated list and field list are auto indented.
 List items
 """"""""""
 
-Intro of the reStructuredText lists.
+A quick intro of the reStructuredText lists.
 
 * Bullet Lists
 
@@ -744,7 +719,7 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#option-lis
 Blocks
 ~~~~~~
 
-The Block elements of the document.
+A quick intro of the Blocks of reStructuredText document.
 
 Highlighted , and most are folded.
 
@@ -863,20 +838,19 @@ You can jumping with links.
 
 And it's highlighted with `Cursor Highlighting`_.
 
+* Commands:
 
-* Actions:
+  **Jumping(Normal Mode):**
 
-  Jumping(Normal Mode):
-
-  + Clicking on links will jump there.
+  + Clicking on a links will jump to it's target. 
     
     - A web link ( www.xxx.xxx or http://xxx.xxx.xxx or xxx@xxx.xxx ): 
 
       Open web browser. 
 
-      if it's an email address ``xxx@xxx.xxx`` will add ``mailto:`` 
+      And if it's an email address ``xxx@xxx.xxx``,  ``mailto:`` will be added.
 
-      the browser is set by ``g:riv_web_browser``, default is ``firefox``
+      web browser is set by '_`g:riv_web_browser`', default is ``firefox``
 
     - A internal reference ( ``xxx_ [xxx]_ `xxx`_`` ): 
 
@@ -888,22 +862,26 @@ And it's highlighted with `Cursor Highlighting`_.
 
     - A internal targets (``.. [xxx]:  .. _xxx:``)
 
-      Find and Jump to the nearest reference , backward.
+      Find and Jump to the nearest backward reference.
 
-    - A local file (if ``g:riv_file_link_style`` is not 0):
+    - A local file (if '`g:riv_file_link_style`_' is not 0):
+
+      like (``xxx.vim`` or ``[[xxx/xxx]]``)
 
       Edit the file. 
 
-      To split editing , you could split the document first:
+      To split editing:
+      As no split editing commands were defined, 
+      you should split document first:
       ``<C-W><C-S>`` or ``<C-W><C-V>``
 
   + You can jump back to origin position with `````` or ``''``
 
-  Navigate(Normal Mode):
+  **Navigate(Normal Mode):**
     
   + ``<Tab>/<S-Tab>`` will navigate to next/prev link in document.
    
-  Create (Normal and Insert):
+  **Create (Normal and Insert):**
 
   + ``:RivCreateLink`` ``<C-E>il``
     create a link from current word. 
@@ -913,52 +891,55 @@ And it's highlighted with `Cursor Highlighting`_.
     If the link is not Anonymous References,
     The target will be put at the end of file by default.
 
-    ``g:riv_create_link_pos`` can be set to ``'.'``
-    to make it put below current line.
+    '_`g:riv_create_link_pos`' can be set to ``'.'``
+    to make the target put below current line.
 
-    default is ``'$'``, means at the file end.
+    default is ``'$'``, means at the end of file.
 
   + ``:RivCreateFoot`` ``<C-E>if``
     create a auto numbered footnote. 
     And append the footnote target to the end of file.
 
-:NOTE: **A reStructuredText syntax hint**
 
-       Links are hyperlink references and hyperlink targets.
+Link Items
+""""""""""
+* A quick Intro of Links.
+
+  Links are hyperlink references and hyperlink targets.
         
-       The hyperlink references are indicated by a trailling underscore
-       or stanalone hyperlinks::
+  The hyperlink references are indicated by a trailling underscore
+  or stanalone hyperlinks::
 
-            xxx_            A reference
-            `xxx xxx`_      Phase reference
-            xxx__           Anonymous referces, links to next anonymous targes
-            `Python home page <http://www.python.org>`_ 
-                            Embedded URIs
-            [xxx]_          A footnote or citation reference
-            www.xxxx.xxx   http://xxx.xxx.xxx
-                            Standalone hyperlinks
-            xxx@ccc.com     Email adress as mailto:xxx@ccc.com
+       xxx_            A reference
+       `xxx xxx`_      Phase reference
+       xxx__           Anonymous referces, links to next anonymous targes
+       `Python home page <http://www.python.org>`_ 
+                       Embedded URIs
+       [xxx]_          A footnote or citation reference
+       www.xxxx.xxx   http://xxx.xxx.xxx
+                       Standalone hyperlinks
+       xxx@ccc.com     Email adress as mailto:xxx@ccc.com
 
-       See `Hyperlink References`_ for syntax details.
+  See `Hyperlink References`_ for syntax details.
 
-       There are implicit hyperlink targets and explicit hyperlink targets.
+  There are implicit hyperlink targets and explicit hyperlink targets.
 
-       Implicit hyperlink targets are generated by section titles, 
-       footnotes, and citations.
+  Implicit hyperlink targets are generated by section titles, 
+  footnotes, and citations.
 
-       Explicit hyperlink targets are defined as follows::
+  Explicit hyperlink targets are defined as follows::
 
-        .. _hyperlink-name: link-block
-        .. __: anonymous-hyperlink-target-link-block
-        _`an inline hyperlink target`
+   .. _hyperlink-name: link-block
+   .. __: anonymous-hyperlink-target-link-block
+   _`an inline hyperlink target`
             
-       See `Hyperlink targets`_ for syntax details.
+  See `Hyperlink targets`_ for syntax details.
 
-       :NOTE: In converted file, Implicit hyperlink are internal file link, 
-              and Explicit hyperlink are external links.
+  :NOTE: In converted file, Implicit hyperlink are internal file link, 
+         and Explicit hyperlink are external links.
 
-              While in vim, clicking both links will bring you to internal intarget.
-              Cause it's target may not valid in local domain.
+         While in vim, clicking both links will bring you to internal intarget.
+         Cause it's target may not valid in local domain.
 
 .. _Hyperlink References:
    http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#hyperlink-references
@@ -980,7 +961,7 @@ For Grid table, it is auto formatted.
 
   Can be autoformated. Only support equal columns each row (no span).
 
-  + Actions:
+  + Commands:
 
     - Create: Use ```<C-E>tc`` or ``:RivTableCreate`` to create table
     - Format: Use ``<C-E>tf`` or ``:RivTableFormat`` to format table.
@@ -988,7 +969,7 @@ For Grid table, it is auto formatted.
       It will be auto formatted after leaving insert mode,
       or pressing ``<Enter>`` or ``<Tab>`` in insert mode.
 
-    Insert Mode Only:
+    **Insert Mode Only:**
 
     - Inside the Table ::
 
@@ -1011,6 +992,8 @@ For Grid table, it is auto formatted.
         +-------+-------------------------------------------------------------+
 
 
+      
+      The table will be rendered as:
 
       +-------+-------------------------------------------------------------+
       |       | Grid Table (No column or row span supported yet)            |
@@ -1030,9 +1013,8 @@ For Grid table, it is auto formatted.
       |       | - 一二三四五  かきくけこ                                    |
       +-------+-------------------------------------------------------------+
 
-    See `Grid Tables`__ for syntax details.
+    See `Grid Tables`_ for syntax details.
 
-__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#grid-tables
 
 * Simple Table:
 
@@ -1053,6 +1035,8 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#grid-table
       ===========  ========================
 
 
+  The table will be rendered as:
+
   ===========  ========================
         A Simple Table
   -------------------------------------
@@ -1064,10 +1048,7 @@ __ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#grid-table
                 - second line of row 3
   ===========  ========================
 
-
-  See `Simple Tables`__ for syntax details.
-
-__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#simple-tables
+  See `Simple Tables`_ for syntax details.
 
 
 Publish
@@ -1076,7 +1057,7 @@ Publish
 Some command wrapper to convert rst files to html/xml/latex/odt/... 
 (docutils_  required)
 
-* Actions:
+* Commands:
 
   + Convert to Html
 
@@ -1089,14 +1070,14 @@ Some command wrapper to convert rst files to html/xml/latex/odt/...
       convert to html file and browse. 
       default is 'firefox'
   
-      the browser is set by ``g:riv_web_browser``, default is ``firefox``
+      the browser is set by `g:riv_web_browser`_, default is ``firefox``
   
     - ``:Riv2HtmlProject`` ``<C-E>2hp`` converting whole project into html.
-      And will ask you to copy all the file with extension in ``g:riv_file_link_ext`` 
+      And will ask you to copy all the file with extension in '`g:riv_file_link_ext`_' 
   
   + ``:Riv2Odt`` ``<C-E>2oo`` convert to odt file and browse by ft browser
   
-    The browser is set with ``g:riv_ft_browser``. 
+    The browser is set with '_`g:riv_ft_browser`'. 
     default is (unix:'xdg-open', windows:'start')
   
   + ``:Riv2Xml`` ``<C-E>2xx`` convert to xml file and browse by web browser
@@ -1106,10 +1087,10 @@ Some command wrapper to convert rst files to html/xml/latex/odt/...
 * Options:
 
   + If you have installed Pygments_ , code will be highlighted
-    in html as the syntax highlight stylesheet have been embedded
-    in it.
+    in html , as the syntax highlight stylesheet have been embedded
+    in it by Riv.
 
-    You can change the stylesheet with ``g:riv_html_code_hl_style``
+    You can change the stylesheet with '_`g:riv_html_code_hl_style`'
 
     - When set to 'default', 'emacs', or 'friendly'
       it will use pygments_'s relevant built-in style.
@@ -1119,31 +1100,38 @@ Some command wrapper to convert rst files to html/xml/latex/odt/...
     
     - Syntax highlight for other formatting are not supported yet.
 
-  + For the files that are in a project. 
-    The path of converted files by default is under ``build_path`` of your project directory. 
-  
-    - default is ``_build``
-    - To change the path. Set it in your vimrc::
-        
-        " Assume you have a project name project 1
-        let project1.build_path = '~/Documents/Riv_Build'
+  + Some misc changing have been done on the stylesheet for better view in html.
     
-    - Open the build path: ``:Riv2BuildPath`` ``<C-E>2b``
-    - local file link converting will be done. 
-      See `local file link converting`_ for details.
-  
-  + For the files that not in a project.  
-    ``g:riv_temp_path`` is used to determine the output path
-  
-    - When it's empty or ``0``, 
-      the converted file is put under the same directory of file ,
+    The ``literal`` and ``literal-block``'s background have been set to '#eeeeee'.
 
-    - if the ``g:riv_temp_path`` is ``1``,
-      the converted file is put in the vim temp path,
-    - Otherwise the converted file is put in the ``g:riv_temp_path``,
-    - default is 1
+  + Output files path
 
-    - Also no local file link will be converted.
+    - For the files that are in a project. 
+      The path of converted files by default is under ``build_path`` of your project directory. 
+  
+      1. default is ``_build``
+      2. To change the path. Set it in your vimrc::
+        
+           " Assume you have a project name project 1
+           let project1.build_path = '~/Documents/Riv_Build'
+    
+      3. Open the build path: ``:Riv2BuildPath`` ``<C-E>2b``
+      4. local file link converting will be done. 
+         See `local file link converting`_ for details.
+  
+    - For the files that not in a project.  
+      '_`g:riv_temp_path`' is used to determine the output path
+  
+      1. When it's empty or ``0``, 
+         the converted file is put under the same directory of file ,
+
+      2. if `g:riv_temp_path`_ is ``1``,
+         the converted file is put in the vim temp path,
+      3. Otherwise the converted file is put in the `g:riv_temp_path`_,
+      4. default is 1
+
+      5. Also no local file link will be converted.
+
 
 :NOTE: When converting, It will first try ``rst2xxxx2.py`` , then try ``rst2xxxx.py``
 
@@ -1180,7 +1168,7 @@ There are some convenience with projects.
 * Scratch_ : Writing diary in a project
 
 * The default project path is ``'~/Documents/Riv'``,
-  you can change it by defining project to ``g:riv_projects`` in your vimrc.::
+  you can change it by defining project to '_`g:riv_projects`' in your vimrc.::
 
     let project1 = { 'path': '~/Dropbox/rst',}
     let g:riv_projects = [project1]
@@ -1210,7 +1198,7 @@ the rst documents.
   will be highlighted and linked, only in vim.
 
   And you can disable highlighting it with 
-  setting ``g:riv_file_ext_link_hl`` to 0.
+  setting '_`g:riv_file_ext_link_hl`' to 0.
 
 * Two types for linking file while converting to other format.
 
@@ -1223,7 +1211,7 @@ the rst documents.
            It will be not changed to link with Riv.
            You'd better use it with Sphinx_'s tool set.
 
-  + You can switch style with ``g:riv_file_link_style``
+  + You can switch style with '_`g:riv_file_link_style`'
 
     - when set to 1, ``MoinMoin``: 
     
@@ -1258,7 +1246,7 @@ the rst documents.
       will be considered as external directory links, 
       and link to the directory.
 
-      You can add other extensions with ``g:riv_file_link_ext``.
+      You can add other extensions with '_`g:riv_file_link_ext`'.
       which default is ``vim,cpp,c,py,rb,lua,pl`` ,
       meaning these files will be recongized.
 
@@ -1306,7 +1294,7 @@ in this form::
 For now it's overhead with substitude by a temp file.
 A parser for docutils_ is needed in the future.
 
-And for ``Sphinx``.
+And for Sphinx_ users.
 you should use Sphinx's tool set to convert it.
 
 Scratch
@@ -1325,7 +1313,7 @@ Scratch is a place for writing diary or notes.
   The index is auto created. Seperate scratches by years and month
   
   You can change the month name using 
-  ``g:riv_month_names``. 
+  '_`g:riv_month_names`'. 
 
   default is:
 
@@ -1346,14 +1334,13 @@ Todo items to keep track of todo things.  ``non-reStructuredText syntax``
 
 It is Todo-box or Todo-keywords in a bullet/enumerated/field list.
 
-
 * Todo Box:
 
   + [ ] This is a todo item of initial state.
   + [o] This is a todo item that's in progress.
   + [X] This is a todo item that's finished.
 
-  + You can change the todo box item by ``g:riv_todo_levels`` ,
+  + You can change the todo box item by '_`g:riv_todo_levels`' ,
 
     default is ``" ,o,X"``
 
@@ -1364,7 +1351,7 @@ It is Todo-box or Todo-keywords in a bullet/enumerated/field list.
   + FIXED A todo item of FIXME/FIXED keyword group.
   + DONE 2012-06-13 ~ 2012-06-23 A todo item of TODO/DONE keyword group.
   + START A todo item of START/PROCESS/STOP keyword group.
-  + You can define your own keyword group for todo items with ``g:riv_todo_keywords``
+  + You can define your own keyword group for todo items with '_`g:riv_todo_keywords`'
   
     each keyword is seperated by ',' , each group is seperated by ';'
   
@@ -1383,7 +1370,7 @@ It is Todo-box or Todo-keywords in a bullet/enumerated/field list.
     If you have Calendar_ installed , it will use it to choose date.
 
     .. _Calendar: https://github.com/mattn/calendar-vim
-  + It is controled by ``g:riv_todo_datestamp``
+  + It is controled by '_`g:riv_todo_datestamp`'
   
     - when set to 2 , will init with a start datestamp.
       and when it's done , will add a finish datestamp.
@@ -1407,7 +1394,7 @@ It is Todo-box or Todo-keywords in a bullet/enumerated/field list.
   + [ ] [#C] a todo item of priorty C
   + Double Click or ``<Enter>`` or ``:RivTodoPrior`` on priorty item 
     to change priority. 
-  + You can define the priorty chars by ``g:riv_todo_priorities``
+  + You can define the priorty chars by '_`g:riv_todo_priorities`'
     Only alphabet or digits are supported.
 
     default is ``"ABC"``
@@ -1418,7 +1405,7 @@ It is Todo-box or Todo-keywords in a bullet/enumerated/field list.
   
   + Use ``:RivTodoToggle`` or ``<C-E>ee`` to add or switch the todo progress.
     
-    When adding a todo item, todo group is ``g:riv_todo_default_group``
+    When adding a todo item, todo group is '_`g:riv_todo_default_group`'
 
     default is 0, which is the todo box group.
 
@@ -1456,15 +1443,15 @@ It is Todo-box or Todo-keywords in a bullet/enumerated/field list.
 Helpers
 ~~~~~~~
 
-A window to help manage the project.
+A window for helping project management.
 
-* Action:
+* Basic Commands:
 
   + ``/`` to enter search mode.
     search item matching inputing, 
     ``<Enter>`` or ``<Esc>`` to quit search mode.
       
-    Set ``g:riv_fuzzy_help`` to 1 to enable fuzzy searching in helper.
+    Set '_`g:riv_fuzzy_help`' to 1 to enable fuzzy searching in helper.
 
   + ``<Tab>`` to switch content, 
   + ``<Enter>`` or Double Click to jump to the item.
@@ -1510,7 +1497,6 @@ A helper showing current document section numbers
 Miscs
 ~~~~~
 
-
 Some useful plugins.
 This is an incomplete list.
     
@@ -1522,10 +1508,37 @@ This is an incomplete list.
     + galaxy.vim:  my colorshceme sets
     + ...
 
-* Insert extra things.
+Appendix
+========
 
-  + Use ``:RivCreateDate`` ``<C-E>id`` to insert a datestamp of today anywhere.
-  + Use ``:RivCreateTime`` ``<C-E>it`` to insert a timestamp of current time anywhere. 
+Commands
+--------
+
+The mappings and commands are described in each section.
+
+Default leader map for Riv is ``<C-E>``.
+You can change it by following options.
+  
+  + '_`g:riv_global_leader`' : leader map for Riv global mapping.
+
+    - ``:RivIndex`` ``<C-E>ww`` to open the project index.
+    - ``:RivAsk`` ``<C-E>wa`` to choose one project to open.
+    - ``:RivScratchCreate`` ``<C-E>sc`` Create or jump to the scratch of today.
+    - ``:RivScratchView`` ``<C-E>cv`` View Scratch index.
+
+  + '_`g:riv_buf_leader`' : leader map for reStructuredText buffers.
+  + '_`g:riv_buf_ins_leader`' : leader map for reStructuredText buffers's insert mode.
+  + To remap a single mapping, use ``map`` in your vimrc::
+        
+        map <C-E>wi    :RivIndex<CR> 
+
+Options
+-------
+
+The Options are described in each section.
+
+You can set them in your vimrc.
+
 
 
 .. _Sphinx: http://sphinx.pocoo.org/
@@ -1538,8 +1551,12 @@ This is an incomplete list.
 
 .. _riv_log: https://github.com/Rykka/riv.vim/blob/master/doc/riv_log.rst
 .. _riv_todo: https://github.com/Rykka/riv.vim/blob/master/doc/riv_todo.rst
-.. _QuickStart: http://docutils.sourceforge.net/docs/user/rst/quickstart.html
+.. _QuickStart: 
 .. _Quickstart With Riv:
    https://github.com/Rykka/riv.vim/blob/master/doc/riv_quickstart.rst
 .. _Quickintro For Riv:
    https://github.com/Rykka/riv.vim/blob/master/doc/riv_quickintro.rst
+.. _A ReStructuredText Primer: http://docutils.sourceforge.net/docs/user/rst/quickstart.html
+.. _Quick reStructuredText: http://docutils.sourceforge.net/docs/user/rst/quickref.html
+.. _Grid tables: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#grid-tables
+.. _Simple Tables: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#simple-tables

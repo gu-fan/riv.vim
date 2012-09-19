@@ -1,8 +1,8 @@
 "=============================================
 "    Name: list.vim
 "    File: list.vim
-" Summary: the bullet list and enum list
-"  Author: Rykka G.Forest
+" Summary: bullet list and enum list
+"  Author: Rykka G.F
 "  Update: 2012-07-07
 "=============================================
 let s:cpo_save = &cpo
@@ -183,7 +183,6 @@ fun! riv#list#get_parent(row) "{{{
     return s:get_parent(a:row)
 endfun "}}}
 "}}}
-
 
 " List: "{{{
 fun! riv#list#new(act) "{{{

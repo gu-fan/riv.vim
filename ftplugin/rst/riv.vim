@@ -31,6 +31,11 @@ fun! s:imap(map_dic) "{{{
         exe "ino <buffer><expr><silent> ".name." ".act
     endfor
 endfun "}}}
+fun! s:nmap(map_dic) "{{{
+    for [name, act] in items(a:map_dic)
+        exe "nor <buffer><silent> ".name." ".act
+    endfor
+endfun "}}}
 fun! s:map(map_dic) "{{{
     let leader = g:riv_buf_leader
     for [name, act] in items(a:map_dic)
@@ -66,6 +71,7 @@ endif "}}}
 
 call s:imap(g:riv_default.buf_imaps)
 call s:map(g:riv_default.buf_maps)
+call s:nmap(g:riv_default.buf_nmaps)
 call s:fold_map(g:riv_default.fold_maps)
 call riv#show_menu()
 aug RIV_BUFFER "{{{

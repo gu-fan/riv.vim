@@ -229,8 +229,8 @@ let s:default.buf_maps = {
     \'RivLinkOpen'       : ['',  'n',  'ko'],
     \'RivLinkNext'       : ['<TAB>',    'n',  'kn'],
     \'RivLinkPrev'       : ['<S-TAB>',  'n',  'kp'],
-    \'RivShiftRight' : [['>', '<C-ScrollwheelDown>' ],  'mi',  'lu'],
-    \'RivShiftLeft'  : [['<', '<C-ScrollwheelUp>'],  'mi',  'ld'],
+    \'RivShiftRight'     : [['>', '<S-ScrollwheelDown>' ],  'mi',  'll'],
+    \'RivShiftLeft'      : [['<', '<S-ScrollwheelUp>'],  'mi',  'lh'],
     \'RivListFormat'     : [['='],  'mi',  'l='],
     \'RivListType0'      : ['',  'mi',  'l1'],
     \'RivListType1'      : ['',  'mi',  'l2'],
@@ -298,6 +298,12 @@ let s:default.buf_imaps = {
     \'<Tab>'        : 'riv#action#ins_tab()'     ,
     \'<S-Tab>'      : 'riv#action#ins_stab()'    ,
     \} 
+
+let s:default.buf_nmaps = {
+    \'<C-E><'         : '<',
+    \'<C-E>>'         : '>',
+    \'<C-E>='         : '=',
+    \}
 "}}}
 " menus "{{{
 let s:default.menus = [
@@ -488,10 +494,10 @@ fun! riv#load_conf() "{{{1
     
     let s:c.sect_lvs = split(g:riv_section_levels,'\zs')
     let s:c.sect_lvs_b = split('#*+:.^','\zs')
-    let s:c.sect_lvs_style = [
-            \[3,"#"], [2,"="], [2,"-"], [2,"~"],
-            \[2,'"'], [2,"'"], [2,"`"],
-            \]
+    let s:c.sect_lvs_style = [[3,'#']]
+    for s in s:c.sect_lvs
+        call add(s:c.sect_lvs_style,[2,s])
+    endfor
 
     if !empty(g:riv_i_tab_user_cmd) && g:riv_i_tab_user_cmd =~ '\\<'
         " it's literal string and is '\<xx>'
