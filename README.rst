@@ -110,6 +110,8 @@ Install
 :NOTE: It's a developing version. 
        So things may change quickly.Keep up-to-date.
 
+       You can get the latest version at https://github.com/Rykka/riv.vim 
+
 * Related tools: 
 
   + python: docutils_ , required for converting to other format.
