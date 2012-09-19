@@ -60,8 +60,11 @@ Features
 On Screen
 ----------
 
-:ScreenShot: TODO
-:ScreenCast: TODO
+ScreenShot:
+
+.. image:: http://i.minus.com/ibmv5c3yvWMisp.png
+
+ScreenCast: TODO
 
 Getting Started
 ---------------
@@ -69,10 +72,8 @@ Getting Started
 * If this is your first exposure to reStructuredText, 
   please read `A ReStructuredText Primer`_ and the
   `Quick reStructuredText`_ user reference first.
-
 * To get a quick overview of Riv features ,
   see `QuickIntro For Riv`_ (doc/riv_quickintro.rst)
-
 * Installation: see `Install`_
 * Quick Start: see `QuickStart With Riv`_  
   or use ``:RivQuickStart`` in vim.

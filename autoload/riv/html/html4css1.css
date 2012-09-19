@@ -248,7 +248,7 @@ pre.code .ln { /* line numbers */
   color: grey;
 }
 
-.code, .literal, ,literal-block {
+.code, .literal, .literal-block {
   background-color: #eeeeee
 }
 
