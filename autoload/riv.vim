@@ -229,8 +229,8 @@ let s:default.buf_maps = {
     \'RivLinkOpen'       : ['',  'n',  'ko'],
     \'RivLinkNext'       : ['<TAB>',    'n',  'kn'],
     \'RivLinkPrev'       : ['<S-TAB>',  'n',  'kp'],
-    \'RivShiftRight'     : [['>', '<S-ScrollwheelDown>' ],  'mi',  'll'],
-    \'RivShiftLeft'      : [['<', '<S-ScrollwheelUp>'],  'mi',  'lh'],
+    \'RivShiftRight'     : [['>', '<C-ScrollwheelDown>' ],  'mi',  'll'],
+    \'RivShiftLeft'      : [['<', '<C-ScrollwheelUp>'],  'mi',  'lh'],
     \'RivListFormat'     : [['='],  'mi',  'l='],
     \'RivListType0'      : ['',  'mi',  'l1'],
     \'RivListType1'      : ['',  'mi',  'l2'],
@@ -303,6 +303,12 @@ let s:default.buf_nmaps = {
     \'<C-E><'         : '<',
     \'<C-E>>'         : '>',
     \'<C-E>='         : '=',
+    \'<S-ScrollwheelDown>' : '>',
+    \'<S-ScrollwheelUp>'   : '<',
+    \}
+let s:default.buf_vmaps = {
+    \'<S-ScrollwheelDown>' : '>gv',
+    \'<S-ScrollwheelUp>'   : '<gv',
     \}
 "}}}
 " menus "{{{

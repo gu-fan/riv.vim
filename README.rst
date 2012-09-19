@@ -70,8 +70,8 @@ Getting Started
   please read `A ReStructuredText Primer`_ and the
   `Quick reStructuredText`_ user reference first.
 
-* To get a quick overview of Riv features , see `QuickIntro For Riv`_ 
-    ( doc/riv_quickintro.rst )
+* To get a quick overview of Riv features ,
+  see `QuickIntro For Riv`_ (doc/riv_quickintro.rst)
 
 * Installation: see `Install`_
 * Quick Start: see `QuickStart With Riv`_  
@@ -79,7 +79,10 @@ Getting Started
 * Instruction: see `Instructions`_ 
 * To change mappings and commands. see Commands_
 * Snapshots: `On Screen`_
-* Also Issues_ and Todo_.
+* Post issues at https://github.com/Rykka/riv.vim/issues
+  Both bug reports and feature request are welcome. 
+* Discussion at https://groups.google.com/forum/#!forum/vim_riv
+* Todos: Todo_.
 
 Install
 -------
@@ -103,6 +106,9 @@ Install
 
 :NOTE: Make sure ``filetype plugin indent on`` and ``syntax on`` is in your vimrc
 
+:NOTE: It's a developing version. 
+       So things may change quickly.Keep up-to-date.
+
 * Related tools: 
 
   + python: docutils_ , required for converting to other format.
@@ -112,16 +118,6 @@ Install
 
     But if you are using Sphinx_'s tools set, you'd better not using it.
     Cause it could not recongize the sphinx's markups.
-
-Issues
-------
-* It's a developing version. 
-
-  So things may change quickly.Keep up-to-date.
-
-* Both bug reports and feature request are welcome. 
-
-  Please Post issues at https://github.com/Rykka/riv.vim/issues
 
 Todo  
 ---------
@@ -162,7 +158,6 @@ Next
   - screencast and screenshot
 
 See riv_todo_ ( doc/riv_todo.rst )
-
 
 ----
 
@@ -536,24 +531,25 @@ They are highlighted. Some are folded.
 
     **Normal and Visual Mode**
 
-    - Shift right: ``>`` ``:RivShiftRight`` or ``<S-ScrollWheelDown>`` (unix only) 
+    - Shift right: ``>`` ``:RivShiftRight`` or ``<C-ScrollWheelDown>`` (unix only) 
   
       Shift rightwards with ``ShiftWidth``
 
-      if it's a list item,
-      When shifting right, it will indent to the list item's sub list
+      If it's a list item, it will indent to the list item's sub list
   
-    - Shift left: ``<`` ``:RivShiftLeft`` or ``<S-ScrollWheelUp>``  (unix only) 
+    - Shift left: ``<`` ``:RivShiftLeft`` or ``<C-ScrollWheelUp>`` (unix only) 
 
       Shift leftwards with ``ShiftWidth``
 
-      if it's a list item,
-      When shifting left, it will indent to the list item's parent list
+      if it's a list item, it will indent to the list item's parent list
 
     - Format:   ``=``
       Format list's level and number.
     - To act as the vim's original ``<`` ``>`` and ``=``,
       just preceding a ``<C-E>``.  as ``<C-E><`` , ``<C-E>>`` and ``<C-E>=``
+
+      Also ``<S-ScrollWheelDown>`` and ``<S-ScrollWheelUp>`` can 
+      be used in unix
 
     :Tips: To make shifting with mouse more easier.
 
@@ -1201,6 +1197,7 @@ the rst documents.
   setting '_`g:riv_file_ext_link_hl`' to 0.
 
 * Two types for linking file while converting to other format.
+  (works for document in project only.)
 
   :MoinMoin: use ``[[xxx]]`` to link to a local file.
   :Sphinx: use ``:doc:`xxx``` and ``:file:`xxx.rst``` to link to local
