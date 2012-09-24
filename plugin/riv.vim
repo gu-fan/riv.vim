@@ -1,7 +1,7 @@
 "=============================================
 "    Name: riv.vim
 "    File: riv.vim
-"  Author: Rykka G.Forest
+"  Author: Rykka G.F
 "  Update: 2012-06-09
 "=============================================
 if exists("g:_riv_loaded") | finish | endif
