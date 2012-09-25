@@ -128,6 +128,7 @@ let s:default.options = {
     \'ignored_imaps'      : "",
     \'month_names'        : 'January,February,March,April,May,June,July,'
                           \.'August,September,October,November,December',
+    \'python_rst_hl'      : 1,
     \}
 " maps "{{{
 let s:default.maps = {

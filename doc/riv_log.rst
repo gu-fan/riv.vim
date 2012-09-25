@@ -1,6 +1,24 @@
 Changelogs
 ==========
 
+* 0.71:
+
+  :File_: DONE 2012-09-13 extension style show in vim only.
+  :File_: DONE 2012-09-13 now square style (moinmoin) use ``[[xxx]]``. 
+          easier for regxp match
+  :File_: DONE 2012-09-13 Support Sphinx style  :file:, :doc:
+  :Sections_: DONE 2012-09-17 Use sphinx section default markup style?
+  :Sections_: DONE 2012-09-17 section create shortcut will check if it's 
+              a section title undercursor and repl it.
+  :Sections_: DONE 2012-09-17 A shortcut to create a document tree.
+  :Sections_: DONE 2012-09-17 Add g:riv_content_format
+  :Publish_: DONE 2012-09-13 remove '_`g:riv_file_link_convert`' 
+  :Publish_: DONE 2012-09-18 different style.css for syntax highlighting in html
+  :Publish_: DONE 2012-09-19 Fix link repl errors while converting to html.
+  :Links_: DONE 2012-09-17 Add g:riv_create_link_pos
+  :Miscs_: DONE 2012-09-19 A google group
+
+
 * 0.70:
 
   :Table_:  DONE 2012-07-17 7b407b4b_ a table parser of vim version.
@@ -160,3 +178,7 @@ Changelogs
 .. _Insert:  riv.rst#Insert
 .. _Todos:   riv.rst#Todos
 .. _Helpers: riv.rst#Helpers
+.. _Sections: riv.rst#Sections
+.. _Publish: riv.rst#Publish
+.. _Links: riv.rst#Links
+.. _Miscs: riv.rst#Miscs

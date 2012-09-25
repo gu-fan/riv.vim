@@ -1,6 +1,6 @@
 :Author: Rykka G.F
-:Update: 2012-09-19
-:Version: 0.71 
+:Update: 2012-09-25
+:Version: 0.72 
 :Github: https://github.com/Rykka/riv.vim
 :Google Group: https://groups.google.com/forum/#!forum/vim_riv
 
@@ -28,7 +28,8 @@ Features
  Functions.
 
  :Folding_:  View the document strucutre
- :Syntax_:   Clearer highlighting and hinting.
+ :Syntax_:   Extra highlighting for File, Code Block, Cursor,
+             and python Docstring.
  :Indent_:   Smarter indent.
  :Insert_:   Speed up the input!
  :Publish_:  Convert to html/xml/latex/odt... (docutils_ required)
@@ -69,21 +70,18 @@ ScreenCast: TODO
 Getting Started
 ---------------
 
-* If this is your first exposure to reStructuredText, 
-  please read `A ReStructuredText Primer`_ and the
+* First exposure to reStructuredText? 
+  Read `A ReStructuredText Primer`_ and the
   `Quick reStructuredText`_ user reference first.
-* To get a quick overview of Riv features ,
-  see `QuickIntro For Riv`_ (doc/riv_quickintro.rst)
 * Installation: see `Install`_
 * Quick Start: see `QuickStart With Riv`_  
   or use ``:RivQuickStart`` in vim.
 * Instruction: see `Instructions`_ 
 * To change mappings and commands. see Commands_
 * Snapshots: `On Screen`_
-* Post issues at https://github.com/Rykka/riv.vim/issues
-  Both bug reports and feature request are welcome. 
+* Know Issues: Issues_ 
+* Things Todo: Todo_.
 * Discussion at https://groups.google.com/forum/#!forum/vim_riv
-* Todos: Todo_.
 
 Install
 -------
@@ -135,32 +133,39 @@ This
 
 Things todo in this version.
 
-* 0.71:
+* 0.72 
 
-  :File_: DONE 2012-09-13 extension style show in vim only.
-  :File_: DONE 2012-09-13 now square style (moinmoin) use ``[[xxx]]``. 
-          easier for regxp match
-  :File_: DONE 2012-09-13 Support Sphinx style  :file:, :doc:
-  :Sections_: DONE 2012-09-17 Use sphinx section default markup style?
-  :Sections_: DONE 2012-09-17 section create shortcut will check if it's 
-              a section title undercursor and repl it.
-  :Sections_: DONE 2012-09-17 A shortcut to create a document tree.
-  :Sections_: DONE 2012-09-17 Add g:riv_content_format
-  :Publish_: DONE 2012-09-13 remove '_`g:riv_file_link_convert`' 
-  :Publish_: DONE 2012-09-18 different style.css for syntax highlighting in html
-  :Publish_: DONE 2012-09-19 Fix link repl errors while converting to html.
-  :Links_: DONE 2012-09-17 Add g:riv_create_link_pos
-  :Miscs_: DONE 2012-09-19 A google group
+  :Syntax_: DONE 2012-09-25 highlight reStructuredText in python docstring.
+  :Intro_: Accomplish the commands_ and  options_ section.
+  :Intro_: ScreenCast tutor
+  :Intro_: Rewrite riv_todo
+  :Intro_: Rewrite riv_quickstart
 
 Next 
 ~~~~~
 
-* 0.72 
-  - refactoring codes.
-  - document
-  - screencast and screenshot
-
 See riv_todo_ ( doc/riv_todo.rst )
+
+
+Issues
+------
+
+There are some know issues:
+
+* Windows:
+  
+  - Converting to other format may fail. 
+    
+    This may due to docutils could not executing correctly with vimrun.exe.
+
+* Mac Os:
+
+  - The List don't act as expected. 
+
+    Could not fix this cause no Mac OS currently.
+
+* Post issues at https://github.com/Rykka/riv.vim/issues
+  Both bug reports and feature request are welcome. 
 
 ----
 
@@ -278,14 +283,19 @@ Syntax
 
 Improved highlights for syntax items.
 
-*  Local file with extension (xxx.rst) are highlighted.
-*  Todo Item are highlighted. 
+*  File_ Link are highlighted. 
+
+   - extension style: ``xxx.rst xxx.vim``
+   - moinmoin style: ``[[xxx]] [[xxx.vim]]``
+   - Sphinx style: ``:doc:`xxx` :file:`xxx.vim```
+
+*  Todos_ Item are highlighted. 
 
 Code Highlighting
 """""""""""""""""
 
 For the ``code`` directives (also ``sourcecode`` and ``code-block``). 
-syntax highlighting is on ::
+Syntax highlighting of Specified languages are on ::
  
   .. code:: python
      
@@ -294,7 +304,14 @@ syntax highlighting is on ::
       x = [0 for i in range(100)]
 
 The ``highlights`` directives in Sphinx_ could also be used to
-highlight big block of codes.
+highlight big block of codes. ::
+
+  .. highlights:: python
+
+  x = [0 for i in range(100)]
+
+  .. highlights::
+    
 
 * Use '_`g:riv_highlight_code`' to set which languages to be highlighted.
 
@@ -318,6 +335,15 @@ Some item that could operate by cursor are highlighted when cursor is on.
 * Todo items are highlighted in ``hl-DiffAdd``
 
 You can disable Cursor Highlighting by set '_`g:riv_link_cursor_hl`' to 0
+
+Docstring Highlighting
+""""""""""""""""""""""
+
+For python files. 
+docstring is highlighted using reStructuredText.
+
+You can disable it by setting ``g:riv_python_rst_hl`` to 0.
+default is 1.
 
 
 Indent
