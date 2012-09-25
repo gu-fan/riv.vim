@@ -136,6 +136,7 @@ Things todo in this version.
 * 0.72 
 
   :Syntax_: DONE 2012-09-25 highlight reStructuredText in python docstring.
+  :File_: FIXED 2012-09-25 Fix the file link highlight of ``~/.xxx``
   :Intro_: Accomplish the commands_ and  options_ section.
   :Intro_: ScreenCast tutor
   :Intro_: Rewrite riv_todo
@@ -340,10 +341,10 @@ Docstring Highlighting
 """"""""""""""""""""""
 
 For python files. 
-docstring is highlighted using reStructuredText.
+docstring can be highlighted using reStructuredText.
 
-You can disable it by setting ``g:riv_python_rst_hl`` to 0.
-default is 1.
+You can enable it by setting ``g:riv_python_rst_hl`` to 1.
+default is 0.
 
 
 Indent

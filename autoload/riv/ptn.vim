@@ -317,6 +317,7 @@ fun! riv#ptn#init() "{{{
     "        root of your disk.
     "        This first one is DOC_ROOT for Compatibility with the sphinx and
     "        moinmoin style.
+    "
     
     let fname_bgn = '%(^|\s|[''"([{<,;!?])'
     let fname_end = '%($|\s|[''")\]}>:.,;!?])'
@@ -326,7 +327,8 @@ fun! riv#ptn#init() "{{{
     " let file_end = '%($|\s)'
 
     let s:p.file_ext_ptn = 'rst|'.join(g:_riv_t.file_ext_lst,'|')
-    let file_name = '[[:alnum:]~./][[:alnum:]~:./\\_-]*'
+    " NOTE: the ~/.xxx should not highlight  '~/.' part
+    let file_name = '[[:alnum:]~./][[:alnum:]~:./\\_-]*[[:alnum:]/\\]'
     
     " The link for ext file, for in vim only.
     if g:riv_file_ext_link_hl == 1
