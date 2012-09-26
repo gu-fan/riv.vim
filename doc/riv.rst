@@ -347,6 +347,11 @@ docstring can be highlighted using reStructuredText.
 You can enable it by setting ``g:riv_python_rst_hl`` to 1.
 default is 0.
 
+Also you can set the filetype to ``rst`` 
+to gain riv features in python file. ::
+    
+    set ft=rst
+
 
 Indent
 ~~~~~~
