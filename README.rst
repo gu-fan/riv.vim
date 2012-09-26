@@ -17,10 +17,10 @@ With it, you can::
 
     Read documents clearer. (with folding and extra highlighting)
     Write documents faster. (with indent and insert improvement)
-    Manage documents simpler. (with project and file link)
-    Even make your life easier. (with Todo and Diary.)
+    Manage documents easier. (with project and file link)
+    Even make your life simpler. (with Todo and Diary.)
 
-You may say it's not so good as described, but I will try :)
+You may say it's not so good as described, but I will try :P
 
 Features
 --------
@@ -48,14 +48,14 @@ Features
 **Managing**
 
  :Project_:  Hold your rst documents in one place.
+ :File_:     Link local file in rst documents. (non-reStructuredText syntax)
+
+             But you can choose ``Sphinx`` or ``MoinMoin`` style.
  :Scratch_:  writing diary or notes.
  :Helpers_: 
              a. `Section Helper`_: Showing section number of current document.
              b. `Todo Helper`_: Managing todo items of project or document.
              c. `File Helper`_: Showing rst files of current directory.
- :File_:     Link local file in rst documents. (non-reStructuredText syntax)
-
-             But you can choose ``Sphinx`` or ``MoinMoin`` style.
  :Todos_:    Keep track of todo things. (non-reStructuredText syntax)    
              
              And it's similar with Emacs's Org-Mode_ style.
