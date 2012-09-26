@@ -129,7 +129,7 @@ On Screen
 
 ScreenShot:
 
-.. image:: http://i.minus.com/ibmv5c3yvWMisp.png
+.. image:: http://i.minus.com/iU41Wc5e13MhS.png
 
 ScreenCast: TODO
 
