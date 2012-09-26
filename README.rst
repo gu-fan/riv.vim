@@ -9,16 +9,19 @@
 Intro
 =====
 
-**Riv** is a vim plugin for reading, writing and managing reStructuredText_ 
-(a simple and powerful plain text markup).
+**Riv** is for writing and managing your document with reStructuredText_ 
+(a simple and powerful plain text markup) in vim.
 
 Short for 'reStructuredText in Vim'. 
 
 With it, you can::
 
-    Read documents clearer.
-    Write documents neater.
-    Manage documents easier.
+    Read documents clearer. (with folding and extra highlighting)
+    Write documents faster. (with indent and insert improvement)
+    Manage documents simpler. (with project and file link)
+    Even make your life easier. (with Todo and Diary.)
+
+You may say it's not so good as described, but I will try :)
 
 Features
 --------
