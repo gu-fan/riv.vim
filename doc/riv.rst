@@ -2,7 +2,6 @@
 :Update: 2012-09-25
 :Version: 0.72 
 :Github: https://github.com/Rykka/riv.vim
-:Google Group: https://groups.google.com/forum/#!forum/vim_riv
 
 .. contents::
 
@@ -84,7 +83,6 @@ Getting Started
 * Snapshots: `On Screen`_
 * Know Issues: Issues_ 
 * Things Todo: Todo_.
-* Discussion at https://groups.google.com/forum/#!forum/vim_riv
 
 Install
 -------
@@ -169,7 +167,7 @@ There are some know issues:
     Could not fix this cause no Mac OS currently.
 
 * Post issues at https://github.com/Rykka/riv.vim/issues
-  Both bug reports and feature request are welcome. 
+  Both bug reports and feature request and discussions are welcome. 
 
 ----
 
