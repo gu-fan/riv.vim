@@ -3,7 +3,71 @@
 :Version: 0.72 
 :Github: https://github.com/Rykka/riv.vim
 
-.. contents::
+
+* Contents:
+
+  + 1 Intro_
+
+    + 1.1 Features_
+    + 1.2 `On Screen`_
+    + 1.3 `Getting Started`_
+    + 1.4 Install_
+    + 1.5 Todo_
+
+      + 1.5.1 Prev_
+      + 1.5.2 This_
+      + 1.5.3 Next_
+
+    + 1.6 Issues_
+
+  + 2 Instructions_
+
+    + 2.1 reStructuredText_
+
+      + 2.1.1 Folding_
+      + 2.1.2 Syntax_
+
+        + 2.1.2.1 `Code Highlighting`_
+        + 2.1.2.2 `Cursor Highlighting`_
+        + 2.1.2.3 `Docstring Highlighting`_
+
+      + 2.1.3 Indent_
+      + 2.1.4 Insert_
+      + 2.1.5 Sections_
+      + 2.1.6 Lists_
+
+        + 2.1.6.1 `List items`_
+
+      + 2.1.7 Blocks_
+      + 2.1.8 Inline_
+      + 2.1.9 Links_
+
+        + 2.1.9.1 `Link Items`_
+
+      + 2.1.10 Table_
+      + 2.1.11 Publish_
+
+    + 2.2 Riv_
+
+      + 2.2.1 Project_
+      + 2.2.2 File_
+
+        + 2.2.2.1 `Local File Link Converting`_
+
+      + 2.2.3 Scratch_
+      + 2.2.4 Todos_
+      + 2.2.5 Helpers_
+
+        + 2.2.5.1 `Todo Helper`_
+        + 2.2.5.2 `File Helper`_
+        + 2.2.5.3 `Section Helper`_
+
+      + 2.2.6 Miscs_
+
+  + 3 Appendix_
+
+    + 3.1 Commands_
+    + 3.2 Options_
 
 Intro
 =====
@@ -121,7 +185,7 @@ Install
     But if you are using Sphinx_'s tools set, you'd better not using it.
     Cause it could not recongize the sphinx's markups.
 
-Todo  
+Todo 
 ---------
 
 Prev
@@ -143,7 +207,7 @@ Things todo in this version.
   :Intro_: Rewrite riv_todo
   :Intro_: Rewrite riv_quickstart
 
-Next 
+Next
 ~~~~~
 
 See riv_todo_ ( doc/riv_todo.rst )

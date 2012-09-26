@@ -173,7 +173,7 @@ endfun "}}}
 
 " {{{1 Create Content table
 fun! s:trim(str) "{{{
-    return matchstr(a:str,'^\s*\zs.*\ze\s*$')
+    return matchstr(a:str,'^\s*\zs.*\S\ze\s*$')
 endfun "}}}
 fun! s:reflize(str) "{{{
     " referenceizing the string
