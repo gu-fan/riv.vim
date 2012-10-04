@@ -51,7 +51,7 @@ for code in g:_riv_t.highlight_code
         exe 'syn region rstDirective_'.code.' matchgroup=rstDirective fold '
             \.'start=#\%(sourcecode\|code\%(-block\)\=\)::\s\+'.code.'\_s*# '
             \.'skip=#^$# '
-            \.'end=#^\s\@!# contains=@rst_'.code
+            \.'end=#^\s\@!# contains=@NoSpell,@rst_'.code
         exe 'syn cluster rstDirectives add=rstDirective_'.code
 
         " For sphinx , the highlight directive can be used for highlighting
@@ -59,7 +59,7 @@ for code in g:_riv_t.highlight_code
         exe 'syn region rstDirective_hl_'.code.' matchgroup=rstDirective fold '
             \.'start=#highlights::\s\+'.code.'\_s*# '
             \.'skip=#^$# '
-            \.'end=#\_^\(..\shighlights::\)\@=# contains=@rst_'.code
+            \.'end=#\_^\(..\shighlights::\)\@=# contains=@NoSpell,@rst_'.code
         exe 'syn cluster rstDirectives add=rstDirective_hl_'.code
     endif
 

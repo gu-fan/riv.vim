@@ -4,7 +4,7 @@
 " Summary: file operation
 "          find /match/delete/
 "  Author: Rykka G.F
-"  Update: 2012-09-15
+"  Update: 2012-10-04
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -149,8 +149,8 @@ fun! riv#file#helper() "{{{
 endfun "}}}
 
 fun! s:find_sect(ptn) "{{{
-    if exists("b:state.sectmatcher")
-        for sect in b:state.sectmatcher
+    if exists("b:riv_state.sectmatcher")
+        for sect in b:riv_state.sectmatcher
             let line = getline(sect.bgn) 
             if line =~ g:_riv_p.section
                 let line = getline(sect.bgn+1)
@@ -198,12 +198,12 @@ function! riv#file#s_fold(row) "{{{
 endfunction "}}}
 
 fun! s:load_sect() "{{{
-    if !exists("b:state")
+    if !exists("b:riv_state")
         return []
     endif
     let lines = []
     let s:curr=expand('%:p')
-    for sect in b:state.sectmatcher
+    for sect in b:riv_state.sectmatcher
         let line =  getline(sect.bgn) 
         if line =~ g:_riv_p.section
             let line = getline(sect.bgn+1)

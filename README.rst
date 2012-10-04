@@ -170,6 +170,10 @@ Install
 
 :NOTE: Make sure ``filetype plugin indent on`` and ``syntax on`` is in your vimrc
 
+       and if you are using spell checking.
+
+       set ``syntax spell toplevel`` to enable it.
+
 :NOTE: It's a developing version. 
        So things may change quickly.Keep up-to-date.
 
@@ -202,6 +206,8 @@ Things todo in this version.
 
   :Syntax_: DONE 2012-09-25 highlight reStructuredText in python docstring.
   :File_: FIXED 2012-09-25 Fix the file link highlight of ``~/.xxx``
+  :Sections_: FIXED 2012-10-04 Fix the section Helper.
+  :Syntax_: FIXED 2012-10-04 Workround of the Spell checking.
   :Intro_: Accomplish the commands_ and  options_ section.
   :Intro_: ScreenCast tutor
   :Intro_: Rewrite riv_todo
