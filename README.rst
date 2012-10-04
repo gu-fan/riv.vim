@@ -84,7 +84,8 @@ With it, you can::
     Manage documents easier. (with project and file link)
     Even make your life simpler. (with Todo and Diary.)
 
-You may say it's not so good as described, but I will try :P
+Not so good as describing?
+I will try. :P
 
 Features
 --------
@@ -137,6 +138,7 @@ Getting Started
 ---------------
 
 * First exposure to reStructuredText? 
+
   Read `A ReStructuredText Primer`_ and the
   `Quick reStructuredText`_ user reference first.
 * Installation: see `Install`_
@@ -156,7 +158,6 @@ Install
  
     Bundle 'Rykka/riv.vim'
 
-.. _Vundle: https://www.github.com/gmarik/vundle
 
 * Using downloaded zip/tar.gz file. 
   Just extract it to your ``.vim`` folder .
@@ -175,7 +176,9 @@ Install
        set ``syntax spell toplevel`` to enable it.
 
 :NOTE: It's a developing version. 
-       So things may change quickly.Keep up-to-date.
+       So things may change quickly.
+
+       Keep up-to-date.
 
        You can get the latest version at https://github.com/Rykka/riv.vim 
 
@@ -1649,6 +1652,7 @@ You can set them in your vimrc.
 .. _Org-Mode: http://orgmode.org/
 .. _reStructuredText: http://docutils.sourceforge.net/rst.html
 .. _Syntastic: https://github.com/scrooloose/syntastic
+.. _Vundle: https://www.github.com/gmarik/vundle
 .. _docutils: http://docutils.sourceforge.net/
 .. _pygments: http://pygments.org/
 
