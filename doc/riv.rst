@@ -1,5 +1,5 @@
 :Author: Rykka G.F
-:Update: 2012-09-25
+:Update: 2012-10-04
 :Version: 0.72 
 :Github: https://github.com/Rykka/riv.vim
 
@@ -694,10 +694,13 @@ They are highlighted. Some are folded.
       To insert content in new line of this list item. add a blank line before it.
   
     - ``<C-CR>\<C-KEnter>`` 
+      or ``<C-E>li``
       Insert a new list of current list level
     - ``<S-CR>\<S-KEnter>`` 
+      or ``<C-E>lj``
       Insert a new list of current child list level
     - ``<C-S-CR>\<C-S-KEnter>`` 
+      or ``<C-E>lk``
       Insert a new list of current parent list level
     - When it's a field list, only the indent is inserted.
   
