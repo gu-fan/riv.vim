@@ -950,7 +950,9 @@ And it's highlighted with `Cursor Highlighting`_.
 
   **Jumping(Normal Mode):**
 
-  + Clicking on a links will jump to it's target. 
+  + Clicking on a links  will jump to it's target. 
+
+    ``<Enter>/<KEnter>`` or doubleclick or ``<C-E>ko``
     
     - A web link ( www.xxx.xxx or http://xxx.xxx.xxx or xxx@xxx.xxx ): 
 
@@ -987,11 +989,13 @@ And it's highlighted with `Cursor Highlighting`_.
 
   **Navigate(Normal Mode):**
     
-  + ``<Tab>/<S-Tab>`` will navigate to next/prev link in document.
+  + Navigate to next/prev link in document.
+
+    ``<Tab>/<S-Tab>`` or ``<C-E>kn/<C-E>kp``
    
   **Create (Normal and Insert):**
 
-  + ``:RivCreateLink`` ``<C-E>il``
+  + ``:RivCreateLink`` ``<C-E>ik``
     create a link from current word. 
 
     If it's empty, you will be asked to input one.

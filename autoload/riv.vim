@@ -270,7 +270,7 @@ let s:default.buf_maps = {
     \'Riv2Xml'           : ['',  'm',   '2xx'],
     \'Riv2BuildPath'     : ['',  'm',   '2b'],
     \'RivDelete'         : ['',  'm',   'df'],
-    \'RivCreateLink'     : ['',  'mi',  'il'],
+    \'RivCreateLink'     : ['',  'mi',  'ik'],
     \'RivCreateDate'     : ['',  'mi',  'id'],
     \'RivCreateFoot'     : ['',  'mi',  'if'],
     \'RivCreateTime'     : ['',  'mi',  'it'],
