@@ -3,7 +3,7 @@
 "    File: riv.vim
 " Summary: Riv autoload main
 "  Author: Rykka G.F
-"  Update: 2012-09-19
+"  Update: 2012-10-05
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -29,7 +29,7 @@ fun! riv#error(msg) "{{{
 endfun "}}}
 fun! riv#warning(msg) "{{{
     echohl WarningMsg
-    echo '[Warnging]'
+    echo '[Warning]'
     echon a:msg
     echohl Normal
 endfun "}}}
