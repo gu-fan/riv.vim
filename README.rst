@@ -1,5 +1,5 @@
 :Author: Rykka G.F
-:Update: 2012-10-04
+:Update: 2012-10-06
 :Version: 0.72 
 :Github: https://github.com/Rykka/riv.vim
 
@@ -215,9 +215,13 @@ Things todo in this version.
   :Intro_: ScreenCast tutor
   :Intro_: Rewrite riv_todo
   :Intro_: Rewrite riv_quickstart
+  :File_:  support dynamical rst file extension (for Sphinx)
+  :File_:  support sphinx embedded :doc: link.
 
 Next
 ~~~~~
+
+:Riv_: write tests
 
 See riv_todo_ ( doc/riv_todo.rst )
 
