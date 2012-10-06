@@ -149,6 +149,7 @@ Getting Started
 * Snapshots: `On Screen`_
 * Know Issues: Issues_ 
 * Things Todo: Todo_.
+* Contribute: Contribution_.
 
 Install
 -------
@@ -221,7 +222,7 @@ Things todo in this version.
 Next
 ~~~~~
 
-:Riv_: write tests
+:Test: write tests
 
 See riv_todo_ ( doc/riv_todo.rst )
 
@@ -245,6 +246,27 @@ There are some know issues:
 
 * Post issues at https://github.com/Rykka/riv.vim/issues
   Both bug reports and feature request and discussions are welcome. 
+
+Contribution
+------------
+
+There are many things needed to be done.
+If you are willing to improve this plugin.
+You can contribute to it.
+
+:Document: 
+           1. this intro document need review and rewrite.
+           2. rewrite and merge the quickstart and quickintro.
+              which could be used in vim.
+           3. A screencast for quickstart.
+
+:Code:
+        1. Supprot autoformatting for table with column/row span. 
+
+           The code of ``docutils/parsers/rst/tableparser`` 
+           can be referenced.
+        2. Support more other plugins of reStructuredText_
+
 
 ----
 
