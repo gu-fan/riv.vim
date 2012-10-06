@@ -250,23 +250,23 @@ There are some know issues:
 Contribution
 ------------
 
-There are many things needed to be done.
-If you are willing to improve this plugin.
-You can contribute to it.
+There are many things need to do.
+
+If you are willing to improve this plugin, Contribute to it.
 
 :Document: 
-           1. this intro document need review and rewrite.
+           1. This README document need review and rewrite.
+              it is also the helpdoc in vim.
            2. rewrite and merge the quickstart and quickintro.
               which could be used in vim.
            3. A screencast for quickstart.
 
 :Code:
-        1. Supprot autoformatting for table with column/row span. 
+        1. Support autoformatting for table with column/row span. 
 
-           The code of ``docutils/parsers/rst/tableparser`` 
+           The code of ``PATH-TO-Docutils/parsers/rst/tableparser`` 
            can be referenced.
         2. Support more other plugins of reStructuredText_
-
 
 ----
 
