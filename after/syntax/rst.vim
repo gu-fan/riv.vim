@@ -67,6 +67,10 @@ for code in g:_riv_t.highlight_code
 endfor
 let b:current_syntax = "rst"
 
+if has("spell")
+    syn spell toplevel
+endif
+
 " Todo Group: "{{{1
 syn cluster rstTodoGroup contains=rstTodoItem,rstTodoPrior,rstTodoTmBgn,rstTodoTmsEnd
 

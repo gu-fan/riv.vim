@@ -1,5 +1,5 @@
 :Author: Rykka G.F
-:Update: 2012-10-04
+:Update: 2012-10-06
 :Version: 0.72 
 :Github: https://github.com/Rykka/riv.vim
 
@@ -149,6 +149,7 @@ Getting Started
 * Snapshots: `On Screen`_
 * Know Issues: Issues_ 
 * Things Todo: Todo_.
+* Contribute: Contribution_.
 
 Install
 -------
@@ -170,10 +171,6 @@ Install
        Default is before $VIMRUNTIME.
 
 :NOTE: Make sure ``filetype plugin indent on`` and ``syntax on`` is in your vimrc
-
-       and if you are using spell checking.
-
-       set ``syntax spell toplevel`` to enable it.
 
 :NOTE: It's a developing version. 
        So things may change quickly.
@@ -210,14 +207,18 @@ Things todo in this version.
   :Syntax_: DONE 2012-09-25 highlight reStructuredText in python docstring.
   :File_: FIXED 2012-09-25 Fix the file link highlight of ``~/.xxx``
   :Sections_: FIXED 2012-10-04 Fix the section Helper.
-  :Syntax_: FIXED 2012-10-04 Workround of the Spell checking.
+  :Syntax_: FIXED 2012-10-04 Workaround of the Spell checking.
   :Intro_: Accomplish the commands_ and  options_ section.
   :Intro_: ScreenCast tutor
   :Intro_: Rewrite riv_todo
   :Intro_: Rewrite riv_quickstart
+  :File_:  support dynamical rst file extension (for Sphinx)
+  :File_:  support sphinx embedded :doc: link.
 
 Next
 ~~~~~
+
+:Test: write tests
 
 See riv_todo_ ( doc/riv_todo.rst )
 
@@ -241,6 +242,27 @@ There are some know issues:
 
 * Post issues at https://github.com/Rykka/riv.vim/issues
   Both bug reports and feature request and discussions are welcome. 
+
+Contribution
+------------
+
+There are many things need to do.
+
+If you are willing to improve this plugin, Contribute to it.
+
+:Document: 
+           1. This README document need review and rewrite.
+              it is also the helpdoc in vim.
+           2. rewrite and merge the quickstart and quickintro.
+              which could be used in vim.
+           3. A screencast for quickstart.
+
+:Code:
+        1. Support autoformatting for table with column/row span. 
+
+           The code of ``PATH-TO-Docutils/parsers/rst/tableparser`` 
+           can be referenced.
+        2. Support more other plugins of reStructuredText_
 
 ----
 
@@ -304,12 +326,12 @@ And extra infos are provided.
   Some extra info of folded lines will be shown at the first line.
   And the number of folded lines will be shown. 
   
-  + Sections_ folding will show it's section number.
-  + Todos_ folding will show the Todo progress : 
-  + Table_ will show number of rows and columns.
-  + '_`g:riv_fold_info_pos`' can be used to change info's side.
-    - when set to ``left``, these info will be shown at left side.
-    - default is ``right``, means shown at right side.
+  + Folded Sections_ will show it's section number.
+  + Folded Todos_ will show the Todo progress in percentage.
+  + Folded Table_ will show number of rows and columns.
+  + '_`g:riv_fold_info_pos`' can be used to change info's position.
+    - when set to ``left``, infos will be shown at left side.
+    - default is ``right``, show infos at right side.
   
 * Options:
 
@@ -364,7 +386,10 @@ Improved highlights for syntax items.
    - moinmoin style: ``[[xxx]] [[xxx.vim]]``
    - Sphinx style: ``:doc:`xxx` :file:`xxx.vim```
 
-*  Todos_ Item are highlighted. 
+*  Todos_ Item are highlighted.
+*  You can use ``:set spell``,
+   and ``spell`` is on for Literl-Block.
+
 
 Code Highlighting
 """""""""""""""""
@@ -1105,7 +1130,7 @@ For Grid table, it is auto formatted.
 
 
       
-      The table will be rendered as:
+      Previous table will be rendered as:
 
       +-------+-------------------------------------------------------------+
       |       | Grid Table (No column or row span supported yet)            |
@@ -1147,7 +1172,7 @@ For Grid table, it is auto formatted.
       ===========  ========================
 
 
-  The table will be rendered as:
+  Previous table will be rendered as:
 
   ===========  ========================
         A Simple Table
