@@ -25,7 +25,7 @@ syn cluster rstCruft                contains=rstEmphasis,rstStrongEmphasis,
 " A blank line is needed after the LiteralBlock
 syn region  rstLiteralBlock         matchgroup=rstDelimiter
       \ start='::\_s*\n\s*\n\ze\z(\s\+\)' skip='^$' end='^\z1\@!'
-      \ contains=@Spell
+      \ contains=@NoSpell
 
 syn region  rstLineBlock
       \ start='^\s*\ze|\_s' end='^\s*$'
