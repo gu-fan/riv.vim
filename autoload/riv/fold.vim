@@ -702,7 +702,7 @@ fun! riv#fold#text() "{{{
 
 endfun "}}}
 fun! riv#fold#update() "{{{
-    if  &filetype!='rst' || &fdm!='expr'
+    if  &filetype!='rst' || &fdm!='expr' || g:riv_fold_auto_update == 0
         return
     endif
     normal! zx

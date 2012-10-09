@@ -309,8 +309,9 @@ And extra infos are provided.
 
     Default is 1.
 
-    :NOTE: When you write file without updating folding,
-           Folding structure of document will be breaked.
+    :NOTE: When you write to a file without updating folding,
+           Previous folding structure of the document will be breaked. 
+           Manual updating is needed.
 
            So use it with caution.
 
