@@ -1,7 +1,7 @@
 " Vim syntax file
 " Language:         reStructuredText documentation format
 " Maintainer:       Nikolai Weibull <now@bitwi.se>
-" Latest Revision:  2012-06-03
+" Latest Revision:  2012-10-09
 
 if exists("b:current_syntax")
   finish
