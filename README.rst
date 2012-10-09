@@ -303,7 +303,16 @@ And extra infos are provided.
   + Open/Close Folding: ``zo``, ``zc``, ``zM``, ``zR``
   + Update Folding: ``zx``
 
-    Also Foldings will be auto updated whilst writing buffer to file, like ``:write``
+    And foldings will be auto updated whilst writing buffer to file, ``:write`` or ``:update``.
+
+    You can disable it by setting '_`g:riv_fold_auto_update`' to 0.
+
+    Default is 1.
+
+    :NOTE: When you write file without updating folding,
+           Folding structure of document will be breaked.
+
+           So use it with caution.
 
   + Toggle Folding: ``za``, ``zA``...
 

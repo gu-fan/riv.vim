@@ -105,6 +105,7 @@ let s:default.options = {
     \'fold_blank'         : 2,
     \'fold_level'         : 3,
     \'fold_section_mark'  : ".",
+    \'fold_auto_update'   : 1,
     \'content_format'     : '%i%l%n %t',
     \'auto_fold_force'    : 1,
     \'auto_fold1_lines'   : 5000,

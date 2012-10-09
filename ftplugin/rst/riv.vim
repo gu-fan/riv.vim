@@ -91,7 +91,9 @@ aug RIV_BUFFER "{{{
         au! WinLeave,BufWinLeave     <buffer>  2match none
     endif "}}}
     au  WinLeave,BufWinLeave     <buffer>  call riv#file#update()
-    au! BufWritePost <buffer>  call riv#fold#update() 
+    if exists("g:riv_fold_auto_update") && g:riv_fold_auto_update > 0
+        au! BufWritePost <buffer>  call riv#fold#update() 
+    endif
     au  BufWritePost <buffer>  call riv#todo#update()
     au! BufWritePre  <buffer>  call riv#create#auto_mkdir()
 aug END "}}}
