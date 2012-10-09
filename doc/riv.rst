@@ -1423,18 +1423,18 @@ in this form::
 
 :NOTE: link converting in a table will make the table error format.
        So you'd better convert it to a link manually.
-       use ``:RivCreateLink`` or ``<C-E>il`` to 
+       Use ``:RivCreateLink`` or ``<C-E>il`` to 
        create it manually. ::
    
            file.rst_
 
            .. _file.rst:: file.html   
 
-For now it's overhead with substitude by a temp file.
+For now it's overhead with substitute by a temp file.
 A parser for docutils_ is needed in the future.
 
 And for Sphinx_ users.
-you should use Sphinx's tool set to convert it.
+You should use Sphinx's tool set to convert it.
 
 Scratch
 ~~~~~~~
@@ -1449,12 +1449,12 @@ Scratch is a place for writing diary or notes.
 * ``:RivScratchView`` ``<C-E>cv``
   View Scratch index.
 
-  The index is auto created. Seperate scratches by years and month
+  The index is auto created. Separate scratches by years and month
   
   You can change the month name using 
   '_`g:riv_month_names`'. 
 
-  default is:
+  Default is:
 
       ``January,February,March,April,May,June,July,August,September,October,November,December``
 
@@ -1481,7 +1481,7 @@ It is Todo-box or Todo-keywords in a bullet/enumerated/field list.
 
   + You can change the todo box item by '_`g:riv_todo_levels`' ,
 
-    default is ``" ,o,X"``
+    Default is ``" ,o,X"``
 
 * Todo Keywords:
     
@@ -1492,51 +1492,51 @@ It is Todo-box or Todo-keywords in a bullet/enumerated/field list.
   + START A todo item of START/PROCESS/STOP keyword group.
   + You can define your own keyword group for todo items with '_`g:riv_todo_keywords`'
   
-    each keyword is seperated by ',' , each group is seperated by ';'
+    Each keyword is separated by ',' , each group is separated by ';'
   
-    default is ``"TODO,DONE;FIXME,FIXED;START,PROCESS,STOP"``,
+    Default is ``"TODO,DONE;FIXME,FIXED;START,PROCESS,STOP"``,
 
     :Note: the last one of each group is considered as the finish keyword.
 
 
-* Datestamps:
+* Date stamps:
 
-  Todo items's start or end date.
+  Todo item's start or end date.
 
-  + [X] 2012-06-23 A todo item with datestamp
-  + Double Click or ``<Enter>`` or ``:RivTodoDate`` on a datestamp to change date. 
+  + [X] 2012-06-23 A todo item with date stamp
+  + Double Click or ``<Enter>`` or ``:RivTodoDate`` on a date stamp to change date. 
 
     If you have Calendar_ installed , it will use it to choose date.
 
     .. _Calendar: https://github.com/mattn/calendar-vim
-  + It is controled by '_`g:riv_todo_datestamp`'
+  + It is controlled by '_`g:riv_todo_datestamp`'
   
-    - when set to 2 , will init with a start datestamp.
-      and when it's done , will add a finish datestamp.
+    - when set to 2 , will initial with a start date stamp.
+      And when it's done , will add a finish date stamp.
 
-      1. [ ] 2012-06-23 This is a todo item with start datestamp
-      2. [X] 2012-06-23 ~ 2012-06-23  A todo item with both start and finish datestamp. 
+      1. [ ] 2012-06-23 This is a todo item with start date stamp
+      2. [X] 2012-06-23 ~ 2012-06-23  A todo item with both start and finish date stamp. 
   
-    - when set to 1 , no init datestamp ,
-      will add a finish datestamp when it's done.
+    - when set to 1 , no initial date stamp ,
+      will add a finish date stamp when it's done.
 
-      1. [X] 2012-06-23 This is a todo item with finish datestamp, 
+      1. [X] 2012-06-23 This is a todo item with finish date stamp, 
 
-    - when set to 0 , no datestamp
+    - when set to 0 , no date stamp
     - Default is 1
   
 * Priorities:
 
-  The Priorites of todo item
+  The Priorities of todo item
 
-  + [ ] [#A] a todo item of priorty A
-  + [ ] [#C] a todo item of priorty C
-  + Double Click or ``<Enter>`` or ``:RivTodoPrior`` on priorty item 
+  + [ ] [#A] a todo item of priority A
+  + [ ] [#C] a todo item of priority C
+  + Double Click or ``<Enter>`` or ``:RivTodoPrior`` on priority item 
     to change priority. 
-  + You can define the priorty chars by '_`g:riv_todo_priorities`'
+  + You can define the priority chars by '_`g:riv_todo_priorities`'
     Only alphabet or digits are supported.
 
-    default is ``"ABC"``
+    Default is ``"ABC"``
 
 * Actions:
 
@@ -1546,7 +1546,7 @@ It is Todo-box or Todo-keywords in a bullet/enumerated/field list.
     
     When adding a todo item, todo group is '_`g:riv_todo_default_group`'
 
-    default is 0, which is the todo box group.
+    Default is 0, which is the todo box group.
 
   + Use ``:RivTodoType1`` ``<C-E>e1`` ... ``:RivTodoType4`` ``<C-E>e4`` 
     to add or change the todo item by group. 
@@ -1554,7 +1554,7 @@ It is Todo-box or Todo-keywords in a bullet/enumerated/field list.
 
   Change Todo Status
 
-  + Double Click or ``<Enter>`` in the box/keyword to swith the todo progress.
+  + Double Click or ``<Enter>`` in the box/keyword to switch the todo progress.
   
 
  
@@ -1587,7 +1587,7 @@ A window for helping project management.
 * Basic Commands:
 
   + ``/`` to enter search mode.
-    search item matching inputing, 
+    Search item matching inputing, 
     ``<Enter>`` or ``<Esc>`` to quit search mode.
       
     Set '_`g:riv_fuzzy_help`' to 1 to enable fuzzy searching in helper.
@@ -1611,7 +1611,7 @@ File Helper
 
 A helper to show rst files of current directory.
 
-also indicating following files if exists::
+Also indicating following files if exists::
 
     'ROOT': 'RT' Root of project
     'INDX': 'IN' Index of current directory
@@ -1641,10 +1641,10 @@ This is an incomplete list.
     
     + Snipmate: snippet
     + neocomplcache: auto complete and snippet
-    + calendar: set datestamp with it
+    + calendar: set date stamp with it
     + fugitive: git control
-    + solarized: a nice colorscheme
-    + galaxy.vim:  my colorshceme sets
+    + solarized: a nice color scheme
+    + galaxy.vim:  my color scheme plugin
     + ...
 
 Appendix
@@ -1666,7 +1666,7 @@ You can change it by following options.
     - ``:RivScratchView`` ``<C-E>cv`` View Scratch index.
 
   + '_`g:riv_buf_leader`' : leader map for reStructuredText buffers.
-  + '_`g:riv_buf_ins_leader`' : leader map for reStructuredText buffers's insert mode.
+  + '_`g:riv_buf_ins_leader`' : leader map for reStructuredText buffer's insert mode.
   + To remap a single mapping, use ``map`` in your vimrc::
         
         map <C-E>wi    :RivIndex<CR> 
