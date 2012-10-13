@@ -58,7 +58,7 @@ With it, you can::
 
     Read documents clearer. (with folding and extra highlighting)
     Write documents faster. (with indent and insert improvement)
-    Manage documents easier. (with project and file link)
+    Manage documents easier. (with project and Sphinx support)
     Even make your life simpler. (with Todo and Diary.)
 
 Features
@@ -103,9 +103,9 @@ Features
 On Screen
 ----------
 
-ScreenShot:
+ScreenShot: Work with Sphinx_
 
-.. image:: http://i.minus.com/iU41Wc5e13MhS.png
+.. image:: http://i.minus.com/ibj1XigngbbYKl.png 
 
 ScreenCast: TODO
 
