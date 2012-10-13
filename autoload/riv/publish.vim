@@ -171,7 +171,7 @@ fun! riv#publish#2(ft, file, path, browse) "{{{
     let file = expand(a:file)
     let out_path = a:path . riv#path#rel_to_root(file)
     let file_path = riv#path#ext_to(out_path, a:ft)
-    call s:auto_mkdir(out_path)
+    call riv#publish#auto_mkdir(out_path)
     if g:riv_file_link_style == 1
         call s:convert(a:ft, s:create_tmp(file), file_path, s:rst_args(a:ft))
     else
@@ -198,7 +198,7 @@ endfun "}}}
 
 fun! riv#publish#copy2proj(file,html_path) abort "{{{
     let out_path = a:html_path . riv#path#rel_to_root(expand(a:file))
-    call s:auto_mkdir(out_path)
+    call riv#publish#auto_mkdir(out_path)
     call s:sys( 'cp -f '. a:file. ' '.  fnamemodify(out_path, ':h'))
 endfun "}}}
 fun! riv#publish#proj2(ft) abort "{{{
@@ -227,7 +227,7 @@ fun! s:rst_args(ft) "{{{
     return exists("g:riv_rst2".a:ft."_args") ? !empty(g:riv_rst2{a:ft}_args)
                 \ ? g:riv_rst2{a:ft}_args : '' : ''
 endfun "}}}
-fun! s:auto_mkdir(path) "{{{
+fun! riv#publish#auto_mkdir(path) "{{{
     if !isdirectory(fnamemodify(a:path,':h')) 
         call mkdir(fnamemodify(a:path,':h'),'p')
     endif

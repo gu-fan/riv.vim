@@ -41,6 +41,10 @@ if g:riv_file_ext_link_hl == 1
 endif
 
 " Code Highlight: "{{{1
+
+" Add block indicator for code directive
+syn match rstCodeBlockIndicator `^\_.` contained
+
 for code in g:_riv_t.highlight_code
     " for performance , use $VIMRUNTIME and first in &rtp
     let path = join([$VIMRUNTIME, split(&rtp,',')[0]],',')
@@ -49,9 +53,9 @@ for code in g:_riv_t.highlight_code
         unlet! b:current_syntax
         exe "syn include @rst_".code." ".s:{code}path
         exe 'syn region rstDirective_'.code.' matchgroup=rstDirective fold '
-            \.'start=#\%(sourcecode\|code\%(-block\)\=\)::\s\+'.code.'\_s*# '
+            \.'start=#\%(sourcecode\|code\%(-block\)\=\)::\s\+'.code.'\s*$# '
             \.'skip=#^$# '
-            \.'end=#^\s\@!# contains=@NoSpell,@rst_'.code
+            \.'end=#^\s\@!# contains=@NoSpell,rstCodeBlockIndicator,@rst_'.code
         exe 'syn cluster rstDirectives add=rstDirective_'.code
 
         " For sphinx , the highlight directive can be used for highlighting
@@ -90,6 +94,10 @@ else
     hi def rstFileLink    guifg=#58A261  gui=underline ctermfg=77 cterm=underline
 endif
 hi link rstFileExtLink rstFileLink
+
+if exists("g:riv_code_indicator") && g:riv_code_indicator == 1
+    hi def link rstCodeBlockIndicator DiffAdd
+endif
 
 hi def link rstTodoItem     Include
 hi def link rstTodoPrior    Include

@@ -8,7 +8,6 @@
 let s:cpo_save = &cpo
 set cpo-=C
 
-
 let s:autoload_path = expand('<sfile>:p:h')
 " Helper "{{{1
 fun! s:error(msg) "{{{
@@ -54,6 +53,11 @@ fun! riv#load_map(map_dic) "{{{
         sil! exe "nor <silent> <Plug>".name." :".action."<CR>"
     endfor
 endfun "}}}
+fun! riv#load_cmd(cmd_list)
+    for [name,args,action] in a:cmd_list
+        sil! exe "com!" args name action
+    endfor
+endfun
 fun! riv#set_g_map(map_dic) "{{{
     for [name,acts] in items(a:map_dic)
         if type(acts) == type([])
@@ -93,8 +97,8 @@ let s:default.options = {
     \'file_ext_link_hl'   : 1,
     \'file_link_invalid_hl' : 'ErrorMsg',
     \'file_link_style'    : 1,
-    \'file_link_convert'  : 1,
     \'highlight_code'     : "lua,python,cpp,javascript,vim,sh",
+    \'code_indicator'     : 1, 
     \'link_cursor_hl'     : 1,
     \'create_link_pos'    : '$',
     \'todo_levels'        : " ,o,X",
@@ -202,7 +206,6 @@ let s:default.maps = {
     \'RivQuickStart'     : 'call riv#action#quick_start()',
     \'RivCreateContent'  : 'call riv#section#content()',
     \}
-"}}}
 
 let s:default.g_maps = {
     \'RivIndex'          : ['ww', '<C-W><C-W>'] ,
@@ -218,6 +221,8 @@ let s:default.fold_maps = {
     \'RivFoldToggle'     : ['@=(foldclosed(".")>0?"zv":"zc")<CR>', '<Space><Space>'],
     \'RivFoldAll'        : ['@=(foldclosed(".")>0?"zR":"zM")<CR>', '<Space>m'],
     \}
+"}}}
+
 " buf maps "{{{
 " s => section
 " e => todo
@@ -316,6 +321,10 @@ let s:default.buf_vmaps = {
     \'<S-ScrollwheelUp>'   : '<gv',
     \}
 "}}}
+" Commads
+let s:default.cmds = [
+    \['RivDocTestVim','-nargs=* ', 'call riv#test#doctest(<f-args>)'],
+    \]
 " menus "{{{
 let s:default.menus = [
     \['Index'                             , 'ww'                     , 'RivIndex'          ]   ,
@@ -551,6 +560,7 @@ endfun "}}}
 fun! riv#init() "{{{
     " for init autoload
     call riv#load_opt(s:default.options)
+    call riv#load_cmd(s:default.cmds)
     call riv#load_map(s:default.maps)
     call riv#load_menu(s:default.menus)
     call riv#load_conf()

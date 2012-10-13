@@ -80,6 +80,26 @@ fun! riv#ptn#get_phase_idx(line, col) "{{{
     let ptn = printf('`[^`]*\%%%dc[^`]*`__\?\|\%%%dc`[^`]*`__\?', a:col, a:col)
     return match(a:line, ptn)
 endfun "}}}
+fun! riv#ptn#get_role_idx(line,col)
+    " return the index of sphinx role :doc: :download: ...
+    " 
+    " >>> let line = "test :doc:`Index <index>` testtest"
+    " >>> ec riv#ptn#get_role_idx(line, 2)
+    " >>> ec riv#ptn#get_role_idx(line, 10)
+    " >>> ec riv#ptn#get_role_idx(line, 12)
+    " >>> ec riv#ptn#get_role_idx(line, 14)
+    " >>> ec riv#ptn#get_role_idx(line, 28)
+    " -1
+    " 5
+    " 5
+    " 5
+    " -1
+    " 
+    " XXX: when col on ':' and '`' , it's not recognized.
+    let ptn = printf(':[^:`]*:`[^`]*\%%%dc[^`]*\|:[^:`]*\%%%dc[^`:]*:`[^`]*`', a:col,a:col)
+    " echoe ptn
+    return match(a:line, ptn)
+endfun
 fun! riv#ptn#get_inline_markup_obj(line, col, bgn) "{{{
     " if cursor is in a phase ,return it's idx , else return -1
     let ptn = '\v%<'.a:col.'c%(^|\s)([`*])\S.{-}%(\S)@<=\1_{,1}' . g:_riv_p.ref_end .   '%>'.a:col.'c'
@@ -309,8 +329,8 @@ fun! riv#ptn#init() "{{{
     "       [[/xxx/]] => DOC_ROOT/xxx/index.rst
     "
     "    2. sphinx style
-    "       :doc:`xxx.rst`   
-    "       :file:`/xxx/xxx.rst`
+    "       :doc:`xxx`   
+    "       :download:`/xxx/xxx.rst`
     "
     " NOTE:  the [[/xxx.rst]] for converting are not the same with 
     "        /xxx.rst for linking which will link to xxx.rst in the
@@ -349,9 +369,11 @@ fun! riv#ptn#init() "{{{
     elseif g:riv_file_link_style == 2 
         " sphinx style
         " :doc:`file` for rst document
-        " :file:`file.vim` for file link
-        let link_file = fname_bgn.'@<=:%(doc|file):`' 
-                    \. file_name .'`\ze'. fname_end 
+        " :download:`file.vim` for file link
+        " :doc:`Test <test.rst>` could be used
+        let link_file = fname_bgn.'@<=:%(doc|download):`%(' 
+                    \. file_name .'|[^`<>]*\<'.file_name.'\>'
+                    \.')`\ze'. fname_end 
     else
         let link_file = '^^'
     endif
@@ -581,9 +603,7 @@ endfun "}}}
 
 " Test 
 if expand('<sfile>:p') == expand('%:p') 
-    " echo '-p xxx   efefe' =~ '\v^\s*%(-\w%( \w+)=|--[[:alnum:]_-]+%(\=\w+)=|/\u)%(, %(-\w%( \w+)=|--[[:alnum:]_.-]+%(\=\w+)=|/\u))*%(  |\t)\ze\s*\S'
-    call riv#ptn#init()
-    " echo riv#ptn#match_obj_list("hello3fefew34",'\d')
+    call riv#test#doctest('%','%',1)
 endif
 
 let &cpo = s:cpo_save

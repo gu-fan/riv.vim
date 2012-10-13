@@ -172,7 +172,6 @@ fun! riv#link#open() "{{{
     endif
 endfun "}}}
 
-
 fun! riv#link#path(str) "{{{
     " return the local file path contained in the string.
     " style 1 
@@ -184,16 +183,20 @@ fun! riv#link#path(str) "{{{
     " [[~/xxx]] => ~/xxx
     " style 2
     " :doc:`xxx` => xxx.rst
-    " :doc:`xxx/` => xxx/index.rst
-    " :file:`xxx` => xxx
-    " :file:`/xxx` => /xxx
+    " :doc:`xxx/` => xxx/index.rst (illegal for sphinx)
+    " :download:`xxx` => xxx
+    " :download:`/xxx` => /xxx
     
     if g:riv_file_link_style == 1
         let f = matchstr(a:str, '^\[\[\zs.*\ze\]\]$')
-        let t = f =~ '^([~]|[a-zA-Z]:)' ? 'file' : 'doc'
+        let t = f =~ '^([~]|[a-zA-Z]:)' ? 'download' : 'doc'
     elseif g:riv_file_link_style == 2 
-        let f = matchstr(a:str, '^:\%(doc\|file\):`\zs.*\ze`$')
-        let t = matchstr(a:str,'^:\zs\%(doc\|file\)\ze:')
+        let f = matchstr(a:str, '^:\%(doc\|download\):`\zs.*\ze`$')
+        " if it's embeded link
+        if f =~ '<\S*>$'
+            let f = matchstr(f, '<\zs.*\ze>')
+        endif
+        let t = matchstr(a:str,'^:\zs\%(doc\|download\)\ze:')
     endif
     if riv#path#is_relative(f)
         let file = expand('%:p:h').'/' . f
@@ -218,10 +221,12 @@ fun! riv#link#path(str) "{{{
 endfun "}}}
 
 fun! s:get_P_or_W_idx(line, col) "{{{
-    let idx = riv#ptn#get_phase_idx(a:line, a:col)
-    if idx == -1
-        let idx = riv#ptn#get_WORD_idx(a:line, a:col)
-    endif
+    " get the index of the phase of the column,
+    " first role, then phase, then word index
+    let idx = riv#ptn#get_role_idx(a:line, a:col)
+    echo "R " idx
+    let idx = idx==-1 ? riv#ptn#get_phase_idx(a:line, a:col) : idx
+    let idx = idx==-1 ? riv#ptn#get_WORD_idx(a:line, a:col) : idx
     return idx
 endfun "}}}
 
