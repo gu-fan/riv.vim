@@ -182,8 +182,8 @@ Things todo in this version.
   :Intro_: DONE 2012-10-13 Options_ section.
   :Intro_: Commands_ section.
   :Intro_: ScreenCast tutor
-  :Intro_: Rewrite riv_todo
   :Intro_: Rewrite riv_quickstart
+  :Intro_: Cheatsheet and Specification added.
   :File_:  DONE 2012-10-13 support user defined rst file suffix.
   :File_:  DONE 2012-10-13 support sphinx embedded :doc: link.
   :Test:   DONE 2012-10-13 Add `:RivDocTestVim` for vim script test.
@@ -193,16 +193,14 @@ Things todo in this version.
 Next
 ~~~~~
 
-:Test: write tests
-
 See riv_todo_ ( doc/riv_todo.rst )
 
 
 Issues
 ------
 
-There are some know issues:
-
+* If the document folding showing some error.
+  You can try force reload ``:RivTestReload`` ``<C-E>t```
 * Windows:
   
   - Converting to other format may fail. 

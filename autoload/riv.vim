@@ -81,7 +81,8 @@ fun! riv#show_menu() "{{{
     sil! menu disable Riv.*
     if &ft != 'rst'
         sil! menu enable Riv.Index
-        sil! menu enable Riv.Choose\ Index
+        sil! menu enable Riv.Index\ list
+        sil! menu enable Riv.Html\ index
     else
         sil! menu enable Riv.*
     endif
@@ -392,6 +393,7 @@ let s:default.menus = [
     \['Helper.Todo\ Helper'               , 'ht'                     , 'RivHelpTodo'       ]   ,
     \['Helper.Update\ Todo\ Cache'        , 'uc'                     , 'RivTodoUpdateCache']   ,
     \['--Help---'                         , '  '                     , '  '                ]   ,
+    \['Test.Force\ Reload\ RST'           , 't`'                     , 'RivTestReload'     ]   ,
     \['Help.QuickStart'                   , '  '                     , 'RivQuickStart'     ]   ,
     \['Help.CheatSheet'                   , '  '                     , 'RivCheatSheet'     ]   ,
     \['Help.Specification'                , '  '                     , 'RivSpecification'  ]   ,
@@ -608,9 +610,86 @@ fun! riv#init() "{{{
     call riv#show_menu()
     call riv#load_aug()
 endfun "}}}
+
+fun! riv#buf_load_aug() "{{{
+    aug RIV_BUFFER "{{{
+        if exists("g:riv_auto_format_table") "{{{
+            au! InsertLeave <buffer> call riv#table#format_pos()
+        endif "}}}
+        if exists("g:riv_link_cursor_hl") "{{{
+            " cursor_link_highlight
+            au! CursorMoved,CursorMovedI <buffer>  call riv#link#hi_hover()
+            " clear the highlight before bufwin/winleave
+            au! WinLeave,BufWinLeave     <buffer>  2match none
+        endif "}}}
+        au  WinLeave,BufWinLeave     <buffer>  call riv#file#update()
+        au! BufWritePost <buffer>  call riv#fold#update() 
+        au  BufWritePost <buffer>  call riv#todo#update()
+        au! BufWritePre  <buffer>  call riv#create#auto_mkdir()
+    aug END "}}}
+endfun "}}}
+fun! s:imap(map_dic) "{{{
+    for [name, act] in items(a:map_dic)
+        exe "ino <buffer><expr><silent> ".name." ".act
+    endfor
+endfun "}}}
+fun! s:nmap(map_dic) "{{{
+    for [name, act] in items(a:map_dic)
+        exe "nor <buffer><silent> ".name." ".act
+    endfor
+endfun "}}}
+fun! s:vmap(map_dic) "{{{
+    for [name, act] in items(a:map_dic)
+        exe "vnor <buffer><silent> ".name." ".act
+    endfor
+endfun "}}}
+fun! s:map(map_dic) "{{{
+    let leader = g:riv_buf_leader
+    for [name, act] in items(a:map_dic)
+        let [nmap,mode,lmap] = act
+        if type(nmap) == type([])
+            for m in nmap
+                exe "map <silent><buffer> ".m." <Plug>".name
+            endfor
+        elseif nmap!=''
+            exe "map <silent><buffer> ".nmap." <Plug>".name
+        endif
+        if mode =~ 'm'
+            exe "map <silent><buffer> ". leader . lmap ." <Plug>".name
+        endif
+        if mode =~ 'n'
+            exe "nma <silent><buffer> ". leader . lmap ." <Plug>".name
+        endif
+        if mode =~ 'i'
+            exe "ima <silent><buffer> ". leader . lmap ." <C-O><Plug>".name
+        endif
+
+        unlet! nmap
+    endfor
+endfun "}}}
+fun! s:fold_map(map_dic) "{{{
+    let leader = g:riv_buf_leader
+    for [name,acts] in items(a:map_dic)
+         exe "nor <silent> <buffer> <Plug>".name." ".acts[0]
+       exe "map <silent> <buffer> ". leader . acts[1] ." ". acts[0]
+    endfor
+endfun "}}}
 fun! riv#buf_init()
     " for the rst buffer
-    
+    setl foldmethod=expr foldexpr=riv#fold#expr(v:lnum) foldtext=riv#fold#text()
+    setl comments=fb:.. commentstring=..\ %s 
+    setl formatoptions+=tcroql
+    setl expandtab
+    let b:undo_ftplugin = "setl fdm< fde< fdt< com< cms< et< fo<"
+                \ "| sil! unlet! b:riv_state b:riv_obj b:riv_flist"
+                \ "| mapc <buffer>"
+            \ "| au! RIV_BUFFER"
+    call s:imap(g:riv_default.buf_imaps)
+    call s:map(g:riv_default.buf_maps)
+    call s:nmap(g:riv_default.buf_nmaps)
+    call s:vmap(g:riv_default.buf_vmaps)
+    call s:fold_map(g:riv_default.fold_maps)
+    call riv#buf_load_aug()
 endfun
 
 if expand('<sfile>:p') == expand('%:p') 
