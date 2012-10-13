@@ -1,43 +1,13 @@
-*riv.txt*         Riv         reStructuredText in Vim
-
+*riv.txt*           Riv         reStructuredText in Vim
                      __________  .__  ____   ____                ~
                      \______   \ |__| \   \ /   /                ~
                       |       _/ |  |  \   Y   /                 ~
                       |    |   \ |  |   \     /                  ~
                       |____|_  / |__|    \___/                   ~
                              \/                                  ~
-
-                            Version : 0.71                       ~
 ======================================================================
-CONTENTS                                          *riv-contents*
 
-Intro                                             |riv-intro|
-
-======================================================================
-INTRO                                             *riv-intro*
-Riv is a vim plugin for managing and writing reStructuredText documents. 
-Short for 'reStructuredText in Vim'.
-
-It is for people either want to manage documents in a wiki way, 
-or writing documents in a neat way.
-
-.. _reStructuredText: http://docutils.sourceforge.net/rst.html
-
-----------------------------------------------------------------------
-QUICKSTART                                        *riv-quickstart*
-
-use `:RivQuickStart`. or view riv_quickstart.rst
-
-----------------------------------------------------------------------
-DETAILS                                           *riv-details*
-
-See riv.rst (open it with |gf|)
-
-======================================================================
-CHANGELOG                                         *riv-changelog*
-
-See riv_log.rst
-Also riv_todo.rst
+See riv.rst (open it with |gf| or use ':e riv.rst' )
 
 ======================================================================
 vim:ft=help:tw=76

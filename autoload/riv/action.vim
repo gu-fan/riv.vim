@@ -19,6 +19,11 @@ fun! riv#action#quick_start() "{{{
     call setline(1,lines)
     update
 endfun "}}}
+fun! riv#action#open(name) "{{{
+    let file = g:_riv_c.doc_pat . 'riv_'.a:name.'.rst'
+    exe 'noa keepa bot sp' file
+    setl ro noma ft=rst
+endfun "}}}
 
 fun! riv#action#db_click(mouse) "{{{
     " could not use map <expr>

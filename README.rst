@@ -112,10 +112,6 @@ ScreenCast: TODO
 Getting Started
 ---------------
 
-* First exposure to reStructuredText? 
-
-  Read `A ReStructuredText Primer`_ and the
-  `Quick reStructuredText`_ user reference first.
 * Installation: see `Install`_
 * Quick Start: see `QuickStart With Riv`_  
   or use ``:RivQuickStart`` in vim.
@@ -255,6 +251,19 @@ reStructuredText
 The following features apply for all ``*.rst`` documents 
 having standard reStructuredText syntax.
 
+* If you are not familiar with reStructuredText.
+
+  Read `A ReStructuredText Primer`_ and `Quick reStructuredText`_. 
+* If you want view reStructuredText's detailed specification. 
+
+  Read `reStructuredText Specification`_
+
+  Use ``:RivSpecification`` to open it in vim.
+
+* And the `reStructuredText cheatsheet`_ as the handbook.
+
+  Use ``:RivCheatSheet`` to open it in vim.
+
 Folding 
 ~~~~~~~~
 
@@ -268,7 +277,7 @@ like: select(V), copy(yy), paste(p) ... Etc.
 
 See ``:h folding`` for more infos.
 
-Sections, lists, and blocks are folded automatically,
+With Riv, Sections, lists, and blocks are folded automatically,
 And extra infos are provided.
 
 * Commands:
@@ -278,7 +287,7 @@ And extra infos are provided.
   These 'z' folding commands can be used.
   Like 'zo' 'zc' ...
 
-  Also Some extra commands are provided.
+  Also extra commands are provided.
 
   + Open/Close Folding: ``zo``, ``zc``, ``zM``, ``zR``
   + Update Folding: ``zx``
@@ -319,7 +328,7 @@ And extra infos are provided.
   + Folded Table_ will show number of rows and columns.
   + '`g:riv_fold_info_pos`_' can be used to change info's position.
   
-* Options:
+* Extra Options:
 
   + To show the blank lines in the end of a folding, use '`g:riv_fold_blank`_'.
   + For large files. Calculate folding may cost time. 
@@ -396,7 +405,7 @@ Some item that could operate by cursor are highlighted when cursor is on.
 * Links are highlighted in ``hl-incSearch``
 
   + if the target file is invalid, it will be highlighted by 
-    '`g:riv_file_link_invalid_hl`_', default is ``"ErrorMsg"``
+    '`g:riv_file_link_invalid_hl`_'
 * Todo items are highlighted in ``hl-DiffAdd``
 
 You can disable Cursor Highlighting by set '`g:riv_link_cursor_hl`_' to 0
@@ -413,7 +422,6 @@ Also you can set the file type to ``rst``
 to gain riv features in python file. ::
     
     set ft=rst
-
 
 Indent
 ~~~~~~
@@ -549,9 +557,11 @@ And it's folded by it's level.
 
     You can set '`g:riv_content_format`_' to change it's format.
     
-* Options:
+* Extra Options:
 
-  + Although you can define a section title with most punctuations
+  + The title punctuations:
+
+    Although you can define a section title with most punctuations
     (any non-alphanumeric printable 7-bit ASCII character). 
 
     Riv use following punctuations for titles: 
@@ -562,7 +572,9 @@ And it's folded by it's level.
 
     The ``:RivTitle0`` will use ``#``
 
-  + Section number are separated by '`g:riv_fold_section_mark`_'
+  + Section mark:
+
+    Section number are separated by '`g:riv_fold_section_mark`_'
 
 See `reStructuredText sections`__ for syntax details.
 
@@ -707,207 +719,11 @@ They are highlighted. Some are folded.
     - ``:RivListDelete`` ``<C-E>lx``
       Delete current list item symbol
 
-
-
-List items
-""""""""""
-
-A quick intro of the reStructuredText lists.
-
-* Bullet Lists
-
-  List item start with ``*,+,-`` , 
-  **NOT** include ``•‣⁃`` as they are Unicode chars.
-
-  It is highlighted, folded. And auto leveled.
-
-  See `Bullet Lists`__  for syntax details.
-
-__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#bullet-lists
-
-1. Enumerated Lists
-
-   A sequenced enumerator. Like Arabic numerals , alphabet characters , Roman numerals
-   with the formating type ``#.`` ``(#)`` ``#)``
-
-   It is highlighted, folded, auto numbered and auto leveled.
-    
-   See `Enumerated Lists`__  for syntax details.
-
-__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#enumerated-lists
-
-Definition Lists
-    A list with a term and an indented definition.
-
-    It is highlighted, not folded.
-
-    See `Definition Lists`__  for syntax details.
-
-__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#definition-lists
-
-:Field Lists:   A List which field name is suffix and 
-                prefix by a single colon ``:field:``
-
-                It is highlighted, and folded.
-
-                Bibliographic Fields items are highlighted in another color.
-
-                See `Field Lists`__  for syntax details.
-
-__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#field-lists
-
-* Option Lists
-
-  A list for command-line options and descriptions
-
-  -a         Output all.
-  -b         Output both (this description is
-             quite long).
-
-  It is highlighted , not folded.
-
-  See `Option Lists`__  for syntax details.
-
-__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#option-lists
-
-
-:NOTE: **A reStructuredText syntax hint**
-    
-       * Most reStructuredText items is separated by blank line. 
-         Include sections, lists, blocks, paragraphs ...
-
-       * Also the reStructuredText is indent sensitive.
-
-       **So subitem of a list have strict syntax**
-
-       To contain a sub item ( lists or paragraphs or blocks ) in a list , 
-        
-       A blank line is needed and the sub item should lines up with 
-       the main list content's left edge.::
-
-           * list 1
-
-            - WRONG! This list is not line up with content's left edge, 
-              so it's in a block quote
-             
-               - WRONG! This list is in a block quote too.
-
-           * list 2
-             - TOO WRONG! A blank line is needed.
-               It's not a sub list of previous list , it's just a line in the content. 
-
-           * list 3
-              - STILL WRONG! Not line up and no blank line.
-                It's not a sub list , but it's a list in a definition list
-
-           * list 4
-
-             - RIGHT! This one is sub list of list 4.
-
-
 Blocks
 ~~~~~~
 
-A quick intro of the Blocks of reStructuredText document.
-
-Highlighted , and most are folded.
-
-* Literal Blocks:
-    
-  Indented literal Blocks ::
-
-   This is a Indented Literal Block.
-   No markup processing is done within it
-
-   For a in [5,4,3,2,1]:   # this is program code, shown as-is
-          print a
-   print "it's..."
-
-  Quoted literal blocks ::
-
-   > This is a Indented Literal Block.
-   > It have a punctuation '' at the line beginning.
-   > The quoting characters are preserved in the processed document
-
-  It's highlighted and folded.
-
-  See `Literal Blocks`__ for syntax details.
-    
-__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#literal-blocks
-
-* Line Blocks::
-
-    | It should have '|' at the beginning
-    | It can have multiple lines
-
-
-  | This is a line block
-
-  | This is the second line (github did not render it correctly as it have div)
-
-  It's highlighted and folded. 
-
-  :Note: for speed considering , the blank line between line blocks are ignored
-         as they are a single line block.
-
-  See `Line Blocks`__ for syntax details.
-
-__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#line-blocks
-
-* Block Quotes:
-
-    Block quote are indented paragraphs.
-
-    This is a block quote
-
-  Block quotes are not highlighted and not folded, 
-  cause it contains other document elements.
-
-    This is a block quote with attribution
-
-    -- Attribution
-
-  The attribution: a text block beginning with "--", "---".::
-
-    -- Attribution (Github did not rendering it correctly as no 'attribution' class)
-    
-  The attribution is highlighted.
-
-  See `Block Quotes`__ for syntax details.
-
-__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#block-quotes
-
-* Doctest Blocks:
-
->>> print 'this is a Doctest block'
-this is a Doctest block
-    
-It's highlighted, not folded.
-
-See `Doctest Blocks`__ for syntax details.
-
-__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#doctest-blocks
-
-* Explicit Markup Blocks::
-    
-    Start with '..' and a whitespace.
-
-  :NOTE: Although reStructuredText support start ``..`` with indent.
-         Riv does not support this yet. 
-         
-         Put all ``..`` at first column to gain highlighting and folding.
-
-  The explicit markup syntax is used for footnotes, citations, hyperlink targets,
-  directives, substitution definitions, and comments.
-
-  It's folded , and it's highlighted depending on it's role.
-
-  See `Explicit Markup Blocks`__ for syntax details.
-
-  And for the ``code`` directives, syntax highlighting is on. 
-  See `Code Highlighting`_  for details.
-
-__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#explicit-markup-blocks
+Blocks in document are highlighting, 
+and some are folded.
 
 Inline
 ~~~~~~~
@@ -915,10 +731,6 @@ Inline
 In-line Markup are highlighted.
 
 :In The Future: an option for conceal?
-
-See `inline markup`__ for syntax details.
-
-__ http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#inline-markup
 
 Links
 ~~~~~
@@ -991,53 +803,6 @@ And it's highlighted with `Cursor Highlighting`_.
     And append the footnote target to the end of file.
 
 
-Link Items
-""""""""""
-* A quick Intro of Links.
-
-  Links are hyperlink references and hyperlink targets.
-        
-  The hyperlink references are indicated by a trailing underscore
-  or standalone hyperlink::
-
-       xxx_            A reference
-       `xxx xxx`_      Phase reference
-       xxx__           Anonymous references, links to next anonymous targets
-       `Python home page <http://www.python.org>`_ 
-                       Embedded URIs
-       [xxx]_          A footnote or citation reference
-       www.xxxx.xxx   http://xxx.xxx.xxx
-                       Standalone hyperlink
-       xxx@ccc.com     Email address as mailto:xxx@ccc.com
-
-  See `Hyperlink References`_ for syntax details.
-
-  There are implicit hyperlink targets and explicit hyperlink targets.
-
-  Implicit hyperlink targets are generated by section titles, 
-  footnotes, and citations.
-
-  Explicit hyperlink targets are defined as follows::
-
-   .. _hyperlink-name: link-block
-   .. __: anonymous-hyperlink-target-link-block
-   _`an in-line hyperlink target`
-            
-  See `Hyperlink targets`_ for syntax details.
-
-  :NOTE: In converted file, Implicit hyperlink are internal file link, 
-         and Explicit hyperlink are external links.
-
-         While in vim, clicking both links will bring you to internal target location.
-
-         No opening browser for explicit hyperlink ,for it's target may not valid in local domain.
-
-.. _Hyperlink References:
-   http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#hyperlink-references
-
-.. _Hyperlink targets:
-   http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#hyperlink-targets
-
 Table
 ~~~~~
 
@@ -1063,29 +828,7 @@ For Grid table, it is auto formatted.
 
     **Insert Mode Only:**
 
-    - Inside the Table ::
-
-        +-------+-------------------------------------------------------------+
-        |       | Grid Table (No column or row span supported yet)            |
-        +-------+-------------------------------------------------------------+
-        | Lines | - <Enter> in column to add a new line                       |
-        |       | - This is the second line of in same row of table.          |
-        +-------+-------------------------------------------------------------+
-        | Rows  | - <C-Enter> to add a separator and a new row                |
-        |       | - <C-S-Enter> to add a header separator and a new row       |
-        |       |   (There could be only one header separator in a table)     |
-        |       | - <S-Enter> to jump to next line                            |
-        +-------+-------------------------------------------------------------+
-        | Cell  | - <C-E>tn or <Tab> or RivTableNextCell, jump to next cell   |
-        |       | - <C-E>tp or <S-Tab> or RivTablePrevCell, jump to prev cell |
-        +-------+-------------------------------------------------------------+
-        | Multi | - Multi Byte characters are OK                              |
-        |       | - 一二三四五  かきくけこ                                    |
-        +-------+-------------------------------------------------------------+
-
-
-      
-      Previous table will be rendered as:
+    - Inside the Table
 
       +-------+-------------------------------------------------------------+
       |       | Grid Table (No column or row span supported yet)            |
@@ -1117,21 +860,7 @@ For Grid table, it is auto formatted.
   Highlighted and folded.
   When folded, the numbers of rows and columns will be shown as '3+2'
 
-  No auto formatting. ::
-
-      ===========  ========================
-            A Simple Table
-      -------------------------------------
-      Col 1        Col 2
-      ===========  ========================
-      1             row 1        
-      2             row 2        
-      3             - first line row 3
-                    - second line of row 3
-      ===========  ========================
-
-
-  Previous table will be rendered as:
+  No auto formatting.
 
   ===========  ========================
         A Simple Table
@@ -1847,3 +1576,7 @@ Options
 .. _Quick reStructuredText: http://docutils.sourceforge.net/docs/user/rst/quickref.html
 .. _Grid tables: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#grid-tables
 .. _Simple Tables: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#simple-tables
+
+.. _reStructuredText Specification: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html
+.. _reStructuredText cheatsheet: http://docutils.sourceforge.net/docs/user/rst/cheatsheet.txt
+

@@ -207,6 +207,8 @@ let s:default.maps = {
     \'RivScratchCreate'  : 'call riv#create#scratch()',
     \'RivScratchView'    : 'call riv#create#view_scr()',
     \'RivQuickStart'     : 'call riv#action#quick_start()',
+    \'RivCheatSheet'     : 'call riv#action#open("cheatsheet")',
+    \'RivSpecification'  : 'call riv#action#open("specification")',
     \'RivCreateContent'  : 'call riv#section#content()',
     \}
 
@@ -331,12 +333,8 @@ let s:default.cmds = [
 " menus "{{{
 let s:default.menus = [
     \['Index'                             , 'ww'                     , 'RivIndex'          ]   ,
-    \['Choose\ Index'                     , 'wa'                     , 'RivAsk'            ]   ,
-    \['Helper.File\ Helper'               , 'hf'                     , 'RivHelpFile'       ]   ,
-    \['Helper.Todo\ Helper'               , 'ht'                     , 'RivHelpTodo'       ]   ,
-    \['Helper.Update\ Todo\ Cache'        , 'uc'                     , 'RivTodoUpdateCache']   ,
-    \['Scratch.Create\ Scratch'           , 'sc'                     , 'RivScratchCreate'  ]   ,
-    \['Scratch.View\ Index'               , 'cv'                     , 'RivScratchView'    ]   ,
+    \['Index\ list'                     , 'wa'                     , 'RivAsk'            ]   ,
+    \['Html\ index'                       , 'wi'                     , 'Riv2HtmlIndex'     ]   ,
     \['--Action--'                        , '  '                     , '  '                ]   ,
     \['Title.Create\ level0\ Title'       , 's0'                     , 'RivTitle0'         ]   ,
     \['Title.Create\ level1\ Title'       , 's1'                     , 'RivTitle1'         ]   ,
@@ -349,7 +347,7 @@ let s:default.menus = [
     \['Link.Next\ Link'                   , 'kn\ or\ \<Tab>'         , 'RivLinkNext'       ]   ,
     \['Link.Previous\ Link'               , 'kp\ or\ <S-Tab>'        , 'RivLinkPrev'       ]   ,
     \['Link.-------'                      , '  '                     , '  '                ]   ,
-    \['Link.Create\ Link'                 , 'il'                     , 'RivCreateLink'     ]   ,
+    \['Link.Create\ Link'                 , 'ik'                     , 'RivCreateLink'     ]   ,
     \['Link.Create\ Footnote'             , 'if'                     , 'RivCreateFoot'     ]   ,
     \['List.Shift\ Right'                 , 'lu\ or\ >'              , 'RivShiftRight'     ]   ,
     \['List.Shift\ Left'                  , 'ld\ or\ <'              , 'RivShiftLeft'      ]   ,
@@ -371,25 +369,32 @@ let s:default.menus = [
     \['Create.Timestamp'                  , 'it'                     , 'RivCreateTime'     ]   ,
     \['Create.Content\ Table'             , 'it'                     , 'RivCreateContent'  ]   ,
     \['Delete.Delete\ Current\ File'      , 'df'                     , 'RivDelete'         ]   ,
-    \['--Convert---'                      , '  '                     , '  '                ]   ,
+    \['Table.Create'                      , 'tc'                     , 'RivTableCreate'    ]   ,
+    \['Table.Format'                      , 'tf'                     , 'RivTableFormat'    ]   ,
+    \['Table.NextCell'                    , 'tp\ or\ i_<Tab>'        , 'RivTableNextCell'  ]   ,
+    \['Table.PrevCell'                    , 'tn\ or\ i_<S-Tab>'      , 'RivTablePrevCell'  ]   ,
+    \['--View---'                         , '  '                     , '  '                ]   ,
+    \['Folding.Update'                    , '<Space>j\ or\ zx'       , 'RivFoldUpdate'     ]   ,
+    \['Folding.Toggle'                    , '<Space><Space>\ or\ za' , 'RivFoldToggle'     ]   ,
+    \['Folding.All'                       , '<Space>m\ or\ zA'       , 'RivFoldAll'        ]   ,
+    \['--Project---'                      , '  '                     , '  '                ]   ,
     \['Convert.Open\ Build\ Path'         , '2b'                     , 'Riv2BuildPath'     ]   ,
-    \['Convert.to\ Html.Browse\ Current'  , '2hh'                    , 'Riv2HtmlAndBrowse' ]   ,
-    \['Convert.to\ Html.Convert\ Current' , '2hf'                    , 'Riv2HtmlFile'      ]   ,
-    \['Convert.to\ Html.Browse\ index'    , '2hf'                    , 'Riv2HtmlIndex'     ]   ,
+    \['Convert.to\ Html.Convert\ Browse'  , '2hh'                    , 'Riv2HtmlAndBrowse' ]   ,
+    \['Convert.to\ Html.Convert\ Only'    , '2hf'                    , 'Riv2HtmlFile'      ]   ,
     \['Convert.to\ Html.Convert\ Project' , '2hp'                    , 'Riv2HtmlProject'   ]   ,
     \['Convert.to\ Odt'                   , '2oo'                    , 'Riv2Odt'           ]   ,
     \['Convert.to\ Latex'                 , '2ll'                    , 'Riv2Latex'         ]   ,
     \['Convert.to\ S5'                    , '2ss'                    , 'Riv2S5'            ]   ,
     \['Convert.to\ Xml'                   , '2xx'                    , 'Riv2Xml'           ]   ,
-    \['--Format---'                       , '  '                     , '  '                ]   ,
-    \['Table.Create'                      , 'tc'                     , 'RivTableCreate'    ]   ,
-    \['Table.Format'                      , 'tf'                     , 'RivTableFormat'    ]   ,
-    \['Table.NextCell'                    , 'tp\ or\ i_<Tab>'        , 'RivTableNextCell'  ]   ,
-    \['Table.PrevCell'                    , 'tn\ or\ i_<S-Tab>'      , 'RivTablePrevCell'  ]   ,
-    \['--Fold---'                         , '  '                     , '  '                ]   ,
-    \['Folding.Update'                    , '<Space>j\ or\ zx'       , 'RivFoldUpdate'     ]   ,
-    \['Folding.Toggle'                    , '<Space><Space>\ or\ za' , 'RivFoldToggle'     ]   ,
-    \['Folding.All'                       , '<Space>m\ or\ zA'       , 'RivFoldAll'        ]   ,
+    \['Scratch.Create\ Scratch'           , 'sc'                     , 'RivScratchCreate'  ]   ,
+    \['Scratch.View\ Index'               , 'sv'                     , 'RivScratchView'    ]   ,
+    \['Helper.File\ Helper'               , 'hf'                     , 'RivHelpFile'       ]   ,
+    \['Helper.Todo\ Helper'               , 'ht'                     , 'RivHelpTodo'       ]   ,
+    \['Helper.Update\ Todo\ Cache'        , 'uc'                     , 'RivTodoUpdateCache']   ,
+    \['--Help---'                         , '  '                     , '  '                ]   ,
+    \['Help.QuickStart'                   , '  '                     , 'RivQuickStart'     ]   ,
+    \['Help.CheatSheet'                   , '  '                     , 'RivCheatSheet'     ]   ,
+    \['Help.Specification'                , '  '                     , 'RivSpecification'  ]   ,
     \]
 "}}}
 " project options " {{{
@@ -576,13 +581,18 @@ fun! riv#load_conf() "{{{1
     let s:e.REF_NOT_FOUND = "Riv: Could not find the reference"
 
 endfun "}}}
+fun! riv#set_ft()
+    if &ft != "help"
+        setl ft=rst
+    endif
+endfun
 fun! riv#load_aug()
     " Load the global auto group 
     aug RIV_GLOBAL
         au!
         au WinEnter,BufWinEnter * call riv#show_menu()
         for ext in g:_riv_c.doc_ext_list
-            exe 'au BufEnter *.'.ext.' set ft=rst' 
+            exe 'au BufEnter *.'.ext.' call riv#set_ft()' 
         endfor
     aug END
     
