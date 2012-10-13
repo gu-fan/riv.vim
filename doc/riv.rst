@@ -1,3 +1,7 @@
+#######################
+reStructuredText in Vim
+#######################
+
 :Author: Rykka G.F
 :Update: 2012-10-13
 :Version: 0.72 
@@ -6,68 +10,41 @@
 
 * Contents:
 
-  + 1 Intro_
+  * 1 Intro_
 
-    + 1.1 Features_
-    + 1.2 `On Screen`_
-    + 1.3 `Getting Started`_
-    + 1.4 Install_
-    + 1.5 Todo_
+    * 1.1 Features_
+    * 1.2 `On Screen`_
+    * 1.3 `Getting Started`_
+    * 1.4 Install_
+    * 1.5 Todo_
+    * 1.6 Issues_
+    * 1.7 Contribution_
 
-      + 1.5.1 Prev_
-      + 1.5.2 This_
-      + 1.5.3 Next_
+  * 2 Instructions_
 
-    + 1.6 Issues_
+    * 2.1 reStructuredText_
 
-  + 2 Instructions_
+      * 2.1.1 Folding_
+      * 2.1.2 Syntax_
+      * 2.1.7 Blocks_
+      * 2.1.8 Inline_
+      * 2.1.9 Links_
+      * 2.1.10 Table_
+      * 2.1.11 Publish_
 
-    + 2.1 reStructuredText_
+    * 2.2 Riv_
 
-      + 2.1.1 Folding_
-      + 2.1.2 Syntax_
+      * 2.2.1 Project_
+      * 2.2.2 File_
+      * 2.2.3 Scratch_
+      * 2.2.4 Todos_
+      * 2.2.5 Helpers_
+      * 2.2.6 Sphinx_
 
-        + 2.1.2.1 `Code Highlighting`_
-        + 2.1.2.2 `Cursor Highlighting`_
-        + 2.1.2.3 `Docstring Highlighting`_
+  * 3 Appendix_
 
-      + 2.1.3 Indent_
-      + 2.1.4 Insert_
-      + 2.1.5 Sections_
-      + 2.1.6 Lists_
-
-        + 2.1.6.1 `List items`_
-
-      + 2.1.7 Blocks_
-      + 2.1.8 Inline_
-      + 2.1.9 Links_
-
-        + 2.1.9.1 `Link Items`_
-
-      + 2.1.10 Table_
-      + 2.1.11 Publish_
-
-    + 2.2 Riv_
-
-      + 2.2.1 Project_
-      + 2.2.2 File_
-
-        + 2.2.2.1 `Local File Link Converting`_
-
-      + 2.2.3 Scratch_
-      + 2.2.4 Todos_
-      + 2.2.5 Helpers_
-
-        + 2.2.5.1 `Todo Helper`_
-        + 2.2.5.2 `File Helper`_
-        + 2.2.5.3 `Section Helper`_
-
-      + 2.2.6 Miscs_
-
-  + 3 Appendix_
-
-    + 3.1 Commands_
-    + 3.2 Options_
+    * 3.1 Commands_
+    * 3.2 Options_
 
 Intro
 =====
@@ -112,7 +89,7 @@ Features
  :Project_:  Hold your rst documents in one place.
  :File_:     Link local file in rst documents. (non-reStructuredText syntax)
 
-             But you can choose ``Sphinx`` or ``MoinMoin`` style.
+             And you can choose ``Sphinx`` or ``MoinMoin`` style.
  :Scratch_:  writing diary or notes.
  :Helpers_: 
              a. `Section Helper`_: Showing section number of current document.
@@ -121,7 +98,7 @@ Features
  :Todos_:    Keep track of todo things. (non-reStructuredText syntax)    
              
              And it's similar with Emacs's Org-Mode_ style.
- :Sphinx_:   Functions for working with Sphinx_.
+ :Sphinx_:   Working with Sphinx_.
 
 On Screen
 ----------
@@ -564,9 +541,11 @@ And it's folded by it's level.
     It's similar with the ``content`` directive,
     except it create the content table into the document.
 
-    The advantage is you can jumping with it in vim.
+    The advantage is you can jumping with it in vim,
+    and have full control of it.
 
-    The disadvantage is you must update it every time after you have changed the document.
+    The disadvantage is you must update it every time 
+    after you have changed the document structure.
 
     You can set '`g:riv_content_format`_' to change it's format.
     
@@ -1415,7 +1394,7 @@ Scratch is a place for writing diary or notes.
 
   Scratches are created auto named by date in '%Y-%m-%d' format.
 
-* ``:RivScratchView`` ``<C-E>cv``
+* ``:RivScratchView`` ``<C-E>sv``
   View Scratch index.
 
   The index is auto created. Separate scratches by years and month
@@ -1590,32 +1569,24 @@ A helper showing current document section numbers
 Sphinx
 ~~~~~~
 
-Riv try to work with Sphinx_.
+Riv can work with Sphinx_.
 
-For now, you can use Cross-referencing  document ``:doc:`xxx``` 
-and downloadable file ``:download:`xxx``` to jump to that document.
+- For now, you can use Cross-referencing  document ``:doc:`xxx``` 
+  and downloadable file ``:download:`xxx``` to jump to that document.
 
-The Cross-referencing arbitrary locations ``:ref:`xxx``` 
-are not supported yet.
+  The Cross-referencing arbitrary locations ``:ref:`xxx``` 
+  are not supported yet.
 
-To work with other master_doc and source_suffix, like 'main.txt' 
+- To work with other master_doc and source_suffix, like 'main.txt' 
 
-Define the global '`g:riv_master_doc`_' and '`g:riv_source_suffix`_'
-or define 'master_doc' and 'source_suffix' in your project.
+  Define the global '`g:riv_master_doc`_' and '`g:riv_source_suffix`_'
+  or define 'master_doc' and 'source_suffix' in your project.
 
-Miscs
-~~~~~
+- There are no wrapper for making command of Sphinx.
+  You should use ``:make html`` by your own.
 
-Some useful plugins.
-This is an incomplete list.
-    
-    + Snipmate: snippet
-    + neocomplcache: auto complete and snippet
-    + calendar: set date stamp with it
-    + fugitive: git control
-    + solarized: a nice color scheme
-    + galaxy.vim:  my color scheme plugin
-    + ...
+  And you can view the index page by ``:Riv2HtmlIndex`` or ``<C-E>wi``
+
 
 Appendix
 ========

@@ -215,7 +215,7 @@ let s:default.g_maps = {
     \'Riv2HtmlIndex'     : ['wi', '<C-W><C-I>'] ,
     \'RivAsk'            : ['wa', '<C-W><C-A>'] ,
     \'RivScratchCreate'  : ['sc', '<C-C><C-C>'] ,
-    \'RivScratchView'    : ['cv', '<C-C><C-V>'] ,
+    \'RivScratchView'    : ['sv', '<C-C><C-V>'] ,
     \'RivHelpTodo'       : ['ht', '<C-h><C-t>'] ,
     \'RivHelpFile'       : ['hf', '<C-h><C-f>'] ,
     \}

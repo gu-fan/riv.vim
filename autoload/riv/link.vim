@@ -108,7 +108,6 @@ fun! riv#link#open() "{{{
     if empty(mo) || mo.start+1 > col || mo.end < col
         return
     endif
-
     if !empty(mo.groups[1])
         " at it's target , find it's referrence
         let [sr,sc] = s:find_ref(mo.str)

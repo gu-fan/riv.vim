@@ -420,7 +420,7 @@ fun! riv#ptn#init() "{{{
     " .. _xxx:
     " .. __:   or   __
     " `xxx  <xxx>`
-    let tar_footnote = '^\.\.\s\[\zs%(\d+|#|#='.ref_name .')\ze\]\_s'
+    let tar_footnote = '^\.\.\s\zs\[%(\d+|#|#='.ref_name .')\]\ze\_s'
     let tar_inline = '%(\s|\_^)\zs_`[^`\\]+`\ze'.ref_end
     let tar_normal = '^\.\.\s\zs_[^:\\]+:\ze%(\s|$)'
     let tar_anonymous = '^\.\.\s\zs__:\ze\_s|^\zs__\ze%(\s|$)'
@@ -445,7 +445,7 @@ fun! riv#ptn#init() "{{{
     " 1 link_tar
     " 2 link_ref
     " 3 link_uri
-    "   4 link_uri_body
+    " 4 link_uri_body
     " 5 link_file
     let s:p.link_all = '\v('. link_target 
                 \ . ')|(' . link_reference
