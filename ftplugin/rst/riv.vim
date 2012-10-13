@@ -19,11 +19,7 @@ setl expandtab
 let b:undo_ftplugin = "setl fdm< fde< fdt< com< cms< et< fo<"
             \ "| sil! unlet! b:riv_state b:riv_obj b:riv_flist"
             \ "| mapc <buffer>"
-            \ "| sil! menu disable Riv.*"
-            \ "| sil! menu enable Riv.Index"
             \ "| au! RIV_BUFFER"
-" for table init
-let b:riv={}
 "}}}
 if !exists("*s:map") "{{{
 fun! s:imap(map_dic) "{{{
@@ -79,7 +75,6 @@ call s:map(g:riv_default.buf_maps)
 call s:nmap(g:riv_default.buf_nmaps)
 call s:vmap(g:riv_default.buf_vmaps)
 call s:fold_map(g:riv_default.fold_maps)
-call riv#show_menu()
 aug RIV_BUFFER "{{{
     if exists("g:riv_auto_format_table") "{{{
         au! InsertLeave <buffer> call riv#table#format_pos()

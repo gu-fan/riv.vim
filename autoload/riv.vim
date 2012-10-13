@@ -78,9 +78,10 @@ fun! riv#load_menu(menu_list) "{{{
     endfor
 endfun "}}}
 fun! riv#show_menu() "{{{
-    if expand('%:e') != 'rst'
-        sil! menu disable Riv.*
+    sil! menu disable Riv.*
+    if &ft != 'rst'
         sil! menu enable Riv.Index
+        sil! menu enable Riv.Choose\ Index
     else
         sil! menu enable Riv.*
     endif
@@ -134,6 +135,8 @@ let s:default.options = {
     \'month_names'        : 'January,February,March,April,May,June,July,'
                           \.'August,September,October,November,December',
     \'python_rst_hl'      : 0,
+    \'source_suffix'      : '.rst',
+    \'master_doc'         : 'index',
     \}
 " maps "{{{
 let s:default.maps = {
@@ -395,11 +398,13 @@ let g:riv_project_list = [ ]
 let g:riv_p_id = 0
 fun! riv#index(...) "{{{
     let id = a:0 ? a:1 : 0
+    let g:riv_p_id = id
+    let b:riv_p_id = id
     if exists("g:_riv_c.p[id]")
-        let path = g:_riv_c.p[id]._root_path
-        exe 'edit ' . path.'index.rst'
-        let g:riv_p_id = id
-        let b:riv_p_id = id
+        let path = riv#path#root()
+        " >>> echo riv#path#idx_file()
+        " index.rst
+        exe 'edit ' . path. riv#path#idx_file()
     else
         echohl ErrorMsg | echo "No such Project ID" | echohl Normal
     endif
@@ -467,6 +472,8 @@ fun! riv#load_conf() "{{{1
         \'path'               : '~/Documents/Riv',
         \'build_path'         : '_build',
         \'scratch_path'       : 'Scratch' ,
+        \'source_suffix'      : g:riv_source_suffix ,
+        \'master_doc'         : g:riv_master_doc ,
         \}
     let s:c.p = []
     if exists("g:riv_projects") && type(g:riv_projects) == type([])
@@ -481,7 +488,9 @@ fun! riv#load_conf() "{{{1
     if empty(s:c.p)
         call add(s:c.p, s:c.p_basic)
     endif
-
+    
+    let s:t.doc_exts = 'rst|txt'
+    let s:c.doc_ext_list = ['txt']
     for proj in s:c.p
         let root = expand(proj.path)
         let proj._root_path = riv#path#directory(root)
@@ -497,6 +506,16 @@ fun! riv#load_conf() "{{{1
             let s_path =   expand(proj.scratch_path)
         endif
         let proj._scratch_path =  riv#path#directory(s_path)
+        " the plain one
+        " >>> echo matchstr('.rst', '^\.\zs.*$')
+        " rst
+        let proj._source_suffix = matchstr(proj.source_suffix,'^\.\zs.*$') 
+        if proj._source_suffix !~ '\v'.s:t.doc_exts
+            " >>> echo g:_riv_t.file_exts
+            " rst|txt
+            let s:t.doc_exts .= '|'.proj._source_suffix
+            call add(s:c.doc_ext_list, proj._source_suffix)
+        endif
     endfor
     "}}}
     
@@ -557,6 +576,17 @@ fun! riv#load_conf() "{{{1
     let s:e.REF_NOT_FOUND = "Riv: Could not find the reference"
 
 endfun "}}}
+fun! riv#load_aug()
+    " Load the global auto group 
+    aug RIV_GLOBAL
+        au!
+        au WinEnter,BufWinEnter * call riv#show_menu()
+        for ext in g:_riv_c.doc_ext_list
+            exe 'au BufEnter *.'.ext.' set ft=rst' 
+        endfor
+    aug END
+    
+endfun
 fun! riv#init() "{{{
     " for init autoload
     call riv#load_opt(s:default.options)
@@ -566,10 +596,16 @@ fun! riv#init() "{{{
     call riv#load_conf()
     call riv#set_g_map(s:default.g_maps)
     call riv#show_menu()
+    call riv#load_aug()
 endfun "}}}
+fun! riv#buf_init()
+    " for the rst buffer
+    
+endfun
 
 if expand('<sfile>:p') == expand('%:p') 
     call riv#init()
+    call riv#test#doctest('%','%',2)
 endif
 let &cpo = s:cpo_save
 unlet s:cpo_save

@@ -9,33 +9,6 @@
 let s:cpo_save = &cpo
 set cpo-=C
 
-fun! riv#file#from_str(str) "{{{
-    " parse file name from string
-    " return [file , is_dir]
-    let file = a:str
-    if g:riv_file_link_style == 2
-        let file = matchstr(file, '^\[\zs.*\ze\]$')
-    endif
-    if !riv#path#is_relative(file)
-        if riv#path#is_directory(file)
-            return [expand(file), 1]
-        else
-            return [expand(file) , 0]
-        endif
-    elseif riv#path#is_directory(file)
-        return [file.'index.rst' , 0]
-    else
-        let f = matchstr(file, '.*\ze\.rst$')
-        if !empty(f)
-            return [file, 0]
-        elseif  g:riv_file_link_style == 2 && fnamemodify(file, ':e') == ''
-            return [file.'.rst', 0]
-        else
-            return [file, 0]
-        endif
-    endif
-endfun "}}}
-
 fun! riv#file#edit(file) "{{{
     let id = s:id()
     exe "edit ".a:file
@@ -90,13 +63,14 @@ fun! s:load_file() "{{{
     let signs = []
     try 
         if riv#path#is_rel_to(root, file )
-            let files = split(glob(dir.'**/*.rst'),'\n')
-            let index = 'index.rst'
+            let files = split(glob(dir.'**/*'.riv#path#ext()),'\n')
+            let index = riv#path#idx_file() 
             let index = has_sign ? index : printf("%s %s",'INDX',index)
-            let root = riv#path#rel_to(dir,root).'index.rst'
+            let root = riv#path#rel_to(dir,root)
+                        \.riv#path#idx_file()
             let root =  has_sign ? root : printf("%s %s",'ROOT',root)
         else
-            let files = split(glob(dir.'*.rst'),'\n')
+            let files = split(glob(dir.'*'.riv#path#ext()),'\n')
         endif
         let cur = riv#path#rel_to(dir, file)
         let current = has_sign ? cur : printf("%s %s", 'CURR',cur)
@@ -239,5 +213,10 @@ endfun "}}}
 fun! s:id() "{{{
     return exists("b:riv_p_id") ? b:riv_p_id : g:riv_p_id
 endfun "}}}
+
+if expand('<sfile>:p') == expand('%:p') "{{{
+    call riv#test#doctest('%','%',2)
+endif "}}}
+
 let &cpo = s:cpo_save
 unlet s:cpo_save

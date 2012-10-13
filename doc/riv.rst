@@ -1,5 +1,5 @@
 :Author: Rykka G.F
-:Update: 2012-10-06
+:Update: 2012-10-13
 :Version: 0.72 
 :Github: https://github.com/Rykka/riv.vim
 
@@ -84,7 +84,6 @@ With it, you can::
     Manage documents easier. (with project and file link)
     Even make your life simpler. (with Todo and Diary.)
 
-
 Features
 --------
  
@@ -122,6 +121,7 @@ Features
  :Todos_:    Keep track of todo things. (non-reStructuredText syntax)    
              
              And it's similar with Emacs's Org-Mode_ style.
+ :Sphinx_:   Functions for working with Sphinx_.
 
 On Screen
 ----------
@@ -211,9 +211,11 @@ Things todo in this version.
   :Intro_: ScreenCast tutor
   :Intro_: Rewrite riv_todo
   :Intro_: Rewrite riv_quickstart
-  :File_:  support dynamical rst file extension (for Sphinx)
-  :File_:  support sphinx embedded :doc: link.
+  :File_:  DONE 2012-10-13 support user defined rst file suffix.
+  :File_:  DONE 2012-10-13 support sphinx embedded :doc: link.
   :Test:   DONE 2012-10-13 Add `:RivDocTestVim` for vim script test.
+  :Menu:   FIXED 2012-10-13 Fix menu disable/enable.
+  :Links_: FIXED 2012-10-13 Fix target link jumping.
 
 Next
 ~~~~~
@@ -234,11 +236,12 @@ There are some know issues:
     
     This may due to docutils could not executing correctly with vimrun.exe.
 
-* Mac Os:
+* Mac OS:
 
   - The List don't act as expected. 
-
-    Could not fix this cause no Mac OS currently.
+  
+    Maybe Caused the ``<C-Enter>`` Could not be mapped.
+    Use other map instead.
 
 * Post issues at https://github.com/Rykka/riv.vim/issues
   Both bug reports and feature request and discussions are welcome. 
@@ -363,7 +366,7 @@ Improved highlights for syntax items.
 
    - extension style: ``xxx.rst xxx.vim``
    - moinmoin style: ``[[xxx]] [[xxx.vim]]``
-   - Sphinx style: ``:doc:`xxx` :file:`xxx.vim```
+   - Sphinx style: ``:doc:`xxx` :download:`xxx.vim```
 
 *  Todos_ Item are highlighted.
 *  You can use ``:set spell`` for spell checking,
@@ -676,11 +679,12 @@ They are highlighted. Some are folded.
       Will shift left.
 
     :NOTE: As this will break the ``<Tab>`` inserting operation 
-           in ``visual block insert``. 
+           in ``visual-block insert``. 
 
            You should use ``<Space>`` instead of ``<Tab>``
 
-           See ``:h v_b_i``
+           or use ``visual-block replace``
+           See ``:h v_b_i`` and ``:h v_b_r``
 
   + New List:
   
@@ -1124,6 +1128,10 @@ For Grid table, it is auto formatted.
 
     See `Grid Tables`_ for syntax details.
 
+    :NOTE: As ``visual-block insert`` be overrided and could not be used in 
+           a table.
+
+           You can use ``visual-block Replace`` instead. see ``:h v_b_r``
 
 * Simple Table:
 
@@ -1256,29 +1264,32 @@ Project is a place to hold your rst documents.
 Though you can edit reStructuredText documents anywhere.
 There are some convenience with projects.
 
-* File_ :  You can write documents and navigating with local file link. 
+File_
+    Write documents and navigating with local file link. 
+Publish_
+    Convert whole project to html, and view them as wiki.
+Todos_ 
+    Manage all the todo items in a project
+Scratch_ 
+    Writing diary in a project
 
-  ``index.rst`` is the index for each directory.
+* Global Commands:
 
-  An ``index.rst`` will be auto created for a new project.
-* Publish_ : You can convert whole project to html, and view them as wiki.
-* Todos_ : You can manage all the todo items in a project
-* Scratch_ : Writing diary in a project
+  + ``:RivIndex`` ``<C-E>ww`` to open the first project index.
+  + ``:RivAsk`` ``<C-E>wa`` to choose one project to open.
 
-* The default project path is ``'~/Documents/Riv'``,
-  you can change it by defining project to '_`g:riv_projects`' in your vimrc.::
+* All projects are in `g:riv_projects`_, 
 
-    let project1 = { 'path': '~/Dropbox/rst',}
-    let g:riv_projects = [project1]
+  + Define a project with a dictionary of options,
+    If not defined, it will have the default value ::
 
-* Use ``:RivIndex`` ``<C-E>ww`` to open the first project index.
+      let project1 = { 'path': '~/Dropbox/rst',}
+      let g:riv_projects = [project1]
 
-* You can have multiple projects also::
+  + To add multiple projects ::
 
-    " You could add multiple projects as well 
-    let project2 = { 'path': '~/Dropbox/rst2',}
-    let g:riv_projects = [project1, project2]
-* Use ``:RivAsk`` ``<C-E>wa`` to choose one project to open.
+      let project2 = { 'path': '~/Dropbox/rst2',}
+      let g:riv_projects = [project1, project2]
 
 File
 ~~~~
@@ -1302,7 +1313,7 @@ the rst documents.
   (works for document in project only.)
 
   :MoinMoin: use ``[[xxx]]`` to link to a local file.
-  :Sphinx: use ``:doc:`xxx``` and ``:file:`xxx.rst``` to link to local
+  :Sphinx: use ``:doc:`xxx``` and ``:download:`xxx.rst``` to link to local
            file and local document.
 
            See Sphinx_Role_Doc_.
@@ -1338,10 +1349,10 @@ the rst documents.
       Words like ``:doc:`/xxxx/xxx.rst```
       will link to ``DOC_ROOT/xxxx/xxx.rst``
     
-      Words like ``:file:`~/xxx/xxx.py``` ``:file:`/xxx/xxx.py``` ``:file:`x:/xxx.rst```
+      Words like ``:download:`~/xxx/xxx.py``` ``:download:`/xxx/xxx.py``` ``:download:`x:/xxx.rst```
       will be considered as external file links
 
-      Words like ``:file:`~/xxx/xxx/``` 
+      Words like ``:download:`~/xxx/xxx/``` 
       will be considered as external directory links, 
       and link to the directory.
 
@@ -1576,6 +1587,22 @@ A helper showing current document section numbers
   Open Section Helper.
   Default is in normal mode.
 
+Sphinx
+~~~~~~
+
+Riv try to work with Sphinx_.
+
+For now, you can use Cross-referencing  document ``:doc:`xxx``` 
+and downloadable file ``:download:`xxx``` to jump to that document.
+
+The Cross-referencing arbitrary locations ``:ref:`xxx``` 
+are not supported yet.
+
+To work with other master_doc and source_suffix, like 'main.txt' 
+
+Define the global '`g:riv_master_doc`_' and '`g:riv_source_suffix`_'
+or define 'master_doc' and 'source_suffix' in your project.
+
 Miscs
 ~~~~~
 
@@ -1616,25 +1643,57 @@ Options
 +-------------------------------+----------------------------------+--------------------------------------------------------+
 | **Name**                      | **Default**                      | **Description**                                        |
 +-------------------------------+----------------------------------+--------------------------------------------------------+
+| **Main**                      |                                  |                                                        |
++-------------------------------+----------------------------------+--------------------------------------------------------+
 | _`g:riv_default`              | {...}                            | The dictionary contain all riv runtime variables.      |
++-------------------------------+----------------------------------+--------------------------------------------------------+
+| _`g:riv_projects`             | []                               | The list contain your project's settings.              |
+|                               |                                  |                                                        |
+|                               |                                  | Defaults are::                                         |
+|                               |                                  |                                                        |
+|                               |                                  |   'path'               : '~/Documents/Riv'             |
+|                               |                                  |   'build_path'         : '_build'                      |
+|                               |                                  |   'scratch_path'       : 'Scratch'                     |
+|                               |                                  |   'source_suffix'      : `g:riv_source_suffix`_        |
+|                               |                                  |   'master_doc'         : `g:riv_master_doc`_           |
++-------------------------------+----------------------------------+--------------------------------------------------------+
+| Commands_                     |                                  |                                                        |
 +-------------------------------+----------------------------------+--------------------------------------------------------+
 | _`g:riv_global_leader`        | '<C-E>'                          | Leader map for Riv global mapping.                     |
 +-------------------------------+----------------------------------+--------------------------------------------------------+
 | _`g:riv_buf_leader`           | '<C-E>'                          | Leader map in reStructuredText buffers only.           |
+|                               |                                  |                                                        |
 |                               |                                  | Normal/Visual Mode                                     |
 +-------------------------------+----------------------------------+--------------------------------------------------------+
 | _`g:riv_buf_ins_leader`       | '<C-E>'                          | Leader map in reStructuredText buffers only.           |
+|                               |                                  |                                                        |
 |                               |                                  | Insert Mode                                            |
 +-------------------------------+----------------------------------+--------------------------------------------------------+
 | File_                         |                                  |                                                        |
 +-------------------------------+----------------------------------+--------------------------------------------------------+
+| _`g:riv_master_doc`           | 'index'                          | The master rst document for each directory in project. |
+|                               |                                  |                                                        |
+|                               |                                  | You can set it for each project.                       |
++-------------------------------+----------------------------------+--------------------------------------------------------+
+| _`g:riv_source_suffix`        | '.rst'                           | The suffix of rst document.                            |
+|                               |                                  |                                                        |
+|                               |                                  | You can set it for each project.                       |
+|                               |                                  |                                                        |
+|                               |                                  | Also for all files with the suffix,                    |
+|                               |                                  | filetype will be set to 'rst'                          |
++-------------------------------+----------------------------------+--------------------------------------------------------+
 | _`g:riv_file_link_ext`        | 'vim,cpp,c,                      | The file link with these extension will be recognized. |
 |                               | py,rb,lua,pl'                    |                                                        |
+|                               |                                  | These files will be copied when converting a porject.  |
+|                               |                                  |                                                        |
+|                               |                                  | These files along with ,'rst,txt' and                  |
+|                               |                                  | source_suffixs used in your project will               |
+|                               |                                  | be highlighted.                                        |
 +-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_file_ext_link_hl`     | 1                                | Syntax highlighting for file link with extensions      |
+| _`g:riv_file_ext_link_hl`     | 1                                | Syntax highlighting for file with extensions           |
 |                               |                                  | in `g:riv_file_link_ext`_.                             |
 +-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_file_link_invalid_hl` | 'ErrorMsg'                       | Highlighting for unexists file link.                   |
+| _`g:riv_file_link_invalid_hl` | 'ErrorMsg'                       | Cursor Highlight Group for non-exists file link.       |
 +-------------------------------+----------------------------------+--------------------------------------------------------+
 | _`g:riv_file_link_style`      | 1                                | The file link style.                                   |
 |                               |                                  |                                                        |
@@ -1656,20 +1715,15 @@ Options
 +-------------------------------+----------------------------------+--------------------------------------------------------+
 | Syntax_                       |                                  |                                                        |
 +-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_highlight_code`       | 'lua,python,cpp,                 | The language to be highlighted.                        |
-|                               | javascript,vim,sh'               | Should be the syntax name used by vim.                 |
+| _`g:riv_highlight_code`       | 'lua,python,cpp,                 | The language name                                      |
+|                               | javascript,vim,sh'               | is the syntax name used by vim.                        |
 +-------------------------------+----------------------------------+--------------------------------------------------------+
 | _`g:riv_code_indicator`       | 1                                | Highlight the first column of code directives.         |
 +-------------------------------+----------------------------------+--------------------------------------------------------+
 | _`g:riv_link_cursor_hl`       | 1                                | Cursor's Hover Highlighting for links.                 |
 +-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_create_link_pos`      | '$'                              | Link Target's position when created.                   |
-|                               |                                  |                                                        |
-|                               |                                  | - '.' : below current line.                            |
-|                               |                                  | - '$' : append at end of file.                         |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_python_rst_hl`        | 0                                | Highlight docstring in python files                    |
-|                               |                                  | with rst syntax highlighting.                          |
+| _`g:riv_python_rst_hl`        | 0                                | Highlight ``DocString`` in python files                |
+|                               |                                  | with rst syntax.                                       |
 +-------------------------------+----------------------------------+--------------------------------------------------------+
 | Todos_                        |                                  |                                                        |
 +-------------------------------+----------------------------------+--------------------------------------------------------+
@@ -1752,10 +1806,9 @@ Options
 +-------------------------------+----------------------------------+--------------------------------------------------------+
 | _`g:riv_html_code_hl_style`   | 'default'                        | The code highlight style for html.                     |
 |                               |                                  |                                                        |
-|                               |                                  | - When set to 'default', 'emacs', or 'friendly'        |
-|                               |                                  |   it will use pygments_'s relevant built-in style.     |
-|                               |                                  | - You can also use your own style sheet.               |
-|                               |                                  |   The full path should be provided.                    |
+|                               |                                  | - 'default', 'emacs', or 'friendly':                   |
+|                               |                                  |   use pygments_'s relevant built-in style.             |
+|                               |                                  | - 'FULL_PATH': use your own style sheet in path.       |
 +-------------------------------+----------------------------------+--------------------------------------------------------+
 | Insert_                       |                                  |                                                        |
 +-------------------------------+----------------------------------+--------------------------------------------------------+
@@ -1774,6 +1827,11 @@ Options
 |                               |                                  | ``let g:riv_ignored_imaps = "<Tab>,<S-Tab>"``          |
 +-------------------------------+----------------------------------+--------------------------------------------------------+
 | **Miscs**                     |                                  |                                                        |
++-------------------------------+----------------------------------+--------------------------------------------------------+
+| _`g:riv_create_link_pos`      | '$'                              | Link Target's position when created.                   |
+|                               |                                  |                                                        |
+|                               |                                  | - '.' : below current line.                            |
+|                               |                                  | - '$' : append at end of file.                         |
 +-------------------------------+----------------------------------+--------------------------------------------------------+
 | _`g:riv_month_names`          | 'January,February,March,April,   | Month Names for Scratch Index                          |
 |                               | May,June,July,August,September,  |                                                        |
@@ -1807,7 +1865,6 @@ Options
 .. _Vundle: https://www.github.com/gmarik/vundle
 .. _docutils: http://docutils.sourceforge.net/
 .. _pygments: http://pygments.org/
-
 .. _riv_log: https://github.com/Rykka/riv.vim/blob/master/doc/riv_log.rst
 .. _riv_todo: https://github.com/Rykka/riv.vim/blob/master/doc/riv_todo.rst
 .. _QuickStart: 

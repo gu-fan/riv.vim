@@ -51,7 +51,7 @@ fun! riv#publish#path(str) "{{{
         let file = file . 'index.html'
     elseif fnamemodify(file, ':e') == '' && t == 'doc'
         let file = file . '.html'
-    elseif fnamemodify(file, ':e') == 'rst' && t == 'doc'
+    elseif fnamemodify(file, ':e') == riv#path#p_ext() && t == 'doc'
         let file = fnamemodify(file, ':r') . '.html'
     endif
     
@@ -63,8 +63,8 @@ fun! s:repl_file_link(line) "{{{
     " [[index]]       => `index <index.html>`_
     " [[index.rst]]   => `index <index.html>`_
     " [[index.vim]]   => `index.vim <index.vim>`_
-    " [[index/]]      => `index/ <index/index.rst>`_
-    " [[/xxx/a.rst]]  => `/xxx/a.rst  <DOC_ROOT/xxx/a.rst>`_    ?
+    " [[index/]]      => `index/ <index/index.html>`_
+    " [[/xxx/a.rst]]  => `/xxx/a.rst  <DOC_ROOT/xxx/a.rst>`_
     
     let line = a:line
     
@@ -201,10 +201,12 @@ fun! riv#publish#copy2proj(file,html_path) abort "{{{
     call riv#publish#auto_mkdir(out_path)
     call s:sys( 'cp -f '. a:file. ' '.  fnamemodify(out_path, ':h'))
 endfun "}}}
+fun! s:get_proj_file_lists()
+    return filter(split(glob(riv#path#root().'**/*'.riv#path#ext()),'\n'), 'v:val !~ '''.riv#path#p_build().'''')
+endfun
 fun! riv#publish#proj2(ft) abort "{{{
     let ft_path = riv#path#build_ft(a:ft)
-    let root = riv#path#root()
-    let files = filter(split(glob(root.'**/*.rst'),'\n'), 'v:val !~ ''_build''')
+    let files = s:get_proj_file_lists()
     for i in range(len(files))
         call riv#publish#2(a:ft,files[i], ft_path, 0)
         redraw
@@ -216,7 +218,7 @@ fun! riv#publish#proj2(ft) abort "{{{
     let copy_ext = '{'.join(g:_riv_t.file_ext_lst,',').'}'
     if a:ft == "html" 
         \ && input("Copy all file of extension: ".copy_ext."\n(Y/n):")!~?'n'
-        let files = filter(split(glob(root.'**/*'.copy_ext)), 'v:val !~ ''_build''')
+        let files = filter(split(glob(riv#path#root().'**/*'.copy_ext)), 'v:val !~ '''.riv#path#p_build().'''')
         for file in files
             call riv#publish#copy2proj(file, ft_path)
         endfor
@@ -237,11 +239,11 @@ fun! s:sys(arg) abort "{{{
     " XXX: error in windows tmp files
     return system(a:arg)
 endfun "}}}
-fun! s:SID() "{{{
-    return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$')
+fun! s:id() "{{{
+    return exists("b:riv_p_id") ? b:riv_p_id : g:riv_p_id
 endfun "}}}
-fun! riv#publish#SID() "{{{
-    return '<SNR>'.s:SID().'_'
-endfun "}}}
+if expand('<sfile>:p') == expand('%:p') "{{{
+    call riv#test#doctest('%','%',2)
+endif "}}}
 let &cpo = s:cpo_save
 unlet s:cpo_save

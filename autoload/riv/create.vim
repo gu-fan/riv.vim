@@ -30,7 +30,7 @@ fun! s:expand_file_link(file) "{{{
     elseif riv#path#is_directory(file)
         let tar = s:str_to_tar(file, file.'index.html')
     else
-        if file =~ '\.rst$'
+        if riv#path#is_ext(file)
             let tar = s:str_to_tar(file, fnamemodify(file, ':r').'.html') 
         elseif fnamemodify(file, ':e') == '' && g:riv_file_link_style == 2
             let tar = s:str_to_tar(file, file.'index.html')
@@ -164,7 +164,7 @@ endfun "}}}
 "}}}
 " scratch "{{{
 fun! riv#create#scratch() "{{{
-    call riv#file#split(riv#path#scratch_path() . strftime("%Y-%m-%d") . '.rst')
+    call riv#file#split(riv#path#scratch_path() . strftime("%Y-%m-%d") . riv#path#ext())
 endfun "}}}
 fun! s:format_src_index() "{{{
     " category scratch by month and format it 4 items a line
@@ -172,7 +172,7 @@ fun! s:format_src_index() "{{{
     if !isdirectory(path)
         return -1
     endif
-    let files = split(glob(path.'*.rst'),'\n')
+    let files = split(glob(path.'*'.riv#path#ext()),'\n')
     "
     let dates = filter(map(copy(files), 'fnamemodify(v:val,'':t:r'')'),'v:val=~''[[:digit:]_-]\+'' ')
 
@@ -200,10 +200,12 @@ fun! s:format_src_index() "{{{
             call add(lines, repeat('-', strwidth(s:months[month-1])))
             let line_lst = [] 
             for day in years[year][month]
-                if g:riv_file_link_style ==2 
-                    let f = printf("[%s]",day)
+                if g:riv_file_link_style == 1 
+                    let f = printf("[[%s]]",day)
+                elseif g:riv_file_link_style == 2 
+                    let f = printf(":doc:`%s`",day)
                 else
-                    let f = printf("%s.rst",day)
+                    let f = printf("%s".riv#path#ext(),day)
                 endif
                 call add(line_lst, f)
                 if len(line_lst) == 4
@@ -216,7 +218,7 @@ fun! s:format_src_index() "{{{
         call add(lines, "")
     endfor
 
-    let file = path.'index.rst'
+    let file = path. riv#path#idx_file()
     call writefile(lines , file)
 endfun "}}}
 
@@ -224,7 +226,7 @@ fun! riv#create#view_scr() "{{{
     call s:format_src_index()
     let path = riv#path#scratch_path()
  
-    call riv#file#split(path.'index.rst')
+    call riv#file#split(path . riv#path#idx_file() )
 endfun "}}}
 
 fun! s:escape(str) "{{{
@@ -248,7 +250,7 @@ fun! riv#create#delete() "{{{
     call delete(file)
  
     if riv#path#is_rel_to_root(file)
-        let index = expand('%:p:h').'/index.rst'
+        let index = expand('%:p:h'). '/' . riv#path#idx_file()
         if filereadable(index)
             call riv#file#edit(index)
             let f_idx = filter(range(1,line('$')),'getline(v:val)=~ptn')

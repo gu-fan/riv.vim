@@ -369,7 +369,7 @@ fun! s:cache_todo(force) "{{{
         return
     endif
 
-    let files = split(glob(root.'**/*.rst'))
+    let files = split(glob(root.'**/*'.riv#path#ext()))
     let b_path = riv#path#build_path()
     let files = filter(files, ' riv#path#is_rel_to(b_path, v:val)')
 
