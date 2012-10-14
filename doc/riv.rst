@@ -1,12 +1,13 @@
-#######################
-reStructuredText in Vim
-#######################
+############################
+Riv: reStructuredText in Vim
+############################
+
+.. rubric:: In vim, for reStructuredText.
 
 :Author: Rykka G.F
 :Update: 2012-10-13
 :Version: 0.72 
 :Github: https://github.com/Rykka/riv.vim
-
 
 * Contents:
 
@@ -16,30 +17,35 @@ reStructuredText in Vim
     * 1.2 `On Screen`_
     * 1.3 `Getting Started`_
     * 1.4 Install_
-    * 1.5 Todo_
+    * 1.5 `Todo and Done`_
     * 1.6 Issues_
     * 1.7 Contribution_
 
   * 2 Instructions_
 
-    * 2.1 reStructuredText_
+    * 2.1 Vim_
 
       * 2.1.1 Folding_
       * 2.1.2 Syntax_
-      * 2.1.7 Blocks_
-      * 2.1.8 Inline_
-      * 2.1.9 Links_
-      * 2.1.10 Table_
-      * 2.1.11 Publish_
+      * 2.1.3 Indent_
+      * 2.1.4 Insert_
 
-    * 2.2 Riv_
+    * 2.2 RST_
 
-      * 2.2.1 Project_
-      * 2.2.2 File_
-      * 2.2.3 Scratch_
-      * 2.2.4 Todos_
-      * 2.2.5 Helpers_
-      * 2.2.6 Sphinx_
+      * 2.2.1 Sections_
+      * 2.2.2 Lists_
+      * 2.2.3 Links_
+      * 2.2.4 Table_
+      * 2.2.5 Publish_
+
+    * 2.3 Riv_
+
+      * 2.3.1 Project_
+      * 2.3.2 File_
+      * 2.3.3 Scratch_
+      * 2.3.4 Todos_
+      * 2.3.5 Helpers_
+      * 2.3.6 Sphinx_
 
   * 3 Appendix_
 
@@ -49,56 +55,46 @@ reStructuredText in Vim
 Intro
 =====
 
-**Riv** is for writing and managing your document with reStructuredText_ 
-(a simple and powerful plain text markup) in vim.
+**Riv**, short for 'reStructuredText in Vim'. 
 
-Short for 'reStructuredText in Vim'. 
+Is for writing and managing your document with reStructuredText_ 
+(a simple and powerful plain text markup) in vim.
 
 With it, you can::
 
     Read documents clearer. (with folding and extra highlighting)
     Write documents faster. (with indent and insert improvement)
     Manage documents easier. (with project and Sphinx support)
-    Even make your life simpler. (with Todo and Diary.)
+    Make life documented. (with Todo and Scratch.)
 
 Features
 --------
  
 **Reading and Writing**
 
- Functions.
+ **Vim Improved**
 
- :Folding_:  View the document structure
- :Syntax_:   Extra highlighting for File, Code Block, Cursor,
-             and python Docstring.
+ :Folding_:  Overview the structure.
+ :Syntax_:   Extra highlighting.
  :Indent_:   Smarter indent.
  :Insert_:   Speed up the input!
- :Publish_:  Convert to html/xml/latex/odt... (docutils_ required)
 
- Document Structures.
+ **RST Documents**
 
  :Sections_: Easy create, easy view.
  :Lists_:    Auto numbered, auto leveled and auto indented.
- :Blocks_:   Highlighted and folded 
- :Inline_:   Highlighted.
  :Links_:    Jumping and Highlighting.
  :Table_:    Auto formatted. 
+ :Publish_:  Convert to html/xml/latex/odt...
 
-**Managing**
+ **Riv Managment**
 
- :Project_:  Hold your rst documents in one place.
- :File_:     Link local file in rst documents. (non-reStructuredText syntax)
-
-             And you can choose ``Sphinx`` or ``MoinMoin`` style.
- :Scratch_:  writing diary or notes.
- :Helpers_: 
-             a. `Section Helper`_: Showing section number of current document.
-             b. `Todo Helper`_: Managing Todo items of project or document.
-             c. `File Helper`_: Showing rst files of current directory.
- :Todos_:    Keep track of todo things. (non-reStructuredText syntax)    
-             
-             And it's similar with Emacs's Org-Mode_ style.
- :Sphinx_:   Working with Sphinx_.
+ :Sphinx_:   Working with Sphinx.
+ :Project_:  A workspace for your documents.
+ :File_:     Link local file in the document.
+ :Scratch_:  Writing notes and diaries.
+ :Helpers_:  Help work with document/project.
+ :Todos_:    Keep track of todo things.
 
 On Screen
 ----------
@@ -112,15 +108,33 @@ ScreenCast: TODO
 Getting Started
 ---------------
 
-* Installation: see `Install`_
-* Quick Start: see `QuickStart With Riv`_  
-  or use ``:RivQuickStart`` in vim.
-* Instruction: see `Instructions`_ 
-* To change mappings and commands. See Commands_
-* Snapshots: `On Screen`_
+* Installation: see Install_
 * Know Issues: Issues_ 
-* Things Todo: Todo_.
+* Things Todo: `Todo and Done`_.
 * Contribute: Contribution_.
+
+* Mappings and commands. See Commands_
+* Options. See Options_
+
+**Reading Guide**
+
+* Quick Start for Riv: see `QuickStart With Riv`_  
+  or use ``:RivQuickStart`` in vim.
+* Detailed Instruction for Riv: see `Instructions`_ 
+  or ``:h riv``, and It's this document.
+
+* If you are not familiar with reStructuredText.
+
+  Read `A ReStructuredText Primer`_ and `Quick reStructuredText`_. 
+* If you want view reStructuredText's detailed specification. 
+
+  Read `reStructuredText Specification`_
+
+  Use ``:RivSpecification`` to open it in vim.
+
+* And the `reStructuredText cheatsheet`_ for a quick view.
+
+  Use ``:RivCheatSheet`` to open it in vim.
 
 Install
 -------
@@ -160,13 +174,13 @@ Install
     But if you are using Sphinx_'s tools set, you'd better not using it.
     Cause it could not recognize the sphinx's markups.
 
-Todo 
----------
+Todo and Done
+-------------
 
 Prev
 ~~~~
 
-See Change log in  riv_log_ ( doc/riv_log.rst )
+See Change log in  riv_log_ (doc/riv_log.rst)
 
 This
 ~~~~~
@@ -183,7 +197,8 @@ Things todo in this version.
   :Intro_: Commands_ section.
   :Intro_: ScreenCast tutor
   :Intro_: Rewrite riv_quickstart
-  :Intro_: Cheatsheet and Specification added.
+  :Intro_: DONE 2012-10-14 Rewrite riv_todo
+  :Intro_: DONE 2012-10-14 Cheatsheet and Specification added.
   :File_:  DONE 2012-10-13 support user defined rst file suffix.
   :File_:  DONE 2012-10-13 support sphinx embedded :doc: link.
   :Test:   DONE 2012-10-13 Add `:RivDocTestVim` for vim script test.
@@ -193,7 +208,7 @@ Things todo in this version.
 Next
 ~~~~~
 
-See riv_todo_ ( doc/riv_todo.rst )
+See riv_todo_ (doc/riv_todo.rst)
 
 
 Issues
@@ -243,24 +258,9 @@ If you are willing to improve this plugin, Contribute to it.
 Instructions
 ============
 
-reStructuredText
-----------------
-
-The following features apply for all ``*.rst`` documents 
-having standard reStructuredText syntax.
-
-* If you are not familiar with reStructuredText.
-
-  Read `A ReStructuredText Primer`_ and `Quick reStructuredText`_. 
-* If you want view reStructuredText's detailed specification. 
-
-  Read `reStructuredText Specification`_
-
-  Use ``:RivSpecification`` to open it in vim.
-
-* And the `reStructuredText cheatsheet`_ as the handbook.
-
-  Use ``:RivCheatSheet`` to open it in vim.
+Vim
+---
+Following features are improved with vim built-in one.
 
 Folding 
 ~~~~~~~~
@@ -299,6 +299,8 @@ And extra infos are provided.
            Manual updating is needed.
 
            So use it with caution.
+    :NOTE: When document's folding stucked, you can use ``:RivTestReload`` or ``<C-E>t``` 
+           to reload document and the folding.
 
   + Toggle Folding: ``za``, ``zA``...
 
@@ -504,6 +506,12 @@ Super ``<Tab>`` and Super ``<Enter>`` in insert mode.
   + Use ``:RivCreateTime`` ``<C-E>it`` to insert a time stamp of current time anywhere. 
 
 
+RST 
+---
+
+Following features are for all document which filetype is ``rst``.
+And are all standard reStructuredText syntax.
+
 Sections 
 ~~~~~~~~~
 
@@ -525,7 +533,15 @@ And it's folded by it's level.
     And ``:RivTitle0`` ``<C-E>s0`` will create a section title
     with an overline.
 
-    Other commands is ``underline`` only, 
+    Other commands is ``underline`` only.
+
+    Riv use following punctuations for titles: 
+
+    ``= - ~ " ' ``` , (HTML has 6 levels)
+
+    You can change it with '`g:riv_section_levels`_'
+
+    The ``:RivTitle0`` will use ``#``
 
   + Folding: 
 
@@ -556,19 +572,6 @@ And it's folded by it's level.
     You can set '`g:riv_content_format`_' to change it's format.
     
 * Extra Options:
-
-  + The title punctuations:
-
-    Although you can define a section title with most punctuations
-    (any non-alphanumeric printable 7-bit ASCII character). 
-
-    Riv use following punctuations for titles: 
-
-    ``= - ~ " ' ``` , (HTML has 6 levels)
-
-    You can change it with '`g:riv_section_levels`_'
-
-    The ``:RivTitle0`` will use ``#``
 
   + Section mark:
 
@@ -630,13 +633,13 @@ They are highlighted. Some are folded.
 
     **Normal and Visual Mode**
 
-    - Shift right: ``>`` ``:RivShiftRight`` or ``<C-ScrollWheelDown>`` (UNIX only) 
+    - Shift right: ``>`` ``:RivShiftRight`` or ``<C-ScrollWheelDown>(UNIX only)``  
   
       Shift rightwards with ``ShiftWidth``
 
       If it's a list item, it will indent to the list item's sub list
   
-    - Shift left: ``<`` ``:RivShiftLeft`` or ``<C-ScrollWheelUp>`` (UNIX only) 
+    - Shift left: ``<`` ``:RivShiftLeft`` or ``<C-ScrollWheelUp>(UNIX only)``  
 
       Shift leftwards with ``ShiftWidth``
 
@@ -716,19 +719,6 @@ They are highlighted. Some are folded.
              
     - ``:RivListDelete`` ``<C-E>lx``
       Delete current list item symbol
-
-Blocks
-~~~~~~
-
-Blocks in document are highlighting, 
-and some are folded.
-
-Inline
-~~~~~~~
-
-In-line Markup are highlighted.
-
-:In The Future: an option for conceal?
 
 Links
 ~~~~~
@@ -877,8 +867,8 @@ For Grid table, it is auto formatted.
 Publish
 ~~~~~~~
 
-Some command wrapper to convert rst files to html/xml/latex/odt/... 
-(docutils_  required)
+Convert rst files to html/xml/latex/odt/... 
+(Some command wrapper, docutils_ required)
 
 * Commands:
 
@@ -913,8 +903,6 @@ Some command wrapper to convert rst files to html/xml/latex/odt/...
     in it by Riv.
 
     You can change the style sheet with '`g:riv_html_code_hl_style`_'
-
-
     
     - Syntax highlight for other formatting are not supported yet.
 
@@ -955,12 +943,37 @@ Some command wrapper to convert rst files to html/xml/latex/odt/...
 
 
 Riv 
------
+---
 
 Following features provides more functions for rst documents.
 
+* You can change some setting for a better working with Sphinx_.
 * Project_, Scratch_, Helpers_ are extra function for managing rst documents.
 * File_, Todos_ are extended syntax items for writing rst document.
+
+Sphinx
+~~~~~~
+
+Riv can work with Sphinx (see `Sphinx Home`_ ).
+
+- For now, you can use Cross-referencing  document ``:doc:`xxx``` 
+  and downloadable file ``:download:`xxx``` to jump to that document.
+  With setting `g:riv_file_link_style` to 2.
+
+  The Cross-referencing arbitrary locations ``:ref:`xxx``` 
+  are not supported yet.
+
+- To work with other master_doc and source_suffix, 
+  like 'main.txt' instead of 'index.rst'
+
+  Define the global '`g:riv_master_doc`_' and '`g:riv_source_suffix`_'
+  or define 'master_doc' and 'source_suffix' in your project.
+
+- There are no wrapper for making command of Sphinx.
+  You should use ``:make html`` by your own.
+
+  And you can view the index page by ``:Riv2HtmlIndex`` or ``<C-E>wi``
+
 
 Project
 ~~~~~~~
@@ -1025,7 +1038,7 @@ the rst documents.
            See Sphinx_Role_Doc_.
            
            It will be not changed to link with Riv.
-           You'd better use it with Sphinx_'s tool set.
+           You'd better use it with Sphinx's tool set.
 
   + You can switch style with '`g:riv_file_link_style`_'
 
@@ -1293,28 +1306,6 @@ A helper showing current document section numbers
   Open Section Helper.
   Default is in normal mode.
 
-Sphinx
-~~~~~~
-
-Riv can work with Sphinx_.
-
-- For now, you can use Cross-referencing  document ``:doc:`xxx``` 
-  and downloadable file ``:download:`xxx``` to jump to that document.
-
-  The Cross-referencing arbitrary locations ``:ref:`xxx``` 
-  are not supported yet.
-
-- To work with other master_doc and source_suffix, like 'main.txt' 
-
-  Define the global '`g:riv_master_doc`_' and '`g:riv_source_suffix`_'
-  or define 'master_doc' and 'source_suffix' in your project.
-
-- There are no wrapper for making command of Sphinx.
-  You should use ``:make html`` by your own.
-
-  And you can view the index page by ``:Riv2HtmlIndex`` or ``<C-E>wi``
-
-
 Appendix
 ========
 
@@ -1334,6 +1325,9 @@ You can change it by following options.
         map <C-E>wi    :RivIndex<CR> 
 
 Besides mappings, you can use 'Riv' menus.
+
+**TODO**: A command and mapping table.
+
 
 Options
 -------
@@ -1555,7 +1549,6 @@ Options
 
 
 
-.. _Sphinx: http://sphinx.pocoo.org/
 .. _Sphinx_role_doc: http://sphinx.pocoo.org/markup/inline.html#role-doc
 .. _Org-Mode: http://orgmode.org/
 .. _reStructuredText: http://docutils.sourceforge.net/rst.html
@@ -1565,11 +1558,8 @@ Options
 .. _pygments: http://pygments.org/
 .. _riv_log: https://github.com/Rykka/riv.vim/blob/master/doc/riv_log.rst
 .. _riv_todo: https://github.com/Rykka/riv.vim/blob/master/doc/riv_todo.rst
-.. _QuickStart: 
 .. _Quickstart With Riv:
    https://github.com/Rykka/riv.vim/blob/master/doc/riv_quickstart.rst
-.. _Quickintro For Riv:
-   https://github.com/Rykka/riv.vim/blob/master/doc/riv_quickintro.rst
 .. _A ReStructuredText Primer: http://docutils.sourceforge.net/docs/user/rst/quickstart.html
 .. _Quick reStructuredText: http://docutils.sourceforge.net/docs/user/rst/quickref.html
 .. _Grid tables: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#grid-tables
@@ -1578,3 +1568,5 @@ Options
 .. _reStructuredText Specification: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html
 .. _reStructuredText cheatsheet: http://docutils.sourceforge.net/docs/user/rst/cheatsheet.txt
 
+
+.. _Sphinx Home: http://sphinx.pocoo.org/
