@@ -9,17 +9,20 @@ Bugs
 
 * **Folding**
 
-   A. XXX Sometimes folding did not update correctly.
+  + Sometimes folding did not update correctly.
 * **List**
-  List behavior not act correctly in Mac OS. see `issue 2`_
+
+  + List behavior not act correctly in Mac OS. see `issue 2`_
 * **Publish**
-  Converting under windows have errors.
+
+  + Converting under windows have errors.
   This may due to docutils could not executing correctly with vimrun.exe.
 * **Syntax**
 
   + The ``.. class:: Model(**Kwarg)`` will highlight all following document.
 * **Insert**
-  The visual block insert for ``<Tab>`` are not usable.
+
+  + The visual block insert for ``<Tab>`` are not usable.
 * **Table**
 
   + The visual block insert for ``|`` in table are not usable.
@@ -33,11 +36,11 @@ Vim
 
 * **Folding**
 
-   + Folding: A buf parser write in python for performance?
+  * Folding: A buf parser write in python for performance?
 
 * **Syntax**
 
-    + highlight the directives with indents.
+  * highlight the directives with indents.
 
 RST
 ---
@@ -48,14 +51,14 @@ RST
 
 * **Documents**
 
-   + A quick ScreenCast tutor.
-   + The commands section
+  * A quick ScreenCast tutor.
+  * The commands section
 
 * **Links**
 
-   + Link anchor between files? 
-     index.rst#section -> index.html#section
-     also the Sphinx :ref: style.
+  * Link anchor between files? 
+    index.rst#section -> index.html#section
+    also the Sphinx :ref: style.
 
 * **Table**
 
@@ -72,9 +75,7 @@ Riv
 
 * **Todos**
 
-   + standard name of todo's cache. 
-
-
+  * standard name of todo's cache. 
 
 * **File**
 
@@ -82,19 +83,19 @@ Riv
 
 * **Publish**
 
-    + Publish: An option to enable highlighting todo items.
-    + the temp path should be validated.
-    + javascript for HTML with folding sections.
-    + [o] support sphinx make and browse
+  * Publish: An option to enable highlighting todo items.
+  * the temp path should be validated.
+  * javascript for HTML with folding sections.
+  * [o] support sphinx make and browse
 
 * **Helpers**
 
-    A. Helpers: An option Helper and option cache. 
-       Let people use it even without touching ``.vimrc`` .
-    B. Helpers: A command helper?
+  1. Helpers: An option Helper and option cache. 
+     Let people use it even without touching ``.vimrc`` .
+  2. Helpers: A command helper?
 * **Scratch**
 
-    - Scratch: Show Scratch sign in Calendar.
+  + Scratch: Show Scratch sign in Calendar.
 
 
 
