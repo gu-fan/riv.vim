@@ -272,12 +272,12 @@ let g:riv_default.cmds = [
     \'type': 'buf', 'mode': 'mi', 'maps': ['cf'], 'keys': [],
 \},
 \{'name': 'RivCreateDate' , 'act': 'call riv#create#date()',
-    \'note': 'Insert Curr Date',
+    \'note': 'Insert Current Date',
     \'menu': 'Insert.Date',
     \'type': 'buf', 'mode': 'mi', 'maps': ['cdd'], 'keys': [],
 \},
 \{'name': 'RivCreateTime' , 'act': 'call riv#create#date(1)',
-    \'note': 'Insert Curr time',
+    \'note': 'Insert Current time',
     \'menu': 'Insert.Time',
     \'type': 'buf', 'mode': 'mi', 'maps': ['cdt'], 'keys': [],
 \},
@@ -592,21 +592,20 @@ fun! riv#cmd#gen_intro() "{{{
   " return lines of cmd intros for README
   let buf = []
   let leader = g:riv_global_leader
-  call add(buf, 'Global')
-  call add(buf, '~~~~~~')
+  call add(buf, '+ **Global**')
+  call add(buf, '')
   for cmd in g:riv_default.cmds
     if !has_key(cmd, 'name') || !has_key(cmd, 'note')
       let m = substitute(cmd.menu,'-','','g')
-      call add(buf, m)
-      call add(buf, repeat('~',len(m)))
+      call add(buf, '+ **'.m.'**')
       call add(buf, '')
       continue
     endif
-    call add(buf, ':_`'.cmd.name.'`:'.'	'. cmd.note)
+    call add(buf, '  - _`'.cmd.name.'` '.': '. cmd.note)
     call add(buf, '')
     if has_key(cmd, 'mode')
       let mode = cmd.mode
-      let modeline = '	**'
+      let modeline = '    **'
       if mode =~ 'm' || mode =~ 'n'
         let modeline .= 'Normal,'
       endif
