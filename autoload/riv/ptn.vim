@@ -614,8 +614,11 @@ endfun "}}}
 fun! riv#ptn#get_file(str) "{{{
     " return [file, is_doc] with fetched str.
     if g:riv_file_link_style == 1
+        " >>> let g:riv_file_link_style = 1
+        " >>> ec riv#ptn#get_file('[[www]]')
+        " ['www', 'doc']
         let f = matchstr(a:str, g:_riv_p.moin_link_str)
-        let t = riv#path#is_relative(f) ? 'file' : 'doc'
+        let t = riv#path#is_relative(f) ? 'doc' : 'file'
     elseif g:riv_file_link_style == 2
         " >>> ec matchstr(':doc:`Hello <x/hello>`', g:_riv_p.sphinx_link_str)
         " >>> ec matchstr(':doc:`Hello`', g:_riv_p.sphinx_link_str)

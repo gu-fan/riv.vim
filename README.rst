@@ -1701,7 +1701,7 @@ Options
 +--------------------------------------------+--------------------------------------------------------+
 | _`g:riv_projects`                          | The list contain your project's settings.              |
 |                                            |                                                        |
-|  []                                        | Defaults are::                                         |
+| []                                         | Defaults are::                                         |
 |                                            |                                                        |
 |                                            |   'path'               : '~/Documents/Riv'             |
 |                                            |   'build_path'         : '_build'                      |
