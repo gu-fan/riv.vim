@@ -295,7 +295,7 @@ fun! riv#create#foot() "{{{
 endfun "}}}
 fun! riv#create#date(...) "{{{
     if a:0 && a:1 == 1
-        exe "normal! a" . strftime('%Y-%m-%d %H:%M:%S') . "\<ESC>"
+        exe "normal! a" . strftime('%H:%M:%S') . "\<ESC>"
     else
         exe "normal! a" . strftime('%Y-%m-%d') . "\<ESC>"
     endif
@@ -315,6 +315,32 @@ fun! riv#create#git_commit_url() "{{{
 
     let [ref, tar] = s:expand_link(sha)
     call append(line('.'), [ref,"",tar])
+endfun "}}}
+
+fun! riv#create#wrap_inline(sign,mode) "{{{
+    " We should consider when in visual mode and insert mode.
+    " **This** is a Test
+    let region = a:mode == 'v' ? 'gv' : 'viW' 
+    let recov = a:mode == 'v' ? "\<Esc>gv".(len(a:sign)*2).'l' : a:mode == 'n' ? "\<Esc>" : ''
+    exe 'norm!' region.'c'.a:sign."\<C-R>\"".a:sign.recov 
+endfun "}}}
+fun! riv#create#transition() "{{{
+    let lines = ['','---','']
+    call append('.',lines)
+    norm! 4j
+endfun "}}}
+fun! riv#create#hyperlink() "{{{
+    exe "norm! \<Esc>Bihttp://\<Esc>E"
+endfun "}}}
+fun! riv#create#exp_mark() "{{{
+    let lines = ['','..  ']
+    call append('.',lines)
+    norm! 2j
+    starti!
+endfun "}}}
+fun! riv#create#literal_block() "{{{
+    exe "norm A::\<Enter>\<Enter>\<Tab>"
+    starti!
 endfun "}}}
 "}}}
 
@@ -350,6 +376,10 @@ endfun "}}}
 fun! riv#create#SID() "{{{
     return '<SNR>'.s:SID().'_'
 endfun "}}}
+
+if expand('<sfile>:p') == expand('%:p') 
+    call riv#test#doctest('%','%',2)
+endif
 
 let &cpo = s:cpo_save
 unlet s:cpo_save

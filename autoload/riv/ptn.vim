@@ -421,7 +421,7 @@ fun! riv#ptn#init() "{{{
     " .. __:   or   __
     " `xxx  <xxx>`
     let tar_footnote = '^\.\.\s\zs\[%(\d+|#|#='.ref_name .')\]\ze\_s'
-    let tar_inline = '%(\s|\_^)\zs_`[^`\\]+`\ze'.ref_end
+    let tar_inline = '%(\s|^|[''"([{</:])\zs_`[^`\\]+`\ze'.ref_end
     let tar_normal = '^\.\.\s\zs_[^:\\]+:\ze%(\s|$)'
     let tar_anonymous = '^\.\.\s\zs__:\ze\_s|^\zs__\ze%(\s|$)'
     let tar_embed  = '^%(\s|\_^)\zs_`.+\s<\zs.+>`_\ze'.ref_end

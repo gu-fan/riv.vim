@@ -156,8 +156,9 @@ fun! riv#insert#shiftright(row,col) "{{{
         return ""
     endif
 endfun "}}}
-if expand('<sfile>:p') == expand('%:p') 
 
-endif
+if expand('<sfile>:p') == expand('%:p') "{{{
+
+endif "}}}
 let &cpo = s:cpo_save
 unlet s:cpo_save

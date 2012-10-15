@@ -9,10 +9,10 @@ let s:cpo_save = &cpo
 set cpo-=C
 
 let s:p = g:_riv_p
-fun! riv#action#quick_start() "{{{
-    let quick_start = g:_riv_c.doc_pat . 'riv_quickstart.rst'
-    let lines = readfile(quick_start)
-    noa keepa bot new QuickStart
+fun! riv#action#tutor(name) "{{{
+    let file = g:_riv_c.doc_pat . a:name . '.rst'
+    let lines = readfile(file)
+    exe 'noa keepa bot new Tutor:'.a:name 
 	setl noswf nolist nospell nocuc wfh
 	setl bt=nofile bh=unload
     set ft=rst
@@ -113,7 +113,6 @@ fun! riv#action#ins_m_enter() "{{{
     return cmd
 endfun "}}}
 
-
 fun! riv#action#ins_backspace() "{{{
     let [row,col] = getpos('.')[1:2]
     let line = getline('.')
@@ -124,6 +123,20 @@ fun! riv#action#ins_backspace() "{{{
     endif
     return  !empty(cmd) ? cmd : "\<BS>"
 endfun "}}}
+fun! riv#action#ins_backspace2() "{{{
+    " Test Test
+    " The
+    let [row,col] = getpos('.')[1:2]
+    let line = getline('.')
+    if s:is_in_bgn_blank(col, line)
+        let cmd = riv#insert#shiftleft(row,col)
+    else
+        let cmd = ""
+    endif
+    let cmd =  !empty(cmd) ? cmd : "\<BS>"
+    exe "norm! i".cmd
+endfun "}}}
+
 
 fun! s:is_in_list_item(col,line) "{{{
     " it's the col before last space in list-item
@@ -162,6 +175,8 @@ fun! riv#action#ins_tab() "{{{
     else
         let cmd = ''
     endif
+
+    " We will execute user cmd only when there were no cmd context.
     if !empty(cmd)
         return cmd
     else
@@ -203,3 +218,4 @@ endfun "}}}
 
 let &cpo = s:cpo_save
 unlet s:cpo_save
+" vim:fdm=marker:

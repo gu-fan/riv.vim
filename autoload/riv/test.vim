@@ -474,7 +474,7 @@ fun! riv#test#reload() "{{{
 endfun "}}}
 fun! riv#test#show_obj() "{{{
     echo b:riv_flist[line('.')]
-    if exists("b:riv_obj"g
+    if exists("b:riv_obj")
         echo b:riv_obj[line('.')]
     endif
 endfun "}}}
