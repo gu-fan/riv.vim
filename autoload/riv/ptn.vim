@@ -96,7 +96,7 @@ fun! riv#ptn#get_role_idx(line,col) "{{{
     let ptn = printf(':[^:`]*:`[^`]*\%%%dc[^`]*\|:[^:`]*\%%%dc[^`:]*:`[^`]*`', a:col,a:col)
     return match(a:line, ptn)
 endfun "}}}
-fun! riv#ptn#get_tar_idx(line,col)
+fun! riv#ptn#get_tar_idx(line,col) "{{{
     " return the index of target link.
     " >>> echo riv#ptn#get_tar_idx(".. _aaa: a.html",3)
     " 0
@@ -105,7 +105,7 @@ fun! riv#ptn#get_tar_idx(line,col)
     else
         return -1
     endif
-endfun
+endfun "}}}
 
 fun! riv#ptn#get_inline_markup_obj(line, col, bgn) "{{{
     " if cursor is in a phase ,return it's idx , else return -1

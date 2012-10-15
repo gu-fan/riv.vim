@@ -2,70 +2,69 @@
 Riv: reStructuredText in Vim
 ############################
 
-.. rubric:: In vim, for reStructuredText.
-
 :Author: Rykka G.F
 :Update: 2012-10-13
-:Version: 0.72 
+:Version: 0.73 
 :Github: https://github.com/Rykka/riv.vim
 
-* Contents:
+* _`Index`:
 
-  * 1 Intro_
+  * 1 Intro_ : Basic Intros
 
-    * 1.1 Features_
-    * 1.2 `On Screen`_
-    * 1.3 `Getting Started`_
-    * 1.4 Install_
-    * 1.5 `Todo and Done`_
-    * 1.6 Issues_
-    * 1.7 Contribution_
+    * 1.1 Features_ : Implemented featues
+    * 1.2 `On Screen`_ : Screenshots and Screencasts
+    * 1.3 `Where To Go`_ : Start from here
+    * 1.4 Tutors_ : Batteries Included
+    * 1.5 Install_ : Installation
+    * 1.6 `Todo and Done`_ : Thins Todo and logs
+    * 1.7 Issues_ : Know Issues
+    * 1.8 Contribution_ : Help improving
 
-  * 2 Instructions_
+  * 2 Instructions_ : Detailed Instructions
 
-    * 2.1 Vim_
+    * 2.1 Vim_ : Vim Improved Feature
 
-      * 2.1.1 Folding_
-      * 2.1.2 Syntax_
-      * 2.1.3 Indent_
-      * 2.1.4 Insert_
+      * 2.1.1 Folding_ : Overview the structure. 
+      * 2.1.2 Syntax_ : Extra highlighting.
+      * 2.1.3 Indent_ : Smarter indent. 
+      * 2.1.4 Insert_ : Speed up the input!
 
-    * 2.2 RST_
+    * 2.2 RST_ : Better RST Supporting
 
-      * 2.2.1 Sections_
-      * 2.2.2 Lists_
-      * 2.2.3 Links_
-      * 2.2.4 Table_
-      * 2.2.5 Publish_
+      * 2.2.1 Sections_ : Easy create, easy view.
+      * 2.2.2 Lists_ : Auto numbered, auto leveled and auto indented.
+      * 2.2.3 Links_ : Jumping and Highlighting.
+      * 2.2.4 Table_ : Auto formatted. 
+      * 2.2.5 Publish_ : Convert to html/xml/latex/odt...
 
-    * 2.3 Riv_
+    * 2.3 Riv_ : Management by Riv
 
-      * 2.3.1 Project_
-      * 2.3.2 File_
-      * 2.3.3 Scratch_
-      * 2.3.4 Todos_
-      * 2.3.5 Helpers_
-      * 2.3.6 Sphinx_
+      * 2.3.1 Sphinx_ :  Working with Sphinx.
+      * 2.3.2 Project_ : A workspace for your documents.
+      * 2.3.3 File_ : Link local file in the document.
+      * 2.3.4 Scratch_ : Writing notes and diaries.
+      * 2.3.5 Todos_ : Keep track of todo things.
+      * 2.3.6 Helpers_ : Help work with document/project.
 
-  * 3 Appendix_
+  * 3 Appendix_ : Extra Infomations
 
-    * 3.1 Commands_
-    * 3.2 Options_
+    * 3.1 Commands_ : Commands and Mappings.
+    * 3.2 Options_ : Options and Settings.
 
 Intro
 =====
 
 **Riv**, short for 'reStructuredText in Vim'. 
 
-Is for writing and managing your document with reStructuredText_ 
+Aim to provide better support of reStructuredText_ 
 (a simple and powerful plain text markup) in vim.
 
-With it, you can::
+It's for you to::
 
-    Read documents clearer. (with folding and extra highlighting)
-    Write documents faster. (with indent and insert improvement)
-    Manage documents easier. (with project and Sphinx support)
-    Make life documented. (with Todo and Scratch.)
+    Read documents clearer. (Folding, Linking and Extra highlight)
+    Write documents faster. (Indent and Insert improvement)
+    Manage documents easier. (Project,File and Sphinx support)
+    Make things documented. (Todo and Scratch)
 
 Features
 --------
@@ -87,7 +86,7 @@ Features
  :Table_:    Auto formatted. 
  :Publish_:  Convert to html/xml/latex/odt...
 
- **Riv Managment**
+**Document Managment**
 
  :Sphinx_:   Working with Sphinx.
  :Project_:  A workspace for your documents.
@@ -105,36 +104,55 @@ ScreenShot: Work with Sphinx_
 
 ScreenCast: TODO
 
-Getting Started
----------------
+Where To Go
+-----------
 
-* Installation: see Install_
-* Know Issues: Issues_ 
-* Things Todo: `Todo and Done`_.
-* Contribute: Contribution_.
+* Index_ : Index of this Document
 
-* Mappings and commands. See Commands_
-* Options. See Options_
+**Gettings Start**
 
-**Reading Guide**
+* Install_: Installation
+* Tutors_ : From the very basic
+* Commands_: Mappings and commands
+* Options_: Options and settings
 
-* Quick Start for Riv: see `QuickStart With Riv`_  
-  or use `RivQuickStart`_ in vim.
-* Detailed Instruction for Riv: see `Instructions`_ 
-  or ``:h riv``, and It's this document.
+**About This Projcet**
 
-* If you are not familiar with reStructuredText.
+* `Todo and Done`_: Todos and Logs
+* Issues_: Known Issues
+* Contribution_: Contribute to this
 
-  Read `A ReStructuredText Primer`_ and `Quick reStructuredText`_. 
-* If you want view reStructuredText's detailed specification. 
+Tutors
+------
 
-  Read `reStructuredText Specification`_
+**Read about RST**
 
-  Use `RivSpecification`_ to open it in vim.
+* To get a quick view of reStructuredText.
 
-* And the `reStructuredText cheatsheet`_ for a quick view.
+  Read `A ReStructuredText Primer`_,
+  Use `:RivPrimer`_ to open it in vim.
+  
+  or Read `Quick reStructuredText`_. 
 
-  Use `RivCheatSheet`_ to open it in vim.
+* To get reStructuredText's detailed specification. 
+
+  Read `reStructuredText Specification`_,
+  Use `:RivSpecification`_ to open it in vim.
+
+* And the `reStructuredText cheatsheet`_ for a quick review,
+  Use `:RivCheatSheet`_ to open it in vim.
+
+**Play with Riv**
+
+* Quick Start With Riv. 
+  
+  Read `QuickStart With Riv`_ ,
+  Use `:RivQuickStart`_ in vim.
+
+* Detailed Instruction for Riv (It's this document!):
+
+  Read `Instructions`_ ,
+  Use `:RivInstruction`_ in vim.
 
 Install
 -------
@@ -177,11 +195,6 @@ Install
 Todo and Done
 -------------
 
-Prev
-~~~~
-
-See Change log in  riv_log_ (doc/riv_log.rst)
-
 This
 ~~~~~
 
@@ -194,28 +207,33 @@ Things todo in this version.
   :Sections_: FIXED 2012-10-04 Fix the section Helper.
   :Syntax_: FIXED 2012-10-04 Workaround of the Spell checking.
   :Intro_: DONE 2012-10-13 Options_ section.
-  :Intro_: Commands_ section.
+  :Intro_: DONE 2012-10-15 Commands_ section.
   :Intro_: ScreenCast tutor
   :Intro_: Rewrite riv_quickstart
   :Intro_: DONE 2012-10-14 Rewrite riv_todo
   :Intro_: DONE 2012-10-14 Cheatsheet and Specification added.
   :File_:  DONE 2012-10-13 support user defined rst file suffix.
   :File_:  DONE 2012-10-13 support sphinx embedded :doc: link.
-  :Test:   DONE 2012-10-13 Add `:RivDocTestVim` for vim script test.
+  :Test:   DONE 2012-10-13 Add `:RivVimTest` for vim script test.
   :Menu:   FIXED 2012-10-13 Fix menu disable/enable.
   :Links_: FIXED 2012-10-13 Fix target link jumping.
+  :Commands_: DONE 2012-10-15 Rewrite command and menu part.
 
 Next
 ~~~~~
 
 See riv_todo_ (doc/riv_todo.rst)
 
+Prev
+~~~~
+
+See riv_log_ (doc/riv_log.rst)
 
 Issues
 ------
 
 * If the document folding showing some error.
-  You can try force reload `RivTestReload`_ ``<C-E>t```
+  You can try force reload `:RivTestReload`_ ``<C-E>t```
 * Windows:
   
   - Converting to other format may fail. 
@@ -235,9 +253,12 @@ Issues
 Contribution
 ------------
 
-There are many things need to do.
+This project aims to provide better inputing for reStructuredText in vim.
 
-If you are willing to improve this plugin, Contribute to it.
+And there are many things need to do.
+
+If you are willing to improve this project, 
+You can do something for it.
 
 :Document: 
            1. This README document need review and rewrite.
@@ -299,7 +320,7 @@ And extra infos are provided.
            Manual updating is needed.
 
            So use it with caution.
-    :NOTE: When document's folding stucked, you can use `RivTestReload`_ or ``<C-E>t``` 
+    :NOTE: When document's folding stucked, you can use `:RivTestReload`_ or ``<C-E>t``` 
            to reload document and the folding.
 
   + Toggle Folding: ``za``, ``zA``...
@@ -502,8 +523,8 @@ Super ``<Tab>`` and Super ``<Enter>`` in insert mode.
 
 * Insert extra things.
 
-  + Use `RivCreateDate`_ ``<C-E>id`` to insert a date stamp of today anywhere.
-  + Use `RivCreateTime`_ ``<C-E>it`` to insert a time stamp of current time anywhere. 
+  + Use `:RivCreateDate`_ ``<C-E>id`` to insert a date stamp of today anywhere.
+  + Use `:RivCreateTime`_ ``<C-E>it`` to insert a time stamp of current time anywhere. 
 
 
 RST 
@@ -525,12 +546,12 @@ And it's folded by it's level.
 
   + Create and Modify titles: 
 
-    Use `RivTitle1`_ ``<C-E>s1`` ...  `RivTitle6`_ ``<C-E>s6`` ,
+    Use `:RivTitle1`_ ``<C-E>s1`` ...  `:RivTitle6`_ ``<C-E>s6`` ,
     To create level 1 to level 6 section title from current word.
 
     If the line empty, you will be asked to input a title.
 
-    And `RivTitle0`_ ``<C-E>s0`` will create a section title
+    And `:RivTitle0`_ ``<C-E>s0`` will create a section title
     with an overline.
 
     Other commands is ``underline`` only.
@@ -541,7 +562,7 @@ And it's folded by it's level.
 
     You can change it with '`g:riv_section_levels`_'
 
-    The `RivTitle0`_ will use ``#``
+    The `:RivTitle0`_ will use ``#``
 
   + Folding: 
 
@@ -558,7 +579,7 @@ And it's folded by it's level.
 
   + Create a content table:
     
-    Use `RivCreateContent`_ or ``<C-E>ic`` to create it.
+    Use `:RivCreateContent`_ or ``<C-E>ic`` to create it.
 
     It's similar with the ``content`` directive,
     except it create the content table into the document.
@@ -633,13 +654,13 @@ They are highlighted. Some are folded.
 
     **Normal and Visual Mode**
 
-    - Shift right: ``>`` `RivShiftRight`_ or ``<C-ScrollWheelDown>(UNIX only)``  
+    - Shift right: ``>`` `:RivShiftRight`_ or ``<C-ScrollWheelDown>(UNIX only)``  
   
       Shift rightwards with ``ShiftWidth``
 
       If it's a list item, it will indent to the list item's sub list
   
-    - Shift left: ``<`` `RivShiftLeft`_ or ``<C-ScrollWheelUp>(UNIX only)``  
+    - Shift left: ``<`` `:RivShiftLeft`_ or ``<C-ScrollWheelUp>(UNIX only)``  
 
       Shift leftwards with ``ShiftWidth``
 
@@ -702,7 +723,7 @@ They are highlighted. Some are folded.
 
     Normal and Insert Mode:
     
-    - `RivListType0`_ ``<C-E>l1`` ... `RivListType4`_ ``<C-E>l5``
+    - `:RivListType0`_ ``<C-E>l1`` ... `:RivListType4`_ ``<C-E>l5``
       Change or add list item symbol of type.
       
       The list item of each type is:: 
@@ -717,7 +738,7 @@ They are highlighted. Some are folded.
               To change a list and it's sub item 
               with indentation fix , use shifting: ``>`` or ``<``.
              
-    - `RivListDelete`_ ``<C-E>lx``
+    - `:RivListDelete`_ ``<C-E>lx``
       Delete current list item symbol
 
 Links
@@ -776,7 +797,7 @@ And it's highlighted with `Cursor Highlighting`_.
    
   **Create (Normal and Insert):**
 
-  + `RivCreateLink`_ ``<C-E>ik``
+  + `:RivCreateLink`_ ``<C-E>ik``
     create a link from current word. 
 
     If it's empty, you will be asked to input one.
@@ -786,7 +807,7 @@ And it's highlighted with `Cursor Highlighting`_.
 
     '`g:riv_create_link_pos`_' can be used to change the target postion.
 
-  + `RivCreateFoot`_ ``<C-E>if``
+  + `:RivCreateFoot`_ ``<C-E>if``
     create a auto numbered footnote. 
     And append the footnote target to the end of file.
 
@@ -808,8 +829,8 @@ For Grid table, it is auto formatted.
 
   + Commands:
 
-    - Create: Use ```<C-E>tc`` or `RivTableCreate`_ to create table
-    - Format: Use ``<C-E>tf`` or `RivTableFormat`_ to format table.
+    - Create: Use ```<C-E>tc`` or `:RivTableCreate`_ to create table
+    - Format: Use ``<C-E>tf`` or `:RivTableFormat`_ to format table.
 
       It will be auto formatted after leaving insert mode,
       or pressing ``<Enter>`` or ``<Tab>`` in insert mode.
@@ -874,27 +895,27 @@ Convert rst files to html/xml/latex/odt/...
 
   + Convert to Html
 
-    - `RivHtmlIndex`_  ``<C-E>wi``
+    - `:RivHtmlIndex`_  ``<C-E>wi``
       browse the html index page.
-    - `Riv2HtmlFile`_  ``<C-E>2hf``
+    - `:Riv2HtmlFile`_  ``<C-E>2hf``
       convert to html file.
   
-    - `Riv2HtmlAndBrowse`_  ``<C-E>2hh``
+    - `:Riv2HtmlAndBrowse`_  ``<C-E>2hh``
       convert to html file and browse. 
       Default is 'firefox'
   
       The browser is set by `g:riv_web_browser`_, default is ``firefox``
   
-    - `Riv2HtmlProject`_ ``<C-E>2hp`` converting whole project into html.
+    - `:Riv2HtmlProject`_ ``<C-E>2hp`` converting whole project into html.
       And will ask you to copy all the file with extension in '`g:riv_file_link_ext`_' 
   
-  + `Riv2Odt`_ ``<C-E>2oo`` convert to odt file and browse by ft browser
+  + `:Riv2Odt`_ ``<C-E>2oo`` convert to odt file and browse by ft browser
   
     The file browser is set with '`g:riv_ft_browser`_'. 
   
-  + `Riv2Xml`_ ``<C-E>2xx`` convert to xml file and browse by web browser
-  + `Riv2S5`_ ``<C-E>2ss`` convert to s5 file and browse by web browser
-  + `Riv2Latex`_ ``<C-E>2ll`` convert to latex file and edit in vim
+  + `:Riv2Xml`_ ``<C-E>2xx`` convert to xml file and browse by web browser
+  + `:Riv2S5`_ ``<C-E>2ss`` convert to s5 file and browse by web browser
+  + `:Riv2Latex`_ ``<C-E>2ll`` convert to latex file and edit in vim
   
 * Options:
 
@@ -924,7 +945,7 @@ Convert rst files to html/xml/latex/odt/...
            " Assume you have a project name project 1
            let project1.build_path = '~/Documents/Riv_Build'
     
-      3. Open the build path: `Riv2BuildPath`_ ``<C-E>2b``
+      3. Open the build path: `:Riv2BuildPath`_ ``<C-E>2b``
       4. Local file link converting will be done. 
          See `local file link converting`_ for details.
   
@@ -972,7 +993,7 @@ Riv can work with Sphinx (see `Sphinx Home`_ ).
 - There are no wrapper for making command of Sphinx.
   You should use ``:make html`` by your own.
 
-  And you can view the index page by `RivHtmlIndex`_ or ``<C-E>wi``
+  And you can view the index page by `:RivHtmlIndex`_ or ``<C-E>wi``
 
 
 Project
@@ -994,9 +1015,9 @@ Scratch_
 
 * Global Commands:
 
-  + `RivIndex`_ ``<C-E>wa`` to open the first project index.
-  + `RivAsk`_ ``<C-E>wa`` to choose one project to open.
-  + `RivHtmlIndex`_ ``<C-E>wi`` Browse project html index.
+  + `:RivIndex`_ ``<C-E>wa`` to open the first project index.
+  + `:RivAsk`_ ``<C-E>wa`` to choose one project to open.
+  + `:RivHtmlIndex`_ ``<C-E>wi`` Browse project html index.
 
 * All projects are in `g:riv_projects`_, 
 
@@ -1094,7 +1115,7 @@ the rst documents.
 * The file links are highlighted. See `Cursor Highlighting`_
 * To delete a local file in project.
 
-  `RivDeleteFile`_ ``<C-E>df``
+  `:RivDeleteFile`_ ``<C-E>df``
   it will also delete all reference to this file in ``index.rst`` of the directory.
 
 Local File Link Converting
@@ -1112,7 +1133,7 @@ in this form::
 
 :NOTE: link converting in a table will make the table error format.
        So you'd better convert it to a link manually.
-       Use `RivCreateLink`_ or ``<C-E>il`` to 
+       Use `:RivCreateLink`_ or ``<C-E>il`` to 
        create it manually. ::
    
            file.rst_
@@ -1130,12 +1151,12 @@ Scratch
   
 Scratch is a place for writing diary or notes.
 
-* `RivScratchCreate`_ ``<C-E>sc``
+* `:RivScratchCreate`_ ``<C-E>sc``
   Create or jump to the scratch of today.
 
   Scratches are created auto named by date in '%Y-%m-%d' format.
 
-* `RivScratchView`_ ``<C-E>sv``
+* `:RivScratchView`_ ``<C-E>sv``
   View Scratch index.
 
   The index is auto created. Separate scratches by years and month
@@ -1182,7 +1203,7 @@ It is Todo-box or Todo-keywords in a bullet/enumerated/field list.
   Todo item's start or end date.
 
   + [X] 2012-06-23 A todo item with date stamp
-  + Double Click or ``<Enter>`` or `RivTodoDate`_ on a date stamp to change date. 
+  + Double Click or ``<Enter>`` or `:RivTodoDate`_ on a date stamp to change date. 
 
     If you have Calendar_ installed , it will use it to choose date.
 
@@ -1209,7 +1230,7 @@ It is Todo-box or Todo-keywords in a bullet/enumerated/field list.
 
   + [ ] [#A] a todo item of priority A
   + [ ] [#C] a todo item of priority C
-  + Double Click or ``<Enter>`` or `RivTodoPrior`_ on priority item 
+  + Double Click or ``<Enter>`` or `:RivTodoPrior`_ on priority item 
     to change priority. 
   + You can define the priority chars by '`g:riv_todo_priorities`_'
 
@@ -1217,14 +1238,14 @@ It is Todo-box or Todo-keywords in a bullet/enumerated/field list.
 
   Add Todo Item
   
-  + Use `RivTodoToggle`_ or ``<C-E>ee`` to add or switch the todo progress.
+  + Use `:RivTodoToggle`_ or ``<C-E>ee`` to add or switch the todo progress.
     
     Change default todo group by '`g:riv_todo_default_group`_'
 
 
-  + Use `RivTodoType1`_ ``<C-E>e1`` ... `RivTodoType4`_ ``<C-E>e4`` 
+  + Use `:RivTodoType1`_ ``<C-E>e1`` ... `:RivTodoType4`_ ``<C-E>e4`` 
     to add or change the todo item by group. 
-  + Use `RivTodoAsk`_ ``<C-E>e``` will show an keyword group list to choose.
+  + Use `:RivTodoAsk`_ ``<C-E>e``` will show an keyword group list to choose.
 
   Change Todo Status
 
@@ -1234,11 +1255,11 @@ It is Todo-box or Todo-keywords in a bullet/enumerated/field list.
  
   Delete Item 
 
-  + Use `RivTodoDel`_ ``<C-E>ex`` to delete the whole todo item
+  + Use `:RivTodoDel`_ ``<C-E>ex`` to delete the whole todo item
 
   Helper
 
-  + Use `RivHelpTodo`_ or ``<C-E>ht`` to open a `Todo Helper`_
+  + Use `:RivHelpTodo`_ or ``<C-E>ht`` to open a `Todo Helper`_
   
 * Folding Info:
 
@@ -1276,7 +1297,7 @@ Todo Helper
 A helper to manage todo items of current project.
 When current document is not in a project, will show current file's todo items.
 
-+ `RivHelpTodo`_ or ``<C-E>ht``
++ `:RivHelpTodo`_ or ``<C-E>ht``
   Open Todo Helper.
   Default is in search mode.
 
@@ -1292,7 +1313,7 @@ Also indicating following files if exists::
     'CURR': 'CR' Current file
     'PREV': 'PR' Previous file
 
-+ `RivHelpFile`_ or ``<C-E>hf``
++ `:RivHelpFile`_ or ``<C-E>hf``
   Open File Helper.
   Default is in normal mode.
 
@@ -1300,7 +1321,7 @@ Section Helper
 """"""""""""""
 A helper showing current document section numbers
 
-+ `RivHelpSection`_ or ``<C-E>hs``
++ `:RivHelpSection`_ or ``<C-E>hs``
   Open Section Helper.
   Default is in normal mode.
 
@@ -1317,374 +1338,371 @@ Commands
 
         map <C-E>wi    :RivIndex<CR> 
 
++ All commands can be executed by ``:{cmd}``.
+  For example: ``:RivIndex`` to open the default Project Index.
+
 + You can use menu to view the commands Shortcut either.
 
 
 + **Global**
 
-  - _`RivIndex` : Open the default Riv project index in vim.
+  - _`:RivIndex` : Open the default Riv project index in vim.
 
     **Normal** :	<C-E>ww,<C-E><C-W><C-W>
 
-  - _`RivAsk` : Show Riv project list.
+  - _`:RivAsk` : Show Riv project list.
 
     **Normal** :	<C-E>wa,<C-E><C-W><C-A>
 
-  - _`RivHtmlIndex` : Browse project html index.
+  - _`:RivHtmlIndex` : Browse project html index.
 
     **Normal** :	<C-E>wi,<C-E><C-W><C-I>
 
-  - _`RivScratchCreate` : Create Or Edit Scratch of today.
+  - _`:RivScratchCreate` : Create Or Edit Scratch of today.
 
     **Normal** :	<C-E>sc,<C-E><C-S><C-C>
 
-  - _`RivScratchView` : View The Index of Scratch Directory
+  - _`:RivScratchView` : View The Index of Scratch Directory
 
     **Normal** :	<C-E>sv,<C-E><C-S><C-V>
 
 + **View**
 
-  - _`RivFoldToggle` : Toggle Fold
+  - _`:RivFoldToggle` : Toggle Fold
 
     **Normal** :	<C-E><Space><Space>
 
-  - _`RivFoldAll` : Toggle all folding
+  - _`:RivFoldAll` : Toggle all folding
 
     **Normal** :	<C-E><Space>a
 
-  - _`RivFoldUpdate` : Update Folding
+  - _`:RivFoldUpdate` : Update Folding
 
     **Normal** :	<C-E><Space>u
 
-  - _`RivLinkOpen` : Open Link under Cursor
+  - _`:RivLinkOpen` : Open Link under Cursor
 
     **Normal** :	<C-E>ko
 
-  - _`RivLinkNext` : Jump to Next Link
+  - _`:RivLinkNext` : Jump to Next Link
 
     **Normal** :	<C-E>kn,<TAB>
 
-  - _`RivLinkPrev` : Jump to Prev Linx
+  - _`:RivLinkPrev` : Jump to Prev Linx
 
     **Normal** :	<C-E>kp,<S-TAB>
 
-  - _`RivShiftRight` : Shift Right with level and indent adjustment.
+  - _`:RivShiftRight` : Shift Right with level and indent adjustment.
 
     **Normal,Visual** :	<C-E>l>,>,<C-ScrollwheelDown>
 
-  - _`RivShiftLeft` : Shift Left with level and indent adjustment.
+  - _`:RivShiftLeft` : Shift Left with level and indent adjustment.
 
     **Normal,Visual** :	<C-E>l<,<,<C-ScrollwheelUp>
 
-  - _`RivShiftEqual` : Format List level
+  - _`:RivShiftEqual` : Format List level
 
     **Normal,Visual** :	<C-E>l=,=
 
-  - _`RivNormRight` : Normal Shift Right
+  - _`:RivNormRight` : Normal Shift Right
 
     **Normal,Visual** :	<C-E>>,<S-ScrollwheelDown>
 
-  - _`RivNormLeft` : Normal Shift Left
+  - _`:RivNormLeft` : Normal Shift Left
 
     **Normal,Visual** :	<C-E><lt>,<S-ScrollwheelUp>
 
-  - _`RivNormEqual` : Normal Equal
+  - _`:RivNormEqual` : Normal Equal
 
     **Normal,Visual** :	<C-E>=
 
-  - _`RivItemClick` : Open Link,Toggle item and toggle section folding
+  - _`:RivItemClick` : Open Link,Toggle item and toggle section folding
 
     **Normal** :	<2-LeftMouse>
 
-  - _`RivItemToggle` : Open Link, Toggle item
+  - _`:RivItemToggle` : Open Link, Toggle item
 
     **Normal** :	<CR>,<KEnter>
 
 + **Doc**
 
-  - _`RivTitle1` : Create Type 1 Title
+  - _`:RivTitle1` : Create Type 1 Title
 
     **Normal,Insert** :	<C-E>s1
 
-  - _`RivTitle2` : Create Type 2 Title
+  - _`:RivTitle2` : Create Type 2 Title
 
     **Normal,Insert** :	<C-E>s2
 
-  - _`RivTitle3` : Create Type 3 Title
+  - _`:RivTitle3` : Create Type 3 Title
 
     **Normal,Insert** :	<C-E>s3
 
-  - _`RivTitle4` : Create Type 4 Title
+  - _`:RivTitle4` : Create Type 4 Title
 
     **Normal,Insert** :	<C-E>s4
 
-  - _`RivTitle5` : Create Type 5 Title
+  - _`:RivTitle5` : Create Type 5 Title
 
     **Normal,Insert** :	<C-E>s5
 
-  - _`RivTitle6` : Create Type 6 Title
+  - _`:RivTitle6` : Create Type 6 Title
 
     **Normal,Insert** :	<C-E>s6
 
-  - _`RivTitle0` : Create Type 0 Title
+  - _`:RivTitle0` : Create Type 0 Title
 
     **Normal,Insert** :	<C-E>s0
 
-  - _`RivTableCreate` : Create a Table
+  - _`:RivTableCreate` : Create a Table
 
     **Normal,Insert** :	<C-E>tc
 
-  - _`RivTableFormat` : Format table
+  - _`:RivTableFormat` : Format table
 
     **Normal,Insert** :	<C-E>tf
 
-  - _`RivTableNextCell` : Nav to Next Cell
+  - _`:RivTableNextCell` : Nav to Next Cell
 
     **Normal,Insert** :	<C-E>tn
 
-  - _`RivTablePrevCell` : Nav to Prev Cell
+  - _`:RivTablePrevCell` : Nav to Prev Cell
 
     **Normal,Insert** :	<C-E>tp
 
-  - _`RivListNew` : Create a New List
+  - _`:RivListNew` : Create a New List
 
     **Normal,Insert** :	<C-E>ln
 
-  - _`RivListSub` : Create a sub list item
+  - _`:RivListSub` : Create a sub list item
 
     **Normal,Insert** :	<C-E>lb
 
-  - _`RivListSup` : Create a sup list item
+  - _`:RivListSup` : Create a sup list item
 
     **Normal,Insert** :	<C-E>lp
 
-  - _`RivListDelete` : Delete List item
+  - _`:RivListDelete` : Delete List item
 
     **Normal,Insert** :	<C-E>lx
 
-  - _`RivListType0` : Create a List type 0
+  - _`:RivListType0` : Create a List type 0
 
     **Normal,Insert** :	<C-E>l1
 
-  - _`RivListType1` : Create a List type 1
+  - _`:RivListType1` : Create a List type 1
 
     **Normal,Insert** :	<C-E>l2
 
-  - _`RivListType2` : Create a List type 2
+  - _`:RivListType2` : Create a List type 2
 
     **Normal,Insert** :	<C-E>l3
 
-  - _`RivListType3` : Create a List type 3
+  - _`:RivListType3` : Create a List type 3
 
     **Normal,Insert** :	<C-E>l4
 
-  - _`RivListType4` : Create a List type 4
+  - _`:RivListType4` : Create a List type 4
 
     **Normal,Insert** :	<C-E>l5
 
-  - _`RivTodoToggle` : Toggle Todo item's status
+  - _`:RivTodoToggle` : Toggle Todo item's status
 
     **Normal,Insert** :	<C-E>ee
 
-  - _`RivTodoDel` : Del Todo Item
+  - _`:RivTodoDel` : Del Todo Item
 
     **Normal,Insert** :	<C-E>ex
 
-  - _`RivTodoDate` : Change Date stamp under cursor
+  - _`:RivTodoDate` : Change Date stamp under cursor
 
     **Normal,Insert** :	<C-E>ed
 
-  - _`RivTodoPrior` : Change Todo Priorties
+  - _`:RivTodoPrior` : Change Todo Priorties
 
     **Normal,Insert** :	<C-E>ep
 
-  - _`RivTodoAsk` : Show the todo group list
+  - _`:RivTodoAsk` : Show the todo group list
 
     **Normal,Insert** :	<C-E>e`
 
-  - _`RivTodoType1` : Change to group 1
+  - _`:RivTodoType1` : Change to group 1
 
     **Normal,Insert** :	<C-E>e1
 
-  - _`RivTodoType2` : Change to group 2
+  - _`:RivTodoType2` : Change to group 2
 
     **Normal,Insert** :	<C-E>e2
 
-  - _`RivTodoType3` : Change to group 3
+  - _`:RivTodoType3` : Change to group 3
 
     **Normal,Insert** :	<C-E>e3
 
-  - _`RivTodoType4` : Change to group 4
+  - _`:RivTodoType4` : Change to group 4
 
     **Normal,Insert** :	<C-E>e4
 
-  - _`RivTodoUpdateCache` : Update Todo cache
+  - _`:RivTodoUpdateCache` : Update Todo cache
 
     **Normal** :	<C-E>uc
 
 + **Edit**
 
-  - _`RivCreateLink` : Create Link based on current word
+  - _`:RivCreateLink` : Create Link based on current word
 
     **Normal,Insert** :	<C-E>ck
 
-  - _`RivCreateFoot` : Create Footnote
+  - _`:RivCreateFoot` : Create Footnote
 
     **Normal,Insert** :	<C-E>cf
 
-  - _`RivCreateDate` : Insert Current Date
+  - _`:RivCreateDate` : Insert Current Date
 
     **Normal,Insert** :	<C-E>cdd
 
-  - _`RivCreateTime` : Insert Current time
+  - _`:RivCreateTime` : Insert Current time
 
     **Normal,Insert** :	<C-E>cdt
 
-  - _`RivCreateContent` : Insert Content Table
+  - _`:RivCreateContent` : Insert Content Table
 
     **Normal** :	<C-E>cc
 
-  - _`RivCreateEmphasis` : Emphasis
+  - _`:RivCreateEmphasis` : Emphasis
 
     **Normal,Insert** :	<C-E>ce
 
-  - _`RivCreateStrong` : Strong
+  - _`:RivCreateStrong` : Strong
 
     **Normal,Insert** :	<C-E>cs
 
-  - _`RivCreateInterpreted` : Interpreted
+  - _`:RivCreateInterpreted` : Interpreted
 
     **Normal,Insert** :	<C-E>ci
 
-  - _`RivCreateLiteralInline` : LiteralInline
+  - _`:RivCreateLiteralInline` : LiteralInline
 
     **Normal,Insert** :	<C-E>cl
 
-  - _`RivCreateLiteralBlock` : LiteralBlock
+  - _`:RivCreateLiteralBlock` : LiteralBlock
 
     **Normal,Insert** :	<C-E>cb
 
-  - _`RivCreateHyperLink` : HyperLink
+  - _`:RivCreateHyperLink` : HyperLink
 
     **Normal,Insert** :	<C-E>ch
 
-  - _`RivCreateTransition` : Transition
+  - _`:RivCreateTransition` : Transition
 
     **Normal,Insert** :	<C-E>cr
 
-  - _`RivCreateExplicitMark` : ExplicitMark
+  - _`:RivCreateExplicitMark` : ExplicitMark
 
     **Normal,Insert** :	<C-E>cm
 
-  - _`RivDeleteFile` : Delete Current File
+  - _`:RivDeleteFile` : Delete Current File
 
     **Normal** :	<C-E>df
 
 + **Miscs**
 
-  - _`Riv2HtmlFile` : Convert to html
+  - _`:Riv2HtmlFile` : Convert to html
 
     **Normal** :	<C-E>2hf
 
-  - _`Riv2HtmlAndBrowse` : Convert to html and browse current file
+  - _`:Riv2HtmlAndBrowse` : Convert to html and browse current file
 
     **Normal** :	<C-E>2hh
 
-  - _`Riv2HtmlProject` : Convert project to html
+  - _`:Riv2HtmlProject` : Convert project to html
 
     **Normal** :	<C-E>2hp
 
-  - _`Riv2Odt` : Convert to odt
+  - _`:Riv2Odt` : Convert to odt
 
     **Normal** :	<C-E>2oo
 
-  - _`Riv2S5` : Convert to S5
+  - _`:Riv2S5` : Convert to S5
 
     **Normal** :	<C-E>2ss
 
-  - _`Riv2Xml` : Convert to Xml
+  - _`:Riv2Xml` : Convert to Xml
 
     **Normal** :	<C-E>2xx
 
-  - _`Riv2Latex` : Convert to Latex
+  - _`:Riv2Latex` : Convert to Latex
 
     **Normal** :	<C-E>2ll
 
-  - _`Riv2BuildPath` : Show Build Path of the project
+  - _`:Riv2BuildPath` : Show Build Path of the project
 
     **Normal** :	<C-E>2b
 
-  - _`RivTestReload` : Force reload Riv and Current Document
+  - _`:RivTestReload` : Force reload Riv and Current Document
 
     **Normal** :	<C-E>t`
 
-  - _`RivTestFold0` : Test folding time
+  - _`:RivTestFold0` : Test folding time
 
     **Normal** :	<C-E>t1
 
-  - _`RivTestFold1` : Test folding time and foldlevel
+  - _`:RivTestFold1` : Test folding time and foldlevel
 
     **Normal** :	<C-E>t2
 
-  - _`RivTestTest` : Test the test
+  - _`:RivTestTest` : Test the test
 
     **Normal** :	<C-E>t4
 
-  - _`RivTestObj` : Show Test object
+  - _`:RivTestObj` : Show Test object
 
     **Normal** :	<C-E>t3
 
-  - _`RivSuperBackSpace` : Super Backspace
+  - _`:RivSuperBackSpace` : Super Backspace
 
     **Insert** :	<C-E>mq,<BS>
 
-  - _`RivSuperTab` : Super Tab
+  - _`:RivSuperTab` : Super Tab
 
     **Insert** :	<C-E>me,<Tab>
 
-  - _`RivSuperSTab` : Super Shift Tab
+  - _`:RivSuperSTab` : Super Shift Tab
 
     **Insert** :	<C-E>mw,<S-Tab>
 
-  - _`RivSuperEnter` : Super Enter
+  - _`:RivSuperEnter` : Super Enter
 
     **Insert** :	<C-E>mm,<Enter>,<KEnter>
 
-  - _`RivSuperCEnter` : Super Ctrl Enter
+  - _`:RivSuperCEnter` : Super Ctrl Enter
 
     **Insert** :	<C-E>mj,<C-Enter>,<C-KEnter>
 
-  - _`RivSuperSEnter` : Super Shift Enter
+  - _`:RivSuperSEnter` : Super Shift Enter
 
     **Insert** :	<C-E>mk,<S-Enter>,<S-KEnter>
 
-  - _`RivSuperMEnter` : Super Alt Enter
+  - _`:RivSuperMEnter` : Super Alt Enter
 
     **Insert** :	<C-E>mh,<C-S-Enter>,<M-Enter>,<C-S-KEnter>,<M-KEnter>
 
-  - _`RivHelpTodo` : Show Todo Helper
+  - _`:RivHelpTodo` : Show Todo Helper
 
     **Normal** :	<C-E>ht,<C-E><C-h><C-t>
 
-  - _`RivHelpFile` : Show File Helper
+  - _`:RivHelpFile` : Show File Helper
 
     **Normal** :	<C-E>hf,<C-E><C-h><C-f>
-
-  - _`RivHelpSection` : Show Section Helper
+  - _`:RivHelpSection` : Show Section Helper
 
     **Normal** :	<C-E>hs
-
-  - _`RivVimTest` : Run doctest for Vim Script
-
-  - _`RivInstruction` : Show Riv Instrucion
-
-  - _`RivQuickStart` : Show Riv QuickStart
-
-  - _`RivCheatSheet` : Show RST CheatSheet
-
-  - _`RivSpecification` : Show RST Specification
-
-  - _`RivGetLatest` : Show Get Latest Info
+  - _`:RivVimTest` : Run doctest for Vim Script
+  - _`:RivInstruction` : Show Riv Instrucion
+  - _`:RivQuickStart` : Show Riv QuickStart
+  - _`:RivCheatSheet` : Show RST CheatSheet
+  - _`:RivPrimer` : Show RST Primer
+  - _`:RivSpecification` : Show RST Specification
+  - _`:RivGetLatest` : Show Get Latest Info
 
 
 Options

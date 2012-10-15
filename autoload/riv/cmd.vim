@@ -457,6 +457,11 @@ let g:riv_default.cmds = [
     \'menu': 'About.Riv\ QuickStart',
     \'type': 'menu'
 \},
+\{'name': 'RivPrimer' , 'act': 'call riv#action#open("primer")',
+    \'note': 'Show RST Primer',
+    \'menu': 'About.RST\ Primer',
+    \'type': 'menu'
+\},
 \{'name': 'RivCheatSheet' , 'act': 'call riv#action#open("cheatsheet")',
     \'note': 'Show RST CheatSheet',
     \'menu': 'About.RST\ CheatSheet',
