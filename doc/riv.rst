@@ -1690,219 +1690,260 @@ Commands
 Options
 -------
 
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| **Name**                      | **Default**                      | **Description**                                        |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| **Main**                      |                                  |                                                        |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_default`              | {...}                            | The dictionary contain all riv runtime variables.      |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_projects`             | []                               | The list contain your project's settings.              |
-|                               |                                  |                                                        |
-|                               |                                  | Defaults are::                                         |
-|                               |                                  |                                                        |
-|                               |                                  |   'path'               : '~/Documents/Riv'             |
-|                               |                                  |   'build_path'         : '_build'                      |
-|                               |                                  |   'scratch_path'       : 'Scratch'                     |
-|                               |                                  |   'source_suffix'      : `g:riv_source_suffix`_        |
-|                               |                                  |   'master_doc'         : `g:riv_master_doc`_           |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| Commands_                     |                                  |                                                        |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_global_leader`        | '<C-E>'                          | Leader map for Riv global mapping.                     |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_buf_leader`           | '<C-E>'                          | Leader map in reStructuredText buffers only.           |
-|                               |                                  |                                                        |
-|                               |                                  | Normal/Visual Mode                                     |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_buf_ins_leader`       | '<C-E>'                          | Leader map in reStructuredText buffers only.           |
-|                               |                                  |                                                        |
-|                               |                                  | Insert Mode                                            |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| File_                         |                                  |                                                        |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_master_doc`           | 'index'                          | The master rst document for each directory in project. |
-|                               |                                  |                                                        |
-|                               |                                  | You can set it for each project.                       |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_source_suffix`        | '.rst'                           | The suffix of rst document.                            |
-|                               |                                  |                                                        |
-|                               |                                  | You can set it for each project.                       |
-|                               |                                  |                                                        |
-|                               |                                  | Also for all files with the suffix,                    |
-|                               |                                  | filetype will be set to 'rst'                          |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_file_link_ext`        | 'vim,cpp,c,                      | The file link with these extension will be recognized. |
-|                               | py,rb,lua,pl'                    |                                                        |
-|                               |                                  | These files will be copied when converting a porject.  |
-|                               |                                  |                                                        |
-|                               |                                  | These files along with ,'rst,txt' and                  |
-|                               |                                  | source_suffixs used in your project will               |
-|                               |                                  | be highlighted.                                        |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_file_ext_link_hl`     | 1                                | Syntax highlighting for file with extensions           |
-|                               |                                  | in `g:riv_file_link_ext`_.                             |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_file_link_invalid_hl` | 'ErrorMsg'                       | Cursor Highlight Group for non-exists file link.       |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_file_link_style`      | 1                                | The file link style.                                   |
-|                               |                                  |                                                        |
-|                               |                                  | - 1:``MoinMoin`` style::                               |
-|                               |                                  |                                                        |
-|                               |                                  |    [[xxx]] => xxx.rst                                  |
-|                               |                                  |    [[xxx/]] => xxx/index.rst                           |
-|                               |                                  |    [[/xxx]] => DOC_ROOT/xxx.rst                        |
-|                               |                                  |    [[xxx.vim]] => xxx.vim                              |
-|                               |                                  |    ('vim' is in `g:riv_file_link_ext`_)                |
-|                               |                                  |    [[~/xxx/xxx.rst]] => ~/xxx/xxx.rst                  |
-|                               |                                  |                                                        |
-|                               |                                  | - 2: ``Sphinx`` style::                                |
-|                               |                                  |                                                        |
-|                               |                                  |     :doc:`xxx` => xxx.rst                              |
-|                               |                                  |     :doc:`xxx/index`  => xxx/index.rst                 |
-|                               |                                  |                                                        |
-|                               |                                  |     :download:`xxx.py` => xxx.py                       |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| Syntax_                       |                                  |                                                        |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_highlight_code`       | 'lua,python,cpp,                 | The language name                                      |
-|                               | javascript,vim,sh'               | is the syntax name used by vim.                        |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_code_indicator`       | 1                                | Highlight the first column of code directives.         |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_link_cursor_hl`       | 1                                | Cursor's Hover Highlighting for links.                 |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_python_rst_hl`        | 0                                | Highlight ``DocString`` in python files                |
-|                               |                                  | with rst syntax.                                       |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| Todos_                        |                                  |                                                        |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_todo_levels`          | " ,o,X"                          | The Todo levels for Todo-Box.                          |
-|                               |                                  |                                                        |
-|                               |                                  | Means ``[ ]``, ``[o]``, ``[X]`` by default.            |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_todo_priorities`      |                                  | The Todo Priorities for Todo-Items                     |
-|                               | "ABC"                            |                                                        |
-|                               |                                  | Only alphabetic or digits.                             |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_todo_default_group`   | 0                                | The default Todo Group for ':RivTodoToggle'            |
-|                               |                                  |                                                        |
-|                               |                                  | - 0 is the Todo-Box group.                             |
-|                               |                                  | - 1 and other are the Todo-Keywords group.             |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_todo_datestamp`       | 1                                | The datestamp behavior for Todo-Item.                  |
-|                               |                                  |                                                        |
-|                               |                                  | - 0: no DateStamp                                      |
-|                               |                                  | - 1: only finish datestamp                             |
-|                               |                                  | - 2: both initial and finish datestamp                 |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_todo_keywords`        | "TODO,DONE;FIXME,FIXED;          | The Todo-Keywords groups.                              |
-|                               | START,PROCESS,STOP"              |                                                        |
-|                               |                                  | Each group is separated by ';',                        |
-|                               |                                  | Each keyword is separated by ','.                      |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-|  Folding_                     |                                  |                                                        |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_fold_blank`           | 2                                | Folding blank lines in the end of the folding lines.   |
-|                               |                                  |                                                        |
-|                               |                                  | - 0: fold one blank line, show rest.                   |
-|                               |                                  | - 1: fold all blank lines, show one if more than one.  |
-|                               |                                  | - 2: fold all blank lines.                             |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_fold_level`           | 3                                | Folding more structure for document.                   |
-|                               |                                  |                                                        |
-|                               |                                  | - 0: 'None'                                            |
-|                               |                                  | - 1: 'Sections'                                        |
-|                               |                                  | - 2: 'Sections and Lists'                              |
-|                               |                                  | - 3: 'Sections,Lists and Blocks'.                      |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_fold_section_mark`    | '.'                              | Mark to seperate the section numbers: '1.1', '1.1.1'   |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_fold_auto_update`     | 1                                | Auto Update folding whilst write to buffer.            |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_auto_fold_force`      | 1                                | Reducing fold level for editing large files.           |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_auto_fold1_lines`     | 5000                             | Lines of file exceeds this will fold section only      |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_auto_fold2_lines`     | 3000                             | Lines of file exceeds this will fold section and list  |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_fold_info_pos`        | 'right'                          | The position for fold info.                            |
-|                               |                                  |                                                        |
-|                               |                                  | - 'left', infos will be shown at left side.            |
-|                               |                                  | - 'right', show infos at right side.                   |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| Publish_                      |                                  |                                                        |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_web_browser`          | 'firefox'                        | The browser for browsing html and web links.           |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_ft_browser`           | UNIX:'xdg-open', windows:'start' | The browser for opening files.                         |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_rst2html_args`        | ''                               | Extra args for converting to html.                     |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_rst2odt_args`         | ''                               | Extra args for converting to odt.                      |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_rst2xml_args`         | ''                               | Extra args for converting to xml.                      |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_rst2s5_args`          | ''                               | Extra args for converting to s5.                       |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_rst2latex_args`       | ''                               | Extra args for converting to latex.                    |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_temp_path`            | 1                                | The temp path for converting a file **NOT**            |
-|                               |                                  | in a project.                                          |
-|                               |                                  |                                                        |
-|                               |                                  | - 0: put under the same directory of converting file.  |
-|                               |                                  | - 1: put in the temp path of vim.                      |
-|                               |                                  | - 'PATH': to the path if it's valid.                   |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_html_code_hl_style`   | 'default'                        | The code highlight style for html.                     |
-|                               |                                  |                                                        |
-|                               |                                  | - 'default', 'emacs', or 'friendly':                   |
-|                               |                                  |   use pygments_'s relevant built-in style.             |
-|                               |                                  | - 'FULL_PATH': use your own style sheet in path.       |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| Insert_                       |                                  |                                                        |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_i_tab_pum_next`       | 1                                | Use ``<Tab>`` to act as ``<C-N>`` in insert mode when  |
-|                               |                                  | there is a popup menu.                                 |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_i_tab_user_cmd`       | ''                               | User command to hook ``<Tab>`` in insert mode.         |
-|                               |                                  |                                                        |
-|                               |                                  | let g:riv_i_tab_user_cmd =                             |
-|                               |                                  | "\<c-g>u\<c-r>=snipMate#TriggerSnippet()\<cr>"         |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_i_stab_user_cmd`      | ''                               | User command to hook ``<S-Tab>`` in insert mode.       |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_ignored_imaps`        | ''                               | Use to disable mapping in insert mode.                 |
-|                               |                                  |                                                        |
-|                               |                                  | ``let g:riv_ignored_imaps = "<Tab>,<S-Tab>"``          |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| **Miscs**                     |                                  |                                                        |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_create_link_pos`      | '$'                              | Link Target's position when created.                   |
-|                               |                                  |                                                        |
-|                               |                                  | - '.' : below current line.                            |
-|                               |                                  | - '$' : append at end of file.                         |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_month_names`          | 'January,February,March,April,   | Month Names for Scratch Index                          |
-|                               | May,June,July,August,September,  |                                                        |
-|                               | October,November,December'       |                                                        |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_section_levels`       | '=-~"''`'                        | The section line punctuations for section title.       |
-|                               |                                  |                                                        |
-|                               |                                  | **NOTE**                                               |
-|                               |                                  | Use ``''`` to escape ``'`` in literal-quote ``'xxx'``. |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_content_format`       | '%i%l%n %t'                      | The format for content table.                          |
-|                               |                                  |                                                        |
-|                               |                                  | - %i is the indent of each line                        |
-|                               |                                  | - %l is the list symbol '+'                            |
-|                               |                                  | - %n is the section number                             |
-|                               |                                  | - %t is the section title                              |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_fuzzy_help`           | 0                                | Fuzzy searching in helper.                             |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
-| _`g:riv_auto_format_table`    | 1                                | Auto formating table when leave Insert Mode            |
-+-------------------------------+----------------------------------+--------------------------------------------------------+
++--------------------------------------------+--------------------------------------------------------+
+| **Name**                                   | **Description**                                        |
++--------------------------------------------+--------------------------------------------------------+
+| **Main**                                   |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_default`                           | The dictionary contain all riv runtime variables.      |
+|                                            |                                                        |
+| {...}                                      |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_projects`                          | The list contain your project's settings.              |
+|                                            |                                                        |
+|  []                                        | Defaults are::                                         |
+|                                            |                                                        |
+|                                            |   'path'               : '~/Documents/Riv'             |
+|                                            |   'build_path'         : '_build'                      |
+|                                            |   'scratch_path'       : 'Scratch'                     |
+|                                            |   'source_suffix'      : `g:riv_source_suffix`_        |
+|                                            |   'master_doc'         : `g:riv_master_doc`_           |
++--------------------------------------------+--------------------------------------------------------+
+| Commands_                                  |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_global_leader`                     | Leader map for Riv global mapping.                     |
+|                                            |                                                        |
+| '<C-E>'                                    |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| File_                                      |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_master_doc`                        | The master rst document for each directory in project. |
+|                                            |                                                        |
+| 'index'                                    | You can set it for each project.                       |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_source_suffix`                     | The suffix of rst document.                            |
+|                                            |                                                        |
+| '.rst'                                     | You can set it for each project.                       |
+|                                            |                                                        |
+|                                            | Also for all files with the suffix,                    |
+|                                            | filetype will be set to 'rst'                          |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_file_link_ext`                     | The file link with these extension will be recognized. |
+|                                            |                                                        |
+| 'vim,cpp,c,py,rb,lua,pl'                   | These files will be copied when converting a porject.  |
+|                                            |                                                        |
+|                                            | These files along with ,'rst,txt' and                  |
+|                                            | source_suffixs used in your project will               |
+|                                            | be highlighted.                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_file_ext_link_hl`                  | Syntax highlighting for file with extensions           |
+|                                            | in `g:riv_file_link_ext`_.                             |
+| 1                                          |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_file_link_invalid_hl`              | Cursor Highlight Group for non-exists file link.       |
+|                                            |                                                        |
+| 'ErrorMsg'                                 |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_file_link_style`                   | The file link style.                                   |
+|                                            |                                                        |
+| 1                                          | - 1:``MoinMoin`` style::                               |
+|                                            |                                                        |
+|                                            |    [[xxx]] => xxx.rst                                  |
+|                                            |    [[xxx/]] => xxx/index.rst                           |
+|                                            |    [[/xxx]] => DOC_ROOT/xxx.rst                        |
+|                                            |    [[xxx.vim]] => xxx.vim                              |
+|                                            |    ('vim' is in `g:riv_file_link_ext`_)                |
+|                                            |    [[~/xxx/xxx.rst]] => ~/xxx/xxx.rst                  |
+|                                            |                                                        |
+|                                            | - 2: ``Sphinx`` style::                                |
+|                                            |                                                        |
+|                                            |     :doc:`xxx` => xxx.rst                              |
+|                                            |     :doc:`xxx/index`  => xxx/index.rst                 |
+|                                            |                                                        |
+|                                            |     :download:`xxx.py` => xxx.py                       |
++--------------------------------------------+--------------------------------------------------------+
+| Syntax_                                    |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_highlight_code`                    | The language name                                      |
+|                                            |                                                        |
+|                                            |                                                        |
+| 'lua,python,cpp,javascript,vim,sh'         | is the syntax name used by vim.                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_code_indicator`                    | Highlight the first column of code directives.         |
+|                                            |                                                        |
+| 1                                          |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_link_cursor_hl`                    | Cursor's Hover Highlighting for links.                 |
+|                                            |                                                        |
+| 1                                          |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_python_rst_hl`                     | Highlight ``DocString`` in python files                |
+|                                            |                                                        |
+| 0                                          | with rst syntax.                                       |
++--------------------------------------------+--------------------------------------------------------+
+| Todos_                                     |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_todo_levels`                       | The Todo levels for Todo-Box.                          |
+|                                            |                                                        |
+| " ,o,X"                                    | Means ``[ ]``, ``[o]``, ``[X]`` by default.            |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_todo_priorities`                   | The Todo Priorities for Todo-Items                     |
+|                                            |                                                        |
+| "ABC"                                      | Only alphabetic or digits.                             |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_todo_default_group`                | The default Todo Group for ':RivTodoToggle'            |
+|                                            |                                                        |
+| 0                                          | - 0 is the Todo-Box group.                             |
+|                                            | - 1 and other are the Todo-Keywords group.             |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_todo_datestamp`                    | The datestamp behavior for Todo-Item.                  |
+|                                            |                                                        |
+| 1                                          | - 0: no DateStamp                                      |
+|                                            | - 1: only finish datestamp                             |
+|                                            | - 2: both initial and finish datestamp                 |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_todo_keywords`                     | The Todo-Keywords groups.                              |
+|                                            |                                                        |
+| "TODO,DONE;FIXME,FIXED;START,PROCESS,STOP" | Each group is separated by ';',                        |
+|                                            | Each keyword is separated by ','.                      |
++--------------------------------------------+--------------------------------------------------------+
+|  Folding_                                  |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_fold_blank`                        | Folding blank lines in the end of the folding lines.   |
+|                                            |                                                        |
+| 2                                          | - 0: fold one blank line, show rest.                   |
+|                                            | - 1: fold all blank lines, show one if more than one.  |
+|                                            | - 2: fold all blank lines.                             |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_fold_level`                        | Folding more structure for document.                   |
+|                                            |                                                        |
+| 3                                          | - 0: 'None'                                            |
+|                                            | - 1: 'Sections'                                        |
+|                                            | - 2: 'Sections and Lists'                              |
+|                                            | - 3: 'Sections,Lists and Blocks'.                      |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_fold_section_mark`                 | Mark to seperate the section numbers: '1.1', '1.1.1'   |
+|                                            |                                                        |
+| '.'                                        |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_fold_auto_update`                  | Auto Update folding whilst write to buffer.            |
+|                                            |                                                        |
+| 1                                          |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_auto_fold_force`                   | Reducing fold level for editing large files.           |
+|                                            |                                                        |
+| 1                                          |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_auto_fold1_lines`                  | Lines of file exceeds this will fold section only      |
+|                                            |                                                        |
+| 5000                                       |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_auto_fold2_lines`                  | Lines of file exceeds this will fold section and list  |
+|                                            |                                                        |
+| 3000                                       |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_fold_info_pos`                     | The position for fold info.                            |
+|                                            |                                                        |
+| 'right'                                    |                                                        |
+|                                            |                                                        |
+|                                            | - 'left', infos will be shown at left side.            |
+|                                            | - 'right', show infos at right side.                   |
++--------------------------------------------+--------------------------------------------------------+
+| Publish_                                   |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_web_browser`                       | The browser for browsing html and web links.           |
+|                                            |                                                        |
+| 'firefox'                                  |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_ft_browser`                        | The browser for opening files.                         |
+|                                            |                                                        |
+| UNIX:'xdg-open', windows:'start'           |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_rst2html_args`                     | Extra args for converting to html.                     |
+|                                            |                                                        |
+| ''                                         |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_rst2odt_args`                      | Extra args for converting to odt.                      |
+|                                            |                                                        |
+| ''                                         |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_rst2xml_args`                      | Extra args for converting to xml.                      |
+|                                            |                                                        |
+| ''                                         |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_rst2s5_args`                       | Extra args for converting to s5.                       |
+|                                            |                                                        |
+| ''                                         |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_rst2latex_args`                    | Extra args for converting to latex.                    |
+|                                            |                                                        |
+| ''                                         |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_temp_path`                         | The temp path for converting a file **NOT**            |
+|                                            | in a project.                                          |
+| 1                                          |                                                        |
+|                                            | - 0: put under the same directory of converting file.  |
+|                                            | - 1: put in the temp path of vim.                      |
+|                                            | - 'PATH': to the path if it's valid.                   |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_html_code_hl_style`                | The code highlight style for html.                     |
+|                                            |                                                        |
+| 'default'                                  | - 'default', 'emacs', or 'friendly':                   |
+|                                            |   use pygments_'s relevant built-in style.             |
+|                                            | - 'FULL_PATH': use your own style sheet in path.       |
++--------------------------------------------+--------------------------------------------------------+
+| Insert_                                    |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_i_tab_pum_next`                    | Use ``<Tab>`` to act as ``<C-N>`` in insert mode when  |
+|                                            | there is a popup menu.                                 |
+| 1                                          |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_i_tab_user_cmd`                    | User command to hook ``<Tab>`` in insert mode.         |
+|                                            |                                                        |
+| ''                                         | let g:riv_i_tab_user_cmd =                             |
+|                                            | "\<c-g>u\<c-r>=snipMate#TriggerSnippet()\<cr>"         |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_i_stab_user_cmd`                   | User command to hook ``<S-Tab>`` in insert mode.       |
+|                                            |                                                        |
+| ''                                         |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_ignored_imaps`                     | Use to disable mapping in insert mode.                 |
+|                                            |                                                        |
+| ''                                         | ``let g:riv_ignored_imaps = "<Tab>,<S-Tab>"``          |
++--------------------------------------------+--------------------------------------------------------+
+| **Miscs**                                  |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_create_link_pos`                   | Link Target's position when created.                   |
+|                                            |                                                        |
+| '$'                                        | - '.' : below current line.                            |
+|                                            | - '$' : append at end of file.                         |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_month_names`                       | Month Names for Scratch Index                          |
+|                                            |                                                        |
+| 'January,February,March,April,             |                                                        |
+| May,June,July,August,September,            |                                                        |
+| October,November,December'                 |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_section_levels`                    | The section line punctuations for section title.       |
+|                                            |                                                        |
+| '=-~"''`'                                  | **NOTE**                                               |
+|                                            | Use ``''`` to escape ``'`` in literal-quote ``'xxx'``. |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_content_format`                    | The format for content table.                          |
+|                                            |                                                        |
+| '%i%l%n %t'                                | - %i is the indent of each line                        |
+|                                            | - %l is the list symbol '+'                            |
+|                                            | - %n is the section number                             |
+|                                            | - %t is the section title                              |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_fuzzy_help`                        | Fuzzy searching in helper.                             |
+|                                            |                                                        |
+| 0                                          |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_auto_format_table`                 | Auto formating table when leave Insert Mode            |
+|                                            |                                                        |
+| 1                                          |                                                        |
++--------------------------------------------+--------------------------------------------------------+
 
 
 
