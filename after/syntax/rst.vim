@@ -31,10 +31,6 @@ syn cluster rstCommentGroup contains=rstCommentTitle,rstTodo
 syn cluster rstCruft add=rstStandaloneHyperlink
 syn cluster rstCommentGroup add=@rstLinkGroup
 
-if g:riv_file_link_style != 0
-    exe 'syn match rstFileLink &'.s:s.rstFileLink.'&'
-    syn cluster rstCruft add=rstFileLink
-endif
 if g:riv_file_ext_link_hl == 1
     exe 'syn match rstFileExtLink &'.s:s.rstFileExtLink.'&'
     syn cluster rstCruft add=rstFileExtLink

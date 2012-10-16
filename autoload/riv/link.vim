@@ -176,8 +176,8 @@ endfun "}}}
 fun! riv#link#path(str) "{{{
     " return the local file path contained in the string.
     
-    ">>>> let g:_temp = g:riv_file_link_style 
-    ">>>> let g:riv_file_link_style = 1
+    ">>>> let g:_temp = riv#ptn#get_flink_style() 
+    ">>>> let riv#ptn#get_flink_style() = 1
     ">>>> echo riv#link#path('[[xxx]]')
     ">xxx.rst
     ">>>> echo riv#link#path('[[xxx.vim]]')
@@ -188,7 +188,7 @@ fun! riv#link#path(str) "{{{
     ">ROOT/xxx.rst
     ">>>> echo riv#link#path('[[~/xxx]]')
     ">~/xxx
-    ">>>> let g:riv_file_link_style = 2
+    ">>>> let riv#ptn#get_flink_style() = 2
     ">>>> echo riv#link#path(':doc:`xxx`')
     ">xxx.rst
     ">>>> echo riv#link#path(':doc:`xxx.vim`')
@@ -199,7 +199,7 @@ fun! riv#link#path(str) "{{{
     ">ROOT/xxx.rst
     ">>>> echo riv#link#path(':doc:`~/xxx`')
     ">~/xxx
-    ">>>> let g:riv_file_link_style = g:_temp
+    ">>>> let riv#ptn#get_flink_style() = g:_temp
 
     let [f,t] = riv#ptn#get_file(a:str)
     if riv#path#is_relative(f)

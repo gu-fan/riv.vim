@@ -15,7 +15,7 @@ fun! s:escape(txt) "{{{
     return escape(a:txt, '~.*\[]^$')
 endfun "}}}
 fun! s:gen_embed_link(title, path) "{{{
-    if g:riv_file_link_style == 2
+    if riv#ptn#get_flink_style() == 2
         return  '`['.a:title.'] <'.a:path.'>`_'
     else
         return  '`'.a:title.' <'.a:path.'>`_'
@@ -172,7 +172,7 @@ fun! riv#publish#2(ft, file, path, browse) "{{{
     let out_path = a:path . riv#path#rel_to_root(file)
     let file_path = riv#path#ext_to(out_path, a:ft)
     call riv#publish#auto_mkdir(out_path)
-    if g:riv_file_link_style == 1
+    if riv#ptn#get_flink_style() == 1
         call s:convert(a:ft, s:create_tmp(file), file_path, s:rst_args(a:ft))
     else
         call s:convert(a:ft, file, file_path, s:rst_args(a:ft))

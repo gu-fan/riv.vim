@@ -613,13 +613,13 @@ endfun "}}}
 
 fun! riv#ptn#get_file(str) "{{{
     " return [file, is_doc] with fetched str.
-    if g:riv_file_link_style == 1
+    if riv#ptn#get_flink_style() == 1
         " >>> let g:riv_file_link_style = 1
         " >>> ec riv#ptn#get_file('[[www]]')
         " ['www', 'doc']
         let f = matchstr(a:str, g:_riv_p.moin_link_str)
         let t = riv#path#is_relative(f) ? 'doc' : 'file'
-    elseif g:riv_file_link_style == 2
+    elseif riv#ptn#get_flink_style() == 2
         " >>> ec matchstr(':doc:`Hello <x/hello>`', g:_riv_p.sphinx_link_str)
         " >>> ec matchstr(':doc:`Hello`', g:_riv_p.sphinx_link_str)
         " x/hello
@@ -628,6 +628,14 @@ fun! riv#ptn#get_file(str) "{{{
         let t = match(a:str,':doc:')!=-1 ? 'doc' : 'file'
     endif
     return [f, t]
+endfun "}}}
+
+fun! riv#ptn#get_flink_style() "{{{
+    return g:_riv_c.p[s:id()].file_link_style
+endfun "}}}
+
+fun! s:id() "{{{
+    return exists("b:riv_p_id") ? b:riv_p_id : g:riv_p_id
 endfun "}}}
 
 if expand('<sfile>:p') == expand('%:p') "{{{

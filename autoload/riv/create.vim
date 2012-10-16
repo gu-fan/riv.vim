@@ -22,7 +22,7 @@ fun! s:expand_file_link(file) "{{{
     " the rel directory with [] will add index.html
     " other unchanged.
     let file = a:file
-    if g:riv_file_link_style == 2 && !empty(file)
+    if riv#ptn#get_flink_style() == 2 && !empty(file)
         let file = matchstr(file, '^\[\zs.*\ze\]$')
     endif
     if !riv#path#is_relative(file)
@@ -32,7 +32,7 @@ fun! s:expand_file_link(file) "{{{
     else
         if riv#path#is_ext(file)
             let tar = s:str_to_tar(file, fnamemodify(file, ':r').'.html') 
-        elseif fnamemodify(file, ':e') == '' && g:riv_file_link_style == 2
+        elseif fnamemodify(file, ':e') == '' && riv#ptn#get_flink_style() == 2
             let tar = s:str_to_tar(file, file.'index.html')
         else
             let tar = s:str_to_tar(file,file)
@@ -200,9 +200,9 @@ fun! s:format_src_index() "{{{
             call add(lines, repeat('-', strwidth(s:months[month-1])))
             let line_lst = [] 
             for day in years[year][month]
-                if g:riv_file_link_style == 1 
+                if riv#ptn#get_flink_style() == 1 
                     let f = printf("[[%s]]",day)
-                elseif g:riv_file_link_style == 2 
+                elseif riv#ptn#get_flink_style() == 2 
                     let f = printf(":doc:`%s`",day)
                 else
                     let f = printf("%s".riv#path#ext(),day)
@@ -233,7 +233,7 @@ fun! s:escape(str) "{{{
     return escape(a:str, '.^$*[]\~')
 endfun "}}}
 fun! s:escape_file_ptn(file) "{{{
-    if g:riv_file_link_style == 2
+    if riv#ptn#get_flink_style() == 2
         return   '\%(^\|\s\)\zs\[' . fnamemodify(s:escape(a:file), ':t:r') 
                     \ . '\]\ze\%(\s\|$\)'
     else

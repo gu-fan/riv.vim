@@ -195,6 +195,7 @@ fun! riv#load_conf() "{{{1
         \'scratch_path'       : 'Scratch' ,
         \'source_suffix'      : g:riv_source_suffix ,
         \'master_doc'         : g:riv_master_doc ,
+        \'file_link_style'    : g:riv_file_link_style,
         \}
     let s:c.p = []
     if exists("g:riv_projects") && type(g:riv_projects) == type([])
@@ -307,8 +308,13 @@ fun! riv#load_aug() "{{{
     aug RIV_GLOBAL
         au!
         au WinEnter,BufWinEnter * call riv#show_menu()
-        for ext in g:_riv_c.doc_ext_list
-            exe 'au BufEnter *.'.ext.' call riv#set_ft()' 
+        
+        " We only want to set the filetype for the files in
+        " the project which has that option.
+        for p in g:_riv_c.p
+            if p.source_suffix != '.rst'
+                exe 'au BufEnter '.p._root_path.'*'.p.source_suffix.' call riv#set_ft() '
+            endif
         endfor
     aug END
     
@@ -343,6 +349,14 @@ fun! riv#buf_load_aug() "{{{
         au! BufWritePre  <buffer>  call riv#create#auto_mkdir()
     aug END "}}}
 endfun "}}}
+fun! riv#buf_load_syn()
+    " XXX This is no useable cause the link_file pattern are 
+    " defined by default option
+    if riv#ptn#get_flink_style() != 0
+        exe 'syn match rstFileLink &'.g:_riv_s.rstFileLink.'&'
+        syn cluster rstCruft add=rstFileLink
+    endif
+endfun
 fun! riv#buf_init() "{{{
     " for the rst buffer
     setl foldmethod=expr foldexpr=riv#fold#expr(v:lnum) foldtext=riv#fold#text()
@@ -360,6 +374,7 @@ fun! riv#buf_init() "{{{
     " call s:fold_map(g:riv_default.fold_maps)
     call riv#cmd#init_maps()
     call riv#buf_load_aug()
+    call riv#buf_load_syn()
 endfun "}}}
 
 if expand('<sfile>:p') == expand('%:p') "{{{
