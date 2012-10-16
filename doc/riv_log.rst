@@ -1,6 +1,24 @@
 Changelogs
 ==========
 
+* 0.72 
+
+  :Syntax_: DONE 2012-09-25 highlight reStructuredText in python DocString.
+  :File_: FIXED 2012-09-25 Fix the file link highlight of ``~/.xxx``
+  :Sections_: FIXED 2012-10-04 Fix the section Helper.
+  :Syntax_: FIXED 2012-10-04 Workaround of the Spell checking.
+  :Intro_: DONE 2012-10-13 Options section.
+  :Intro_: DONE 2012-10-15 Commands section.
+  :Intro_: DONE 2012-10-16 Rewrite riv_quickstart
+  :Intro_: DONE 2012-10-14 Rewrite riv_todo
+  :Intro_: DONE 2012-10-14 Cheatsheet and Specification added.
+  :File_:  DONE 2012-10-13 support user defined rst file suffix.
+  :File_:  DONE 2012-10-13 support sphinx embedded :doc: link.
+  :Test:   DONE 2012-10-13 Add `:RivVimTest` for vim script test.
+  :Menu:   FIXED 2012-10-13 Fix menu disable/enable.
+  :Links_: FIXED 2012-10-13 Fix target link jumping.
+  :Commands_: DONE 2012-10-15 Rewrite command and menu part.
+
 * 0.71:
 
   :File_: DONE 2012-09-13 extension style show in vim only.
