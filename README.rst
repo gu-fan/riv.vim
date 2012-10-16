@@ -211,7 +211,7 @@ Things todo in this version.
   :Intro_: ScreenCast tutor
   :Indent_: FIXED 2012-10-16 List indentation for visual lines are wrong
   :File_: The file pattern separated for each project.
-  :Insert_: Literal-block create have trailing chars.
+  :Insert_: FIXED 2012-10-16 Literal-block create have trailing chars.
   :Lists_: Add :RivListToggle
   :Lists_: List sub/sup need rewrite
 
