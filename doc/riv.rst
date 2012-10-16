@@ -107,12 +107,13 @@ ScreenCast: TODO
 Where To Go
 -----------
 
-* Index_ : Index of this Document
+* Index_ : Index of Document
 
 **Gettings Start**
 
 * Install_: Installation
 * Tutors_ : From the very basic
+* Instructions_ : The detailed instruction.
 * Commands_: Mappings and commands
 * Options_: Options and settings
 
@@ -120,10 +121,15 @@ Where To Go
 
 * `Todo and Done`_: Todos and Logs
 * Issues_: Known Issues
-* Contribution_: Contribute to this
+* Contribution_: Help improving
 
 Tutors
 ------
+
+**Vim**
+
+* If you are new to vim. Use ``:h``,
+  Use ``vimtutor`` in your shell.
 
 **Read about RST**
 
@@ -456,8 +462,16 @@ blocks, list, explicit marks.
 If no fix is needed, ``shiftwidth`` will be used for the indenting.
 
 * Commands:
-    
-  **Insert Mode**
+  
+  **Normal**
+
+  + ``>`` and ``<`` will indent with fixed indent.
+
+    To use original ``shiftwidth`` indent.
+
+    Use ``<C-E>>`` and ``<C-E><``
+
+  **Insert**
 
   + Newline (``<Enter>`` or ``o`` in Normal mode):
     will start newline with fixed indentation 
@@ -521,11 +535,22 @@ Super ``<Tab>`` and Super ``<Enter>`` in insert mode.
 
        You can view default mappings with '_`g:riv_default.buf_imaps`'
 
-* Insert extra things.
+* Insert extra fields.
 
-  + Use `:RivCreateDate`_ ``<C-E>id`` to insert a date stamp of today anywhere.
-  + Use `:RivCreateTime`_ ``<C-E>it`` to insert a time stamp of current time anywhere. 
-
+  + `:RivCreateDate`_ : Insert current date 
+  + `:RivCreateTime`_ : Insert current time
+  + `:RivCreateEmphasis`_ : Create Emphasis text
+  + `:RivCreateStrong`_ : Create Strong text
+  + `:RivCreateLink`_ : Create Link based on current word
+  + `:RivCreateFoot`_ : Create Footnote
+  + `:RivCreateDate`_ : Insert Current Date
+  + `:RivCreateTime`_ : Insert Current time
+  + `:RivCreateInterpreted`_ : Interpreted
+  + `:RivCreateLiteralInline`_ : LiteralInline
+  + `:RivCreateLiteralBlock`_ : LiteralBlock
+  + `:RivCreateHyperLink`_ : HyperLink
+  + `:RivCreateTransition`_ : Transition
+  + `:RivCreateExplicitMark`_ : ExplicitMark
 
 RST 
 ---
@@ -1342,6 +1367,7 @@ Commands
   For example: ``:RivIndex`` to open the default Project Index.
 
 + You can use menu to view the commands Shortcut either.
+  ``:popup Riv`` Can be used when you not showing the menu bar.
 
 
 + **Global**

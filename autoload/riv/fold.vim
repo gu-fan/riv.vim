@@ -16,8 +16,11 @@ fun! s:init_stat(...) "{{{
     elseif len > g:riv_auto_fold2_lines && g:riv_auto_fold_force == 1
         let b:foldlevel = b:foldlevel >= 2 ? 2 : 0 
     endif
-
-    call s:parse_from_start()
+    " To avoid stuck with necompl
+    if !exists("b:riv_flist") || ( len(b:riv_flist) != len + 1 )
+        call s:parse_from_start()
+    endif
+    " Todo: Parse from the first modified line.
 endfun "}}}
 " Parse "{{{
 fun! s:parse_from_start() "{{{

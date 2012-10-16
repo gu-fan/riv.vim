@@ -486,7 +486,7 @@ fun! riv#cmd#init_cmds() "{{{
   for cmd in g:riv_default.cmds
     if cmd.type == 'global' 
       exe "com!" cmd.name cmd.act
-      exe "nor <Plug>(".cmd.name.")" ":".cmd.act."<CR>"
+      exe "nor <Plug>(".cmd.name.")" ":".cmd.name."<CR>"
       if has_key(cmd, 'maps')
         for map in cmd.maps
           exe "map <silent>" leader.map "<Plug>(".cmd.name.")"
@@ -494,21 +494,21 @@ fun! riv#cmd#init_cmds() "{{{
       endif
     elseif cmd.type == 'buf'
       exe "com!" cmd.name cmd.act
-      exe "nor <Plug>(".cmd.name.")" ":".cmd.act."<CR>" 
+      exe "nor <Plug>(".cmd.name.") :".cmd.name."<CR>" 
     elseif cmd.type == 'mod'
       let act_n = substitute(cmd.act, '%M','"n"','')
       exe "com!" cmd.name act_n
-      exe "nor <Plug>(".cmd.name.")" act_n 
+      exe "nor <Plug>(".cmd.name.") :" cmd.name."<CR>"
     elseif cmd.type == 'norm'
       exe "com!" cmd.name cmd.act
-      exe "nor <Plug>(".cmd.name.")" ":".cmd.act."<CR>" 
+      exe "nor <Plug>(".cmd.name.")" ":".cmd.name."<CR>" 
     elseif cmd.type == 'farg'
       exe "com!" cmd.args cmd.name  cmd.act
       exe "nor <Plug>(".cmd.name.") :" cmd.name."<CR>"
     elseif cmd.type == 'menu'
       if has_key(cmd, 'act')
         exe "com!" cmd.name cmd.act
-        exe "nor <Plug>(".cmd.name.")" ":".cmd.act."<CR>" 
+        exe "nor <Plug>(".cmd.name.")" ":".cmd.name."<CR>" 
       endif
     endif
 

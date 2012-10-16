@@ -7,7 +7,17 @@
                              \/                                  ~
 ======================================================================
 
-See riv.rst (open it with |gf| or use ':e riv.rst' )
+                                                    *:RivInstruction*
+    Show Riv Instruction.   
+
+                                                    *:RivQuickStart*
+    Show Riv QuickStart
+
+                                                    *:RivPrimer*
+    Show RST Primer
+
+                                                    *:RivSpecification*
+    Show RST Specification
 
 ======================================================================
 vim:ft=help:tw=76
