@@ -142,18 +142,18 @@ or ``<C-E>l```
 
 * Press ``<C-E>l``` on this line To toggle the List
 
-You can create a sub list by ``:RivListNew`` 
-or ``<C-E>ln`` or ``<C-Enter>``
+You can create a sub list by ``:RivSuperCEnter`` 
+or ``<C-E>mj`` or ``<C-Enter>``
 
 1. Press ``<C-Enter>`` in insert mode to create a new list item
 
-You can create a sub list by ``:RivListSub`` 
-or ``<C-E>lb`` or ``<S-Enter>``
+You can create a sub list by ``:RivSuperSEnter`` 
+or ``<C-E>mk`` or ``<S-Enter>``
 
 1. Press ``<S-Enter>`` in insert mode to create a sub list item
 
-You can create a sup list by ``:RivListSup`` 
-or ``<C-E>lp`` or ``<C-S-Enter>``
+You can create a sup list by ``:RivSuperMEnter`` 
+or ``<C-E>mh`` or ``<C-S-Enter>``
 
 1. This is a List
 
