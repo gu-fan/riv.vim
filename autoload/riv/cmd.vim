@@ -560,7 +560,7 @@ fun! riv#cmd#init_maps() "{{{
               exe "nma <silent><buffer>" key "<Plug>(".cmd.name .")"
             endif
             if cmd.keymode =~ 'i'
-              exe "ima <silent><buffer>" key "<C-O><Plug>(".cmd.name.")"
+              exe "ima <silent><buffer>" key "<C-O>:".cmd.act."<CR>"
             endif
             if cmd.keymode =~ 'v'
               " for the range function. only :call can be used.

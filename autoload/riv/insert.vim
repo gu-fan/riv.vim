@@ -16,12 +16,15 @@ let s:f_buf = 0
 
 " for new line's indent
 fun! riv#insert#indent(row) "{{{
-    let pnb_num = prevnonblank(a:row - 1)
+    let row = a:row == '.' ? line('.') :
+            \ a:row == '$' ? line('$') : a:row
+
+    let pnb_num = prevnonblank(row - 1)
     if pnb_num == 0
         return 0
     endif
 
-    let p_line = getline(a:row - 1)
+    let p_line = getline(row - 1)
 
     let pnb_line = getline(pnb_num)
     let ind = indent(pnb_num)
@@ -31,13 +34,17 @@ fun! riv#insert#indent(row) "{{{
     " 1~2:start of list content
     " 3:  indent of list  
     " 4:  start of prev list left edge.
+    " >>> let _t_line = ' :aefaw: Test'
+    " >>> echo matchend(_t_line, g:_riv_p.all_list)
+    " >>> echo riv#fold#indent(_t_line)
+    " >>> echo matchend(_t_line, '^\s*')
     let l_ind = matchend(pnb_line, s:p.all_list)
     if l_ind != -1 
-        if a:row <= pnb_num+2 
-            return (ind + l_ind - matchend(pnb_line, '^\s*'))
-        elseif a:row <= pnb_num+3 
+        if row <= pnb_num+2 
+            return l_ind
+        elseif row <= pnb_num+3 
             return ind
-        elseif a:row >= pnb_num+4 
+        elseif row >= pnb_num+4 
             " find previous list item's indent
             " XXX: should use parent's list, which indent should 
             " be less than current one
@@ -54,14 +61,14 @@ fun! riv#insert#indent(row) "{{{
     " 1~2+:ind  
     " 2:
     let l_ind = matchend(pnb_line, s:p.literal_block)
-    if l_ind != -1 &&  a:row == pnb_num+2
+    if l_ind != -1 && row == pnb_num+2
         return ind
     endif
 
     " exp_markup
     " 1~2: ind
     let l_ind = matchend(pnb_line, s:p.exp_mark)
-    if l_ind != -1 &&  a:row <= pnb_num+2
+    if l_ind != -1 && row <= pnb_num+2
         return l_ind
     endif
     
@@ -69,9 +76,9 @@ fun! riv#insert#indent(row) "{{{
     " 1~2: ind
     " 3 : check prev exp_mark or list
     " 4+ : 0
-    if a:row > pnb_num+3
+    if row > pnb_num+3
         return 0
-    elseif  a:row > pnb_num+2
+    elseif  row > pnb_num+2
         call cursor(pnb_num,1)
         let p_row = searchpos(s:p.all_list.'|^\s*\.\.\s\|^\S', 'bW')[0]
         let p_line = getline(p_row)
@@ -158,7 +165,7 @@ fun! riv#insert#shiftright(row,col) "{{{
 endfun "}}}
 
 if expand('<sfile>:p') == expand('%:p') "{{{
-
+    call riv#test#doctest('%','%',2)
 endif "}}}
 let &cpo = s:cpo_save
 unlet s:cpo_save
