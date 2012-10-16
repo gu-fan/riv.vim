@@ -264,7 +264,7 @@ fun! riv#list#new(act) "{{{
         endif
     endif
     
-    exe "norm! i\<C-G>u".cmd
+    exe "norm! a\<C-G>u".cmd
 
     call s:new_list_item(a:act)
 
