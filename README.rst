@@ -213,7 +213,7 @@ Things todo in this version.
   :File_: The file pattern separated for each project.
   :Insert_: FIXED 2012-10-16 Literal-block create have trailing chars.
   :Lists_: Add :RivListToggle
-  :Lists_: List sub/sup need rewrite
+  :Lists_: DONE 2012-10-17 List new/sub/sup rewrite
 
 Next
 ~~~~~

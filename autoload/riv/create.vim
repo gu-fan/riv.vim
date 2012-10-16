@@ -333,13 +333,11 @@ fun! riv#create#hyperlink() "{{{
     exe "norm! \<Esc>Bihttp://\<Esc>E"
 endfun "}}}
 fun! riv#create#exp_mark() "{{{
-    let lines = ['','..  ']
-    call append('.',lines)
-    norm! 2j
+    exe "norm! A\<Enter>\<Enter>\<Esc>A.. "
     starti!
 endfun "}}}
 fun! riv#create#literal_block() "{{{
-    exe "norm A::\<Enter>\<Enter>\<Tab>"
+    exe "norm! A::\<Enter>\<Enter>    "
     starti!
 endfun "}}}
 "}}}

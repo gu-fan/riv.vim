@@ -33,6 +33,9 @@ fun! riv#warning(msg) "{{{
     echon a:msg
     echohl Normal
 endfun "}}}
+fun! riv#breakundo() "{{{
+    let &ul=&ul
+endfun "}}}
 "}}}
 "{{{ Loading Functions
 fun! riv#load_opt(opt_dic) "{{{

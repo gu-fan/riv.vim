@@ -2,7 +2,7 @@
 "    Name: table.vim
 "    File: table.vim
 " Summary: Grid table
-"  Author: Rykka G.Forest
+"  Author: Rykka G.F
 "  Update: 2012-07-16
 " Version: 0.5
 "=============================================
@@ -367,6 +367,19 @@ fun! s:zip(list) "{{{
     return zipped
 endfun "}}}
 
+
+fun! riv#table#newline(type) "{{{
+    " TODO: break a row will break the content into two lines
+    call riv#breakundo()
+    let [row,col] = getpos('.')[1:2]
+    call s:get_table().add_line(a:type)
+    if a:type == 'cont'
+        call cursor(row+1,col)
+    else
+        call cursor(row+2,col)
+    endif
+    call search(g:_riv_p.cell.'|^\s*$' ,'Wbc')
+endfun "}}}
 
 if expand('<sfile>:p') == expand('%:p') "{{{
     echo s:zip([[1,2,3],[4,5,6],[7,8]])

@@ -72,45 +72,31 @@ endfun "}}}
 
 fun! riv#action#ins_enter() "{{{
     if getline('.') =~ s:p.table
-        let [row,col] = getpos('.')[1:2]
-        return s:table_newline_cmd(row,col,'cont')
+        call riv#table#newline('cont')
     else
-        return  "\<C-G>u\<Enter>"
+        exe "norm! i\<C-G>u\<Enter>"
     endif
 endfun "}}}
 fun! riv#action#ins_c_enter() "{{{
-    let line = getline('.')
     if getline('.') =~ s:p.table
-        let [row,col] = getpos('.')[1:2]
-        return s:table_newline_cmd(row,col,'sepr')
+        call riv#table#newline('sepr')
+    else
+        call riv#list#new(0)
     endif
-    let cmd = "\<C-G>u"
-    let cmd .= line=~ '\S' ? "\<CR>" : ''
-    let cmd .= "\<C-O>:call riv#list#new(0)\<CR>\<Esc>A"
-    return cmd
 endfun "}}}
 fun! riv#action#ins_s_enter() "{{{
-    let line = getline('.')
     if getline('.') =~ s:p.table
-        " let [row,col] = getpos('.')[1:2]
-        " return s:table_newline_cmd(row,col,'cont')
-        return "\<C-O>:call cursor(riv#table#nextline())\<CR>"
+        call cursor(riv#table#nextline())
+    else
+        call riv#list#new(1)
     endif
-    let cmd = "\<C-G>u"
-    let cmd .= line=~ '\S' ? "\<CR>\<CR>" : ''
-    let cmd .= "\<C-O>:call riv#list#new(1)\<CR>\<Esc>A"
-    return cmd
 endfun "}}}
 fun! riv#action#ins_m_enter() "{{{
-    let line = getline('.')
     if getline('.') =~ s:p.table
-        let [row,col] = getpos('.')[1:2]
-        return s:table_newline_cmd(row,col,'head')
+        call riv#table#newline('head')
+    else
+        call riv#list#new(-1)
     endif
-    let cmd = "\<C-G>u"
-    let cmd .= line=~ '\S' ? "\<CR>\<CR>" : ''
-    let cmd .= "\<C-O>:call riv#list#new(-1)\<CR>\<Esc>A"
-    return cmd
 endfun "}}}
 
 fun! riv#action#ins_backspace() "{{{

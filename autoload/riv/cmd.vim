@@ -409,21 +409,21 @@ let g:riv_default.cmds = [
     \'note': 'Super Shift Tab',
     \'type': 'expr', 'mode': 'i', 'maps': ['mw'], 'keys':['<S-Tab>'],
 \},
-\{'name': 'RivSuperEnter', 'act': 'riv#action#ins_enter()',
+\{'name': 'RivSuperEnter', 'act': 'call riv#action#ins_enter()',
     \'note': 'Super Enter',
-    \'type': 'ins', 'mode': 'i', 'maps': ['mm'], 'keys':['<Enter>', '<KEnter>'],
+    \'type': 'buf', 'mode': 'ni', 'maps': ['mm'], 'keys':['<Enter>', '<KEnter>'], 'keymode': 'i',
 \},
-\{'name': 'RivSuperCEnter', 'act': 'riv#action#ins_c_enter()',
+\{'name': 'RivSuperCEnter', 'act': 'call riv#action#ins_c_enter()',
     \'note': 'Super Ctrl Enter',
-    \'type': 'ins', 'mode': 'i', 'maps': ['mj'], 'keys':['<C-Enter>', '<C-KEnter>'],
+    \'type': 'buf', 'mode': 'ni', 'maps': ['mj'], 'keys':['<C-Enter>', '<C-KEnter>'], 'keymode': 'i',
 \},
-\{'name': 'RivSuperSEnter', 'act': 'riv#action#ins_s_enter()',
+\{'name': 'RivSuperSEnter', 'act': 'call riv#action#ins_s_enter()',
     \'note': 'Super Shift Enter',
-    \'type': 'ins', 'mode': 'i', 'maps': ['mk'], 'keys':['<S-Enter>', '<S-KEnter>'],
+    \'type': 'buf', 'mode': 'ni', 'maps': ['mk'], 'keys':['<S-Enter>', '<S-KEnter>'], 'keymode': 'i',
 \},
-\{'name': 'RivSuperMEnter', 'act': 'riv#action#ins_m_enter()',
+\{'name': 'RivSuperMEnter', 'act': 'call riv#action#ins_m_enter()',
     \'note': 'Super Alt Enter',
-    \'type': 'ins', 'mode': 'i', 'maps': ['mh'], 'keys':['<C-S-Enter>', '<M-Enter>', '<C-S-KEnter>', '<M-KEnter>'],
+    \'type': 'buf', 'mode': 'ni', 'maps': ['mh'], 'keys':['<C-S-Enter>', '<M-Enter>', '<C-S-KEnter>', '<M-KEnter>'], 'keymode': 'i',
 \},
 \{'name': 'RivHelpTodo' , 'act': 'call riv#todo#todo_helper()',
     \'note': 'Show Todo Helper',
@@ -518,21 +518,56 @@ fun! riv#cmd#init_maps() "{{{
   let leader = g:riv_global_leader
   for cmd in g:riv_default.cmds
     if cmd.type == 'buf'
-      if has_key(cmd, 'maps')
-      for key in map(copy(cmd.maps), 'leader.v:val') + cmd.keys
-          if cmd.mode =~ 'm'
-            exe "map <silent><buffer>" key "<Plug>(".cmd.name.")"
-          endif
-          if cmd.mode =~ 'n'
-            exe "nma <silent><buffer>" key "<Plug>(".cmd.name .")"
-          endif
-          if cmd.mode =~ 'i'
-            exe "ima <silent><buffer>" key "<C-O><Plug>(".cmd.name.")"
-          endif
-          if cmd.mode =~ 'v'
-            exe "vma <silent><buffer>" key ":".cmd.act."<CR>" 
-          endif
-        endfor
+      if has_key(cmd, 'maps') 
+        if !has_key(cmd, 'keymode')
+          for key in map(copy(cmd.maps), 'leader.v:val') + cmd.keys
+            if cmd.mode =~ 'm'
+              exe "map <silent><buffer>" key "<Plug>(".cmd.name.")"
+            endif
+            if cmd.mode =~ 'n'
+              exe "nma <silent><buffer>" key "<Plug>(".cmd.name .")"
+            endif
+            if cmd.mode =~ 'i'
+              exe "ima <silent><buffer>" key "<C-O><Plug>(".cmd.name.")"
+            endif
+            if cmd.mode =~ 'v'
+              " for the range function. only :call can be used.
+              exe "vma <silent><buffer>" key ":".cmd.act."<CR>" 
+            endif
+          endfor
+        else
+          " For the key and map have seperated Mode.
+          for key in map(copy(cmd.maps), 'leader.v:val')
+            if cmd.mode =~ 'm'
+              exe "map <silent><buffer>" key "<Plug>(".cmd.name.")"
+            endif
+            if cmd.mode =~ 'n'
+              exe "nma <silent><buffer>" key "<Plug>(".cmd.name .")"
+            endif
+            if cmd.mode =~ 'i'
+              exe "ima <silent><buffer>" key "<C-O><Plug>(".cmd.name.")"
+            endif
+            if cmd.mode =~ 'v'
+              " for the range function. only :call can be used.
+              exe "vma <silent><buffer>" key ":".cmd.act."<CR>" 
+            endif
+          endfor
+          for key in cmd.keys
+            if cmd.keymode =~ 'm'
+              exe "map <silent><buffer>" key "<Plug>(".cmd.name.")"
+            endif
+            if cmd.keymode =~ 'n'
+              exe "nma <silent><buffer>" key "<Plug>(".cmd.name .")"
+            endif
+            if cmd.keymode =~ 'i'
+              exe "ima <silent><buffer>" key "<C-O><Plug>(".cmd.name.")"
+            endif
+            if cmd.keymode =~ 'v'
+              " for the range function. only :call can be used.
+              exe "vma <silent><buffer>" key ":".cmd.act."<CR>" 
+            endif
+          endfor
+        endif
       endif
     elseif cmd.type == 'ins'
       "XXX This is for those super inserting

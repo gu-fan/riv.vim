@@ -185,7 +185,7 @@ endfun "}}}
 "}}}
 
 " List: "{{{
-fun! riv#list#new(act) "{{{
+fun! s:new_list_item(act) "{{{
     " create new list with act: 
     " '1'  : child 
     " '0'  : new
@@ -233,6 +233,7 @@ fun! riv#list#new(act) "{{{
             else
                 let level = s:stat2level(type, num, attr) 
                 let [type,num,attr] = s:level2stat(level-1)
+                let idt = substitute(idt, repeat(' ',len(num.attr)+1),'','')
             endif
         else
             let num = s:next_list_num(num, is_roman)
@@ -243,6 +244,32 @@ fun! riv#list#new(act) "{{{
     let line = substitute(line, '^\s*', list_str, '')
     
     call setline(row, line)
+endfun "}}}
+fun! riv#list#new(act) "{{{
+    " For Sub and Sup List, insert two line if it's not blank
+    " Else check the blank line before.
+    let row = line('.')
+    let line_c = getline(row)
+    let line_p = getline(row-1)
+    let cmd = ''
+    if a:act == 0
+        if line_c =~ '\S'
+            let cmd .= "\<CR>"
+        endif
+    else
+        if line_c =~ '\S'
+            let cmd .= "\<CR>\<CR>"
+        elseif line_p =~ '\S' && line_c !~ '\S'
+            let cmd .= "\<CR>"
+        endif
+    endif
+    
+    exe "norm! i\<C-G>u".cmd
+
+    call s:new_list_item(a:act)
+
+    norm! $
+
 endfun "}}}
 
 fun! s:is_roman(row) "{{{
@@ -263,6 +290,7 @@ endfun "}}}
 
 fun! riv#list#stat(line,...) "{{{
     " return [type , idt , num , attr, space]
+    " [1,' ', 1, '*', ' ']
     let is_roman = a:0 ? a:1 : 0
     let ma = matchlist(a:line, s:p.list_checker)
     let idt = matchstr(a:line,'^\s*')
@@ -374,6 +402,7 @@ fun! riv#list#level(line,...) "{{{
         return -1
     endif
 endfun "}}}
+" type num attr
 let s:list_stats= [
 \ [1, '',  '*'],  [1, '',  '+'] , [1, '',   '-'],
 \ [2, '1', '.'],  [4, 'A', '.'],  [4, 'a', '.'],  [6, 'I', '.'],  [6, 'i', '.'], 
