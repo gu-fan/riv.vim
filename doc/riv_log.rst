@@ -17,7 +17,7 @@ Changelogs
   :Test:   DONE 2012-10-13 Add `:RivVimTest` for vim script test.
   :Menu:   FIXED 2012-10-13 Fix menu disable/enable.
   :Links_: FIXED 2012-10-13 Fix target link jumping.
-  :Commands_: DONE 2012-10-15 Rewrite command and menu part.
+  :Commands: DONE 2012-10-15 Rewrite command and menu part.
 
 * 0.71:
 

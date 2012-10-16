@@ -209,7 +209,7 @@ Things todo in this version.
 * 0.73: This is mainly a bug fix version.
 
   :Intro_: ScreenCast tutor
-  :Indent_: List indentation for visual lines are wrong
+  :Indent_: FIXED 2012-10-16 List indentation for visual lines are wrong
   :File_: The file pattern separated for each project.
   :Insert_: Literal-block create have trailing chars.
   :Lists_: Add :RivListToggle

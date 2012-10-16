@@ -383,6 +383,7 @@ fun! riv#ptn#init() "{{{
     else
         let link_file = '^^'
     endif
+
     let s:p.moin_link_str = '\[\[\zs.*\ze\]\]'
     let s:p.sphinx_link_str = ':\%(doc\|download\):`\([^`<>]*<\zs[^`>]*\ze>\|\zs.*\ze\)`'
 

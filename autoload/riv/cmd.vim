@@ -530,7 +530,7 @@ fun! riv#cmd#init_maps() "{{{
             exe "ima <silent><buffer>" key "<C-O><Plug>(".cmd.name.")"
           endif
           if cmd.mode =~ 'v'
-            exe "vma <silent><buffer>" key "<Esc><Plug>(".cmd.name.")gv"
+            exe "vma <silent><buffer>" key ":".cmd.act."<CR>" 
           endif
         endfor
       endif
