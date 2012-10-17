@@ -7,16 +7,17 @@ Riv: QuickStart
 
 Riv is a plugin for better working with reStructuredText in Vim.
 
-This Riv tutor, is to show enough command to working with it.
+This Riv tutor, is to show enough commands to working with it.
 
 :NOTE: The commands of this document will modify the text.
        Make sure it's the copy of quickstart.rst
 
-       If you started ``:RivQuickStart``, Then it's already a copy.
+       If you started ``:RivQuickStart``, 
+       Then it is a copy at '~/Documents/riv_quickstart.rst'
 
-:NOTE: The ``<C-E>`` in command means ``Ctrl+E`` or ``Ctrl+e`` ,
+:NOTE: The ``<C-E>`` in commands means ``Ctrl+E`` or ``Ctrl+e`` ,
 
-       Commands ``<C-E>xx`` are based on the ``g:riv_global_leader``
+       It is based on the ``g:riv_global_leader``
        If you have changed it, using yours.
 
 Read

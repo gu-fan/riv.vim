@@ -16,7 +16,9 @@ fun! riv#action#tutor(name) "{{{
 	setl noswf nolist nospell nocuc wfh
 	" setl bt=nofile bh=unload
     set ft=rst
+    0,$del _
     call setline(1,lines)
+    call riv#create#auto_mkdir()
     update
 endfun "}}}
 fun! riv#action#open(name) "{{{

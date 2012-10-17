@@ -102,7 +102,9 @@ ScreenShot: Work with Sphinx_
 
 .. image:: http://i.minus.com/ibj1XigngbbYKl.png 
 
-ScreenCast: TODO
+ScreenCast: 
+
+* QuickStart_
 
 Where To Go
 -----------
@@ -2029,3 +2031,5 @@ Options
 
 
 .. _Sphinx Home: http://sphinx.pocoo.org/
+
+.. _QuickStart: http://www.youtube.com/watch?v=ceyxAK37ixE 
