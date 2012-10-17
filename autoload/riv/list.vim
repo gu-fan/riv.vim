@@ -534,6 +534,16 @@ fun! riv#list#toggle_type(i) "{{{
     endif
 endfun "}}}
 
+fun! riv#list#toggle() "{{{
+    " toggle current list item
+    let end = matchend(getline('.'), s:p.b_e_list)
+    if end!= -1
+        call riv#list#delete()
+    else
+        call riv#list#change(0)
+    endif
+endfun "}}}
+
 fun! riv#list#fixed_col(row,col,sft) "{{{
     " add prev line idt
     " check block indent

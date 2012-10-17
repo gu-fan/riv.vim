@@ -180,6 +180,11 @@ let g:riv_default.cmds = [
     \'menu': 'List.Sup\ List',
     \'type': 'buf', 'mode': 'mi', 'maps': ['lp'], 'keys': [],
 \},
+\{'name': 'RivListToggle' , 'act': 'call riv#list#toggle()',
+    \'note': 'ToggleList item',
+    \'menu': 'List.Toggle\ List',
+    \'type': 'buf', 'mode': 'mi', 'maps': ['l`'], 'keys': [],
+\},
 \{'name': 'RivListDelete' , 'act': 'call riv#list#delete()',
     \'note': 'Delete List item',
     \'menu': 'List.Del\ List',
@@ -641,7 +646,7 @@ fun! riv#cmd#gen_intro() "{{{
       call add(buf, '')
       continue
     endif
-    call add(buf, '  - _`'.cmd.name.'` '.': '. cmd.note)
+    call add(buf, '  - _`:'.cmd.name.'` '.': '. cmd.note)
     call add(buf, '')
     if has_key(cmd, 'mode')
       let mode = cmd.mode

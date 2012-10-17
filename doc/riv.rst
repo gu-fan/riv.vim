@@ -218,7 +218,6 @@ Things todo in this version.
   :Syntax_: DONE 2012-10-17 add highlight for inline hyperlink reference and target
   :Syntax_: FIXED fix the (**) highlight in directive.
 
-
 Next
 ~~~~~
 
@@ -914,7 +913,7 @@ Convert rst files to html/xml/latex/odt/...
 
   + Convert to Html
 
-    - `:RivHtmlIndex`_  ``<C-E>wi``
+    - `:RivProjectHtmlIndex`_  ``<C-E>wi``
       browse the html index page.
     - `:Riv2HtmlFile`_  ``<C-E>2hf``
       convert to html file.
@@ -1012,7 +1011,7 @@ Riv can work with Sphinx (see `Sphinx Home`_ ).
 - There are no wrapper for making command of Sphinx.
   You should use ``:make html`` by your own.
 
-  And you can view the index page by `:RivHtmlIndex`_ or ``<C-E>wi``
+  And you can view the index page by `:RivProjectHtmlIndex`_ or ``<C-E>wi``
 
 
 Project
@@ -1034,9 +1033,9 @@ Scratch_
 
 * Global Commands:
 
-  + `:RivIndex`_ ``<C-E>wa`` to open the first project index.
-  + `:RivAsk`_ ``<C-E>wa`` to choose one project to open.
-  + `:RivHtmlIndex`_ ``<C-E>wi`` Browse project html index.
+  + `:RivProjectIndex`_ ``<C-E>wa`` to open the first project index.
+  + `:RivProjectList`_ ``<C-E>wa`` to choose one project to open.
+  + `:RivProjectHtmlIndex`_ ``<C-E>wi`` Browse project html index.
 
 * All projects are in `g:riv_projects`_, 
 
@@ -1364,17 +1363,18 @@ Commands
   ``:popup Riv`` Can be used when you not showing the menu bar.
 
 
+
 + **Global**
 
-  - _`:RivIndex` : Open the default Riv project index in vim.
+  - _`:RivProjectIndex` : Open the default Riv project index in vim.
 
     **Normal** :	<C-E>ww,<C-E><C-W><C-W>
 
-  - _`:RivAsk` : Show Riv project list.
+  - _`:RivProjectList` : Show Riv project list.
 
     **Normal** :	<C-E>wa,<C-E><C-W><C-A>
 
-  - _`:RivHtmlIndex` : Browse project html index.
+  - _`:RivProjectHtmlIndex` : Browse project html index.
 
     **Normal** :	<C-E>wi,<C-E><C-W><C-I>
 
@@ -1501,6 +1501,10 @@ Commands
   - _`:RivListSup` : Create a sup list item
 
     **Normal,Insert** :	<C-E>lp
+
+  - _`:RivListToggle` : ToggleList item
+
+    **Normal,Insert** :	<C-E>l`
 
   - _`:RivListDelete` : Delete List item
 
@@ -1692,19 +1696,19 @@ Commands
 
   - _`:RivSuperEnter` : Super Enter
 
-    **Insert** :	<C-E>mm,<Enter>,<KEnter>
+    **Normal,Insert** :	<C-E>mm,<Enter>,<KEnter>
 
   - _`:RivSuperCEnter` : Super Ctrl Enter
 
-    **Insert** :	<C-E>mj,<C-Enter>,<C-KEnter>
+    **Normal,Insert** :	<C-E>mj,<C-Enter>,<C-KEnter>
 
   - _`:RivSuperSEnter` : Super Shift Enter
 
-    **Insert** :	<C-E>mk,<S-Enter>,<S-KEnter>
+    **Normal,Insert** :	<C-E>mk,<S-Enter>,<S-KEnter>
 
   - _`:RivSuperMEnter` : Super Alt Enter
 
-    **Insert** :	<C-E>mh,<C-S-Enter>,<M-Enter>,<C-S-KEnter>,<M-KEnter>
+    **Normal,Insert** :	<C-E>mh,<C-S-Enter>,<M-Enter>,<C-S-KEnter>,<M-KEnter>
 
   - _`:RivHelpTodo` : Show Todo Helper
 
@@ -1713,15 +1717,23 @@ Commands
   - _`:RivHelpFile` : Show File Helper
 
     **Normal** :	<C-E>hf,<C-E><C-h><C-f>
+
   - _`:RivHelpSection` : Show Section Helper
 
     **Normal** :	<C-E>hs
+
   - _`:RivVimTest` : Run doctest for Vim Script
+
   - _`:RivInstruction` : Show Riv Instrucion
+
   - _`:RivQuickStart` : Show Riv QuickStart
-  - _`:RivCheatSheet` : Show RST CheatSheet
+
   - _`:RivPrimer` : Show RST Primer
+
+  - _`:RivCheatSheet` : Show RST CheatSheet
+
   - _`:RivSpecification` : Show RST Specification
+
   - _`:RivGetLatest` : Show Get Latest Info
 
 
