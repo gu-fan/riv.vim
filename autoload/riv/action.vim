@@ -12,9 +12,9 @@ let s:p = g:_riv_p
 fun! riv#action#tutor(name) "{{{
     let file = g:_riv_c.doc_pat . a:name . '.rst'
     let lines = readfile(file)
-    exe 'noa keepa bot new Tutor:'.a:name 
+    exe 'noa keepa bot new ~/Documents/'.a:name 
 	setl noswf nolist nospell nocuc wfh
-	setl bt=nofile bh=unload
+	" setl bt=nofile bh=unload
     set ft=rst
     call setline(1,lines)
     update
@@ -75,7 +75,9 @@ fun! riv#action#ins_enter() "{{{
         call riv#table#newline('cont')
     else
         " exe "norm! \<Esc>gi\<CR>\<Right>"
-        call feedkeys("\<Esc>a\<CR>",'n')
+        " exe "norm! \<Esc>a\<C-G>u\<C-M>"
+        call feedkeys("\<Esc>gi\<C-G>u\<C-M>",'n')
+        " norm! o
     endif
 endfun "}}}
 fun! riv#action#ins_c_enter() "{{{

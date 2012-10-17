@@ -135,7 +135,7 @@ fun! s:set_proj_conf(proj) "{{{
     return proj
 endfun "}}}
 fun! riv#index(...) "{{{
-    let id = a:0 ? a:1 : 1
+    let id = a:0 ? a:1 : g:riv_p_id
     if exists("g:_riv_c.p[id]")
         " >>> echo riv#path#idx_file()
         " index.rst
@@ -145,12 +145,12 @@ fun! riv#index(...) "{{{
     endif
 endfun "}}}
 fun! riv#index_list() "{{{
-    if len(g:_riv_c.p) == 1
-        call riv#error('You have NOT set any project in g:riv_projects.')
-        return
-    endif
+    " if len(g:_riv_c.p) == 1
+    "     call riv#error('You have NOT set any project in g:riv_projects.')
+    "     return
+    " endif
     let id = inputlist(["Please Select One Project ID:"]+
-                \map(range(len(g:_riv_c.p)-1),'v:val+1. "." . g:_riv_c.p[v:val+1].path') )
+                \map(range(len(g:_riv_c.p)),'v:val+1. "." . g:_riv_c.p[v:val].path') )
     if id != 0
         call riv#index(id)
     endif
@@ -217,7 +217,9 @@ fun! riv#load_conf() "{{{1
     elseif exists("g:riv_project") && type(g:riv_project) == type({})
         call add(s:c.p, s:set_proj_conf(g:riv_project))
     endif
-    call insert(s:c.p, s:c.p_basic)
+    if empty(s:c.p)
+        call insert(s:c.p, s:c.p_basic)
+    endif
     
     let s:t.doc_exts = 'rst|txt'
     let s:c.doc_ext_list = ['txt']

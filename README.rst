@@ -128,10 +128,13 @@ Tutors
 
 **Vim**
 
-* If you are new to vim. Use ``:h``,
+* To get a tutor for vim. 
   Use ``vimtutor`` in your shell.
+  
+* To view the quick reference of vim.
+  Use ``:h quickref``.
 
-**Read about RST**
+**RST**
 
 * To get a quick view of reStructuredText.
 
@@ -148,7 +151,7 @@ Tutors
 * And the `reStructuredText cheatsheet`_ for a quick review,
   Use `:RivCheatSheet`_ to open it in vim.
 
-**Play with Riv**
+**Riv**
 
 * Quick Start With Riv. 
   
@@ -212,7 +215,7 @@ Things todo in this version.
   :Indent_: FIXED 2012-10-16 List indentation for visual lines are wrong
   :File_: DONE 2012-10-17 The file pattern separated for each project.
   :Insert_: FIXED 2012-10-16 Literal-block create have trailing chars.
-  :Lists_: Add :RivListToggle
+  :Lists_: DONE 2012-10-17 Add :RivListToggle
   :Lists_: DONE 2012-10-17 List new/sub/sup rewrite
   :Indent_: FIXED 2012-10-17 fix SuperEnter's indent
   :Syntax_: DONE 2012-10-17 add highlight for inline hyperlink reference and target
@@ -252,7 +255,7 @@ Issues
 Contribution
 ------------
 
-This project aims to provide better inputing for reStructuredText in vim.
+This project aims to provide better working with reStructuredText in vim.
 
 And there are many things need to do.
 
@@ -581,7 +584,10 @@ And it's folded by it's level.
     You can change it with '`g:riv_section_levels`_'
 
     The `:RivTitle0`_ will use ``#``
-
+    
+    :NOTE: Keep in mind sub titles should be one level deeper
+           than current one.
+  
   + Folding: 
 
     Pressing ``<Enter>`` or double clicking on the section title 
@@ -995,7 +1001,7 @@ Sphinx
 
 Riv can work with Sphinx (see `Sphinx Home`_ ).
 
-- For now, you can use Cross-referencing  document ``:doc:`xxx``` 
+- For now, you can use Cross-referencing document ``:doc:`xxx``` 
   and downloadable file ``:download:`xxx``` to jump to that document.
   With setting `g:riv_file_link_style` to 2.
 
@@ -1033,7 +1039,7 @@ Scratch_
 
 * Global Commands:
 
-  + `:RivProjectIndex`_ ``<C-E>wa`` to open the first project index.
+  + `:RivProjectIndex`_ ``<C-E>ww`` to open the first project index.
   + `:RivProjectList`_ ``<C-E>wa`` to choose one project to open.
   + `:RivProjectHtmlIndex`_ ``<C-E>wi`` Browse project html index.
 
@@ -1049,6 +1055,11 @@ Scratch_
 
       let project2 = { 'path': '~/Dropbox/rst2',}
       let g:riv_projects = [project1, project2]
+
+  + if you are editing a rst document outside 
+    a project.
+
+    It's settings will using the first one.
 
 File
 ~~~~
@@ -1361,7 +1372,6 @@ Commands
 
 + You can use menu to view the commands Shortcut either.
   ``:popup Riv`` Can be used when you not showing the menu bar.
-
 
 
 + **Global**

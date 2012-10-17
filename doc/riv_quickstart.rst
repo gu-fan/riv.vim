@@ -2,25 +2,21 @@
 Riv: QuickStart
 ###############
 
-.. rubric:: A Taste of Riv
-
 :Author:    Rykka G.F
 :Date:      2012-10-16 11:06:54
 
 Riv is a plugin for better working with reStructuredText in Vim.
-This is a Riv tutor, designed to describe enough command to working 
-with it.
 
-If you are not familiar with Vim, use ``:h``.
-
-If you are not familiar with reStructuredText, use ``:RivPrimer``
+This Riv tutor, is to show enough command to working with it.
 
 :NOTE: The commands of this document will modify the text.
        Make sure it's the copy of quickstart.rst
 
        If you started ``:RivQuickStart``, Then it's already a copy.
 
-:NOTE: The commands ``<C-E>xx`` are based on the ``g:riv_global_leader``
+:NOTE: The ``<C-E>`` in command means ``Ctrl+E`` or ``Ctrl+e`` ,
+
+       Commands ``<C-E>xx`` are based on the ``g:riv_global_leader``
        If you have changed it, using yours.
 
 Read
@@ -28,27 +24,34 @@ Read
 
 Folding
 -------
+This document was opened with some of them are folded.
 
-Folding is a vim feature to get an overview of document structure.
+**Toggle Folding**
 
-You will come to this project with some of them are folded.
+Click or press ``<Enter>`` on the folding to open it.
 
-You can click or press ``<Enter>`` on the folding to open it.
-And you can use ``za`` to toggle folding.
+Use ``za`` to toggle folding.
 
-If you have changed the document structure, 
+**Update Folding**
+
 Folding will be auto updated when you write to file, 
-and you can use ``zx`` to update folding manually.
+
+Use ``zx`` to update folding manually.
 
 Syntax
 ------
 
-reStructuredText items are highlighted.
+**Items**
+
+Items are highlighted.
 
 *Italic*, **Strong**, ``Inline Literal``, `Interpreted`, 
 www.python.org Syntax_
 
-You can use ``code`` directive to highlight code.
+
+**Code**
+
+``code`` directive are highlighted by it's language.
 
 .. code:: cpp
    
@@ -68,43 +71,54 @@ Write
 Insert
 ------
 
-You can insert extra field by ``:RivCreateXxx``
-
-To Insert current date , Use ``:RivCreateDate``, 
-or ``<C-E>cdd``
+**Insert Misc Things**
+To Insert current date
+``:RivCreateDate`` or ``<C-E>cdd``
 
     :Date: 
 
-You can create a stron text by ``:RivCreateStrong``
-or  ``<C-E>cs``, 
-You can use it in Visual Mode either.
+Create a strong text 
+``:RivCreateStrong`` or  ``<C-E>cs``, 
 
-    Make this Strong.
+    Strong
 
-You can view these commands in menu or by ``:popup Riv.Insert``
+Create a strong text in Visual Mode.
+
+    Make it Strong
+
+These commands can be view by menu or by ``:popup Riv.Insert``
 
 Indent
 ------
 
-The indentation of RST is complicated.
+**Indents are fixed.**
 
-So the ``>`` , ``<`` in Normal Mode
-and ``<Tab>`` and ``<S-Tab>``, ``<BS>`` in insert mode are using 
-fixed indent in different context.
+You can use ``<`` ``>`` to change a line's indent.
 
-* This is a List
-
-    Press ``<`` at This line to align it to parent's content.
-
-    In Insert Mode, ``<BS>`` at the begining can be used.
-
-Also the List item will be changed.
+Also ``<Tab>`` and ``<S-Tab>`` and ``<BS>`` in Insert Mode
+at the beginning of line will change it's indent.
 
 * This is a List
 
-  + Press ``<`` on this line to change it's level and item to parent list
+    Press ``<`` at This line to align it to parent.
 
-  + To gain a Normal ShiftRight, Use ``<C-E><``
+    In Insert Mode, ``I<BS>`` at the line begining can be used.
+
+**Change Multiple lines in Visual Mode**
+
+* This is a List
+    
+    Line 1 ``Vjj<`` will align these lines to parent.
+    Line 2
+    Line 3
+    
+**List item will change it's level while Shifting.**
+
+* This is a List
+
+  + Press ``<`` to change it's level to parent list
+
+  + To get a Normal ShiftRight, Use ``<C-E><``
 
 RST
 ===
@@ -112,89 +126,109 @@ RST
 Section
 -------
 
-Create a Section title with ``:RivTitle1`` to ``:RivTitle6``
-or ``<C-E>s1`` to ``<C-E>s6``
+**Create a Section title**
 
-    A Title
+``:RivTitle1`` to ``:RivTitle6`` or ``<C-E>s1`` to ``<C-E>s6``
 
-Each Section are folded. 
+Use ``<C-E>s3`` to create a level 3 section.
 
-You can view sections of current project by ``:RivHelpSection`` 
-or ``<C-E>hs``
+A Level 3 section
 
-You can insert the table of sections of current file by ``:RivCreateContent``
-or ``<C-E>cc``
+**View current document's sections**
+
+``:RivHelpSection`` or ``<C-E>hs``
+
+
+**Insert the Table of Contents**
+
+``:RivCreateContent`` or ``<C-E>cc``
+
+
 
 Block
 -----
 
-You can create a literal-block by ``:RivCreateLiteralBlock``
-or ``<C-E>cb``
+**Create a literal-block**
 
-You can create a explicit-mark by ``:RivCreateExplicitMark``
-or ``<C-E>cm``
+``:RivCreateLiteralBlock`` or ``<C-E>cb``
+
+
+**Create a explicit-mark**
+
+``:RivCreateExplicitMark`` or ``<C-E>cm``
+
 
 List
 ----
 
-You can change current line to a list by ``:RivListToggle``
-or ``<C-E>l```
+**Toggle current line to list**
+
+``:RivListToggle`` or ``<C-E>l```
 
 * Press ``<C-E>l``` on this line To toggle the List
 
-You can create a sub list by ``:RivSuperCEnter`` 
-or ``<C-E>mj`` or ``<C-Enter>``
+**Create a new list** 
 
-1. Press ``<C-Enter>`` in insert mode to create a new list item
+``:RivListNew`` or ``<C-E>ln``, 
+Also ``<C-Enter>`` in Inert Mode
 
-You can create a sub list by ``:RivSuperSEnter`` 
-or ``<C-E>mk`` or ``<S-Enter>``
+1. Press ``A<C-Enter>`` to create a new list item
 
-1. Press ``<S-Enter>`` in insert mode to create a sub list item
+**Create a sub list** 
 
-You can create a sup list by ``:RivSuperMEnter`` 
-or ``<C-E>mh`` or ``<C-S-Enter>``
+``:RivListSub`` or ``<C-E>lb``, 
+Also ``<S-Enter>`` in Inert Mode
 
-1. This is a List
+1. Press ``A<S-Enter>`` to create a sub list item
 
-    A. Press ``<C-S-Enter>`` in insert mode to create a sup list item
+**Create a sup list**
 
-You can change the list indent and level by ``<`` ``>`` on it's line
-in Normal Mode.
-or ``<Tab>`` ``<S-Tab>`` at the begining of that line in Insert mode.
+``:RivListSup``  or ``<C-E>lp``,
+Also ``<C-S-Enter>`` in Insert Mode
 
 1. This is a List
 
-   A. Press ``<`` or ``>`` on This line to change it's level
-
+    A. Press ``A<C-S-Enter>`` in insert mode to create a sup list item
 
 Link
 ----
 
-Jump to Link Target by ``:RivLinkOpen`` ``<C-E>ko``
-Or ``<Enter>`` or Double clicking.
+**Navigate between links** 
+
+``:RivLinkNext`` ``:RivLinkPrev``,
+or ``<Tab>`` and ``<S-Tab>`` in Normal Mode 
+
+Section_ Link_
+
+**Jump to Link Target** 
+
+``:RivLinkOpen`` ``<C-E>ko``
+Or ``<Enter>`` or Double clicking in Normal Mode
 
     Google_
 
-Link can targets to sections. 
+**Link can targets to sections** 
 
-    Section_
+Use `` or '' to jump back
 
-You can create a link by ``:RivCreateLink`` or ``<C-E>ck``
+    Section_ 
+
+**Create a link**
+
+``:RivCreateLink`` or ``<C-E>ck``
 
     Press ``<C-E>ck`` on Github to create the Link
-
-You can navigate between links by ``<Tab>`` and ``<S-Tab>`` in Normal
-mode, or use ``:RivLinkNext`` ``:RivLinkPrev``
-
 
 Table
 -----
 
-You can create a Grid Table by ``:RivTableCreat`` or ``<C-E>tc``
+**Create a Grid Table** 
 
-You can insert contents in it then.
-Table Will be auto formatted when you leave insert mode.
+``:RivTableCreat`` or ``<C-E>tc``
+
+
+
+Table will be auto formatted when you leave insert mode.
 
 In Insert mode:
 
@@ -213,61 +247,74 @@ Insert a ``|`` to create new columns.
 Publish
 -------
 
-If you have installed docutils_ package.
+If docutils_ package have installed.
 
-You can convert the document to other format.
+**Convert document to other format**
 
-``:Riv2HtmlFile`` will convert current file to html.
+``:Riv2HtmlAndBrowse`` or ``<C-E>2hh`` will convert current file to html and browse.
 
-``:Riv2Odt`` will convert current file to odt.
+``:Riv2Odt`` or ``<C-E>2oo`` will convert current file to odt.
 
 If you are working in a project.
 
 ``:Riv2HtmlProject`` will convert current project to html.
-``:RivHtmlIndex`` will open the html file in browser.
+``:RivProjectHtmlIndex`` will open index in browser.
 
 Riv
 ===
 
 Project
 -------
-A project is a place to keep your documents.
+Keep your documents in a project
 
-``:RivIndex`` or ``<C-E>ww`` to open your main (first) project's index file.
+**Open main project's index file**
 
-``:RivAsk`` or ``<C-E>wa`` to show the list of your projects to open.
+``:RivProjectIndex`` or ``<C-E>ww`` to 
+
+**Show project list**
+
+``:RivProjectList`` or ``<C-E>wa``
 
 File
 ----
+Link and edit files
 
-Files can be linked and opened.
+**Link file in vim**
 
-The file with specified extensions will be highlighted and linked.
+File with specified extensions will be highlighted and linked.
 
-    The Riv Instuction: riv.rst
-    
-    But this link will not available after converted to other format.
+    index.rst ~/Documents/ test.py
 
-For links working after converting.
-Riv provide two style of file links.::
+It's not converted, so in vim only.
+
+**Link file in other format**
+
+To make links working after converting. 
+Riv provide two styles::
 
     Moinmoin style: [[riv]]
 
     Sphinx style: :doc:`riv`
 
-by default the Moinmoin style are used.
+by default the Moinmoin style are used, 
+And the links of this style will be converted.
 
-If you are using Sphinx_ style. You must converting it using 
-Sphinx toolkit.
+If you are using Sphinx style. 
+You must converting it using Sphinx_ toolkit.
 
 Todo
 ----
-You can creat a todo item and toggle it's state on a list item
-by ``:RivTodoToggle`` or ``<C-E>ee``
+Things Todos
+
+**Creat todo item and toggle state**
+
+On list lines only, ``:RivTodoToggle`` or ``<C-E>ee``
 
     A. [ ] Press ``<C-E>ee`` to toggle the todo state.
 
-Priorties can be used by ``:RivTodoPrior`` or ``<C-E>ep``
+**Change Priorties**
+
+``:RivTodoPrior`` or ``<C-E>ep``
 
     A. [ ] Press ``<C-E>ep`` to toggle the todo prior
 
@@ -275,19 +322,42 @@ Scratch
 -------
 Scratch is a place to hold your diaries or notes.
 
-Create scratch of Today: ``:RivScratchCreate`` or ``<C-E>sc``
+**Create scratch of Today**
 
-View Scratch Index: ``:RivScratchView`` or ``<C-E>sv``
+``:RivScratchCreate`` or ``<C-E>sc``
+
+**View Scratch Index**
+
+``:RivScratchView`` or ``<C-E>sv``
 
 Helper
 ------
-Helper is to help you manage the document.
+Help manage the document.
 
-Section Helper : ``:RivHelpSection`` or ``<C-E>hs``
+**Section Helper** 
 
-File Helper : ``:RivHelpFile`` or ``<C-E>hf``
+``:RivHelpSection`` or ``<C-E>hs``
 
-Todo Helper : ``:RivHelpTodo`` or ``<C-E>ht``
+**File Helper**  
+
+``:RivHelpFile`` or ``<C-E>hf``
+
+**Todo Helper** 
+
+``:RivHelpTodo`` or ``<C-E>ht``
+
+Where To go
+===========
+
+You have finished this tutor.
+
+You can starting your reStructuredText in Vim.
+
+If you are not familiar with Vim, use ``:h``.
+
+To get a quick view of reStructuredText, use ``:RivPrimer``
+
+If you want to view the detailed instruction, use ``:RivInstruction``
 
 .. _Google: www.google.com
 .. _docutils: http://docutils.sourceforge.net/
