@@ -22,7 +22,7 @@ fun! riv#link#get_last_foot() "{{{
 endfun "}}}
 fun! riv#link#finder(dir) "{{{
     let flag = a:dir=="b" ? 'Wnb' : 'Wn'
-    let [srow,scol] = searchpos(g:_riv_p.link_all,flag,0,100)
+    let [srow,scol] = searchpos(riv#ptn#link_all(),flag,0,100)
     if srow[0] != 0
         call setpos("'`",getpos('.'))
         call cursor(srow, scol)
@@ -103,7 +103,7 @@ fun! riv#link#open() "{{{
         return 
     endif
     
-    let mo = riv#ptn#match_object(line, g:_riv_p.link_all, idx)
+    let mo = riv#ptn#match_object(line, riv#ptn#link_all(), idx)
 
     if empty(mo) || mo.start+1 > col || mo.end < col
         return
@@ -176,8 +176,8 @@ endfun "}}}
 fun! riv#link#path(str) "{{{
     " return the local file path contained in the string.
     
-    ">>>> let g:_temp = riv#ptn#get_flink_style() 
-    ">>>> let riv#ptn#get_flink_style() = 1
+    ">>>> let g:_temp = riv#path#file_link_style() 
+    ">>>> let riv#path#file_link_style() = 1
     ">>>> echo riv#link#path('[[xxx]]')
     ">xxx.rst
     ">>>> echo riv#link#path('[[xxx.vim]]')
@@ -188,7 +188,7 @@ fun! riv#link#path(str) "{{{
     ">ROOT/xxx.rst
     ">>>> echo riv#link#path('[[~/xxx]]')
     ">~/xxx
-    ">>>> let riv#ptn#get_flink_style() = 2
+    ">>>> let riv#path#file_link_style() = 2
     ">>>> echo riv#link#path(':doc:`xxx`')
     ">xxx.rst
     ">>>> echo riv#link#path(':doc:`xxx.vim`')
@@ -199,7 +199,7 @@ fun! riv#link#path(str) "{{{
     ">ROOT/xxx.rst
     ">>>> echo riv#link#path(':doc:`~/xxx`')
     ">~/xxx
-    ">>>> let riv#ptn#get_flink_style() = g:_temp
+    ">>>> let riv#path#file_link_style() = g:_temp
 
     let [f,t] = riv#ptn#get_file(a:str)
     if riv#path#is_relative(f)
@@ -247,7 +247,7 @@ fun! riv#link#hi_hover() "{{{
     let idx = s:get_link_idx(line,col)
     
     if idx != -1
-        let obj = riv#ptn#match_object(line, g:_riv_p.link_all, idx)
+        let obj = riv#ptn#match_object(line, riv#ptn#link_all(), idx)
         if !empty(obj) && obj.start < col
             let bgn = obj.start + 1
             let end = obj.end

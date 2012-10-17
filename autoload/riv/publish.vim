@@ -15,7 +15,7 @@ fun! s:escape(txt) "{{{
     return escape(a:txt, '~.*\[]^$')
 endfun "}}}
 fun! s:gen_embed_link(title, path) "{{{
-    if riv#ptn#get_flink_style() == 2
+    if riv#path#file_link_style() == 2
         return  '`['.a:title.'] <'.a:path.'>`_'
     else
         return  '`'.a:title.' <'.a:path.'>`_'
@@ -71,8 +71,8 @@ fun! s:repl_file_link(line) "{{{
     " we will get the idx and find the pattern from origin line.
     let o_line = line
     let pre_idx = 0           " for the inline markup column check
-    let idx = matchend(o_line, g:_riv_p.link_file)
-    let str = matchstr(o_line, g:_riv_p.link_file)
+    let idx = matchend(o_line, riv#ptn#link_file())
+    let str = matchstr(o_line, riv#ptn#link_file())
     while idx != -1
         let obj = riv#ptn#get_inline_markup_obj(o_line, idx+1, pre_idx)
         " it's not in a inline markup
@@ -83,8 +83,8 @@ fun! s:repl_file_link(line) "{{{
             let line = substitute(line, s:escape_file_ptn(title), 
                             \s:gen_embed_link(title, path), 'g')
         endif
-        let idx = matchend(o_line, g:_riv_p.link_file,idx)
-        let str = matchstr(o_line, g:_riv_p.link_file,idx)
+        let idx = matchend(o_line, riv#ptn#link_file(),idx)
+        let str = matchstr(o_line, riv#ptn#link_file(),idx)
         let pre_idx = idx
     endwhile
     return line
@@ -172,7 +172,7 @@ fun! riv#publish#2(ft, file, path, browse) "{{{
     let out_path = a:path . riv#path#rel_to_root(file)
     let file_path = riv#path#ext_to(out_path, a:ft)
     call riv#publish#auto_mkdir(out_path)
-    if riv#ptn#get_flink_style() == 1
+    if riv#path#file_link_style() == 1
         call s:convert(a:ft, s:create_tmp(file), file_path, s:rst_args(a:ft))
     else
         call s:convert(a:ft, file, file_path, s:rst_args(a:ft))
@@ -238,9 +238,6 @@ endfun "}}}
 fun! s:sys(arg) abort "{{{
     " XXX: error in windows tmp files
     return system(a:arg)
-endfun "}}}
-fun! s:id() "{{{
-    return exists("b:riv_p_id") ? b:riv_p_id : g:riv_p_id
 endfun "}}}
 if expand('<sfile>:p') == expand('%:p') "{{{
     call riv#test#doctest('%','%',2)

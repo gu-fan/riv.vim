@@ -210,11 +210,13 @@ Things todo in this version.
 
   :Intro_: ScreenCast tutor
   :Indent_: FIXED 2012-10-16 List indentation for visual lines are wrong
-  :File_: The file pattern separated for each project.
+  :File_: DONE 2012-10-17 The file pattern separated for each project.
   :Insert_: FIXED 2012-10-16 Literal-block create have trailing chars.
   :Lists_: Add :RivListToggle
   :Lists_: DONE 2012-10-17 List new/sub/sup rewrite
-  :Indent_: fix indent of field list
+  :Indent_: FIXED 2012-10-17 fix SuperEnter's indent
+  :Syntax_: DONE 2012-10-17 add highlight for inline hyperlink reference and target
+  :Syntax_: FIXED fix the (**) highlight in directive.
 
 
 Next

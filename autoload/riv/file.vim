@@ -10,14 +10,10 @@ let s:cpo_save = &cpo
 set cpo-=C
 
 fun! riv#file#edit(file) "{{{
-    let id = s:id()
-    exe "edit ".a:file
-    let b:riv_p_id = id
+    exe "edit +let\\ b:riv_p_id=".riv#id() a:file
 endfun "}}}
 fun! riv#file#split(file) "{{{
-    let id = s:id()
-    exe "split ".a:file
-    let b:riv_p_id = id
+    exe "split +let\\ b:riv_p_id=".riv#id()  a:file
 endfun "}}}
 
 " Helper:  "{{{1
@@ -208,10 +204,6 @@ fun! riv#file#section_helper() "{{{
     let s:sect.input=""
     cal s:sect.win('vI')
     
-endfun "}}}
-
-fun! s:id() "{{{
-    return exists("b:riv_p_id") ? b:riv_p_id : g:riv_p_id
 endfun "}}}
 
 if expand('<sfile>:p') == expand('%:p') "{{{

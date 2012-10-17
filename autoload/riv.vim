@@ -9,17 +9,15 @@ let s:cpo_save = &cpo
 set cpo-=C
 
 let s:autoload_path = expand('<sfile>:p:h')
+let g:riv_version = '0.73'
+let g:riv_p_id = 0
 
-" Helper "{{{1
+" Miscs "{{{1
 fun! s:error(msg) "{{{
     echohl WarningMsg
     redraw
     echo a:msg
     echohl Normal
-endfun "}}}
-fun! s:normlist(list,...) "{{{
-    " return list with words
-    return filter(map(a:list,'matchstr(v:val,''\w\+'')'), ' v:val!=""')
 endfun "}}}
 fun! riv#error(msg) "{{{
     echohl ErrorMsg
@@ -35,6 +33,14 @@ fun! riv#warning(msg) "{{{
 endfun "}}}
 fun! riv#breakundo() "{{{
     let &ul=&ul
+endfun "}}}
+fun! riv#id() "{{{
+    return exists('b:riv_p_id') ? b:riv_p_id : g:riv_p_id
+endfun "}}}
+fun! riv#get_latest() "{{{
+    echohl Statement
+    echo "Get Latest Verion at https://github.com/Rykka/riv.vim"
+    echohl Normal
 endfun "}}}
 "}}}
 "{{{ Loading Functions
@@ -67,7 +73,7 @@ fun! riv#show_menu() "{{{
 endfun "}}}
 "}}}
 "{{{ Options:
-let s:default = {'version':'0.73'}
+let s:default = {'version': g:riv_version}
 let s:default.options = {
     \'default'            : s:default,
     \'global_leader'      : '<C-E>',
@@ -112,42 +118,43 @@ let s:default.options = {
     \'month_names'        : 'January,February,March,April,May,June,July,'
                           \.'August,September,October,November,December',
     \'python_rst_hl'      : 0,
+    \'build_path'         : '_build',
+    \'scratch_path'       : 'Scratch',
     \'source_suffix'      : '.rst',
     \'master_doc'         : 'index',
     \}
+"}}}
 
 " project options " {{{
-let g:riv_proj_temp = {}
-let g:riv_project_list = [ ]
-let g:riv_p_id = 0
-fun! riv#index(...) "{{{
-    let id = a:0 ? a:1 : 0
-    let g:riv_p_id = id
-    let b:riv_p_id = id
-    if exists("g:_riv_c.p[id]")
-        let path = riv#path#root()
-        " >>> echo riv#path#idx_file()
-        " index.rst
-        exe 'edit ' . path. riv#path#idx_file()
-    else
-        echohl ErrorMsg | echo "No such Project ID" | echohl Normal
-    endif
-endfun "}}}
-fun! riv#ask_index() "{{{
-    let id = inputlist(["Please Select One Project ID:"]+
-                \map(range(len(g:_riv_c.p)),'v:val+1. "." . g:_riv_c.p[v:val].path') )
-    if id != 0
-        call riv#index((id-1))
-    endif
-endfun "}}}
 fun! s:set_proj_conf(proj) "{{{
     let proj = copy(g:_riv_c.p_basic)
     for [key,var] in items(a:proj)
         let proj[key] = var
+        unlet var
     endfor
     return proj
 endfun "}}}
-"}}}
+fun! riv#index(...) "{{{
+    let id = a:0 ? a:1 : 1
+    if exists("g:_riv_c.p[id]")
+        " >>> echo riv#path#idx_file()
+        " index.rst
+        exe "edit +let\\ b:riv_p_id=".id riv#path#root(id).riv#path#idx_file(id)
+    else
+        call riv#error("No such Project ID in g:riv_projects.")
+    endif
+endfun "}}}
+fun! riv#index_list() "{{{
+    if len(g:_riv_c.p) == 1
+        call riv#error('You have NOT set any project in g:riv_projects.')
+        return
+    endif
+    let id = inputlist(["Please Select One Project ID:"]+
+                \map(range(len(g:_riv_c.p)-1),'v:val+1. "." . g:_riv_c.p[v:val+1].path') )
+    if id != 0
+        call riv#index(id)
+    endif
+endfun "}}}
 "}}}
 
 fun! riv#load_conf() "{{{1
@@ -193,9 +200,9 @@ fun! riv#load_conf() "{{{1
     
     " Project: "{{{
     let s:c.p_basic = {
-        \'path'               : '~/Documents/Riv',
-        \'build_path'         : '_build',
-        \'scratch_path'       : 'Scratch' ,
+        \'path'               : '~/Documents/Riv' ,
+        \'build_path'         : g:riv_build_path ,
+        \'scratch_path'       : g:riv_scratch_path ,
         \'source_suffix'      : g:riv_source_suffix ,
         \'master_doc'         : g:riv_master_doc ,
         \'file_link_style'    : g:riv_file_link_style,
@@ -210,9 +217,7 @@ fun! riv#load_conf() "{{{1
     elseif exists("g:riv_project") && type(g:riv_project) == type({})
         call add(s:c.p, s:set_proj_conf(g:riv_project))
     endif
-    if empty(s:c.p)
-        call add(s:c.p, s:c.p_basic)
-    endif
+    call insert(s:c.p, s:c.p_basic)
     
     let s:t.doc_exts = 'rst|txt'
     let s:c.doc_ext_list = ['txt']
@@ -253,7 +258,7 @@ fun! riv#load_conf() "{{{1
     let s:t.time_fmt  = "%Y-%m-%d"
     let s:t.sect_punc = '!"#$%&''()*+,-./:;<=>?@[\]^_`{|}~'
     let s:t.list_lvs  =  ["*","+","-"]
-    let s:t.highlight_code = s:normlist(split(g:riv_highlight_code,','))
+    let s:t.highlight_code = riv#ptn#norm_list(split(g:riv_highlight_code,','))
     let s:t.month_names = split(g:riv_month_names,',')
     
     let s:c.sect_lvs = split(g:riv_section_levels,'\zs')
@@ -301,11 +306,6 @@ fun! riv#load_conf() "{{{1
     let s:e.REF_NOT_FOUND = "Riv: Could not find the reference"
 
 endfun "}}}
-fun! riv#set_ft() "{{{
-    if &ft != "help"
-        setl ft=rst
-    endif
-endfun "}}}
 fun! riv#load_aug() "{{{
     " Load the global auto group 
     aug RIV_GLOBAL
@@ -316,9 +316,10 @@ fun! riv#load_aug() "{{{
         " the project which has that option.
         for p in g:_riv_c.p
             if p.source_suffix != '.rst'
-                exe 'au BufEnter '.p._root_path.'*'.p.source_suffix.' call riv#set_ft() '
+                exe 'au BufEnter '.p._root_path.'*'.p.source_suffix.'  setl ft=rst'
             endif
         endfor
+        au! FileType rst call riv#buf_load_syn()  
     aug END
     
 endfun "}}}
@@ -328,11 +329,6 @@ fun! riv#init() "{{{
     call riv#cmd#init()
     call riv#load_conf()
     call riv#load_aug()
-endfun "}}}
-fun! riv#get_latest() "{{{
-    echohl Statement
-    echo "Get Latest Verion at https://github.com/Rykka/riv.vim"
-    echohl Normal
 endfun "}}}
 
 fun! riv#buf_load_aug() "{{{
@@ -352,32 +348,28 @@ fun! riv#buf_load_aug() "{{{
         au! BufWritePre  <buffer>  call riv#create#auto_mkdir()
     aug END "}}}
 endfun "}}}
-fun! riv#buf_load_syn()
-    " XXX This is no useable cause the link_file pattern are 
-    " defined by default option
-    if riv#ptn#get_flink_style() != 0
-        exe 'syn match rstFileLink &'.g:_riv_s.rstFileLink.'&'
+fun! riv#buf_load_syn() "{{{
+    if &ft=='rst' && riv#path#file_link_style() != 0
+        exe 'syn match rstFileLink &'.riv#ptn#rstFileLink().'&'
+        exe 'syn match rstFileLinkEmbed +<\zs[^>]*\ze>+ contained'
+            \ 'containedin=rstFileLink'
         syn cluster rstCruft add=rstFileLink
+        hi link rstFileLinkEmbed Number
     endif
-endfun
+endfun "}}}
 fun! riv#buf_init() "{{{
     " for the rst buffer
-    setl foldmethod=expr foldexpr=riv#fold#expr(v:lnum) foldtext=riv#fold#text()
+    setl foldmethod=expr foldexpr=riv#fold#expr(v:lnum) 
+    setl foldtext=riv#fold#text()
     setl comments=fb:.. commentstring=..\ %s 
-    setl formatoptions+=tcroql
-    setl expandtab
+    setl formatoptions+=tcroql expandtab
     let b:undo_ftplugin = "setl fdm< fde< fdt< com< cms< et< fo<"
-                \ "| sil! unlet! b:riv_state b:riv_obj b:riv_flist"
+                \ "| sil! unlet! "
+                \ "b:riv_state b:riv_obj b:riv_flist"
                 \ "| mapc <buffer>"
-            \ "| au! RIV_BUFFER"
-    " call s:imap(g:riv_default.buf_imaps)
-    " call s:map(g:riv_default.buf_maps)
-    " call s:nmap(g:riv_default.buf_nmaps)
-    " call s:vmap(g:riv_default.buf_vmaps)
-    " call s:fold_map(g:riv_default.fold_maps)
+                \ "| au! RIV_BUFFER"
     call riv#cmd#init_maps()
     call riv#buf_load_aug()
-    call riv#buf_load_syn()
 endfun "}}}
 
 if expand('<sfile>:p') == expand('%:p') "{{{

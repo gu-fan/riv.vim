@@ -22,7 +22,7 @@ fun! s:expand_file_link(file) "{{{
     " the rel directory with [] will add index.html
     " other unchanged.
     let file = a:file
-    if riv#ptn#get_flink_style() == 2 && !empty(file)
+    if riv#path#file_link_style() == 2 && !empty(file)
         let file = matchstr(file, '^\[\zs.*\ze\]$')
     endif
     if !riv#path#is_relative(file)
@@ -32,7 +32,7 @@ fun! s:expand_file_link(file) "{{{
     else
         if riv#path#is_ext(file)
             let tar = s:str_to_tar(file, fnamemodify(file, ':r').'.html') 
-        elseif fnamemodify(file, ':e') == '' && riv#ptn#get_flink_style() == 2
+        elseif fnamemodify(file, ':e') == '' && riv#path#file_link_style() == 2
             let tar = s:str_to_tar(file, file.'index.html')
         else
             let tar = s:str_to_tar(file,file)
@@ -59,7 +59,7 @@ endfun "}}}
 fun! s:expand_link(word) "{{{
     " expand file, and let the refname expand
     let word = a:word
-    if word=~ g:_riv_p.link_file
+    if word=~ riv#ptn#link_file()
         return s:expand_file_link(word)
     else
         if word =~ '\v^'.g:_riv_p.ref_name.'$'
@@ -200,9 +200,9 @@ fun! s:format_src_index() "{{{
             call add(lines, repeat('-', strwidth(s:months[month-1])))
             let line_lst = [] 
             for day in years[year][month]
-                if riv#ptn#get_flink_style() == 1 
+                if riv#path#file_link_style() == 1 
                     let f = printf("[[%s]]",day)
-                elseif riv#ptn#get_flink_style() == 2 
+                elseif riv#path#file_link_style() == 2 
                     let f = printf(":doc:`%s`",day)
                 else
                     let f = printf("%s".riv#path#ext(),day)
@@ -233,7 +233,7 @@ fun! s:escape(str) "{{{
     return escape(a:str, '.^$*[]\~')
 endfun "}}}
 fun! s:escape_file_ptn(file) "{{{
-    if riv#ptn#get_flink_style() == 2
+    if riv#path#file_link_style() == 2
         return   '\%(^\|\s\)\zs\[' . fnamemodify(s:escape(a:file), ':t:r') 
                     \ . '\]\ze\%(\s\|$\)'
     else
@@ -365,9 +365,6 @@ fun! riv#create#cmd_helper() "{{{
 endfun "}}}
 "}}}
 
-fun! s:id() "{{{
-    return exists("b:riv_p_id") ? b:riv_p_id : g:riv_p_id
-endfun "}}}
 fun! s:SID() "{{{
     return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$')
 endfun "}}}

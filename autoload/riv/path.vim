@@ -11,48 +11,51 @@ set cpo-=C
 let s:slash = has('win32') || has('win64') ? '\' : '/'
 let s:win =  has('win32') || has('win64') ? 1 : 0
 
-" check 'ssl' ?
 let s:c = g:_riv_c
-fun! riv#path#root() "{{{
-    return g:_riv_c.p[s:id()]._root_path
+fun! riv#path#root(...) "{{{
+    return g:_riv_c.p[a:0 ? a:1 : riv#id()]._root_path
 endfun "}}}
 
-fun! riv#path#build_ft(ft) "{{{
-    return g:_riv_c.p[s:id()]._build_path . a:ft . s:slash
+fun! riv#path#build_ft(ft,...) "{{{
+    return g:_riv_c.p[a:0 ? a:1 : riv#id()]._build_path . a:ft . s:slash
 endfun "}}}
-fun! riv#path#p_build() "{{{
+fun! riv#path#p_build(...) "{{{
     " >>> echo riv#path#p_build()
     " _build
-    return g:_riv_c.p[s:id()].build_path
+    return g:_riv_c.p[a:0 ? a:1 : riv#id()].build_path
 endfun "}}}
-fun! riv#path#build_path() "{{{
-    return g:_riv_c.p[s:id()]._build_path
+fun! riv#path#build_path(...) "{{{
+    return g:_riv_c.p[a:0 ? a:1 : riv#id()]._build_path
 endfun "}}}
-fun! riv#path#scratch_path() "{{{
-    return g:_riv_c.p[s:id()]._scratch_path
+fun! riv#path#scratch_path(...) "{{{
+    return g:_riv_c.p[a:0 ? a:1 : riv#id()]._scratch_path
+endfun "}}}
+fun! riv#path#file_link_style(...) "{{{
+    return g:_riv_c.p[a:0 ? a:1 : riv#id()].file_link_style
 endfun "}}}
 
-fun! riv#path#ext() "{{{
+fun! riv#path#ext(...) "{{{
     " file suffix 
     " >>> echo riv#path#ext()
     " .rst
-    return g:_riv_c.p[s:id()].source_suffix
+    return g:_riv_c.p[a:0 ? a:1 : riv#id()].source_suffix
 endfun "}}}
-fun! riv#path#idx() "{{{
+fun! riv#path#idx(...) "{{{
     " project master doc.
     " >>> echo riv#path#idx()
     " index
-    return g:_riv_c.p[s:id()].master_doc
+    return g:_riv_c.p[a:0 ? a:1 : riv#id()].master_doc
 endfun "}}}
-fun! riv#path#idx_file() "{{{
+fun! riv#path#idx_file(...) "{{{
     " >>> echo riv#path#idx_file()
     " index.rst
-    return riv#path#idx() . riv#path#ext()
+    return call('riv#path#idx',a:000) . call('riv#path#ext',a:000)  
 endfun "}}}
 
-fun! riv#path#p_ext() "{{{
-    return g:_riv_c.p[s:id()]._source_suffix
+fun! riv#path#p_ext(...) "{{{
+    return g:_riv_c.p[a:0 ? a:1 : riv#id()]._source_suffix
 endfun "}}}
+
 fun! riv#path#is_ext(file) "{{{
     " >>> echo riv#path#is_ext('aaa.rst')
     " 1
@@ -125,10 +128,6 @@ fun! riv#path#ext_to(file, ft) "{{{
 endfun "}}}
 fun! riv#path#ext_tail(file, ft) "{{{
     return fnamemodify(a:file, ":t:r") . '.' . a:ft
-endfun "}}}
-
-fun! s:id() "{{{
-    return exists("b:riv_p_id") ? b:riv_p_id : g:riv_p_id
 endfun "}}}
 
 if expand('<sfile>:p') == expand('%:p') "{{{

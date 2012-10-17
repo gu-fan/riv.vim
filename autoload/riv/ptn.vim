@@ -26,7 +26,7 @@ endfun "}}}
 fun! riv#ptn#escape(str) "{{{
     return escape(a:str, '.^$*[]()\@+=~')
 endfun "}}}
-fun! s:normlist(list,...) "{{{
+fun! riv#ptn#norm_list(list,...) "{{{
     " return list with words
     return filter(map(a:list,'matchstr(v:val,''\w\+'')'), ' v:val!=""')
 endfun "}}}
@@ -232,7 +232,7 @@ fun! riv#ptn#init() "{{{
                 \  map(range(len(td_key_list)), 
                 \ '(v:val+1).".". td_key_list[v:val]')
     let g:_riv_t.td_keyword_groups = map(td_key_list, 
-                \ 's:normlist(split(v:val,'',''))')
+                \ 'riv#ptn#norm_list(split(v:val,'',''))')
     
     let td_lv_ptn = '['.join(split(g:riv_todo_levels,','),'').']'
     " '[ ]', '[o]', '[X]'
@@ -252,7 +252,7 @@ fun! riv#ptn#init() "{{{
     "}}}
     
     " it's 'AA|BB|CC|DD'
-    let td_keywords = join(s:normlist(split(g:riv_todo_keywords,'[,;]')),'|')
+    let td_keywords = join(riv#ptn#norm_list(split(g:riv_todo_keywords,'[,;]')),'|')
     let td_key_done =  join(map(copy(g:_riv_t.td_keyword_groups),'v:val[-1]'),'|')
     let g:_riv_t.todo_done_key =  td_key_done
 
@@ -349,7 +349,7 @@ fun! riv#ptn#init() "{{{
     let fname_bgn = '%(^|\s|[''"([{<,;!?])'
     let fname_end = '%($|\s|[''")\]}>:.,;!?])'
     
-    let g:_riv_t.file_ext_lst = s:normlist(split(g:riv_file_link_ext,','))
+    let g:_riv_t.file_ext_lst = riv#ptn#norm_list(split(g:riv_file_link_ext,','))
 
     let s:p.file_ext_ptn = g:_riv_t.doc_exts
                 \.'|'. join(g:_riv_t.file_ext_lst,'|')
@@ -367,27 +367,29 @@ fun! riv#ptn#init() "{{{
     endif
     let s:p.ext_file_link  = '\v'. ext_file_link
     
-    if g:riv_file_link_style == 1
+    " if g:riv_file_link_style == 1
         " moinmoin style
         " [[*]]  [[xxx/]] [[*.vim]]
-        let link_file = fname_bgn.'@<=\[\[' 
+        let link_file1 = fname_bgn.'@<=\[\[' 
                     \. file_name .'\]\]@='. fname_end 
-    elseif g:riv_file_link_style == 2 
+    " elseif g:riv_file_link_style == 2 
         " sphinx style
         " :doc:`file` for rst document
         " :download:`file.vim` for file link
         " :doc:`Test <test.rst>` could be used
-        let link_file = fname_bgn.'@<=:%(doc|download):`%(' 
+        let link_file2 = fname_bgn.'@<=:%(doc|download):`%(' 
                     \. file_name .'|[^`<>]*\<'.file_name.'\>'
                     \.')`\ze'. fname_end 
-    else
-        let link_file = '^^'
-    endif
+    " else
+        let link_file0 = '^^'
+    " endif
 
     let s:p.moin_link_str = '\[\[\zs.*\ze\]\]'
     let s:p.sphinx_link_str = ':\%(doc\|download\):`\([^`<>]*<\zs[^`>]*\ze>\|\zs.*\ze\)`'
 
-    let s:p.link_file = '\v'. link_file
+    let s:p.link_file0 = '\v'. link_file0
+    let s:p.link_file1 = '\v'. link_file1
+    let s:p.link_file2 = '\v'. link_file2
 
     " Reference: "{{{4
     "  xxx_
@@ -448,12 +450,14 @@ fun! riv#ptn#init() "{{{
     " 3 link_uri
     " 4 link_uri_body
     " 5 link_file
-    let s:p.link_all = '\v('. link_target 
-                \ . ')|(' . link_reference
-                \ . ')|(' . link_uri 
-                \ . ')|(' . link_file
-                \ . ')|(' . ext_file_link
-                \. ')'
+    for i in range(3)
+        let s:p['link_all'.i] = '\v('. link_target 
+                    \ . ')|(' . link_reference
+                    \ . ')|(' . link_uri 
+                    \ . ')|(' . link_file{i}
+                    \ . ')|(' . ext_file_link
+                    \. ')'
+    endfor
     "}}}4
     "
     " Miscs: 
@@ -491,7 +495,9 @@ fun! riv#ptn#init() "{{{
     let s:s.rivTodoTmEnd = '\v'.td_tms_end
     
     " Syntax After: "{{{3
-    let s:s.rstFileLink = s:p.link_file
+    for i in range(3)
+        let s:s['rstFileLink'.i] = s:p['link_file'.i]
+    endfor
     let s:s.rstFileExtLink = s:p.ext_file_link
 
     let s:s.rstTodoRegion = '\v\C'.td_list .'@<='. td_b_k . td_prior . '=%(' 
@@ -614,13 +620,13 @@ endfun "}}}
 
 fun! riv#ptn#get_file(str) "{{{
     " return [file, is_doc] with fetched str.
-    if riv#ptn#get_flink_style() == 1
+    if riv#path#file_link_style() == 1
         " >>> let g:riv_file_link_style = 1
         " >>> ec riv#ptn#get_file('[[www]]')
         " ['www', 'doc']
         let f = matchstr(a:str, g:_riv_p.moin_link_str)
         let t = riv#path#is_relative(f) ? 'doc' : 'file'
-    elseif riv#ptn#get_flink_style() == 2
+    elseif riv#path#file_link_style() == 2
         " >>> ec matchstr(':doc:`Hello <x/hello>`', g:_riv_p.sphinx_link_str)
         " >>> ec matchstr(':doc:`Hello`', g:_riv_p.sphinx_link_str)
         " x/hello
@@ -631,12 +637,17 @@ fun! riv#ptn#get_file(str) "{{{
     return [f, t]
 endfun "}}}
 
-fun! riv#ptn#get_flink_style() "{{{
-    return g:_riv_c.p[s:id()].file_link_style
+fun! riv#ptn#link_file() "{{{
+    " >>> echo riv#ptn#link_file()
+    return g:_riv_p['link_file'.riv#path#file_link_style()]
 endfun "}}}
-
-fun! s:id() "{{{
-    return exists("b:riv_p_id") ? b:riv_p_id : g:riv_p_id
+fun! riv#ptn#link_all() "{{{
+    " >>> echo riv#ptn#link_all()
+    return g:_riv_p['link_all'.riv#path#file_link_style()]
+endfun "}}}
+fun! riv#ptn#rstFileLink() "{{{
+    " >>> echo riv#ptn#rstFileLink() 
+    return g:_riv_s['rstFileLink'.riv#path#file_link_style()]
 endfun "}}}
 
 if expand('<sfile>:p') == expand('%:p') "{{{

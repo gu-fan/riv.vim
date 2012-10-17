@@ -74,7 +74,8 @@ fun! riv#action#ins_enter() "{{{
     if getline('.') =~ s:p.table
         call riv#table#newline('cont')
     else
-        exe "norm! \<Esc>gi\<CR>\<Right>"
+        " exe "norm! \<Esc>gi\<CR>\<Right>"
+        call feedkeys("\<Esc>a\<CR>",'n')
     endif
 endfun "}}}
 fun! riv#action#ins_c_enter() "{{{

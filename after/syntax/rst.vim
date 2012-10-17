@@ -12,7 +12,21 @@ let s:s = g:_riv_s
 
 syn sync match rstHighlight groupthere NONE #^\_s\@!#
 
-" Lists in rst file
+" Link "{{{1
+fun! s:def_inline_char(name, start, end, char_left, char_right) "{{{
+    exe 'syn match rst'.a:name
+      \ '+'.a:char_left.'\zs'.a:start.'\ze[^[:space:]'
+      \.a:char_right.a:start[strlen(a:start)-1].'][^'
+      \.a:start[strlen(a:start)-1]
+      \.'\\]*'.a:end.'\ze\%($\|\s\|[''")\]}>/:.,;!?\\-]\)+'
+endfun "}}}
+
+for pair in ['""', "''", '()', '{}', '<>']
+    call s:def_inline_char('PhaseHyperLinkReference', '`', '`__\=', pair[0] ,pair[1],)
+endfor
+call s:def_inline_char('PhaseHyperLinkReference', '`', '`__\=', '\[','\]')
+call s:def_inline_char('PhaseHyperLinkReference', '`', '`__\=', '\%(^\|\s\|[/:]\)','')
+" List: "{{{1
 syn match rstDefinitionList `\v^(\s*)\h[^:]*\ze%(\s:\s.*)*\n\1\s+\S`
 syn match rstBulletList `\v^\s*[-*+]\ze\s+`
 syn match rstEnumeratedList `\v\c^\s*%(\d+|[#a-z]|[imlcxvd]+)[.)]\ze\s+`
@@ -27,16 +41,15 @@ syn match   rstCommentTitle '\v(^\s+|(^\.\.\s+)@<=):=\u\w*(\s+\u\w*)*:' containe
 syn cluster rstCommentGroup contains=rstCommentTitle,rstTodo
 
 
-" Local File: "{{{1
+" File: "{{{1
 syn cluster rstCruft add=rstStandaloneHyperlink
 syn cluster rstCommentGroup add=@rstLinkGroup
-
 if g:riv_file_ext_link_hl == 1
     exe 'syn match rstFileExtLink &'.s:s.rstFileExtLink.'&'
     syn cluster rstCruft add=rstFileExtLink
 endif
 
-" Code Highlight: "{{{1
+" Code: "{{{1
 
 " Add block indicator for code directive
 syn match rstCodeBlockIndicator `^\_.` contained
@@ -71,7 +84,7 @@ if has("spell")
     syn spell toplevel
 endif
 
-" Todo Group: "{{{1
+" Todo: "{{{1
 syn cluster rstTodoGroup contains=rstTodoItem,rstTodoPrior,rstTodoTmBgn,rstTodoTmsEnd
 
 exe 'syn match rstTodoRegion `' . s:s.rstTodoRegion .'` transparent contains=@rstTodoGroup'
@@ -105,6 +118,8 @@ hi link rstStandaloneHyperlink          Underlined
 hi link rstFootnoteReference            Underlined
 hi link rstCitationReference            Underlined
 hi link rstHyperLinkReference           Underlined
+hi link rstInlineInternalTargets        Keyword
+hi link rstPhaseHyperLinkReference      Underlined
 
 hi def link rstBulletList                   Function
 hi def link rstEnumeratedList               Function

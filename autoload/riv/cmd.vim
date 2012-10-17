@@ -9,19 +9,19 @@ let s:cpo_save = &cpo
 set cpo-=C
 " cmds "{{{1
 let g:riv_default.cmds = [
-\{'name': 'RivIndex', 'act': 'call riv#index()',
+\{'name': 'RivProjectIndex', 'act': 'call riv#index()',
     \'note': 'Open the default Riv project index in vim.',
     \'menu': 'Project.Index',
     \'type': 'global', 'mode': 'm', 'maps': ['ww', '<C-W><C-W>'],
     \'keys': [],
 \},
-\{'name': 'RivAsk' , 'act': 'call riv#ask_index()',
+\{'name': 'RivProjectList' , 'act': 'call riv#index_list()',
     \'note': 'Show Riv project list.',
     \'menu': 'Project.List',
     \'type': 'global', 'mode': 'm', 'maps': ['wa', '<C-W><C-A>'] ,
     \'keys': [],
 \},
-\{'name': 'RivHtmlIndex' , 'act': 'call riv#publish#browse()',
+\{'name': 'RivProjectHtmlIndex' , 'act': 'call riv#publish#browse()',
     \'note': 'Browse project html index.',
     \'menu': 'Project.Html\ Index',
     \'type': 'global', 'mode': 'm', 'maps': ['wi', '<C-W><C-I>'] ,

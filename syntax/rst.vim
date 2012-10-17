@@ -6,7 +6,6 @@
 if exists("b:current_syntax")
   finish
 endif
-
 let s:cpo_save = &cpo
 set cpo&vim
 
@@ -84,10 +83,15 @@ syn region rstHyperlinkTarget contained matchgroup=rstDirective
 syn region rstHyperlinkTarget matchgroup=rstDirective
       \ start=+^__\_s+ skip=+^$+ end=+^\s\@!+
 
+syn cluster rstONECruft                contains=
+      \ rstInterpretedText,rstInlineLiteral,rstSubstitutionReference,
+      \ rstInlineInternalTargets,rstFootnoteReference,rstHyperlinkReference
+
+" For Strong/Emphasis. Only oneline pattern could be used here.
 execute 'syn region rstExDirective contained matchgroup=rstDirective' .
       \ ' start=+' . s:ReferenceName . '::\_s+' .
       \ ' skip=+^$+' .
-      \ ' end=+^\s\@!+ contains=@rstCruft'
+      \ ' end=+^\s\@!+ contains=@rstONECruft'
 
 execute 'syn match rstSubstitutionDefinition contained' .
       \ ' /|' . s:ReferenceName . '|\_s\+/ nextgroup=@rstDirectives'
@@ -128,6 +132,7 @@ call s:DefineInlineMarkup('InterpretedTextOrHyperlinkReference', '`', '`', '`_\{
 call s:DefineInlineMarkup('InlineLiteral', '``', "", '``')
 call s:DefineInlineMarkup('SubstitutionReference', '|', '|', '|_\{0,2}')
 call s:DefineInlineMarkup('InlineInternalTargets', '_`', '`', '`')
+" call s:DefineInlineMarkup('PhaseHyperLinkReference', '`', '`', '`_\{1,2}')
 
 " TODO: Can’t remember why these two can’t be defined like the ones above.
 execute 'syn match rstFootnoteReference contains=@NoSpell' .
@@ -150,8 +155,8 @@ syn sync minlines=50 linebreaks=1
 
 hi def link rstTodo                         Todo
 hi def link rstComment                      Comment
-hi def link rstSections                     Type
-hi def link rstTransition                   Typedef
+hi def link rstSections                     Typedef
+hi def link rstTransition                   Type
 hi def link rstLiteralBlock                 String
 hi def link rstLineBlock                    String
 hi def link rstQuotedLiteralBlock           String
