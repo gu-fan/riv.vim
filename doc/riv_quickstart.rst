@@ -3,21 +3,21 @@ Riv: QuickStart
 ###############
 
 :Author:    Rykka G.F
-:Date:      2012-10-16 11:06:54
+:Date:      2012-10-18
 
-Riv is a plugin for better working with reStructuredText in Vim.
+Riv is for better working with reStructuredText in Vim.
 
-This Riv tutor, is to show enough commands to working with it.
+This tutor is to show enough commands to work with it.
 
 :NOTE: The commands of this document will modify the text.
-       Make sure it's the copy of quickstart.rst
+       Make sure it's a copy of quickstart.rst
 
        If you started ``:RivQuickStart``, 
-       Then it is a copy at '~/Documents/riv_quickstart.rst'
+       Then it is a copy, and at '~/Documents/riv_quickstart.rst'
 
 :NOTE: The ``<C-E>`` in commands means ``Ctrl+E`` or ``Ctrl+e`` ,
 
-       It is based on the ``g:riv_global_leader``
+       It is based on ``g:riv_global_leader``
        If you have changed it, using yours.
 
 Read
@@ -73,6 +73,7 @@ Insert
 ------
 
 **Insert Misc Things**
+
 To Insert current date
 ``:RivCreateDate`` or ``<C-E>cdd``
 
@@ -119,7 +120,9 @@ at the beginning of line will change it's indent.
 
   + Press ``<`` to change it's level to parent list
 
-  + To get a Normal ShiftRight, Use ``<C-E><``
+* To get a unfixed Indent, Use ``<C-E><``
+
+  + Press ``<C-E><`` to change it's level to parent list
 
 RST
 ===
@@ -131,9 +134,9 @@ Section
 
 ``:RivTitle1`` to ``:RivTitle6`` or ``<C-E>s1`` to ``<C-E>s6``
 
-Use ``<C-E>s3`` to create a level 3 section.
+Use ``<C-E>s3`` to create a level 3 title
 
-A Level 3 section
+A Level 3 title
 
 **View current document's sections**
 
@@ -189,7 +192,7 @@ Also ``<C-S-Enter>`` in Insert Mode
 
 1. This is a List
 
-    A. Press ``A<C-S-Enter>`` in insert mode to create a sup list item
+    A. Press ``A<C-S-Enter>`` to create a sup list item
 
 Link
 ----
@@ -248,7 +251,7 @@ Insert a ``|`` to create new columns.
 Publish
 -------
 
-If docutils_ package have installed.
+docutils_ package required.
 
 **Convert document to other format**
 
@@ -266,7 +269,7 @@ Riv
 
 Project
 -------
-Keep your documents in a project
+Put your documents in a project
 
 **Open main project's index file**
 
@@ -278,9 +281,9 @@ Keep your documents in a project
 
 File
 ----
-Link and edit files
+Link files
 
-**Link file in vim**
+**File link in vim**
 
 File with specified extensions will be highlighted and linked.
 
@@ -288,7 +291,7 @@ File with specified extensions will be highlighted and linked.
 
 It's not converted, so in vim only.
 
-**Link file in other format**
+**File link in other format**
 
 To make links working after converting. 
 Riv provide two styles::
@@ -309,7 +312,8 @@ Things Todos
 
 **Creat todo item and toggle state**
 
-On list lines only, ``:RivTodoToggle`` or ``<C-E>ee``
+On List lines, Press ``:RivTodoToggle`` or ``<C-E>ee``,
+You can also click the todo items to toggle it's state.
 
     A. [ ] Press ``<C-E>ee`` to toggle the todo state.
 
@@ -321,7 +325,7 @@ On list lines only, ``:RivTodoToggle`` or ``<C-E>ee``
 
 Scratch
 -------
-Scratch is a place to hold your diaries or notes.
+A place to hold your diaries or notes.
 
 **Create scratch of Today**
 
@@ -350,16 +354,21 @@ Help manage the document.
 Where To go
 ===========
 
-You have finished this tutor.
+The QuickStart for Riv have finished.
 
 You can starting your reStructuredText in Vim.
 
-If you are not familiar with Vim, use ``:h``.
+For Vim help, use ``:h``.
 
 To get a quick view of reStructuredText, use ``:RivPrimer``
 
-If you want to view the detailed instruction, use ``:RivInstruction``
+To view the detailed Riv instruction, use ``:RivInstruction``
+
+Get Latest Riv or post issues at riv.vim_
+
+
 
 .. _Google: www.google.com
 .. _docutils: http://docutils.sourceforge.net/
-.. _Sphinx: http://sphinx.pocoo.org/ 
+.. _Sphinx: http://sphinx.pocoo.org/
+.. _riv.vim: www.github.com/Rykka/riv.vim

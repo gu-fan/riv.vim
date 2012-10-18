@@ -104,7 +104,7 @@ ScreenShot: Work with Sphinx_
 
 ScreenCast: 
 
-* QuickStart_
+* Riv: QuickStart_
 
 Where To Go
 -----------
@@ -2028,8 +2028,5 @@ Options
 
 .. _reStructuredText Specification: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html
 .. _reStructuredText cheatsheet: http://docutils.sourceforge.net/docs/user/rst/cheatsheet.txt
-
-
 .. _Sphinx Home: http://sphinx.pocoo.org/
-
 .. _QuickStart: http://www.youtube.com/watch?v=ceyxAK37ixE 

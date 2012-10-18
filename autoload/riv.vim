@@ -152,7 +152,7 @@ fun! riv#index_list() "{{{
     let id = inputlist(["Please Select One Project ID:"]+
                 \map(range(len(g:_riv_c.p)),'v:val+1. "." . g:_riv_c.p[v:val].path') )
     if id != 0
-        call riv#index(id)
+        call riv#index(id-1)
     endif
 endfun "}}}
 "}}}

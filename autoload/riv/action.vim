@@ -12,7 +12,7 @@ let s:p = g:_riv_p
 fun! riv#action#tutor(name) "{{{
     let file = g:_riv_c.doc_pat . a:name . '.rst'
     let lines = readfile(file)
-    exe 'noa keepa bot new ~/Documents/'.a:name 
+    exe 'noa keepa bot new ~/Documents/'.a:name.'.rst'
 	setl noswf nolist nospell nocuc wfh
 	" setl bt=nofile bh=unload
     set ft=rst
