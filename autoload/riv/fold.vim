@@ -645,7 +645,7 @@ endfun "}}}
 " Main "{{{
 fun! riv#fold#expr(row) "{{{
     if a:row == 1
-        call s:init_stat()
+        noa call s:init_stat()
     endif
     return b:riv_flist[a:row]
 endfun "}}}
@@ -712,7 +712,7 @@ fun! riv#fold#update() "{{{
 endfun "}}}
 let s:modified = 0
 fun! riv#fold#init() "{{{
-    call s:init_stat()
+    noa call s:init_stat()
 endfun "}}}
 "}}}
 "

@@ -56,7 +56,7 @@ endfun "}}}
 fun! riv#table#format_pos() "{{{
     let pos = getpos('.')
     if getline('.') =~ s:p.table
-        call riv#table#format()
+        noa call riv#table#format()
         call setpos('.',pos)
         " It may get folded after formating.
         if foldclosed(pos[1])!=-1

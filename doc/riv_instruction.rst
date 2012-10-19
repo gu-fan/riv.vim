@@ -1,6 +1,6 @@
-############################
-Riv: reStructuredText in Vim
-############################
+###############
+Riv: Instrucion
+###############
 
 :Author: Rykka G.F
 :Update: 2012-10-16
@@ -9,279 +9,43 @@ Riv: reStructuredText in Vim
 
 * _`Index`:
 
-  * 1 Intro_ : Basic Intros
+  * 1 Instructions_ : Detailed Instructions
 
-    * 1.1 Features_ : Implemented featues
-    * 1.2 `On Screen`_ : Screenshots and Screencasts
-    * 1.3 `Where To Go`_ : Start from here
-    * 1.4 Tutors_ : Batteries Included
-    * 1.5 Install_ : Installation
-    * 1.6 `Todo and Done`_ : Thins Todo and logs
-    * 1.7 Issues_ : Know Issues
-    * 1.8 Contribution_ : Help improving
+    * 1.1 Vim_ : Vim Improved Feature
 
-  * 2 Instructions_ : Detailed Instructions
+      * 1.1.1 Folding_ : Overview the structure. 
+      * 1.1.2 Syntax_ : Extra highlighting.
+      * 1.1.3 Indent_ : Smarter indent. 
+      * 1.1.4 Insert_ : Speed up the input!
 
-    * 2.1 Vim_ : Vim Improved Feature
+    * 1.2 RST_ : Better RST Supporting
 
-      * 2.1.1 Folding_ : Overview the structure. 
-      * 2.1.2 Syntax_ : Extra highlighting.
-      * 2.1.3 Indent_ : Smarter indent. 
-      * 2.1.4 Insert_ : Speed up the input!
+      * 1.2.1 Sections_ : Easy create, easy view.
+      * 1.2.2 Lists_ : Auto numbered, auto leveled and auto indented.
+      * 1.2.3 Links_ : Jumping and Highlighting.
+      * 1.2.4 Table_ : Auto formatted. 
+      * 1.2.5 Publish_ : Convert to html/xml/latex/odt...
 
-    * 2.2 RST_ : Better RST Supporting
+    * 1.3 Riv_ : Management by Riv
 
-      * 2.2.1 Sections_ : Easy create, easy view.
-      * 2.2.2 Lists_ : Auto numbered, auto leveled and auto indented.
-      * 2.2.3 Links_ : Jumping and Highlighting.
-      * 2.2.4 Table_ : Auto formatted. 
-      * 2.2.5 Publish_ : Convert to html/xml/latex/odt...
+      * 1.3.1 Sphinx_ :  Working with Sphinx.
+      * 1.3.2 Project_ : A workspace for your documents.
+      * 1.3.3 File_ : Link local file in the document.
+      * 1.3.4 Scratch_ : Writing notes and diaries.
+      * 1.3.5 Todos_ : Keep track of todo things.
+      * 1.3.6 Helpers_ : Help work with document/project.
 
-    * 2.3 Riv_ : Management by Riv
+  * 2 Appendix_ : Extra Infomations
 
-      * 2.3.1 Sphinx_ :  Working with Sphinx.
-      * 2.3.2 Project_ : A workspace for your documents.
-      * 2.3.3 File_ : Link local file in the document.
-      * 2.3.4 Scratch_ : Writing notes and diaries.
-      * 2.3.5 Todos_ : Keep track of todo things.
-      * 2.3.6 Helpers_ : Help work with document/project.
-
-  * 3 Appendix_ : Extra Infomations
-
-    * 3.1 Commands_ : Commands and Mappings.
-    * 3.2 Options_ : Options and Settings.
-
-Intro
-=====
-
-**Riv**, short for 'reStructuredText in Vim'. 
-
-Aim to provide better support of reStructuredText_ 
-(a simple and powerful plain text markup) in vim.
-
-It's for you to::
-
-    Read documents clearer. (Folding, Linking and Extra highlight)
-    Write documents faster. (Indent and Insert improvement)
-    Manage documents easier. (Project,File and Sphinx support)
-    Make things documented. (Todo and Scratch)
-
-Features
---------
- 
-**Reading and Writing**
-
- **Vim Improved**
-
- :Folding_:  Overview the structure.
- :Syntax_:   Extra highlighting.
- :Indent_:   Smarter indent.
- :Insert_:   Speed up the input!
-
- **RST Documents**
-
- :Sections_: Easy create, easy view.
- :Lists_:    Auto numbered, auto leveled and auto indented.
- :Links_:    Jumping and Highlighting.
- :Table_:    Auto formatted. 
- :Publish_:  Convert to html/xml/latex/odt...
-
-**Document Managment**
-
- :Sphinx_:   Working with Sphinx.
- :Project_:  A workspace for your documents.
- :File_:     Link local file in the document.
- :Scratch_:  Writing notes and diaries.
- :Helpers_:  Help work with document/project.
- :Todos_:    Keep track of todo things.
-
-On Screen
-----------
-
-ScreenShot: Work with Sphinx_
-
-.. image:: http://i.minus.com/ibj1XigngbbYKl.png 
-
-ScreenCast: 
-
-* Riv: QuickStart_
-
-Where To Go
------------
-
-* Index_ : Index of Document
-
-**Gettings Start**
-
-* Install_: Installation
-* Tutors_ : From the very basic
-* Instructions_ : The detailed instruction.
-* Commands_: Mappings and commands
-* Options_: Options and settings
-
-**About This Projcet**
-
-* `Todo and Done`_: Todos and Logs
-* Issues_: Known Issues
-* Contribution_: Help improving
-
-Tutors
-------
-
-**Vim**
-
-* To get a tutor for vim. 
-  Use ``vimtutor`` in your shell.
-  
-* To view the quick reference of vim.
-  Use ``:h quickref``.
-
-**RST**
-
-* To get a quick view of reStructuredText.
-
-  Read `A ReStructuredText Primer`_,
-  Use `:RivPrimer`_ to open it in vim.
-  
-  or Read `Quick reStructuredText`_. 
-
-* To get reStructuredText's detailed specification. 
-
-  Read `reStructuredText Specification`_,
-  Use `:RivSpecification`_ to open it in vim.
-
-* And the `reStructuredText cheatsheet`_ for a quick review,
-  Use `:RivCheatSheet`_ to open it in vim.
-
-**Riv**
-
-* Quick Start With Riv. 
-  
-  Read `QuickStart With Riv`_ ,
-  Use `:RivQuickStart`_ in vim.
-
-* Detailed Instruction for Riv (It's this document!):
-
-  Read `Instructions`_ ,
-  Use `:RivInstruction`_ in vim.
-
-Install
--------
-* Using Vundle_  (Recommended)
-
-  Add this line to your vimrc::
- 
-    Bundle 'Rykka/riv.vim'
-
-
-* Using downloaded zip/tar.gz file. 
-  Just extract it to your ``.vim`` folder .
-
-
-:NOTE: Make sure your .vim folder in option ``runtimepath`` 
-       is before the $VIMRUNTIME, otherwise the syntax/indent files
-       for rst files will use vim's built-in one.
-
-       Default is before $VIMRUNTIME.
-
-:NOTE: Make sure ``filetype plugin indent on`` and ``syntax on`` is in your vimrc
-
-:NOTE: It's a developing version. 
-       So things may change quickly.
-
-       Keep up-to-date.
-
-       You can get the latest version at https://github.com/Rykka/riv.vim 
-
-* Related tools: 
-
-  + python: docutils_ , required for converting to other format.
-  + python: pygments_ for syntax highlighting in other format.
-  + python: Sphinx_ for Sphinx users.
-  + vim: Syntastic_  for syntax checking. docutils_ required.
-
-    But if you are using Sphinx_'s tools set, you'd better not using it.
-    Cause it could not recognize the sphinx's markups.
-
-Todo and Done
--------------
-
-This
-~~~~~
-
-Things todo in this version.
-
-* 0.73: This is mainly a bug fix version.
-
-  :Intro_: ScreenCast tutor
-  :Indent_: FIXED 2012-10-16 List indentation for visual lines are wrong
-  :File_: DONE 2012-10-17 The file pattern separated for each project.
-  :Insert_: FIXED 2012-10-16 Literal-block create have trailing chars.
-  :Lists_: DONE 2012-10-17 Add :RivListToggle
-  :Lists_: DONE 2012-10-17 List new/sub/sup rewrite
-  :Indent_: FIXED 2012-10-17 fix SuperEnter's indent
-  :Syntax_: DONE 2012-10-17 add highlight for inline hyperlink reference and target
-  :Syntax_: FIXED fix the (**) highlight in directive.
-
-Next
-~~~~~
-
-See riv_todo_ (doc/riv_todo.rst)
-
-Prev
-~~~~
-
-See riv_log_ (doc/riv_log.rst)
-
-Issues
-------
-
-* If the document folding showing some error.
-  You can try force reload `:RivTestReload`_ ``<C-E>t```
-* Windows:
-  
-  - Converting to other format may fail. 
-    
-    This may due to docutils could not executing correctly with vimrun.exe.
-
-* Mac OS:
-
-  - The List don't act as expected. 
-  
-    Maybe Caused the ``<C-Enter>`` Could not be mapped.
-    Use other map instead.
-
-* Post issues at https://github.com/Rykka/riv.vim/issues
-  Both bug reports and feature request and discussions are welcome. 
-
-Contribution
-------------
-
-This project aims to provide better working with reStructuredText in vim.
-
-And there are many things need to do.
-
-If you are willing to improve this project, 
-You can do something for it.
-
-:Document: 
-           1. This README document need review and rewrite.
-              It is also the helpdoc in vim.
-           2. Rewrite and merge the quickstart and quick intro.
-              Which could be used in vim.
-           3. A screencast for quickstart.
-
-:Code:
-        1. Support auto formatting for table with column/row span. 
-
-           The code of ``PATH-TO-Docutils/parsers/rst/tableparser`` 
-           can be referenced.
-        2. Support more other plugins of reStructuredText_
-
-----
+    * 2.1 Commands_ : Commands and Mappings.
+    * 2.2 Options_ : Options and Settings.
 
 Instructions
 ============
+
+This is the detailed Instruction for Riv.
+
+To View the Riv Intro , Use `:RivIntro`_
 
 Vim
 ---
@@ -601,7 +365,7 @@ And it's folded by it's level.
 
     ``<Enter>`` or Clicking on the section reference will bring you to the section title.
 
-    E.g.: click the link of Features_ will bring you to the ``Features`` Section (in vim)
+    E.g.: click the link of Lists_ will bring you to the ``Lists`` Section (in vim)
 
   + Create a content table:
     
@@ -1736,6 +1500,8 @@ Commands
 
   - _`:RivVimTest` : Run doctest for Vim Script
 
+  - _`:RivIntro` : Show Riv Intro
+
   - _`:RivInstruction` : Show Riv Instrucion
 
   - _`:RivQuickStart` : Show Riv QuickStart
@@ -2017,8 +1783,6 @@ Options
 .. _Vundle: https://www.github.com/gmarik/vundle
 .. _docutils: http://docutils.sourceforge.net/
 .. _pygments: http://pygments.org/
-.. _riv_log: https://github.com/Rykka/riv.vim/blob/master/doc/riv_log.rst
-.. _riv_todo: https://github.com/Rykka/riv.vim/blob/master/doc/riv_todo.rst
 .. _Quickstart With Riv:
    https://github.com/Rykka/riv.vim/blob/master/doc/riv_quickstart.rst
 .. _A ReStructuredText Primer: http://docutils.sourceforge.net/docs/user/rst/quickstart.html
@@ -2029,4 +1793,4 @@ Options
 .. _reStructuredText Specification: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html
 .. _reStructuredText cheatsheet: http://docutils.sourceforge.net/docs/user/rst/cheatsheet.txt
 .. _Sphinx Home: http://sphinx.pocoo.org/
-.. _QuickStart: http://www.youtube.com/watch?v=ceyxAK37ixE 
+.. _QuickStart: http://www.youtube.com/watch?v=sgSz2J1NVJ8

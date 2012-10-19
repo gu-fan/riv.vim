@@ -7,17 +7,20 @@
                              \/                                  ~
 ======================================================================
 
-                                                    *:RivInstruction*
-    Show Riv Instruction.   
+                                               *:RivIntro*
+    Riv Intro   
 
-                                                    *:RivQuickStart*
-    Show Riv QuickStart
+                                               *:RivInstruction*
+    Riv Instruction
 
-                                                    *:RivPrimer*
-    Show RST Primer
+                                               *:RivQuickStart*
+    Riv QuickStart
 
-                                                    *:RivSpecification*
-    Show RST Specification
+                                               *:RivPrimer*
+    RST Primer
+
+                                               *:RivSpecification*
+    RST Specification
 
 ======================================================================
 vim:ft=help:tw=76

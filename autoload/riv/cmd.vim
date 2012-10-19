@@ -452,7 +452,12 @@ let g:riv_default.cmds = [
     \'note': 'Run doctest for Vim Script',
     \'menu': 'Helper.VimTest',
 \},
-\{'name': 'RivInstruction' , 'act': 'call riv#action#tutor("riv")',
+\{'name': 'RivIntro' , 'act': 'call riv#action#open("intro")',
+    \'note': 'Show Riv Intro',
+    \'menu': 'About.Riv\ Intro',
+    \'type': 'menu'
+\},
+\{'name': 'RivInstruction' , 'act': 'call riv#action#open("instruction")',
     \'note': 'Show Riv Instrucion',
     \'menu': 'About.Riv\ Intruction',
     \'type': 'menu'
