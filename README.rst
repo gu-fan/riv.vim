@@ -69,7 +69,7 @@ On Screen
 
 ScreenShot: Work with Sphinx
 
-.. image:: http://i.minus.com/ibj1XigngbbYKl.png 
+.. image:: http://i.minus.com/ibnVOcyyNVfO8U.png
 
 ScreenCast: 
 
@@ -85,52 +85,13 @@ Where To Go
 * Install_: Installation
 * Tutors_ : From the very basic
 * Instructions_ : The detailed instruction.
+  Use ``:RivInstruction`` in vim.
 
 **About This Projcet**
 
 * `Todo and Done`_: Todos and Logs
 * Issues_: Known Issues
 * Contribution_: Help improving
-
-Tutors
-------
-
-**Vim**
-
-* To get a tutor for vim. 
-  Use ``vimtutor`` in your shell.
-  
-* To view the quick reference of vim.
-  Use ``:h quickref``.
-
-**RST**
-
-* To get a quick view of reStructuredText.
-
-  Read `A ReStructuredText Primer`_,
-  Use ``:RivPrimer`` to open it in vim.
-  
-  or Read `Quick reStructuredText`_. 
-
-* To get reStructuredText's detailed specification. 
-
-  Read `reStructuredText Specification`_,
-  Use ``:RivSpecification`` to open it in vim.
-
-* And the `reStructuredText cheatsheet`_ for a quick review,
-  Use ``:RivCheatSheet`` to open it in vim.
-
-**Riv**
-
-* Quick Start With Riv. 
-  
-  Read `QuickStart With Riv`_ ,
-  Use ``:RivQuickStart`` in vim.
-
-* Detailed Instruction for Riv (It's this document!):
-
-  Read `Instructions`_ ,
-  Use ``:RivInstruction`` in vim.
 
 Install
 -------
@@ -169,6 +130,46 @@ Install
 
     But if you are using Sphinx_'s tools set, you'd better not using it.
     Cause it could not recognize the sphinx's markups.
+
+Tutors
+------
+
+**Vim**
+
+* To get a tutor for vim. 
+  Use ``vimtutor`` in your shell.
+  
+* To view the quick reference of vim.
+  Use ``:h quickref``.
+
+**RST**
+
+* To get a quick view of reStructuredText.
+
+  Read `A ReStructuredText Primer`_,
+  Use ``:RivPrimer`` to open it in vim.
+  
+  or Read `Quick reStructuredText`_. 
+
+* To get reStructuredText's detailed specification. 
+
+  Read `reStructuredText Specification`_,
+  Use ``:RivSpecification`` to open it in vim.
+
+* And the `reStructuredText cheatsheet`_ for a quick review,
+  Use ``:RivCheatSheet`` to open it in vim.
+
+**Riv**
+
+* Quick Start With Riv. 
+  
+  Read `QuickStart With Riv`_ ,
+  Use ``:RivQuickStart`` in vim.
+
+* Detailed Instruction for Riv:
+
+  Read `Instructions`_ ,
+  Use ``:RivInstruction`` in vim.
 
 Todo and Done
 -------------
