@@ -1,6 +1,18 @@
 Changelogs
 ==========
 
+* 0.73: This is mainly a bug fix version.
+
+  :Intro: DONE 2012-10-19 ScreenCast tutor
+  :Indent: FIXED 2012-10-16 List indentation for visual lines are wrong
+  :File: DONE 2012-10-17 The file pattern separated for each project.
+  :Insert: FIXED 2012-10-16 Literal-block create have trailing chars.
+  :Lists: DONE 2012-10-17 Add :RivListToggle
+  :Lists: DONE 2012-10-17 List new/sub/sup rewrite
+  :Indent: FIXED 2012-10-17 fix SuperEnter's indent
+  :Syntax: DONE 2012-10-17 add highlight for inline hyperlink reference and target
+  :Syntax: FIXME fix the (**) highlight in directive.
+
 * 0.72 
 
   :Syntax_: DONE 2012-09-25 highlight reStructuredText in python DocString.
