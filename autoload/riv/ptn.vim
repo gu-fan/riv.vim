@@ -625,7 +625,7 @@ fun! riv#ptn#get_file(str) "{{{
         " >>> ec riv#ptn#get_file('[[www]]')
         " ['www', 'doc']
         let f = matchstr(a:str, g:_riv_p.moin_link_str)
-        let t = riv#path#is_relative(f) ? 'doc' : 'file'
+        let t = f !~ '^[~]\|^[a-zA-Z]:' ? 'doc' : 'file'
     elseif riv#path#file_link_style() == 2
         " >>> ec matchstr(':doc:`Hello <x/hello>`', g:_riv_p.sphinx_link_str)
         " >>> ec matchstr(':doc:`Hello`', g:_riv_p.sphinx_link_str)
