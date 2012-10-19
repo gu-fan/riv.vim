@@ -4,7 +4,7 @@ Riv: reStructuredText in Vim
 
 :Author: Rykka G.F
 :Update: 2012-10-16
-:Version: 0.73 
+:Version: 0.74 
 :Github: https://github.com/Rykka/riv.vim
 
 * _`Index`:

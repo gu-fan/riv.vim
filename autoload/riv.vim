@@ -9,7 +9,7 @@ let s:cpo_save = &cpo
 set cpo-=C
 
 let s:autoload_path = expand('<sfile>:p:h')
-let g:riv_version = '0.73'
+let g:riv_version = '0.74'
 let g:riv_p_id = 0
 
 " Miscs "{{{1

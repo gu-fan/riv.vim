@@ -177,6 +177,7 @@ fun! s:get_table.format_table() dict "{{{
     if empty(self.table) | return -1 | endif
 
     let lines = self.table.lines(self.indent)
+    if empty(lines) | return -2 | endif
     let [bgn,end] = [self.bgn, self.end]
     let d_bgn = 0
 
