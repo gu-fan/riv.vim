@@ -16,7 +16,8 @@ Bugs
 * **Publish**
 
   + Converting under windows have errors.
-  This may due to docutils could not executing correctly with vimrun.exe.
+
+    This may due to docutils could not executing correctly with vimrun.exe.
 * **Syntax**
 
   + The ``.. class:: Model(**Kwarg)`` will highlight all following document.
