@@ -191,15 +191,15 @@ fun! s:format_src_index() "{{{
     endfor
     
     let lines = []
-    for year in keys(years)
+    for year in sort(keys(years))
         call add(lines, "Year ".year)
         call add(lines, "=========")
-        for month in keys(years[year])
+        for month in sort(keys(years[year]))
             call add(lines, "")
             call add(lines, s:months[month-1])
             call add(lines, repeat('-', strwidth(s:months[month-1])))
             let line_lst = [] 
-            for day in years[year][month]
+            for day in sort(years[year][month])
                 if riv#path#file_link_style() == 1 
                     let f = printf("[[%s]]",day)
                 elseif riv#path#file_link_style() == 2 
