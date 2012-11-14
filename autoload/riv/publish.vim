@@ -110,8 +110,12 @@ fun! s:convert(ft, input, output, ...) "{{{
     if !executable(exe)
         let exe = 'rst2'.a:ft.'.py'
         if !executable(exe)
-            call riv#error('Could not find '.exe)
-            return -1
+            " try whitout .py extension. Compatibility with some
+            " python-docutils packages (Ubuntu 12.04 at least)
+            let exe = 'rst2'.a:ft.''
+            if !executable(exe)
+                call riv#error('Could not find '.exe)
+                return -1
         endif
     endif
     let args = a:0 ? a:1 : ''
