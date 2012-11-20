@@ -209,11 +209,11 @@ fun! s:format_src_index() "{{{
                 endif
                 call add(line_lst, f)
                 if len(line_lst) == 4
-                    call add(lines, join(line_lst,"    "))
+                    call add(lines, join(line_lst, "    "))
                     let line_lst = [] 
                 endif
             endfor
-            call add(lines, join(line_lst,"    "))
+            call add(lines, join(line_lst, "    "))
         endfor
         call add(lines, "")
     endfor

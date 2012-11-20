@@ -116,6 +116,7 @@ fun! s:convert(ft, input, output, ...) "{{{
             if !executable(exe)
                 call riv#error('Could not find '.exe)
                 return -1
+            endif
         endif
     endif
     let args = a:0 ? a:1 : ''
@@ -205,9 +206,9 @@ fun! riv#publish#copy2proj(file,html_path) abort "{{{
     call riv#publish#auto_mkdir(out_path)
     call s:sys( 'cp -f '. a:file. ' '.  fnamemodify(out_path, ':h'))
 endfun "}}}
-fun! s:get_proj_file_lists()
+fun! s:get_proj_file_lists() "{{{
     return filter(split(glob(riv#path#root().'**/*'.riv#path#ext()),'\n'), 'v:val !~ '''.riv#path#p_build().'''')
-endfun
+endfun "}}}
 fun! riv#publish#proj2(ft) abort "{{{
     let ft_path = riv#path#build_ft(a:ft)
     let files = s:get_proj_file_lists()
