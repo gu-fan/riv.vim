@@ -9,22 +9,30 @@ let s:cpo_save = &cpo
 set cpo-=C
 
 let s:p = g:_riv_p
-fun! riv#action#tutor(name) "{{{
-    let file = g:_riv_c.doc_pat . a:name . '.rst'
-    let lines = readfile(file)
-    exe 'noa keepa bot new ~/Documents/'.a:name.'.rst'
-	setl noswf nolist nospell nocuc wfh
-	" setl bt=nofile bh=unload
-    set ft=rst
-    0,$del _
-    call setline(1,lines)
-    call riv#create#auto_mkdir()
-    update
+fun! riv#action#tutor(fname, bname) "{{{
+    " Read tutor in a nofile buffer.
+    "   if not exists, create buffer
+    "   if buffer exists, load buffer.
+    if riv#win#new(a:bname)
+        setl buftype=nofile bufhidden=hide noswapfile
+        set ft=rst
+        let file = g:_riv_c.doc_path . a:fname . '.rst'
+        try
+            call setline(1, readfile(file))
+        catch
+            call riv#error('Error while reading file: '.v:exception)
+        endtry
+        update
+    endif
+
 endfun "}}}
 fun! riv#action#open(name) "{{{
-    let file = g:_riv_c.doc_pat . 'riv_'.a:name.'.rst'
-    exe 'noa keepa bot sp' file
-    setl ro noma ft=rst
+    let file = g:_riv_c.doc_path . 'riv_'.a:name.'.rst'
+    if riv#win#new(file)
+        " exe 'noa keepa bot sp' file
+        setl ro noma ft=rst
+        update
+    endif
 endfun "}}}
 
 fun! riv#action#db_click(mouse) "{{{

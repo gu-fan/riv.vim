@@ -13,23 +13,31 @@ let g:riv_version = '0.74'
 let g:riv_p_id = 0
 
 " Miscs "{{{1
-fun! s:error(msg) "{{{
-    echohl WarningMsg
-    redraw
-    echo a:msg
+fun! riv#echo(msg) "{{{
+    echohl Type
+    echo '[RIV]'
     echohl Normal
+    echon a:msg
 endfun "}}}
 fun! riv#error(msg) "{{{
     echohl ErrorMsg
-    echo '[Error:]'
-    echon a:msg
+    echo '[RIV]'
     echohl Normal
+    echon a:msg
 endfun "}}}
 fun! riv#warning(msg) "{{{
     echohl WarningMsg
-    echo '[Warning]'
-    echon a:msg
+    echo '[RIV]'
     echohl Normal
+    echon a:msg
+endfun "}}}
+fun! riv#debug(msg) "{{{
+    if g:riv_debug
+        echohl KeyWord
+        echom "[RIV]"
+        echohl Normal
+        echon a:msg
+    endif
 endfun "}}}
 fun! riv#breakundo() "{{{
     let &ul=&ul
@@ -49,7 +57,7 @@ fun! riv#load_opt(opt_dic) "{{{
         if !exists('g:riv_'.opt)
             let g:riv_{opt} = var
         elseif type(g:riv_{opt}) != type(var)
-            call s:error("RIV: Wrong type for Option:'g:riv_".opt."'! Use default.")
+            call riv#error("RIV: Wrong type for Option:'g:riv_".opt."'! Use default.")
             unlet! g:riv_{opt}
             let g:riv_{opt} = var
         endif
@@ -76,6 +84,7 @@ endfun "}}}
 let s:default = {'version': g:riv_version}
 let s:default.options = {
     \'default'            : s:default,
+    \'debug'              : 0,
     \'global_leader'      : '<C-E>',
     \'file_link_ext'      : 'vim,cpp,c,py,rb,lua,pl',
     \'file_ext_link_hl'   : 1,
@@ -172,7 +181,7 @@ fun! riv#load_conf() "{{{1
     let s:e = g:_riv_e
 
     let s:c.riv_path = s:autoload_path . '/riv/'
-    let s:c.doc_pat  = fnamemodify(s:autoload_path ,':h').'/doc/'
+    let s:c.doc_path  = fnamemodify(s:autoload_path ,':h').'/doc/'
 
     " Python:
     if has("python") "{{{

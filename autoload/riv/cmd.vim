@@ -452,17 +452,17 @@ let g:riv_default.cmds = [
     \'note': 'Run doctest for Vim Script',
     \'menu': 'Helper.VimTest',
 \},
-\{'name': 'RivIntro' , 'act': 'call riv#action#open("intro")',
+\{'name': 'RivIntro' , 'act': 'call riv#action#tutor("riv_intro","[Riv_Intro]")',
     \'note': 'Show Riv Intro',
     \'menu': 'About.Riv\ Intro',
     \'type': 'menu'
 \},
-\{'name': 'RivInstruction' , 'act': 'call riv#action#open("instruction")',
+\{'name': 'RivInstruction' , 'act': 'call riv#action#tutor("riv_instruction", "[Riv_Instruction]")',
     \'note': 'Show Riv Instrucion',
     \'menu': 'About.Riv\ Intruction',
     \'type': 'menu'
 \},
-\{'name': 'RivQuickStart' , 'act': 'call riv#action#tutor("riv_quickstart")',
+\{'name': 'RivQuickStart' , 'act': 'call riv#action#tutor("riv_quickstart", "[Riv_QuickStart]")',
     \'note': 'Show Riv QuickStart',
     \'menu': 'About.Riv\ QuickStart',
     \'type': 'menu'

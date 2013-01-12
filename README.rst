@@ -181,7 +181,7 @@ Things todo in this version.
 
 * 0.75:
 
-  - fix section syntax to ignore '::' and '..'. #21
+  -  #21: Fix section syntax to ignore '::' and '..'.
 
 Next
 ~~~~~
