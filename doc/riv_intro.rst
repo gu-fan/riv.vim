@@ -3,8 +3,8 @@ Riv: reStructuredText in Vim
 ############################
 
 :Author: Rykka G.F
-:Update: 2012-10-16
-:Version: 0.74 
+:Update: 2013-01-12
+:Version: 0.75 
 :Github: https://github.com/Rykka/riv.vim
 
 * _`Index`:
@@ -179,7 +179,9 @@ This
 
 Things todo in this version.
 
-* 0.74:
+* 0.75:
+
+  - fix section syntax to ignore '::' and '..'. #21
 
 Next
 ~~~~~

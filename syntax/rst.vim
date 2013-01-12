@@ -13,7 +13,9 @@ syn match   rstTodo         '\v(<|:)%(FIXME|TODO|XXX|NOTE)%(:|\_s@=)' contained
 
 syn case ignore
 
-syn match   rstSections /\v%(\S\s*\n)@<!\_^\s*\S.*\n([=`:.'"~^_*+#-])\1*\s*$/
+" NOTE: When the above line length longer than '::' , then it's literal_block
+" but we can not compare it's length, so we ignore '::' and '..'
+syn match   rstSections /\v%(\S\s*\n)@<!\_^\s*\S.*\n%(([=`'"~^_*+#-])\1*|([:.])\2{2,})\s*$/
 syn match   rstSections /\v%(\S\s*\n)@<!\_^(([=`:.'"~^_*+#-])\2*\s*)\n\s*\S.*\n\1$/
 syn match   rstTransition  /\v%(\_^\s*\n)@<=\_^[=`:.'"~^_*+#-]{4,}\s*(\n\s*\_$)\@=/
 
@@ -155,7 +157,7 @@ syn sync minlines=50 linebreaks=1
 
 hi def link rstTodo                         Todo
 hi def link rstComment                      Comment
-hi def link rstSections                     Typedef
+hi def link rstSections                     Label
 hi def link rstTransition                   Type
 hi def link rstLiteralBlock                 String
 hi def link rstLineBlock                    String

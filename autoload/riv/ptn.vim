@@ -138,6 +138,14 @@ fun! riv#ptn#init() "{{{
     " Section: "{{{3
     " Although most puncutation can be used, only use some of them.
     " the '::' and '..' are not considered as section punct
+    " XXX when :: match title , it's not literal_block, 
+    "     when it's not title, it became literal_block
+    "
+    "     As we don't include ':.' in default title puncutation, we set 
+    "     syntax to ignore it.
+    "     ../../after/syntax/rst.vim
+    "     ../../syntax/rst.vim
+    "
     let s:p.section = '\v^%(([=`''"~^_*+#-])\1+|([:.])\2{2,})\s*$'
 
 
