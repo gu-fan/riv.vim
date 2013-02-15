@@ -182,6 +182,7 @@ Things todo in this version.
 * 0.75:
 
   -  #21: Fix section syntax to ignore '::' and '..'.
+  -  #25: Fix tutor's document path.  
 
 Next
 ~~~~~

@@ -138,7 +138,7 @@ fun! s:table_in_range(bgn,end) "{{{
     let rows = []
     for i in range(a:bgn,a:end)
         let line = getline(i)
-        if line =~ s:p.table_line
+        if line =~ s:p.table_mline
             let cols = map(riv#ptn#match_obj_list(line, s:p.table_cell),'v:val.str')
             let c_len = len(cols)
             if max_col < c_len
@@ -177,16 +177,17 @@ fun! s:get_table.format_table() dict "{{{
     if empty(self.table) | return -1 | endif
 
     let lines = self.table.lines(self.indent)
+
     if empty(lines) | return -2 | endif
     let [bgn,end] = [self.bgn, self.end]
     let d_bgn = 0
 
     " only change the different lines for speed
-    for i in range(bgn,end)
-        if getline(i) != lines[0]
-            call setline(i, lines[0])
-        endif
+    for i in range(bgn, end)
         if !empty(lines)
+            if getline(i) != lines[0]
+                call setline(i, lines[0])
+            endif
             call remove(lines, 0)
         elseif getline(i) =~ s:p.table
             " no lines in new table , 
