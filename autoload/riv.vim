@@ -127,6 +127,7 @@ let s:default.options = {
     \'month_names'        : 'January,February,March,April,May,June,July,'
                           \.'August,September,October,November,December',
     \'python_rst_hl'      : 0,
+    \'default_path'         : '~/Documents/Riv',
     \'build_path'         : '_build',
     \'scratch_path'       : 'Scratch',
     \'source_suffix'      : '.rst',
@@ -209,7 +210,7 @@ fun! riv#load_conf() "{{{1
     
     " Project: "{{{
     let s:c.p_basic = {
-        \'path'               : '~/Documents/Riv' ,
+        \'path'               : g:riv_default_path ,
         \'build_path'         : g:riv_build_path ,
         \'scratch_path'       : g:riv_scratch_path ,
         \'source_suffix'      : g:riv_source_suffix ,

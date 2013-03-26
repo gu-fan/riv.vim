@@ -183,6 +183,7 @@ Things todo in this version.
 
   -  #21: Fix section syntax to ignore '::' and '..'.
   -  #25: Fix tutor's document path.  
+  -  #27: Add ``g:riv_default_path`` ('~/Documents/Riv')
 
 Next
 ~~~~~
