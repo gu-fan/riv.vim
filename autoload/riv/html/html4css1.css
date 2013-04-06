@@ -309,3 +309,24 @@ h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
 
 ul.auto-toc {
   list-style-type: none }
+
+.document {
+    width: 940px;
+    margin-right: auto;
+    margin-left: auto;
+
+}
+
+.title {
+    font-size: 42px;
+    font-weight: bold;
+}
+
+pre {
+    padding: 1em;
+}
+
+blockquote {
+    margin: 1em;
+}
+
