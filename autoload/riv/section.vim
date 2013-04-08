@@ -3,7 +3,7 @@
 "    File: section.vim
 " Summary: For creating sections
 "  Author: Rykka G.F
-"  Update: 2012-09-17
+"  Update: 2013-04-08
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -159,11 +159,13 @@ fun! riv#section#title(level,...) "{{{
     let lines = s:sect_lines(title, a:level)
     
     " cursor is now one line below the heading.
-    let row = line('.')
-    call append(row-1,lines)
+    " let row = line('.')
+    let row = row ==1 ? 1 : row - 1
+    call append(row-1, lines)
     
-    " in case if no preceding blank line
-    if !s:is_blank(getline(row-1)) && row != 1
+    " in case if no preceding blank line, We append an empty line to
+    " match the sectin syntax
+    if !s:is_blank(getline(row-1)) && row != 1 
         call append(row-1,'')
     endif
     
