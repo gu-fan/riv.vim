@@ -542,7 +542,7 @@ fun! riv#cmd#init_maps() "{{{
             endif
             if cmd.mode =~ 'v'
               " for the range function. only :call can be used.
-              exe "vma <silent><buffer>" key ":".cmd.act."<CR>" 
+              exe "vno <silent><buffer>" key ":".cmd.act."<CR>" 
             endif
           endfor
         else
@@ -559,7 +559,7 @@ fun! riv#cmd#init_maps() "{{{
             endif
             if cmd.mode =~ 'v'
               " for the range function. only :call can be used.
-              exe "vma <silent><buffer>" key ":".cmd.act."<CR>" 
+              exe "vno <silent><buffer>" key ":".cmd.act."<CR>" 
             endif
           endfor
           for key in cmd.keys
@@ -570,11 +570,11 @@ fun! riv#cmd#init_maps() "{{{
               exe "nma <silent><buffer>" key "<Plug>(".cmd.name .")"
             endif
             if cmd.keymode =~ 'i'
-              exe "ima <silent><buffer>" key "<C-O>:".cmd.act."<CR>"
+              exe "ino <silent><buffer>" key "<C-O>:".cmd.act."<CR>"
             endif
             if cmd.keymode =~ 'v'
               " for the range function. only :call can be used.
-              exe "vma <silent><buffer>" key ":".cmd.act."<CR>" 
+              exe "vno <silent><buffer>" key ":".cmd.act."<CR>" 
             endif
           endfor
         endif
