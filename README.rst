@@ -3,7 +3,7 @@ Riv: reStructuredText in Vim
 ############################
 
 :Author: Rykka G.F
-:Update: 2013-01-12
+:Update: 2013-04-12
 :Version: 0.75 
 :Github: https://github.com/Rykka/riv.vim
 
@@ -184,6 +184,8 @@ Things todo in this version.
   -  #21: Fix section syntax to ignore '::' and '..'.
   -  #25: Fix tutor's document path.  
   -  #27: Add ``g:riv_default_path`` ('~/Documents/Riv')
+  -  #29: noremap for commands.
+  -  For html filetype, copy image for 'image/figure' directives.
 
 Next
 ~~~~~

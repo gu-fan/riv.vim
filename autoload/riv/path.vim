@@ -83,7 +83,7 @@ fun! riv#path#rel_to(dir, path) "{{{
         let dot = substitute(f,'[^/]\+/','../','g')
         return dot.tail
     endif
-    return substitute(path, dir, '','')
+    return substitute(path, dir, '', '')
 endfun "}}}
 fun! riv#path#is_rel_to(dir, path) "{{{
     
@@ -129,6 +129,27 @@ endfun "}}}
 fun! riv#path#ext_tail(file, ft) "{{{
     return fnamemodify(a:file, ":t:r") . '.' . a:ft
 endfun "}}}
+
+fun! riv#path#join(a, ...)
+    " python2.7/posixpath.py
+    "
+    " Join two or more pathname componentes,
+    " inserting '/' as needed.
+    " If any component is an absolute path, all previous path components
+    " will be discarded.
+    "
+    let path = a:a
+    for b in a:000
+        if !riv#path#is_relative(b)
+            let path = b
+        elseif  path == '' ||  path =~ '/$'
+            let path .= b
+        else 
+            let path .= '/' . b
+        endif
+    endfor
+    return path
+endfun
 
 if expand('<sfile>:p') == expand('%:p') "{{{
     call riv#test#doctest('%','%',2)
