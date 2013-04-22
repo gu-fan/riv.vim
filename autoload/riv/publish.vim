@@ -118,13 +118,23 @@ fun! s:convert(options) "{{{
     " }
     
     let ft =   get(a:options, 'filetype', 'html')
+    let o_ft = ''
     let input = get(a:options, 'input', '')
     let output = get(a:options, 'output', '')
     let real_file = get(a:options, 'real_file', input)
     let style = ''
     let args = s:rst_args(ft) 
+    
+    " For PDF file , we should try rst2latex and rst2xetex.
+    if ft=='pdf'
+        let ft='latex'
+        let out_path = fnamemodify(output, ':p:h')
+        let file =  fnamemodify(output, ':p:t:r').'.latex'
+        let output = out_path.'/'.file
+        let o_ft = 'pdf'
+    endif
 
-    " try 2 first , for py3 version should decode to 'bytes'.
+
     let exe = 'rst2'.ft.'2.py'
     if !executable(exe)
         let exe = 'rst2'.ft.'.py'
@@ -138,6 +148,9 @@ fun! s:convert(options) "{{{
             endif
         endif
     endif
+    
+
+    " try 2 first , for py3 version should decode to 'bytes'.
     if ft == 'html' 
         if g:riv_html_code_hl_style =~ '^\(default\|emacs\|friendly\)$'
             let style = ' --stylesheet='.s:css_html.','
@@ -152,6 +165,10 @@ fun! s:convert(options) "{{{
     call s:sys( exe." ". style . args .' '
                 \.shellescape(input) 
                 \." > ".shellescape(output) )
+    if o_ft=='pdf'
+        call s:copy_img(input, output)
+        call s:sys( 'pdflatex -output-directory '.out_path.' '.shellescape(output) )
+    endif
 endfun "}}}
 
 fun! s:copy_img(input, output) "{{{

@@ -706,6 +706,7 @@ Convert rst files to html/xml/latex/odt/...
   + `:Riv2Xml`_ ``<C-E>2xx`` convert to xml file and browse by web browser
   + `:Riv2S5`_ ``<C-E>2ss`` convert to s5 file and browse by web browser
   + `:Riv2Latex`_ ``<C-E>2ll`` convert to latex file and edit in vim
+  + `:Riv2Pdf`_ ``<C-E>2pp`` convert to latex file and then convert to pdf file.
   
 * Options:
 
@@ -1433,6 +1434,10 @@ Commands
   - _`:Riv2Latex` : Convert to Latex
 
     **Normal** :	<C-E>2ll
+
+  - _`:Riv2Pdf` : Convert to Pdf
+
+    **Normal** :	<C-E>2pp
 
   - _`:Riv2BuildPath` : Show Build Path of the project
 

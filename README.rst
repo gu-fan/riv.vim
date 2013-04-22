@@ -53,7 +53,7 @@ Features
  :Lists:    Auto numbered, auto leveled and auto indented.
  :Links:    Jumping and Highlighting.
  :Table:    Auto formatted. 
- :Publish:  Convert to html/xml/latex/odt...
+ :Publish:  Convert to pdf/html/xml/latex/odt...
 
 **Document Managment**
 
