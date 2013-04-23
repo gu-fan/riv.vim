@@ -487,6 +487,11 @@ let g:riv_default.cmds = [
     \'menu': 'About.RST\ Specification',
     \'type': 'menu'
 \},
+\{'name': 'RivDirectives' , 'act': 'call riv#action#open("directives")',
+    \'note': 'Show RST Directives',
+    \'menu': 'About.RST\ Directives',
+    \'type': 'menu'
+\},
 \{'name': 'RivGetLatest',
   \'note': 'Show Get Latest Info',
   \'menu': 'About.Riv\ v'.escape(g:riv_default.version,'.'), 

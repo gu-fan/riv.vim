@@ -108,6 +108,8 @@ let s:css_default = g:_riv_c.riv_path.'html/default.css'
 let s:css_emacs = g:_riv_c.riv_path.'html/emacs.css'
 let s:css_friendly = g:_riv_c.riv_path.'html/friendly.css'
 let s:css_html = g:_riv_c.riv_path.'html/html4css1.css'
+let s:tex_default = g:_riv_c.riv_path.'latex/default.tex'
+let s:tex_cjk = g:_riv_c.riv_path.'latex/cjk.tex'
 
 fun! s:convert(options) "{{{
     " options {
@@ -129,7 +131,7 @@ fun! s:convert(options) "{{{
     if ft=='pdf'
         let ft='latex'
         let out_path = fnamemodify(output, ':p:h')
-        let file =  fnamemodify(output, ':p:t:r').'.latex'
+        let file =  fnamemodify(output, ':p:t:r').'.xetex'
         let o_file = output
         let output = out_path.'/'.file
         let o_ft = 'pdf'
@@ -162,15 +164,18 @@ fun! s:convert(options) "{{{
 
         " Copy the images for figure and image directives.
         call s:copy_img(real_file, output)
+    elseif ft == 'latex'
+        " let style = ' --stylesheet='.s:tex_cjk
+        call s:copy_img(input, output)
     endif
-    call s:sys( exe." ". style . args .' '
+    call s:sys( exe." ". style ." ". args ." "
                 \.shellescape(input) 
                 \." > ".shellescape(output) )
     if o_ft=='pdf'
-        call s:copy_img(input, output)
         " See :Man pdflatex for option details
         if executable('pdflatex')
             call s:sys( 'pdflatex -interaction batchmode -output-directory '.out_path.' '.shellescape(output) )
+            " call s:sys( 'xelatex '.shellescape(output) )
         else
             call riv#error('Could not find pdflatex. Please Install texlive package.')
             return -1
