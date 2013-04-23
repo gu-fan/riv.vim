@@ -3,7 +3,7 @@
 "    File: publish.vim
 " Summary: publish to html/pdf...
 "  Author: Rykka G.F
-"  Update: 2012-09-17
+"  Update: 2013-04-23
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -130,6 +130,7 @@ fun! s:convert(options) "{{{
         let ft='latex'
         let out_path = fnamemodify(output, ':p:h')
         let file =  fnamemodify(output, ':p:t:r').'.latex'
+        let o_file = output
         let output = out_path.'/'.file
         let o_ft = 'pdf'
     endif
@@ -167,7 +168,13 @@ fun! s:convert(options) "{{{
                 \." > ".shellescape(output) )
     if o_ft=='pdf'
         call s:copy_img(input, output)
-        call s:sys( 'pdflatex -output-directory '.out_path.' '.shellescape(output) )
+        " See :Man pdflatex for option details
+        if executable('pdflatex')
+            call s:sys( 'pdflatex -interaction batchmode -output-directory '.out_path.' '.shellescape(output) )
+        else
+            call riv#error('Could not find pdflatex. Please Install texlive package.')
+            return -1
+        endif
     endif
 endfun "}}}
 
