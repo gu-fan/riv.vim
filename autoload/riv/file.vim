@@ -37,7 +37,7 @@ fun! riv#file#syn_hi() "{{{
     hi link rivFile Function
     hi link rivType Include
 endfun "}}}
-"
+
 if has("signs") "{{{
     sign define riv_root text=RT texthl=Question
     sign define riv_indx text=IN texthl=Question
