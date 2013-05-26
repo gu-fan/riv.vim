@@ -329,7 +329,9 @@ fun! s:check(row) "{{{
     let line = b:lines[row]
 
     if has_key(b:riv_state, 's_chk')  
-        call s:s_checker(row)
+        if  s:s_checker(row)
+            return
+        endif
     endif
     
     if line=~'^\s*$' && row != line('$')
@@ -337,7 +339,9 @@ fun! s:check(row) "{{{
     endif
 
     if b:foldlevel > 2 && has_key(b:riv_state, 't_chk')
-        call s:t_checker(row)
+        if s:t_checker(row)
+            return
+        endif
     endif
 
     if b:foldlevel > 1 && !empty(b:riv_state.l_chk) && !has_key(b:riv_state, 'e_chk')
@@ -492,6 +496,7 @@ fun! s:l_checker(row) "{{{
     endwhile
 endfun "}}}
 fun! s:e_checker(row) "{{{
+    " check end
     if (  b:lines[a:row] =~ '^\S' )
         let b:riv_state.e_chk.end = a:row-1
         call add(b:riv_state.matcher,b:riv_state.e_chk)
@@ -503,6 +508,7 @@ fun! s:e_checker(row) "{{{
     endif
 endfun "}}}
 fun! s:b_checker(row) "{{{
+    " block
     if (  riv#fold#indent(b:lines[a:row]) <= b:riv_state.b_chk.indent )
         let b:riv_state.b_chk.end = a:row-1
         call add(b:riv_state.matcher, b:riv_state.b_chk)
@@ -514,6 +520,7 @@ fun! s:b_checker(row) "{{{
     endif
 endfun "}}}
 fun! s:lb_checker(row) "{{{
+    " line block
     if b:lines[a:row] !~ s:p.line_block && b:lines[a:row-1] =~ '^\s*$'
         let b:riv_state.lb_chk.end = a:row-1
         call add(b:riv_state.matcher, b:riv_state.lb_chk)
@@ -527,14 +534,17 @@ endfun "}}}
 fun! s:t_checker(row) "{{{
     if b:lines[a:row] =~ g:_riv_p.table_fence
         let b:riv_state.t_chk.row += 1
+        return 1
     elseif (b:lines[a:row] !~ s:p.table_line )
         let b:riv_state.t_chk.end = a:row-1
         call add(b:riv_state.matcher, b:riv_state.t_chk)
         call remove(b:riv_state, 't_chk')
+        return 0
     elseif a:row==line('$')
         let b:riv_state.t_chk.end = a:row
         call add(b:riv_state.matcher, b:riv_state.t_chk)
         call remove(b:riv_state, 't_chk')
+        return 0
     endif
 endfun "}}}
 fun! s:st_checker(row) "{{{

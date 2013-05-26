@@ -409,13 +409,19 @@ endfun "}}}
 fun! riv#todo#update() "{{{
     " update the todo cache with current file
     let file = expand('%:p')
+    " don't cache file in build path
     if riv#path#is_rel_to(riv#path#build_path(), file)
         return
     endif
+
     try
         let f = riv#path#rel_to_root(file)
         let lines = s:file2lines(getline(1,line('$')), f)
-        let cache = riv#path#root() .'.todo_cache'
+        let dir = riv#path#root()
+        let cache = dir .'.todo_cache'
+        if !isdirectory(dir)
+            call mkdir(dir,'p')
+        endif
     catch 
         return -1
     endtry
