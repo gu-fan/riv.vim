@@ -422,15 +422,16 @@ fun! riv#todo#update() "{{{
         if !isdirectory(dir)
             call mkdir(dir,'p')
         endif
+        if filereadable(cache)
+            let c_lines = filter(readfile(cache), ' v:val!~escape(f,''\'')')
+        else
+            let c_lines = []
+        endif
+        call writefile(c_lines+lines , cache)
     catch 
+        call riv#error("Update todo cache failed.")
         return -1
     endtry
-    if filereadable(cache)
-        let c_lines = filter(readfile(cache), ' v:val!~escape(f,''\'')')
-    else
-        let c_lines = []
-    endif
-    call writefile(c_lines+lines , cache)
 endfun "}}}
 
 fun! riv#todo#enter() "{{{
