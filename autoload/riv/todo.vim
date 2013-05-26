@@ -3,7 +3,7 @@
 "    File: todo.vim
 " Summary: todo items
 "  Author: Rykka G.Forest
-"  Update: 2012-07-07
+"  Update: 2013-05-26
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -429,7 +429,7 @@ fun! riv#todo#update() "{{{
         endif
         call writefile(c_lines+lines , cache)
     catch 
-        call riv#error("Update todo cache failed.")
+        call riv#warning("Update todo cache failed.")
         return -1
     endtry
 endfun "}}}
