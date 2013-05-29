@@ -409,6 +409,7 @@ endfun "}}}
 fun! riv#todo#update() "{{{
     " update the todo cache with current file
     let file = expand('%:p')
+    
     " don't cache file in build path
     if riv#path#is_rel_to(riv#path#build_path(), file)
         return
@@ -429,7 +430,7 @@ fun! riv#todo#update() "{{{
         endif
         call writefile(c_lines+lines , cache)
     catch 
-        call riv#warning("Update todo cache failed.")
+        call riv#degbug("Update todo cache failed:". v:exception)
         return -1
     endtry
 endfun "}}}
