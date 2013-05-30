@@ -430,7 +430,7 @@ fun! riv#todo#update() "{{{
         endif
         call writefile(c_lines+lines , cache)
     catch 
-        call riv#degbug("Update todo cache failed:". v:exception)
+        call riv#debug("Update todo cache failed:". v:exception)
         return -1
     endtry
 endfun "}}}
