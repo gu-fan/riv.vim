@@ -237,7 +237,7 @@ Table will be auto formatted when you leave insert mode.
 In Insert mode:
 
     +-----------------------------------------+
-    | Press ``<Enter>`` to creat a new line   |
+    | Press ``<Enter>`` to create a new line  |
     +-----------------------------------------+
     | Press ``<C-Enter>`` to create a new row |
     +-----------------------------------------+
@@ -301,23 +301,23 @@ Riv provide two styles::
     Sphinx style: :doc:`riv`
 
 by default the Moinmoin style are used, 
-And the links of this style will be converted.
+and the links of this style will be converted.
 
 If you are using Sphinx style. 
-You must converting it using Sphinx_ toolkit.
+You must convert it using Sphinx_ toolkit.
 
 Todo
 ----
 Things Todos
 
-**Creat todo item and toggle state**
+**Create todo item and toggle state**
 
 On List lines, Press ``:RivTodoToggle`` or ``<C-E>ee``,
 You can also click the todo items to toggle it's state.
 
     A. [ ] Press ``<C-E>ee`` to toggle the todo state.
 
-**Change Priorties**
+**Change Priorities**
 
 ``:RivTodoPrior`` or ``<C-E>ep``
 
