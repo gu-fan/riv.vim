@@ -289,7 +289,8 @@ fun! riv#publish#2(ft, file, path, browse) "{{{
         elseif a:ft == "odt"
             call s:sys(g:riv_ft_browser . ' '. file_path . ' &')
         else
-            call s:sys(g:riv_web_browser . ' '. file_path . ' &')
+            let escaped_path = substitute(file_path, ' ', '\\ ', 'g')
+            call s:sys(g:riv_web_browser . ' '. escaped_path . ' &')
         endif
     endif
 endfun "}}}
