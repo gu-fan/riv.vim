@@ -177,7 +177,7 @@ hi def link rstDelimiter                    Delimiter
 hi def      rstEmphasis                     term=italic cterm=italic gui=italic
 hi def link rstStrongEmphasis               Special
 "term=bold cterm=bold gui=bold
-hi def link rstInterpretedTextOrHyperlinkReference  Identifier
+hi def link rstInterpretedTextOrHyperlinkReference  Constant
 hi def link rstInlineLiteral                String
 hi def link rstSubstitutionReference        PreProc
 hi def link rstInlineInternalTargets        Identifier
