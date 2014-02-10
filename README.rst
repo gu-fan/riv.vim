@@ -2,6 +2,8 @@
 Riv: reStructuredText in Vim
 ############################
 
+**Your Personal Wiki in RST, And More**
+
 :Author: Rykka G.F
 :Update: 2014-02-10
 :Version: 0.75 
