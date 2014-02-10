@@ -3,7 +3,7 @@
 "    File: action.vim
 " Summary: simulate and fix some misc actions
 "  Author: Rykka G.Forest
-"  Update: 2012-07-07
+"  Update: 2014-02-10
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -116,7 +116,7 @@ fun! riv#action#ins_backspace() "{{{
     let [row,col] = getpos('.')[1:2]
     let line = getline('.')
     if s:is_in_bgn_blank(col, line)
-        let cmd = riv#insert#shiftleft(row,col)
+        let cmd = riv#insert#shiftleft_bs(row,col)
     else
         let cmd = ""
     endif

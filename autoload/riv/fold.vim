@@ -2,7 +2,7 @@
 "    Name: fold.vim
 "    File: fold.vim
 "  Author: Rykka G.F
-"  Update: 2012-07-07
+"  Update: 2014-02-10
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -311,6 +311,7 @@ fun! s:set_fdl_list() "{{{
             let end = prevnonblank(end) + 1
         endif
         let  b:riv_flist[bgn : bgn] = map(b:riv_flist[bgn : bgn],'">".fdl')
+        " if it's not a one line folding?
         if bgn+1 <= end
             let b:riv_flist[bgn+1 : end] = map(b:riv_flist[bgn+1 : end],'fdl')
         endif
