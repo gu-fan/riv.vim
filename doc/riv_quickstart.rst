@@ -228,7 +228,7 @@ Table
 
 **Create a Grid Table** 
 
-``:RivTableCreat`` or ``<C-E>tc``
+``:RivTableCreate`` or ``<C-E>tc``
 
 
 
