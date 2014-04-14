@@ -491,7 +491,9 @@ They are highlighted. Some are folded.
 
   + New List:
   
-    Insert Mode Only: 
+    Insert Mode Only. Note that some terminals pass ``<C-CR>`` and ``<S-CR>``
+    as different (or indistinguishable) mappings, so the alternative key mapping
+    should be used.
 
     - ``<CR>\<KEnter>`` (enter key and keypad enter key)
       Insert the content of this list.
@@ -499,13 +501,13 @@ They are highlighted. Some are folded.
       To insert content in new line of this list item. Add a blank line before it.
   
     - ``<C-CR>\<C-KEnter>`` 
-      or ``<C-E>li``
+      or ``<C-E>ln``
       Insert a new list of current list level
     - ``<S-CR>\<S-KEnter>`` 
-      or ``<C-E>lj``
+      or ``<C-E>lb``
       Insert a new list of current child list level
     - ``<C-S-CR>\<C-S-KEnter>`` 
-      or ``<C-E>lk``
+      or ``<C-E>lp``
       Insert a new list of current parent list level
     - When it's a field list, only the indent is inserted.
   
