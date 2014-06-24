@@ -5,9 +5,12 @@ Riv: reStructuredText in Vim
 **Your Personal Wiki in RST, And More**
 
 :Author: Rykka G.F
-:Update: 2014-02-10
+:Update: 2014-06-24
 :Version: 0.75 
 :Github: https://github.com/Rykka/riv.vim
+
+
+:NOTE: Currently in rebuilding process.
 
 * _`Index`:
 
