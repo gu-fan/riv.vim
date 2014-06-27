@@ -1,7 +1,7 @@
 " Vim syntax file
 " Language:         reStructuredText documentation format
 " Maintainer:       Nikolai Weibull <now@bitwi.se>
-" Latest Revision:  2012-10-09
+" Latest Revision:  2014-06-28
 
 if exists("b:current_syntax")
   finish
@@ -85,8 +85,10 @@ syn region rstHyperlinkTarget contained matchgroup=rstDirective
 syn region rstHyperlinkTarget matchgroup=rstDirective
       \ start=+^__\_s+ skip=+^$+ end=+^\s\@!+
 
+" To Fix #61 (https://github.com/Rykka/riv.vim/issues/61) , I removed the SubstitutionDefinition from 
+" ExDirective's inline hightlight group
 syn cluster rstONECruft                contains=
-      \ rstInterpretedText,rstInlineLiteral,rstSubstitutionReference,
+      \ rstInterpretedText,rstInlineLiteral,
       \ rstInlineInternalTargets,rstFootnoteReference,rstHyperlinkReference
 
 " For Strong/Emphasis. Only oneline pattern could be used here.
