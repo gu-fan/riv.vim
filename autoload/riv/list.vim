@@ -365,7 +365,7 @@ fun! s:nr2num(n,type) "{{{
 endfun "}}}
 fun! s:next_list_num(num,...) "{{{
     let is_roman = a:0 ? a:1 : 0
-    if a:num == ''
+    if a:num == '' || a:num == '#'
         return a:num
     elseif a:num =~ '\d\+'
         return a:num+1
