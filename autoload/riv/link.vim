@@ -3,7 +3,7 @@
 "    File: link.vim
 " Summary: link ref and targets.
 "  Author: Rykka G.F
-"  Update: 2012-09-13
+"  Update: 2014-07-11
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -26,6 +26,9 @@ fun! riv#link#finder(dir) "{{{
     if srow[0] != 0
         call setpos("'`",getpos('.'))
         call cursor(srow, scol)
+
+        " NOTE: Add it to jumplist
+        norm! m'
     endif
 endfun "}}}
 fun! s:normal_ptn(text) "{{{

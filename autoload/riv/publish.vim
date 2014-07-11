@@ -168,6 +168,7 @@ fun! s:convert(options) "{{{
         " let style = ' --stylesheet='.s:tex_cjk
         call s:copy_img(input, output)
     endif
+
     call s:sys( exe." ". style ." ". args ." "
                 \.shellescape(input) 
                 \." > ".shellescape(output) )

@@ -3,7 +3,7 @@
 "    File: riv.vim
 " Summary: Riv autoload main
 "  Author: Rykka G.F
-"  Update: 2012-10-05
+"  Update: 2014-07-11
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -124,6 +124,9 @@ let s:default.options = {
     \'i_tab_user_cmd'     : "",
     \'i_stab_user_cmd'    : "",
     \'ignored_imaps'      : "",
+    \'ignored_nmaps'      : "",
+    \'ignored_vmaps'      : "",
+    \'ignored_maps'       : "",
     \'month_names'        : 'January,February,March,April,May,June,July,'
                           \.'August,September,October,November,December',
     \'python_rst_hl'      : 0,
@@ -294,9 +297,14 @@ fun! riv#load_conf() "{{{1
         let s:c.i_stab_user_cmd = g:riv_i_stab_user_cmd
     endif
     
-    for key in split(g:riv_ignored_imaps,',')
-        call remove(g:riv_default.buf_imaps, key)
-    endfor
+    " This is Invalid Now!!
+    " for key in split(g:riv_ignored_imaps,',')
+    "     call (g:riv_default.buf_imaps, key)
+    " endfor
+    let g:riv_default.ignored_imaps = split(g:riv_ignored_imaps,',')
+    let g:riv_default.ignored_nmaps = split(g:riv_ignored_nmaps,',')
+    let g:riv_default.ignored_vmaps = split(g:riv_ignored_vmaps,',')
+    let g:riv_default.ignored_maps = split(g:riv_ignored_maps,',')
 
     if empty(g:riv_ft_browser) "{{{
         if has('win32') || has('win64')
