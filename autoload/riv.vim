@@ -353,10 +353,10 @@ endfun "}}}
 
 fun! riv#buf_load_aug() "{{{
     aug RIV_BUFFER "{{{
-        if exists("g:riv_auto_format_table") "{{{
+        if exists("g:riv_auto_format_table") && g:riv_auto_format_table == 1 "{{{
             au! InsertLeave <buffer> call riv#table#format_pos()
         endif "}}}
-        if exists("g:riv_link_cursor_hl") "{{{
+        if exists("g:riv_link_cursor_hl")  && g:riv_link_cursor_hl == 1 "{{{
             " cursor_link_highlight
             au! CursorMoved,CursorMovedI <buffer>  call riv#link#hi_hover()
             " clear the highlight before bufwin/winleave
