@@ -99,6 +99,7 @@ let s:default.options = {
     \'todo_default_group' : 0,
     \'todo_datestamp'     : 1,
     \'todo_keywords'      : "TODO,DONE;FIXME,FIXED;START,PROCESS,STOP",
+    \'disable_folding'    : 0,
     \'fold_blank'         : 2,
     \'fold_level'         : 3,
     \'fold_section_mark'  : ".",
@@ -379,8 +380,11 @@ fun! riv#buf_load_syn() "{{{
 endfun "}}}
 fun! riv#buf_init() "{{{
     " for the rst buffer
-    setl foldmethod=expr foldexpr=riv#fold#expr(v:lnum) 
-    setl foldtext=riv#fold#text()
+    if g:riv_disable_folding == 0
+        setl foldmethod=expr foldexpr=riv#fold#expr(v:lnum) 
+        setl foldtext=riv#fold#text()
+    endif
+
     setl comments=fb:.. commentstring=..\ %s 
     setl formatoptions+=tcroql expandtab
     let b:undo_ftplugin = "setl fdm< fde< fdt< com< cms< et< fo<"
