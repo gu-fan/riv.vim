@@ -18,7 +18,7 @@ like `vimwiki`, `vim-notes`, etc.
 
 The most advantage of `Riv` is it support reStructedText for your note.
 
-Which are used in many places like sphinx(readthedocs.org) and have many relevent plugins(pygments).
+Which are used in many places like Sphinx_ (www.readthedocs.org) and have many relevent plugins(Pygments_).
 
 
 * _`Index`:
