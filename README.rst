@@ -2,14 +2,11 @@
 Riv: reStructuredText in Vim
 ############################
 
-**Your Personal Wiki in RST, And More**
 
 :Author: Rykka G.F
 :Update: 2014-07-11
 :Version: 0.76 
 :Github: https://github.com/Rykka/riv.vim
-
-
 :NOTE: Currently in rebuilding process.
 
 Comparion
