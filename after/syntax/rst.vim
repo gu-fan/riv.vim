@@ -144,5 +144,6 @@ hi def link rstOptionList                   Statement
 hi def link rstBlockQuoteAttr               Exception
 hi def link rstCommentTitle                 SpecialComment
 
+
 let &cpo = s:cpo_save
 unlet s:cpo_save

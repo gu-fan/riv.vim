@@ -2,7 +2,7 @@
 "    Name: restin/insert.vim
 "    File: restin/insert.vim
 "  Author: Rykka G.Forest
-"  Update: 2014-02-10
+"  Update: 2014-07-11
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -99,6 +99,7 @@ fun! riv#insert#fixed_col(row,col,sft) "{{{
     " return with fix indentation with row col and direction
     " context is the item with smaller indentation (parent)
     " find all possible context of current row
+    
     if s:f_row == a:row && s:f_buf == bufnr('%')
         return riv#ptn#fix_sfts(a:col, s:f_cols, a:sft)
     endif
@@ -154,15 +155,20 @@ fun! riv#insert#shiftleft(row,col) "{{{
     endif
 endfun "}}}
 
-" NOTE: CHECK IF IT ACTS ALL RIGHT for backspace
-" but we should set the setting of 'bs'
 fun! riv#insert#shiftleft_bs(row,col) "{{{
     " shift in insert mode.
     " should in blank line.
     let sft = -&sw
     let fix_sft = riv#insert#fixed_sft(a:row,a:col,sft)
     if fix_sft != sft && fix_sft!=0
-        return repeat("\<BS>", abs(fix_sft))
+        " NOTE:
+        " As `<BS>` will delete all in list context.
+        " change it to `<Del>` and:
+        " set ww+=[,]
+        " set bs=indent,eol,start
+        "
+        " return repeat("\<BS>", abs(fix_sft))
+        return repeat("\<Left>\<Del>", abs(fix_sft))
     else
         return ""
     endif

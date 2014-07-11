@@ -115,7 +115,7 @@ endfun "}}}
 fun! riv#action#ins_backspace() "{{{
     let [row,col] = getpos('.')[1:2]
     let line = getline('.')
-    if s:is_in_bgn_blank(col, line)
+    if s:is_row_bgns_blank(col, line)
         let cmd = riv#insert#shiftleft_bs(row,col)
     else
         let cmd = ""
@@ -127,7 +127,7 @@ fun! riv#action#ins_backspace2() "{{{
     " The
     let [row,col] = getpos('.')[1:2]
     let line = getline('.')
-    if s:is_in_bgn_blank(col, line)
+    if s:is_row_bgns_blank(col, line)
         let cmd = riv#insert#shiftleft(row,col)
     else
         let cmd = ""
@@ -141,7 +141,7 @@ fun! s:is_in_list_item(col,line) "{{{
     " it's the col before last space in list-item
     return a:col <= matchend(a:line, s:p.all_list)
 endfun "}}}
-fun! s:is_in_bgn_blank(col,line) "{{{
+fun! s:is_row_bgns_blank(col,line) "{{{
     " it's the col include last space in a line
     return a:col <= matchend(a:line, '^\s*') + 1
 endfun "}}}
@@ -169,7 +169,7 @@ fun! riv#action#ins_tab() "{{{
     elseif s:is_in_list_item(col, line)
         " before the list item, shift the list
         return "\<C-O>:call riv#list#shift('+')\<CR>"
-    elseif s:is_in_bgn_blank(col, line)
+    elseif s:is_row_bgns_blank(col, line)
         let cmd = riv#insert#shiftright(row,col)
     else
         let cmd = ''
@@ -198,7 +198,7 @@ fun! riv#action#ins_stab() "{{{
     elseif s:is_in_list_item(col, line)
         " before the list item, shift the list
         return "\<C-O>:call riv#list#shift('-')\<CR>"
-    elseif s:is_in_bgn_blank(col, line)
+    elseif s:is_row_bgns_blank(col, line)
         let cmd = riv#insert#shiftleft(row,col)
     else
         let cmd = '' 
