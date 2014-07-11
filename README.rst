@@ -1,22 +1,18 @@
-############################
-Riv: reStructuredText in Vim
-############################
+#######################
+Riv: Take Notes in rst
+#######################
 
-
-:Author: Rykka G.F
 :Update: 2014-07-11
 :Version: 0.76 
-:Github: https://github.com/Rykka/riv.vim
-:NOTE: Currently in rebuilding process.
 
 Comparion
 =========
 
-There are some other note in vim. (you can use org-mode if with Emacs)
+There are some other note plugins in vim. (Also you can use org-mode if with Emacs)
 
 like `vimwiki`, `vim-notes`, etc.
 
-The most advantage of `Riv` is it support reStructedText for your note.
+In comparition, the most advantage of `Riv` is it support reStructedText for your note.
 
 Which are used in many places like Sphinx_ (www.readthedocs.org) and have many relevent plugins(Pygments_).
 
