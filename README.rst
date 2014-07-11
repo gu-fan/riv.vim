@@ -5,12 +5,24 @@ Riv: reStructuredText in Vim
 **Your Personal Wiki in RST, And More**
 
 :Author: Rykka G.F
-:Update: 2014-06-24
-:Version: 0.75 
+:Update: 2014-07-11
+:Version: 0.76 
 :Github: https://github.com/Rykka/riv.vim
 
 
 :NOTE: Currently in rebuilding process.
+
+Comparion
+=========
+
+There are some other note in vim. (you can use org-mode if with Emacs)
+
+like `vimwiki`, `vim-notes`, etc.
+
+The most advantage of `Riv` is it support reStructedText for your note.
+
+Which are used in many places like sphinx(readthedocs.org) and have many relevent plugins(pygments).
+
 
 * _`Index`:
 
@@ -44,6 +56,10 @@ Riv will help you in the following ways:
 * Easier management of documents through "Project", "File" and "Sphinx_"
   support.
 * Enable you to document things using the "Todo" and "Scratch" features.
+
+
+
+
 
 Features
 ========
