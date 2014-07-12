@@ -2,6 +2,10 @@
 Riv: Take Notes in rst
 #######################
 
+    The Internet is just a world passing around notes in a classroom.
+
+    -- `Jon Stewart`_
+
 :Last Update: 2014-07-12
 :Version: 0.76 
 
@@ -9,9 +13,6 @@ Riv: Take Notes in rst
 Intro
 =====
 
-    The Internet is just a world passing around notes in a classroom.
-
-    -- `Jon Stewart`_
 
 **Riv** is short for 'reStructuredText in Vim'.
 
