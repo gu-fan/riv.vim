@@ -93,9 +93,12 @@ Related tools
 Tutorials
 =========
 
-Screencast: 
+You can start with `:RivQuickStart`.
+
+Here is the Screencast: 
 
 * Riv: QuickStart_ (HD)
+
 
 Vim newbie
 ----------
