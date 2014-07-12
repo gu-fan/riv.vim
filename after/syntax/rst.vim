@@ -3,7 +3,7 @@
 "    File: after/syntax/rst.vim
 "  Author: Rykka G.F
 " Summary: syntax file with options.
-"  Update: 2014-06-28
+"  Update: 2014-07-12
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -68,27 +68,41 @@ exe 'syn cluster rstDirectives add=rstDirective_code'
 for code in g:_riv_t.highlight_code
     " for performance , use $VIMRUNTIME and first in &rtp
     let path = join([$VIMRUNTIME, split(&rtp,',')[0]],',')
-    let paths = split(globpath(path, "syntax/".code.".vim"), '\n')
+
+    " NOTE: As pygments are using differnet syntax name versus vim.
+    " The highlight_code will contain a name pair, which is pygments|vim
+    
+    if code =~ '[^|]\+|[^|]\+'
+        let [pcode, vcode] = split(code, '|')
+    else
+        let [pcode, vcode] = [code, code]
+    endif
+    
+    " NOTE: the syntax_group_name must be words only.
+    let scode = substitute(pcode, '[^0-9a-zA-Z]', 'x','g')
+
+    let paths = split(globpath(path, "syntax/".vcode.".vim"), '\n')
+   
     if !empty(paths)
-        let s:{code}path= fnameescape(paths[0])
-        if filereadable(s:{code}path)
+        let s:{vcode}path= fnameescape(paths[0])
+        if filereadable(s:{vcode}path)
             unlet! b:current_syntax
-            exe "syn include @rst_".code." ".s:{code}path
-            exe 'syn region rstDirective_'.code.' matchgroup=rstDirective fold '
-                \.'start=#\%(sourcecode\|code\%(-block\)\=\)::\s\+'.code.'\s*$# '
+            exe "syn include @rst_".scode." ".s:{vcode}path
+            exe 'syn region rstDirective_'.scode.' matchgroup=rstDirective fold '
+                \.'start=#\%(sourcecode\|code\%(-block\)\=\)::\s\+'.pcode.'\s*$# '
                 \.'skip=#^$# '
-                \.'end=#^\s\@!# contains=@NoSpell,rstCodeBlockIndicator,@rst_'.code
-            exe 'syn cluster rstDirectives add=rstDirective_'.code
+                \.'end=#^\s\@!# contains=@NoSpell,rstCodeBlockIndicator,@rst_'.scode
+            exe 'syn cluster rstDirectives add=rstDirective_'.scode
 
             " For sphinx , the highlight directive can be used for highlighting
             " code block
-            exe 'syn region rstDirective_hl_'.code.' matchgroup=rstDirective fold '
-                \.'start=#highlights::\s\+'.code.'\_s*# '
+            exe 'syn region rstDirective_hl_'.scode.' matchgroup=rstDirective fold '
+                \.'start=#highlights::\s\+'.pcode.'\_s*# '
                 \.'skip=#^$# '
-                \.'end=#\_^\(..\shighlights::\)\@=# contains=@NoSpell,@rst_'.code
-            exe 'syn cluster rstDirectives add=rstDirective_hl_'.code
+                \.'end=#\_^\(..\shighlights::\)\@=# contains=@NoSpell,@rst_'.scode
+            exe 'syn cluster rstDirectives add=rstDirective_hl_'.scode
         endif
-        unlet s:{code}path
+        unlet s:{vcode}path
     endif
 endfor
 let b:current_syntax = "rst"

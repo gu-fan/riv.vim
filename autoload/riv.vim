@@ -3,7 +3,7 @@
 "    File: riv.vim
 " Summary: Riv autoload main
 "  Author: Rykka G.F
-"  Update: 2014-07-11
+"  Update: 2014-07-12
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -274,7 +274,7 @@ fun! riv#load_conf() "{{{1
     let s:t.time_fmt  = "%Y-%m-%d"
     let s:t.sect_punc = '!"#$%&''()*+,-./:;<=>?@[\]^_`{|}~'
     let s:t.list_lvs  =  ["*","+","-"]
-    let s:t.highlight_code = riv#ptn#norm_list(split(g:riv_highlight_code,','))
+    let s:t.highlight_code = split(g:riv_highlight_code,',')
     let s:t.month_names = split(g:riv_month_names,',')
     
     let s:c.sect_lvs = split(g:riv_section_levels,'\zs')
