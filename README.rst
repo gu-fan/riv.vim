@@ -93,7 +93,7 @@ Related tools
 Tutorials
 =========
 
-You can start with `:RivQuickStart`.
+You can start with ``:RivQuickStart``.
 
 Here is the Screencast: 
 
