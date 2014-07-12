@@ -40,27 +40,17 @@ Features
  
 
 **Wiki**  
-    Write rst document as a wiki with project and local file support.
+    Write rst document as a wiki with project and local file support. Also **TODO** syntax is added.
+**Editing**   
+    Faster typing, easier navigation, clear intending, auto formatting lists/tables etc.
 **Syntax** 
     Improved syntax highlighting with the original one.
 **Folding** 
     Improved folding support, which helps overview the structure of a document.
-**Insert**   
-    Faster insertion of text, as well as easier navigation and intending.
 **Publish** 
     Convert rst files to a number of different formats such as pdf, html, xml, latex, odt etc.
-
-**Lists** 
-   Auto numbered, leveled and auto indented lists.
-**Links**    
-   Highlighted links, jump to link targets, create links.
-**Table**   
-    Auto formatting of tables.
-
 **Sphinx**   
     Sphinx_ syntax support.
-**Todos**    
-    Maintain Todo lists.
 
 
 
