@@ -25,34 +25,6 @@ And reStructuredText's syntax are markdown_ alike, but are more powerful and ext
 
 It's used in many places like Sphinx_ (www.readthedocs.org) and have many relevent plugins(Pygments_, Nikola_).
 
-_`Index`
-========
-
-* Contents:
-
-  + 1 `Riv: Take Notes in rst`_
-
-    + 1.1 Comparion_
-    + 1.2 `Index`_
-    + 1.3 Intro_
-    + 1.4 Features_
-    + 1.5 Installation_
-
-      + 1.5.1 `Using Vundle`_
-      + 1.5.2 `Using downloaded zip/tar.gz file`_
-      + 1.5.3 `Related tools`_
-
-    + 1.6 Tutorials_
-
-      + 1.6.1 Vim_
-      + 1.6.2 reST_
-      + 1.6.3 Riv_
-
-    + 1.7 Issues_
-
-      + 1.7.1 `Common Issues`_
-
-
 Intro
 =====
 
@@ -92,21 +64,18 @@ Features
 Installation
 ============
 
-Using Vundle
-------------
+Using Vundle_
+-------------
 
-This is the recommended method to install Riv. Using Vundle_ you can update to
-the latest Git version of Riv easily.
-
-To manage Riv using Vundle, simply add this line to your .vimrc (after you
-have properly set up Vundle)::
+Recommended, Add this line to your .vimrc (after you
+have properly set up Vundle_)::
  
     Bundle 'Rykka/riv.vim'
 
-Using downloaded zip/tar.gz file
----------------------------------
+Downloaded zip/tar.gz file
+--------------------------
 
-Just extract the contents of the archive to your ``.vim`` directory.
+Extract the contents of the archive to your ``.vim`` directory.
 
 :NOTE: Make sure that your .vim directory is placed before $VIMRUNTIME in the 
        ``runtimepath`` option of your .vimrc, otherwise Vim's built-in 
@@ -140,16 +109,16 @@ Screencast:
 
 * Riv: QuickStart_ (HD)
 
-Vim
----
+Vim newbie
+----------
 
 * If you are new to Vim, you can get a basic overview of Vim using
   ``vimtutor``. To use it simply type ``vimtutor`` in your shell.
   
 * To view the quick reference of Vim, use ``:h quickref``.
 
-reST
-----
+reST newbie
+-----------
 
 * To get a quick overview of reStructuredText, some of the available options
   are:
@@ -172,7 +141,6 @@ Riv
 
 * Detailed instructions for Riv are available at "`Instructions`_". Use
   ``:RivInstruction`` to read the same in Vim.
-
 
 Issues
 ======
