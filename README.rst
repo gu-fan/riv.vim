@@ -68,21 +68,18 @@ Downloaded zip/tar.gz file
 
 Extract the contents of the archive to your ``.vim`` directory.
 
-:NOTE: Make sure that your .vim directory is placed before $VIMRUNTIME in the 
-       ``runtimepath`` option of your .vimrc, otherwise Vim's built-in 
-       syntax/indent files will override the ones provided by Riv
-       (for rst files).
+NOTE
+----
 
-       By default it *is* present before $VIMRUNTIME.
+Make sure that your .vim directory is placed before $VIMRUNTIME in the 
+``runtimepath`` option of your .vimrc, otherwise Vim's built-in 
+syntax/indent files will override the ones provided by Riv
+(for rst files).
 
-:NOTE: Make sure the ``filetype plugin indent on`` and ``syntax on`` options
-       are present in your .vimrc.
+By default it *is* present before $VIMRUNTIME.
 
-:NOTE: Riv is under active development, so things may change quickly. 
-
-       You are advised to keep up-to-date.
-
-       You can get the latest version at https://github.com/Rykka/riv.vim 
+Also Make sure the ``filetype plugin indent on`` and ``syntax on`` options
+are present in your .vimrc.
 
 Related tools
 -------------
