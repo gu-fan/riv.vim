@@ -140,7 +140,7 @@ The bug tracker for Riv is at https://github.com/Rykka/riv.vim/issues.
 You can use it to report bugs and open feature requests. Discussions related
 to Riv are welcome too. 
 
-You can follow my twitter @rykkaf_ and notice me there too.
+You can follow my twitter `@rykkaf`_ and notice me there too.
 
 Common Issues
 -------------
@@ -193,4 +193,4 @@ Common Issues
 .. _Jon Stewart: http://en.wikipedia.org/wiki/Jon_Stewart 
 .. _Nikola: https://github.com/getnikola/nikola
 
-.. _@rykkaf: https://twitter.com/rykkaf
+.. _`@rykkaf`: https://twitter.com/rykkaf
