@@ -9,16 +9,17 @@ Riv: Take Notes in rst
 Intro
 =====
 
+    The Internet is just a world passing around notes in a classroom.
+
+    -- `Jon Stewart`_
+
 **Riv** is short for 'reStructuredText in Vim'.
 
-It is a vim plugin for writing notes/wiki with reStructuredText_.
+It is a vim plugin for writing notes with reStructuredText_.
 
 Comparion
 =========
 
-    The Internet is just a world passing around notes in a classroom.
-
-    -- `Jon Stewart`_
 
 First things first, Why using this plugin?
 
