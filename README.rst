@@ -2,7 +2,7 @@
 Riv: Take Notes in rst
 #######################
 
-:Update: 2014-07-11
+:Last Update: 2014-07-12
 :Version: 0.76 
 
 Comparion
@@ -10,14 +10,18 @@ Comparion
 
 There are some other note plugins in vim. (Also you can use org-mode if with Emacs)
 
-like `vimwiki`, `vim-notes`, etc.
+like vimwiki_, vim-notes_, etc.
 
-In comparition, the most advantage of `Riv` is it support reStructedText for your note.
+In comparition, the most advantage of **Riv** is it support reStructedText for your note.
 
-Which are used in many places like Sphinx_ (www.readthedocs.org) and have many relevent plugins(Pygments_).
+And reStructedText's syntax are markdown alike, but are more powerful, like table, LaTex, ect.
+(This post have a comparions between them https://gist.github.com/dupuy/1855764)
 
+It's used in many places like Sphinx_ (www.readthedocs.org) and have many relevent plugins(Pygments_).
 
-* _`Index`:
+_`Index`:
+=========
+
 
   * 1 Intro_: Basic introduction
   * 2 Features_: Implemented features
@@ -275,3 +279,6 @@ contribution:
 .. _riv_todo: https://github.com/Rykka/riv.vim/blob/master/doc/riv_todo.rst
 .. _reStructuredText Specification: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html
 .. _reStructuredText cheatsheet: http://docutils.sourceforge.net/docs/user/rst/cheatsheet.txt
+
+.. _vimwiki: https://github.com/vimwiki/vimwiki 
+.. _vim-notes: https://github.com/xolox/vim-notes 
