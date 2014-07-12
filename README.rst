@@ -43,10 +43,8 @@ Features
     Write rst document as a wiki with project and local file support. Also **TODO** syntax is added.
 **Editing**   
     Faster typing, easier navigation, clear intending, auto formatting lists/tables etc.
-**Syntax** 
-    Improved syntax highlighting with the original one.
-**Folding** 
-    Improved folding support, which helps overview the structure of a document.
+**Reading** 
+    Improved syntax highlighting and folding support for you to read document in vim more clearly.
 **Publish** 
     Convert rst files to a number of different formats such as pdf, html, xml, latex, odt etc.
 **Sphinx**   
