@@ -3,7 +3,7 @@ Riv: Instrucion
 ###############
 
 :Author: Rykka G.F
-:Update: 2012-10-16
+:Update: 2014-07-12
 :Version: 0.73 
 :Github: https://github.com/Rykka/riv.vim
 
@@ -1597,12 +1597,20 @@ Options
 |                                            |                                                        |
 |                                            |     :download:`xxx.py` => xxx.py                       |
 +--------------------------------------------+--------------------------------------------------------+
-| Syntax_                                    |                                                        |
-+--------------------------------------------+--------------------------------------------------------+
-| _`g:riv_highlight_code`                    | The language name                                      |
-|                                            |                                                        |
-|                                            |                                                        |
-| 'lua,python,cpp,javascript,vim,sh'         | is the syntax name used by vim.                        |
+
++------------------------------------+-------------------------------------------------+
+| Syntax_                            |                                                 |
++------------------------------------+-------------------------------------------------+
+| _`g:riv_highlight_code`            | The language name                               |
+|                                    |                                                 |
+| 'lua,python,cpp,javascript,vim,sh' | is the syntax name used by vim.                 |
+|                                    |                                                 |
+|                                    | For some syntax have different name in pygments |
+|                                    | and vim,  you can use `|` to seperate it.       |
+|                                    |                                                 |
+|                                    | e.g: pygments_code_name|vim_code_name           |
++------------------------------------+-------------------------------------------------+
+
 +--------------------------------------------+--------------------------------------------------------+
 | _`g:riv_code_indicator`                    | Highlight the first column of code directives.         |
 |                                            |                                                        |
@@ -1643,6 +1651,11 @@ Options
 |                                            | Each keyword is separated by ','.                      |
 +--------------------------------------------+--------------------------------------------------------+
 |  Folding_                                  |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_disable_folding`                   | Disable Folding or not                                 |
+|                                            |                                                        |
+| 0                                          | - 0: Enable it.                                        |
+|                                            | - 1: Disable it.                                       |
 +--------------------------------------------+--------------------------------------------------------+
 | _`g:riv_fold_blank`                        | Folding blank lines in the end of the folding lines.   |
 |                                            |                                                        |
@@ -1745,6 +1758,14 @@ Options
 | _`g:riv_ignored_imaps`                     | Use to disable mapping in insert mode.                 |
 |                                            |                                                        |
 | ''                                         | ``let g:riv_ignored_imaps = "<Tab>,<S-Tab>"``          |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_ignored_nmaps`                     | Use to disable mapping in normal mode.                 |
+|                                            |                                                        |
+| ''                                         | ``let g:riv_ignored_nmaps = "<Tab>,<S-Tab>"``          |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_ignored_vmaps`                     | Use to disable mapping in visual mode.                 |
+|                                            |                                                        |
+| ''                                         | ``let g:riv_ignored_vmaps = "<Tab>,<S-Tab>"``          |
 +--------------------------------------------+--------------------------------------------------------+
 | **Miscs**                                  |                                                        |
 +--------------------------------------------+--------------------------------------------------------+
