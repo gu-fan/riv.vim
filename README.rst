@@ -148,6 +148,8 @@ Common Issues
 * If you get errors with folding in documents, you can try to force reload
   using ``:RivTestReload`` or ``<C-E>t```.
 
+  Or just `:w` as it will auto refolding after saving.
+
 * Windows:
   
   - Converting to other formats may fail. 
@@ -193,4 +195,5 @@ Common Issues
 .. _Jon Stewart: http://en.wikipedia.org/wiki/Jon_Stewart 
 .. _Nikola: https://github.com/getnikola/nikola
 
+You can start with `:RivQuickStart`.
 .. _`@rykkaf`: https://twitter.com/rykkaf
