@@ -5,6 +5,14 @@ Riv: Take Notes in rst
 :Last Update: 2014-07-12
 :Version: 0.76 
 
+
+Intro
+=====
+
+**Riv** is short for 'reStructuredText in Vim'.
+
+It is a vim plugin for writing notes/wiki with reStructuredText_.
+
 Comparion
 =========
 
@@ -24,13 +32,6 @@ And reStructuredText's syntax are markdown_ alike, but are more powerful and ext
 (This post have a comparions between them https://gist.github.com/dupuy/1855764)
 
 It's used in many places like Sphinx_ (www.readthedocs.org) and have many relevent plugins(Pygments_, Nikola_).
-
-Intro
-=====
-
-**Riv** is short for 'reStructuredText in Vim'.
-
-It is a vim plugin for writing notes/wiki with reStructuredText_.
 
 Features
 ========
@@ -149,6 +150,8 @@ The bug tracker for Riv is at https://github.com/Rykka/riv.vim/issues.
 You can use it to report bugs and open feature requests. Discussions related
 to Riv are welcome too. 
 
+You can follow my twitter @rykkaf_ and notice me there too.
+
 Common Issues
 -------------
 
@@ -199,3 +202,5 @@ Common Issues
 
 .. _Jon Stewart: http://en.wikipedia.org/wiki/Jon_Stewart 
 .. _Nikola: https://github.com/getnikola/nikola
+
+.. _@rykkaf: https://twitter.com/rykkaf
