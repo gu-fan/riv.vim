@@ -8,29 +8,50 @@ Riv: Take Notes in rst
 Comparion
 =========
 
-There are some other note plugins in vim. (Also you can use org-mode if with Emacs)
+    The Internet is just a world passing around notes in a classroom.
+
+    -- `Jon Stewart`_
+
+First things first, Why using this plugin?
+
+There are some other note plugins in vim. (Also org-mode_ if you are a Emacs fan)
 
 like vimwiki_, vim-notes_, etc.
 
-In comparition, the most advantage of **Riv** is it support reStructedText for your note.
+In comparition, the most advantage of **Riv.vim** is it support reStructuredText_ for your note.
 
-And reStructedText's syntax are markdown alike, but are more powerful, like table, LaTex, ect.
+And reStructuredText's syntax are markdown_ alike, but are more powerful and extensible, support like table, LaTex, ect.
 (This post have a comparions between them https://gist.github.com/dupuy/1855764)
 
-It's used in many places like Sphinx_ (www.readthedocs.org) and have many relevent plugins(Pygments_).
+It's used in many places like Sphinx_ (www.readthedocs.org) and have many relevent plugins(Pygments_, Nikola_).
 
-_`Index`:
-=========
+_`Index`
+========
 
+* Contents:
 
-  * 1 Intro_: Basic introduction
-  * 2 Features_: Implemented features
-  * 3 `Riv in Action`_: Screenshots and screencasts
-  * 4 Installation_: Installing Riv
-  * 5 Tutorials_: Tutorials for Riv, Vim, as well as reStructuredText.
-  * 6 `Todo and Changelog`_: Things to do and things already done.
-  * 7 Issues_: Known issues
-  * 8 Contributing_: Help improving
+  + 1 `Riv: Take Notes in rst`_
+
+    + 1.1 Comparion_
+    + 1.2 `Index`_
+    + 1.3 Intro_
+    + 1.4 Features_
+    + 1.5 Installation_
+
+      + 1.5.1 `Using Vundle`_
+      + 1.5.2 `Using downloaded zip/tar.gz file`_
+      + 1.5.3 `Related tools`_
+
+    + 1.6 Tutorials_
+
+      + 1.6.1 Vim_
+      + 1.6.2 reST_
+      + 1.6.3 Riv_
+
+    + 1.7 Issues_
+
+      + 1.7.1 `Common Issues`_
+
 
 Intro
 =====
@@ -61,50 +82,31 @@ Riv will help you in the following ways:
 Features
 ========
  
-Reading and Writing
--------------------
 
-**Vim Improved ;-)**
+**Wiki**  
+    Write rst document as a wiki with project and local file support.
+**Syntax** 
+    Improved syntax highlighting with the original one.
+**Folding** 
+    Improved folding support, which helps overview the structure of a document.
+**Insert**   
+    Faster insertion of text, as well as easier navigation and intending.
+**Publish** 
+    Convert rst files to a number of different formats such as pdf, html, xml, latex, odt etc.
 
-:**Folding**:     Improved folding support, which helps overview the structure
-                  of a document.
-:**Syntax**:      Extra syntax highlighting.
-:**Indent**:      Smarter indentation.
-:**Insert**:      Faster insertion of text, as well as easier navigation.
+**Lists** 
+   Auto numbered, leveled and auto indented lists.
+**Links**    
+   Highlighted links, jump to link targets, create links.
+**Table**   
+    Auto formatting of tables.
 
-**reST Documents**
+**Sphinx**   
+    Sphinx_ syntax support.
+**Todos**    
+    Maintain Todo lists.
 
-:Sections: Easily create section titles. Sections are folded by default.
-:Lists:    Auto numbered, auto leveled and auto indented.
-:Links:    Highlight links, jump to link targets, create links.
-:Table:    Auto formatting of tables, as well as commands to create tables.
-:Publish:  Convert rst files to a number of different formats such as
-           pdf, html, xml, latex, odt etc.
 
-Document Managment
-------------------
-
-:Sphinx:   Support for Sphinx.
-:Project:  You can group related documents under a central location called a 
-           project. Projects allow you to perform actions on all the
-           member files at the same time.
-:File:     Link support for local files in the document.
-:Scratch:  Write notes and diaries.
-:Todos:    Maintain Todo lists.
-:Helpers:  Help work with documents and projects.
-
-Riv in Action
-=============
-
-Screenshot: 
-
-* Working with Sphinx
-
-.. image:: http://i.minus.com/ibnVOcyyNVfO8U.png
-
-Screencast: 
-
-* Riv: QuickStart_ (HD)
 
 Installation
 ============
@@ -148,9 +150,14 @@ Related tools
 + Python: Pygments_, provides syntax highlighting for other formats.
 + Python: Sphinx_ for Sphinx users.
 + Vim: Syntastic_ for syntax checking. Requires Docutils_.
++ Python: Nikola_ for static blogging with rst syntax.
 
 Tutorials
 =========
+
+Screencast: 
+
+* Riv: QuickStart_ (HD)
 
 Vim
 ---
@@ -185,31 +192,6 @@ Riv
 * Detailed instructions for Riv are available at "`Instructions`_". Use
   ``:RivInstruction`` to read the same in Vim.
 
-Todo and Changelog
-==================
-
-Current Version
----------------
-
-Things that need to be done in the following version.
-
-* **0.75:**
-
-  -  #21: Fix section syntax to ignore ``::`` and ``..``.
-  -  #25: Fix tutor's document path.  
-  -  #27: Add ``g:riv_default_path`` ('~/Documents/Riv')
-  -  #29: noremap for commands.
-  -  For html filetype, copy image for 'image/figure' directives.
-
-Future Versions
----------------
-
-See riv_todo_ (doc/riv_todo.rst)
-
-Changelog
----------
-
-See riv_log_ (doc/riv_log.rst)
 
 Issues
 ======
@@ -238,28 +220,6 @@ Common Issues
     This could happen if the ``<C-Enter>`` key could not be mapped. Try some
     other mapping instead.
 
-Contributing
-============
-
-This project aims to provide better support for working with reStructuredText
-in Vim.
-
-And there are many things that need to be done.
-
-If you are willing to help improve this project, the following areas need 
-contribution:
-
-:Documentation:
-               1. Rewrite and merge the quickstart and intro, which could be
-                  used in Vim.
-               2. A screencast for the quickstart.
-
-:Code:
-        1. Support auto formatting for table with column/row span. 
-
-           The code of ``PATH-TO-Docutils/parsers/rst/tableparser`` 
-           can be referenced.
-        2. Support for more plugins of reStructuredText_.
 
 
 .. _Vim text editor: http://www.vim.org/
@@ -282,3 +242,11 @@ contribution:
 
 .. _vimwiki: https://github.com/vimwiki/vimwiki 
 .. _vim-notes: https://github.com/xolox/vim-notes 
+
+.. _markdown: http://daringfireball.net/projects/markdown/
+
+.. _org-mode: http://orgmode.org/
+
+
+.. _Jon Stewart: http://en.wikipedia.org/wiki/Jon_Stewart 
+.. _Nikola: https://github.com/getnikola/nikola
