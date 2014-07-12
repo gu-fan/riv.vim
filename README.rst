@@ -58,26 +58,7 @@ Intro
 
 **Riv** is short for 'reStructuredText in Vim'.
 
-It is a plugin for the `Vim text editor`_, which aims to provide better support
-for reStructuredText_  (a simple and powerful plain text markup) in Vim.
-
-In Short, It can be your Personal Wiki,
-Also can be your Document Writer,
-Even with your code doc writer. 
-
-Riv will help you in the following ways:
-
-* Make the documents clearer to read and easier to navigate using folding,
-  linking and providing extra syntax highlighting.
-* Enable you to write documents faster through improved indentation and
-  inserting.
-* Easier management of documents through "Project", "File" and "Sphinx_"
-  support.
-* Enable you to document things using the "Todo" and "Scratch" features.
-
-
-
-
+It is a vim plugin for writing notes/wiki with reStructuredText_.
 
 Features
 ========
