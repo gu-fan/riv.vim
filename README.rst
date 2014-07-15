@@ -68,17 +68,20 @@ Downloaded zip/tar.gz file
 
 Extract the contents of the archive to your ``.vim`` directory.
 
-NOTE
-----
+Config
+------
 
-Make sure that your .vim directory is placed before $VIMRUNTIME in the 
-``runtimepath`` option of your .vimrc, otherwise Vim's built-in 
-syntax/indent files will override the ones provided by Riv
-(for rst files).
+You can add projects with ``g:riv_projects``::
 
-By default it *is* present before $VIMRUNTIME.
+    let proj1 = { 'path': '~/Dropbox/rst',}
+    let g:riv_projects = [proj1]
 
-Also Make sure the ``filetype plugin indent on`` and ``syntax on`` options
+More options see the ``:RivInstruction``
+
+Make sure your .vim directory is before $VIMRUNTIME in 
+``runtimepath``.  By default it *IS* present before $VIMRUNTIME.
+
+Also Make sure ``filetype plugin indent on`` and ``syntax on`` options
 are present in your .vimrc.
 
 Related tools
@@ -89,6 +92,7 @@ Related tools
 + Python: Sphinx_ for Sphinx users.
 + Vim: Syntastic_ for syntax checking. Requires Docutils_.
 + Python: Nikola_ for static blogging with rst syntax.
++ Python: InstantRst_ for preview rst document instantly.
 
 Tutorials
 =========
@@ -197,3 +201,5 @@ Common Issues
 
 You can start with `:RivQuickStart`.
 .. _`@rykkaf`: https://twitter.com/rykkaf
+
+.. _InstantRst: https://github.com/Rykka/InstantRst
