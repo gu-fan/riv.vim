@@ -108,6 +108,7 @@ let s:css_default = g:_riv_c.riv_path.'html/default.css'
 let s:css_emacs = g:_riv_c.riv_path.'html/emacs.css'
 let s:css_friendly = g:_riv_c.riv_path.'html/friendly.css'
 let s:css_html = g:_riv_c.riv_path.'html/html4css1.css'
+let s:css_typo = g:_riv_c.riv_path.'html/typo.css'
 let s:tex_default = g:_riv_c.riv_path.'latex/default.tex'
 let s:tex_cjk = g:_riv_c.riv_path.'latex/cjk.tex'
 
@@ -157,7 +158,8 @@ fun! s:convert(options) "{{{
     if ft == 'html' 
         if g:riv_html_code_hl_style =~ '^\(default\|emacs\|friendly\)$'
             let style = ' --stylesheet='.s:css_html.','
-                        \.s:css_{g:riv_html_code_hl_style}
+                        \.s:css_{g:riv_html_code_hl_style}.','
+                        \.s:css_typo
         elseif filereadable(g:riv_html_code_hl_style)
             let style = ' --stylesheet='.g:riv_html_code_hl_style
         endif

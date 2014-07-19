@@ -35,6 +35,8 @@ And reStructuredText's syntax are markdown_ alike, but are more powerful and ext
 
 It's used in many places like Sphinx_ (www.readthedocs.org) and have many relevent plugins(Pygments_, Nikola_).
 
+And it's using sofish's typo.css_ for better preview.
+
 Features
 ========
  
@@ -87,12 +89,13 @@ are present in your .vimrc.
 Related tools
 -------------
 
++ Python: InstantRst_ for preview rst document instantly.
 + Python: Docutils_, required for converting reST files to other formats.
 + Python: Pygments_, provides syntax highlighting for other formats.
 + Python: Sphinx_ for Sphinx users.
 + Vim: Syntastic_ for syntax checking. Requires Docutils_.
 + Python: Nikola_ for static blogging with rst syntax.
-+ Python: InstantRst_ for preview rst document instantly.
++ Python: HoverCraft_ for writing presentation from rst.
 
 Tutorials
 =========
@@ -187,19 +190,13 @@ Common Issues
 .. _riv_todo: https://github.com/Rykka/riv.vim/blob/master/doc/riv_todo.rst
 .. _reStructuredText Specification: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html
 .. _reStructuredText cheatsheet: http://docutils.sourceforge.net/docs/user/rst/cheatsheet.txt
-
 .. _vimwiki: https://github.com/vimwiki/vimwiki 
 .. _vim-notes: https://github.com/xolox/vim-notes 
-
 .. _markdown: http://daringfireball.net/projects/markdown/
-
 .. _org-mode: http://orgmode.org/
-
-
 .. _Jon Stewart: http://en.wikipedia.org/wiki/Jon_Stewart 
 .. _Nikola: https://github.com/getnikola/nikola
-
-You can start with `:RivQuickStart`.
 .. _`@rykkaf`: https://twitter.com/rykkaf
-
 .. _InstantRst: https://github.com/Rykka/InstantRst
+.. _HoverCraft: https://github.com/regebro/hovercraft
+.. _typo.css:  https://github.com/sofish/Typo.css 
