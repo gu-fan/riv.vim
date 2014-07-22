@@ -30,12 +30,13 @@ like vimwiki_, vim-notes_, etc.
 
 In comparition, the most advantage of **Riv.vim** is it support reStructuredText_ for your note.
 
-And reStructuredText's syntax are markdown_ alike, but are more powerful and extensible, support like table, LaTex, ect.
-(This post have a comparions between them https://gist.github.com/dupuy/1855764)
+    reStructuredText is a markup language, syntax are markdown_ alike, but are more powerful and extensible, support like table, LaTex, ect.
 
-It's used in many places like Sphinx_ (www.readthedocs.org) and have many relevent plugins(Pygments_, Nikola_).
+    It's used in many places like Sphinx_ (www.readthedocs.org) and have many relevent plugins(Pygments_, Nikola_).
 
-And it's using sofish's typo.css_ for better preview.
+    There is a post of comparions between them https://gist.github.com/dupuy/1855764
+
+
 
 Features
 ========
@@ -49,10 +50,18 @@ Features
     Improved syntax highlighting and folding support for you to read document in vim more clearly.
 **Publish** 
     Convert rst files to a number of different formats such as pdf, html, xml, latex, odt etc.
-**Sphinx**   
-    Sphinx_ syntax support.
+    And using sofish's typo.css_ for better preview.
+**Plugins**   
+    Support many plugins like Sphinx_ syntax support.
+    Other rst plugins:
 
+    - Vim & Python: InstantRst_ for preview rst document instantly.
+    - Vim & Python: Syntastic_ for syntax checking. Requires Docutils_ and Pygments_.
+    - Python: Sphinx_ for Sphinx users.
+    - Python: Nikola_ for static blogging with rst syntax.
+    - Python: HoverCraft_ for writing presentation from rst.
 
+    Contribution to this list are welcome.
 
 Installation
 ============
@@ -89,34 +98,27 @@ are present in your .vimrc.
 Related tools
 -------------
 
-+ Python: InstantRst_ for preview rst document instantly.
-+ Python: Docutils_, required for converting reST files to other formats.
-+ Python: Pygments_, provides syntax highlighting for other formats.
-+ Python: Sphinx_ for Sphinx users.
-+ Vim: Syntastic_ for syntax checking. Requires Docutils_.
-+ Python: Nikola_ for static blogging with rst syntax.
-+ Python: HoverCraft_ for writing presentation from rst.
 
 Tutorials
 =========
 
-You can start with ``:RivQuickStart``.
+You can have a quick start with ``:RivQuickStart``.
 
 Here is the Screencast: 
 
 * Riv: QuickStart_ (HD)
 
 
-Vim newbie
-----------
+Vim Novince
+-----------
 
 * If you are new to Vim, you can get a basic overview of Vim using
   ``vimtutor``. To use it simply type ``vimtutor`` in your shell.
   
 * To view the quick reference of Vim, use ``:h quickref``.
 
-reST newbie
------------
+Rst Novince
+------------
 
 * To get a quick overview of reStructuredText, some of the available options
   are:
@@ -131,8 +133,8 @@ reST newbie
 * Finally, you can use "`reStructuredText cheatsheet`_" for a quick review. Use
   ``:RivCheatSheet`` to open it in Vim.
 
-Riv
----
+Riv Novince
+-----------
 
 * For getting started with Riv, read "`QuickStart With Riv`_".
   You can also view it using ``:RivQuickStart`` in Vim.
