@@ -37,7 +37,7 @@ In comparition, the most advantage of **Riv.vim** is it support reStructuredText
     There is a post of comparions between them https://gist.github.com/dupuy/1855764
 
 
-Here is a Screenshot preview in Firefox and editing in Vim (moonlight scheme of Galaxy.vim_ )
+Here is a Screenshot preview in Firefox (default style with typo.css_ ) and editing in Vim (moonlight scheme of Galaxy.vim_ )
 
 .. image:: http://i.imgur.com/D3RgbMD.png
    :height: 384px
@@ -208,5 +208,4 @@ Common Issues
 .. _InstantRst: https://github.com/Rykka/InstantRst
 .. _HoverCraft: https://github.com/regebro/hovercraft
 .. _typo.css:  https://github.com/sofish/Typo.css 
-
 .. _Galaxy.vim: https://github.com/Rykka/galaxy.vim
