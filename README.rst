@@ -21,42 +21,44 @@ It is a vim plugin for taking notes with reStructuredText_.
 Comparion
 =========
 
+First things first.
 
-First things first, Why this?
+As there are some other note plugins in vim. 
+like vimwiki_, vim-notes_,  VOoM_ etc.
 
-There are some other note plugins in vim. (Also org-mode_ if you are a Emacs fan)
+Also org-mode_ if you are Emacs fan.
 
-like vimwiki_, vim-notes_, etc.
+**Why using this plugin?**
 
-In comparition, the most advantage of **Riv.vim** is it support reStructuredText_ for your note.
+In comparition, the most advantage of **Riv.vim** is reStructuredText_ support. 
 
-    reStructuredText is a markup language, syntax are markdown_ alike, but are more powerful and extensible, support table, LaTex, ect.
+    reStructuredText is a markup language.
 
-    It's used in many places like Sphinx_ (www.readthedocs.org) and have many relevent plugins(Pygments_, Nikola_).
+    It's syntax are markdown_ alike, but more powerful and extensible, table, LaTex ect. are supported.
 
-    There is a post of comparions between them https://gist.github.com/dupuy/1855764
+    It's widely used in python community. And have many relevent plugins. Sphinx_ (www.readthedocs.org) Pygments_, Nikola_, etc.
 
+    There is a post of comparions between reStructuredText and markdown https://gist.github.com/dupuy/1855764
 
-Here is a Screenshot preview in Firefox (default style with typo.css_ ) and editing in Vim (moonlight scheme of Galaxy.vim_ )
+Here's a screenshot of edit in vim (moonlight scheme of Galaxy.vim_ ) and instant preview in firefox (with InstantRst_ ):
 
-.. image:: http://i.imgur.com/D3RgbMD.png
+.. image::
+   http://i.imgur.com/xPfs1fy.png
    :height: 384px
    :width: 683px
 
-
 Features
 ========
- 
 
 **Wiki**  
-    Write rst document as a wiki with project and local file support. Also **TODO** syntax is added.
+    Write wiki with project and file link support. **TODO** syntax is added.
 **Editing**   
-    Faster typing, easier navigation, clear intending, auto formatting lists/tables etc.
+    Faster typing, easier navigation, clear intending, auto formatting etc.
 **Reading** 
-    Improved syntax highlighting and folding support for you to read document in vim more clearly.
+    Improved syntax highlighting and folding support for reading document clearly.
 **Publish** 
-    Convert rst files to a number of different formats such as pdf, html, xml, latex, odt etc.
-    And using sofish's typo.css_ for better preview.
+    Convert rst files to a number of different formats: pdf, html, xml, latex and odt etc.
+    sofish's typo.css_ is added for better performance. 
 **Plugins**   
     Support many plugins like Sphinx_ syntax support.
     Other rst plugins:
@@ -75,7 +77,8 @@ Installation
 Using Vundle_
 -------------
 
-Recommended, Add this line to your .vimrc (after you
+**Recommended**
+Add this line to your .vimrc (after you
 have properly set up Vundle_)::
  
     Bundle 'Rykka/riv.vim'
@@ -209,3 +212,4 @@ Common Issues
 .. _HoverCraft: https://github.com/regebro/hovercraft
 .. _typo.css:  https://github.com/sofish/Typo.css 
 .. _Galaxy.vim: https://github.com/Rykka/galaxy.vim
+.. _VOoM: https://github.com/vim-voom/VOoM
