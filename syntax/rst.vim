@@ -1,7 +1,7 @@
 " Vim syntax file
 " Language:         reStructuredText documentation format
 " Maintainer:       Nikolai Weibull <now@bitwi.se>
-" Latest Revision:  2014-06-28
+" Latest Revision:  2014-07-24
 
 if exists("b:current_syntax")
   finish
@@ -74,9 +74,10 @@ let s:ReferenceName = '[[:alnum:]]\+\%([_.-][[:alnum:]]\+\)*'
 
 " NOTE: #66 If we use '.*' all explicit markup will became comment.
 " So use '[^.]' here. us \_s to skip the exdirective match
-" See '/collection'
+" See '/collection' 
+" Also use '\@='to match \_s with zero width
 execute 'syn region rstComment contained'
-        \ ' start=#[^.|[_[:blank:]]\+[^:[:blank:]]\_s#'
+        \ ' start=#[^.|[_[:blank:]]\+[^:[:blank:]]\_s\@=#'
         \ ' skip=+^$+' .
         \ ' end=+^\s\@!+'
         \ ' contains=@rstCommentGroup'
