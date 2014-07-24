@@ -58,9 +58,8 @@ syn cluster rstDirectives           contains=rstFootnote,rstCitation,
 
 
 " NOTE: Fix #66 https://github.com/Rykka/riv.vim/pull/66
-" Here we match all the whitespace that's more than 'z1' and ignore it ('syn-skip').
-" Also See '\@>'
-" pattern skip=#^\(\(\z1\s\+\)\@>\S\)#'
+" Here we match all the whitespace that's more than 'z1' and ignore it. (skip=#^\(\(\z1\s\+\)\@>\S\)#')
+" See 'syn-skip', 'syn-keepend' and '\@>'
 "
 execute 'syn region rstExplicitMarkup keepend'
         \ ' start=#^\z(\s*\)\.\.\s#'
@@ -74,9 +73,10 @@ syn match   rstExplicitMarkupDot       '^\s*\.\.\_s' contained
 let s:ReferenceName = '[[:alnum:]]\+\%([_.-][[:alnum:]]\+\)*'
 
 " NOTE: #66 If we use '.*' all explicit markup will became comment.
-" So use \w here. us \_s to skip the exdirective match
+" So use '[^.]' here. us \_s to skip the exdirective match
+" See '/collection'
 execute 'syn region rstComment contained'
-        \ ' start=#\w\+\_s#'
+        \ ' start=#[^.|[_[:blank:]]\+[^:[:blank:]]\_s#'
         \ ' skip=+^$+' .
         \ ' end=+^\s\@!+'
         \ ' contains=@rstCommentGroup'
