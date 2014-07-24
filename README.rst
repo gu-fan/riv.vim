@@ -6,7 +6,7 @@ Riv: Take Notes in rst
 
     -- `Jon Stewart`_
 
-:Last Update: 2014-07-12
+:Last Update: 2014-07-24
 :Version: 0.76 
 
 
@@ -16,13 +16,13 @@ Intro
 
 **Riv** is short for 'reStructuredText in Vim'.
 
-It is a vim plugin for writing notes with reStructuredText_.
+It is a vim plugin for taking notes with reStructuredText_.
 
 Comparion
 =========
 
 
-First things first, Why using this plugin?
+First things first, Why this?
 
 There are some other note plugins in vim. (Also org-mode_ if you are a Emacs fan)
 
@@ -30,12 +30,18 @@ like vimwiki_, vim-notes_, etc.
 
 In comparition, the most advantage of **Riv.vim** is it support reStructuredText_ for your note.
 
-    reStructuredText is a markup language, syntax are markdown_ alike, but are more powerful and extensible, support like table, LaTex, ect.
+    reStructuredText is a markup language, syntax are markdown_ alike, but are more powerful and extensible, support table, LaTex, ect.
 
     It's used in many places like Sphinx_ (www.readthedocs.org) and have many relevent plugins(Pygments_, Nikola_).
 
     There is a post of comparions between them https://gist.github.com/dupuy/1855764
 
+
+Here is a Screenshot preview in Firefox and editing in Vim (moonlight scheme of Galaxy.vim_ )
+
+.. image:: http://i.imgur.com/D3RgbMD.png
+   :height: 384px
+   :width: 683px
 
 
 Features
@@ -202,3 +208,5 @@ Common Issues
 .. _InstantRst: https://github.com/Rykka/InstantRst
 .. _HoverCraft: https://github.com/regebro/hovercraft
 .. _typo.css:  https://github.com/sofish/Typo.css 
+
+.. _Galaxy.vim: https://github.com/Rykka/galaxy.vim
