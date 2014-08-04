@@ -121,6 +121,7 @@ let s:default.options = {
     \'auto_format_table'  : 1,
     \'fold_info_pos'      : 'right',
     \'temp_path'          : 1,
+    \'disable_indent'     : 0,
     \'i_tab_pum_next'     : 1,
     \'i_tab_user_cmd'     : "",
     \'i_stab_user_cmd'    : "",
