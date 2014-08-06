@@ -3,7 +3,7 @@
 "    File: riv.vim
 " Summary: Riv autoload main
 "  Author: Rykka G.F
-"  Update: 2014-07-12
+"  Update: 2014-08-06
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -360,7 +360,7 @@ fun! riv#buf_load_aug() "{{{
         endif "}}}
         if exists("g:riv_link_cursor_hl")  && g:riv_link_cursor_hl == 1 "{{{
             " cursor_link_highlight
-            au! CursorMoved,CursorMovedI <buffer>  call riv#link#hi_hover()
+            au! CursorMoved <buffer>  call riv#link#hi_hover()
             " clear the highlight before bufwin/winleave
             au! WinLeave,BufWinLeave     <buffer>  2match none
         endif "}}}
