@@ -6,17 +6,14 @@ Riv: Take Notes in rst
 
     -- `Jon Stewart`_
 
-:Last Update: 2014-07-24
+:Last Update: 2014-08-07
 :Version: 0.76 
 
 
 Intro
 =====
 
-
-**Riv** is short for 'reStructuredText in Vim'.
-
-It is a vim plugin for taking notes with reStructuredText_.
+**Riv** is a vim plugin for taking notes with reStructuredText_.
 
 Comparion
 =========

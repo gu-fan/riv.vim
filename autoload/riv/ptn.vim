@@ -32,6 +32,9 @@ fun! riv#ptn#norm_list(list,...) "{{{
 endfun "}}}
 
 fun! riv#ptn#match_object(str,ptn,...) "{{{
+    " return a python like match object
+    " @param: string, pattern,  [start]
+    " @return object { start,end, groups, str}
 
     let start = a:0 ? a:1 : 0
     let s = {}

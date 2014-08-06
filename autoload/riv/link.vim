@@ -247,7 +247,7 @@ fun! riv#link#hi_hover() "{{{
     let [s:hl_row, s:hl_bgn,s:hl_end] = [row, 0 , 0]
 
     let line = getline(row)
-    let idx = s:get_link_idx(line,col)
+    let idx = s:get_link_idx(line, col)
     
     if idx != -1
         let obj = riv#ptn#match_object(line, riv#ptn#link_all(), idx)
