@@ -1,6 +1,6 @@
-###############
-Riv: Instrucion
-###############
+################
+Riv: Instruction
+################
 
 :Author: Rykka G.F
 :Update: 2014-07-12
@@ -1509,7 +1509,7 @@ Commands
 
   - _`:RivIntro` : Show Riv Intro
 
-  - _`:RivInstruction` : Show Riv Instrucion
+  - _`:RivInstruction` : Show Riv Instruction
 
   - _`:RivQuickStart` : Show Riv QuickStart
 
