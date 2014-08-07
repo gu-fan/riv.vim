@@ -17,7 +17,7 @@ Intro
 
 A screencast with Riv in vim and InstantRst_
 
-.. image:: http://i.minus.com/iAresHe7Rq17r.gif
+.. image:: intro.gif
 
 Comparion
 =========
