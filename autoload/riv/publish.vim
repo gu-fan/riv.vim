@@ -3,7 +3,7 @@
 "    File: publish.vim
 " Summary: publish to html/pdf...
 "  Author: Rykka G.F
-"  Update: 2013-04-23
+"  Update: 2014-08-08
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -160,7 +160,6 @@ fun! s:convert(options) "{{{
         if g:riv_html_code_hl_style =~ '^\(default\|emacs\|friendly\)$'
             let style = ' --stylesheet='.s:css_html.','
                         \.s:css_{g:riv_html_code_hl_style}.','
-                        \.s:css_typo.','
                         \.s:css_size
         elseif filereadable(g:riv_html_code_hl_style)
             let style = ' --stylesheet='.g:riv_html_code_hl_style

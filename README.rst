@@ -9,11 +9,15 @@ Riv: Take Notes in rst
 :Last Update: 2014-08-07
 :Version: 0.76 
 
-
 Intro
 =====
 
 **Riv** is a vim plugin for taking notes with reStructuredText_.
+
+
+A screencast with Riv in vim and InstantRst_
+
+.. image:: http://i.minus.com/iAresHe7Rq17r.gif
 
 Comparion
 =========
@@ -37,12 +41,6 @@ In comparition, the most advantage of **Riv.vim** is reStructuredText_ support.
 
     There is a post of comparions between reStructuredText and markdown https://gist.github.com/dupuy/1855764
 
-Here's a screenshot of edit in vim (moonlight scheme of Galaxy.vim_ ) and instant preview in firefox (with InstantRst_ ):
-
-.. image::
-   http://i.imgur.com/xPfs1fy.png
-   :height: 384px
-   :width: 683px
 
 Features
 ========
