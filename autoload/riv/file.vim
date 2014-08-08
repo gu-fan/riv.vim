@@ -207,7 +207,7 @@ fun! riv#file#section_helper() "{{{
 endfun "}}}
 
 if expand('<sfile>:p') == expand('%:p') "{{{
-    call riv#test#doctest('%','%',2)
+    call doctest#start()
 endif "}}}
 
 let &cpo = s:cpo_save

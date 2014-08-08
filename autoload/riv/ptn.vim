@@ -666,7 +666,7 @@ endfun "}}}
 
 if expand('<sfile>:p') == expand('%:p') "{{{
     call riv#ptn#init()
-    call riv#test#doctest('%','%',1)
+    call doctest#start()
 endif "}}}
 
 let &cpo = s:cpo_save

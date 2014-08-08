@@ -137,6 +137,7 @@ let s:default.options = {
     \'scratch_path'       : 'Scratch',
     \'source_suffix'      : '.rst',
     \'master_doc'         : 'index',
+    \'auto_rst2html'      :  0,
     \}
 "}}}
 
@@ -358,6 +359,11 @@ fun! riv#buf_load_aug() "{{{
         if exists("g:riv_auto_format_table") && g:riv_auto_format_table == 1 "{{{
             au! InsertLeave <buffer> call riv#table#format_pos()
         endif "}}}
+        if exists("g:riv_auto_rst2html") && g:riv_auto_rst2html == 1 "{{{
+            if riv#path#is_rel_to_root(expand('%:p'))
+                au! BufWritePost <buffer> Riv2HtmlFile
+            endif
+        endif "}}}
         if exists("g:riv_link_cursor_hl")  && g:riv_link_cursor_hl == 1 "{{{
             " cursor_link_highlight
             au! CursorMoved <buffer>  call riv#link#hi_hover()
@@ -399,7 +405,7 @@ endfun "}}}
 
 if expand('<sfile>:p') == expand('%:p') "{{{
     call riv#init()
-    call riv#test#doctest('%','%',2)
+    call doctest#start()
 endif "}}}
 
 let &cpo = s:cpo_save

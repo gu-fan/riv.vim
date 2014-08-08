@@ -29,6 +29,9 @@ fun! riv#insert#indent(row) "{{{
     let pnb_line = getline(pnb_num)
     let ind = indent(pnb_num)
     
+    " NOTE: 
+    " Recreate the indentation:
+    " like issue
     " lists: bullet,enum,field
     " preceding blank lines:
     " 1~2:start of list content
@@ -38,6 +41,7 @@ fun! riv#insert#indent(row) "{{{
     " >>> echo matchend(_t_line, g:_riv_p.all_list)
     " >>> echo riv#fold#indent(_t_line)
     " >>> echo matchend(_t_line, '^\s*')
+    "
     let l_ind = matchend(pnb_line, s:p.all_list)
     if l_ind != -1 
         if row <= pnb_num+2 
@@ -186,7 +190,7 @@ fun! riv#insert#shiftright(row,col) "{{{
 endfun "}}}
 
 if expand('<sfile>:p') == expand('%:p') "{{{
-    call riv#test#doctest('%','%',2)
+    call doctest#start()
 endif "}}}
 let &cpo = s:cpo_save
 unlet s:cpo_save

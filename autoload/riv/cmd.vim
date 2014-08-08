@@ -452,7 +452,7 @@ let g:riv_default.cmds = [
     \'menu': 'Helper.Section',
     \'type': 'buf', 'mode': 'm', 'maps': ['hs'], 'keys': [],
 \},
-\{'name': 'RivVimTest', 'act': 'call riv#test#doctest(<f-args>)',
+\{'name': 'RivVimTest', 'act': 'call doctest#start(<f-args>)',
     \'type': 'farg', 'args': '-nargs=*',
     \'note': 'Run doctest for Vim Script',
     \'menu': 'Helper.VimTest',

@@ -288,7 +288,7 @@ fun! riv#link#hi_hover() "{{{
 endfun "}}}
 
 if expand('<sfile>:p') == expand('%:p') "{{{
-    call riv#test#doctest('%','%',2)
+    call doctest#start()
 endif "}}}
 let &cpo = s:cpo_save
 unlet s:cpo_save
