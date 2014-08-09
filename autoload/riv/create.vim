@@ -163,7 +163,7 @@ fun! riv#create#link() "{{{
     
     " select target line
     if g:riv_create_link_pos == '$' && tar !~ '^__'
-        if  getline(eof) =~ '^\s*$\|^\.\.\_s'
+        if  getline(eof) =~ '\v^\s*$|^\.\.%(\s|$)'
             call append(eof, [tar])
         else
             call append(eof, ["",tar])
@@ -337,7 +337,7 @@ fun! riv#create#git_commit_url() "{{{
 
     if g:riv_create_link_pos == '$' 
         let eof = line('$')
-        if  getline(eof) =~ '^\s*$\|^\.\.\_s'
+        if  getline(eof) =~ '\v^\s*$|^\.\.%(\s|$)'
             call append(eof, [tar])
         else
             call append(eof, ["",tar])

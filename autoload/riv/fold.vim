@@ -370,7 +370,7 @@ fun! s:check(row) "{{{
                 let b:riv_state.e_chk= {'type': 'exp', 'bgn':a:row,}
                 return 1
             else
-                let b:riv_state.b_chk = {'type': 'block', 'bgn': a:row+1, 
+                let b:riv_state.b_chk = {'type': 'block', 'bgn': a:row, 
                             \ 'indent': riv#fold#indent(line)}
                 " the block line may be other item, so not return
             endif
@@ -378,7 +378,7 @@ fun! s:check(row) "{{{
 
     endif
 
-    if line=~'^\s*[[:alnum:]]\+\_s'
+    if line=~'^\s*[[:alnum:]]\+%(\s|$)'
         return
     elseif b:foldlevel > 1 && !has_key(b:riv_state, 'e_chk')
                 \ && line=~s:p.all_list
@@ -397,7 +397,7 @@ fun! s:check(row) "{{{
             call insert(b:riv_state.l_chk, l_item, 0)
         endif
         return 1
-    elseif line=~s:p.section  && line !~ '^\.\.\_s*$'
+    elseif line=~s:p.section  && line !~ '^\.\.%(\s|$)*$'
         let b:riv_state.s_chk =  {'type': 'sect' , 'bgn': row, 'attr': line[0]}
         return 1
     elseif line=~ '^__\s'
@@ -406,7 +406,7 @@ fun! s:check(row) "{{{
         return 1
     elseif line=~'^\s*\w'
         return
-    elseif b:foldlevel > 2 && (line=~s:p.exp_mark )
+    elseif b:foldlevel > 2 && (line =~ s:p.exp_mark )
         if  (line=~'^\.\.\s*$' && a:row!=line('$') 
                             \ && b:lines[a:row+1]=~'^\s*$')
             call add(b:riv_state.matcher,{'type': 'exp', 'mark': 'ignored', 
@@ -479,6 +479,13 @@ fun! s:l_checker(row) "{{{
     " if empty(b:riv_state.l_chk) | return | endif
     " List can contain Explicit Markup items.
     " if has_key(b:riv_state, 'e_chk') | return | endif
+    " NOTE: 
+    " Field list 
+    " list-item:
+    "   
+    "   list content
+    "
+    " are not folded
     let l = b:riv_state.l_chk
     let idt = riv#fold#indent(b:lines[a:row]) 
     let end = line('$')
@@ -690,7 +697,7 @@ fun! riv#fold#text() "{{{
             let cate = " .."
         elseif b:riv_obj[lnum].type == 'block'
             let cate = " ::"
-            let line = getline(lnum+1)
+            let line = getline(lnum)
         elseif b:riv_obj[lnum].type == 'line_block'
             let cate = " | "
         elseif b:riv_obj[lnum].type == 'trans'

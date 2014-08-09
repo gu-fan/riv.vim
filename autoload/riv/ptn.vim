@@ -135,7 +135,7 @@ fun! riv#ptn#init() "{{{
     " Basic: "{{{3
     let s:p.blank = '^\s*$'
     let s:p.indent = '^\s*'
-    let s:p.space_bgn = '^\_s\|^$'
+    let s:p.space_bgn = '^%(\s|$)\|^$'
     let s:p.no_space_bgn = '^\S'
 
     " Section: "{{{3
@@ -194,21 +194,29 @@ fun! riv#ptn#init() "{{{
     " not '\c' as it changes whole patten
     let enum1  = '%(\d+|[#[:alpha:]]|[IMLCXVDimlcxvd]+)[.)]'
     let enum2  = '[(]%(\d+|[#[:alpha:]]|[IMLCXVDimlcxvd]+)[)]'
+    " The field list can have an indent-block version,
+    " like.
+    " :xxx:
+    "   xxxx
+    "
+    " So we should use `%(\s|$)` to match it
+    " NOTE: use `%(\s|$)` instead of %(\s|$) cause it's not working.
     let field  = ':[^:]+:'
 
-    let b_e_list = '%('.bullet.'|'.enum1.'|'.enum2.')'
-    let all_list   = '%('.bullet.'|'.enum1.'|'.enum2.'|'.field.')'
     
     let list_wrap = '\v^\s*%s\s+'
 
     let s:p.bullet_list = printf(list_wrap, bullet)
     let s:p.enum1_list = printf(list_wrap, enum1)
     let s:p.enum2_list = printf(list_wrap, enum2)
-    let s:p.field_list = printf(list_wrap, field)
+    let s:p.field_list = '\v^\s*:[^:]+:%(\s|$)'
     let s:p.field_list_full= '\v^\s*:[^:]+:\s+\ze\S.+[^:]$'
 
+    let b_e_list = '%('.bullet.'|'.enum1.'|'.enum2.')'
+    let all_list   = '%('.bullet.'|'.enum1.'|'.enum2.'|'.field.')'
+
     let s:p.b_e_list = printf(list_wrap, b_e_list)
-    let s:p.all_list = printf(list_wrap, all_list)
+    let s:p.all_list = '\v%('.s:p.b_e_list .'|'.s:p.field_list.')'
 
 
     let white_wrap = '\v^(\s*)(%s)(\s+)'
@@ -437,10 +445,10 @@ fun! riv#ptn#init() "{{{
     " .. _xxx:
     " .. __:   or   __
     " `xxx  <xxx>`
-    let tar_footnote = '^\.\.\s\zs\[%(\d+|#|#='.ref_name .')\]\ze\_s'
+    let tar_footnote = '^\.\.\s\zs\[%(\d+|#|#='.ref_name .')\]\ze%(\s|$)'
     let tar_inline = '%(\s|^|[''"([{</:])\zs_`[^`\\]+`\ze'.ref_end
     let tar_normal = '^\.\.\s\zs_[^:\\]+:\ze%(\s|$)'
-    let tar_anonymous = '^\.\.\s\zs__:\ze\_s|^\zs__\ze%(\s|$)'
+    let tar_anonymous = '^\.\.\s\zs__:\ze%(\s|$)|^\zs__\ze%(\s|$)'
     let tar_embed  = '^%(\s|\_^)\zs_`.+\s<\zs.+>`_\ze'.ref_end
 
     let s:p.link_tar_footnote = '\v'.tar_footnote
