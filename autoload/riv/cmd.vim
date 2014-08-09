@@ -635,14 +635,14 @@ fun! riv#cmd#init_maps() "{{{
         for key in map(copy(cmd.maps), 'leader.v:val') + cmd.keys
           exe "nma <silent><buffer>" key "<Plug>(".cmd.name.")"
           exe "vno <silent><buffer>" key "<Esc>:".act_v."<CR>"
-          exe "ino <silent><buffer>" key "<Esc>:".act_i."<CR>"
+          exe "ino <buffer>" key "<Esc>:".act_i."<CR>"
         endfor
       endif
     elseif cmd.type == 'expr'
       if has_key(cmd, 'maps')
         for key in map(copy(cmd.maps), 'leader.v:val') + cmd.keys
             if index(g:riv_default.ignored_imaps, key) == -1
-              exe "ino <silent><buffer><expr>" key cmd.act 
+              exe "ino <buffer><expr>" key cmd.act 
             endif
         endfor
       endif

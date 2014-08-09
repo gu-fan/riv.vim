@@ -603,6 +603,7 @@ fun! s:get_block(row) "{{{
 endfun "}}}
 
 fun! riv#ptn#fix_sft(c_col,f_col,sft) "{{{
+    " 
     if (a:sft > 0 && a:c_col < a:f_col && a:c_col+a:sft >= a:f_col)
         \|| (a:sft < 0 && a:c_col > a:f_col && a:c_col+a:sft <= a:f_col)
         return a:f_col
@@ -611,7 +612,8 @@ fun! riv#ptn#fix_sft(c_col,f_col,sft) "{{{
     endif
 endfun "}}}
 fun! riv#ptn#fix_sfts(col,f_cols,sft) "{{{
-    " find the first f_col close to col
+    " for current col, find the closest one in f_cols with sft
+    "
     let b_col = a:col
     if a:sft >= 0
         for f_col in sort(a:f_cols)

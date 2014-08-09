@@ -14,6 +14,9 @@ let s:e = g:_riv_e
 " the searchpos and setpos version
 " it's heavy though.
 fun! s:get_all_list(row) "{{{
+    " return the current list's row number
+    " return 0 if not exists.
+    
     let row = prevnonblank(a:row)
 
     let save_pos = getpos('.')
