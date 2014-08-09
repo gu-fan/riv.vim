@@ -158,10 +158,14 @@ fun! riv#section#title(level,...) "{{{
 
     let lines = s:sect_lines(title, a:level)
     
-    " cursor is now one line below the heading.
-    " let row = line('.')
+    " Note:
+    " Use sft to make the title's pos does not change.
+    " as our cursor pos will be different if at different idx 
+    " of title
+    
+    let sft = rows == 3 ? 2-idx : rows-idx
     let row = row ==1 ? 1 : row - 1
-    call append(row-1, lines)
+    call append(row-1+sft, lines)
     
     " in case if no preceding blank line, We append an empty line to
     " match the sectin syntax

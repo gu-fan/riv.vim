@@ -3,8 +3,8 @@ Riv: Instruction
 ################
 
 :Author: Rykka G.F
-:Update: 2014-07-12
-:Version: 0.73 
+:Update: 2014-08-09
+:Version: 0.77 
 :Github: https://github.com/Rykka/riv.vim
 
 * _`Index`:
@@ -741,6 +741,8 @@ Convert rst files to html/xml/latex/odt/...
       3. Open the build path: `:Riv2BuildPath`_ ``<C-E>2b``
       4. Local file link converting will be done. 
          See `local file link converting`_ for details.
+      5. Set `g:riv_auto_rst2html`_ to 1 to automatic convert after writing.
+         only project file are auto converted.
   
     - For the files that not in a project.  
       '`g:riv_temp_path`_' is used to determine the output path
@@ -757,7 +759,7 @@ Convert rst files to html/xml/latex/odt/...
 
 
 Riv 
----
+----
 
 Following features provides more functions for rst documents.
 
@@ -817,7 +819,7 @@ Scratch_
   + Define a project with a dictionary of options,
     If not defined, it will have the default value ::
 
-      let project1 = { 'path': '~/Dropbox/rst',}
+      let project1 = { 'Name': 'My Working Notes', 'path': '~/Dropbox/rst',}
       let g:riv_projects = [project1]
 
   + To add multiple projects ::
@@ -1803,6 +1805,12 @@ Options
 | _`g:riv_auto_format_table`                 | Auto formating table when leave Insert Mode            |
 |                                            |                                                        |
 | 1                                          |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_auto_rst2html`                     | Auto Converting rst to html after writing.             |
+|                                            | file should in project.                                |
+|                                            |                                                        |
+| 0                                          |                                                        |
+|                                            |                                                        |
 +--------------------------------------------+--------------------------------------------------------+
 | _`g:riv_default_path`                      | Default path for your project.                         |
 |                                            |                                                        |

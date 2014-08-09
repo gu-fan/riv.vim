@@ -10,10 +10,10 @@ let s:cpo_save = &cpo
 set cpo-=C
 
 fun! riv#file#edit(file) "{{{
-    exe "edit +let\\ b:riv_p_id=".riv#id() a:file
+    exe "edit ".a:file
 endfun "}}}
 fun! riv#file#split(file) "{{{
-    exe "split +let\\ b:riv_p_id=".riv#id()  a:file
+    exe "split " a:file
 endfun "}}}
 
 " Helper:  "{{{1

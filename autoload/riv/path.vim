@@ -8,43 +8,56 @@
 let s:cpo_save = &cpo
 set cpo-=C
 
+let s:path_sep_pattern = (exists('+shellslash') ? '[\\/]' : '/') . '\+'
+let s:is_windows = has('win16') || has('win32') || has('win64') || has('win95')
+let s:is_cygwin = has('win32unix')
+let s:is_mac = !s:is_windows && !s:is_cygwin
+\ && (has('mac') || has('macunix') || has('gui_macvim') ||
+\ (!isdirectory('/proc') && executable('sw_vers')))
+
+" XXX:
+" For using one rst both in windows and linux.
+" This will cause things different, though vim will handle it.
 let s:slash = has('win32') || has('win64') ? '\' : '/'
 let s:win =  has('win32') || has('win64') ? 1 : 0
 
 let s:c = g:_riv_c
+let s:id = function("riv#id")
+
 fun! riv#path#root(...) "{{{
-    return g:_riv_c.p[a:0 ? a:1 : riv#id()]._root_path
+    return s:c.p[a:0 ? a:1 : s:id()]._root_path
 endfun "}}}
 
 fun! riv#path#build_ft(ft,...) "{{{
-    return g:_riv_c.p[a:0 ? a:1 : riv#id()]._build_path . a:ft . s:slash
+    " return the build's filetype path
+    return s:c.p[a:0 ? a:1 : s:id()]._build_path . a:ft . s:slash
 endfun "}}}
 fun! riv#path#p_build(...) "{{{
     " >>> echo riv#path#p_build()
     " _build
-    return g:_riv_c.p[a:0 ? a:1 : riv#id()].build_path
+    return s:c.p[a:0 ? a:1 : s:id()].build_path
 endfun "}}}
 fun! riv#path#build_path(...) "{{{
-    return g:_riv_c.p[a:0 ? a:1 : riv#id()]._build_path
+    return s:c.p[a:0 ? a:1 : s:id()]._build_path
 endfun "}}}
 fun! riv#path#scratch_path(...) "{{{
-    return g:_riv_c.p[a:0 ? a:1 : riv#id()]._scratch_path
+    return s:c.p[a:0 ? a:1 : s:id()]._scratch_path
 endfun "}}}
 fun! riv#path#file_link_style(...) "{{{
-    return g:_riv_c.p[a:0 ? a:1 : riv#id()].file_link_style
+    return s:c.p[a:0 ? a:1 : s:id()].file_link_style
 endfun "}}}
 
 fun! riv#path#ext(...) "{{{
     " file suffix 
     " >>> echo riv#path#ext()
     " .rst
-    return g:_riv_c.p[a:0 ? a:1 : riv#id()].source_suffix
+    return s:c.p[a:0 ? a:1 : s:id()].source_suffix
 endfun "}}}
 fun! riv#path#idx(...) "{{{
     " project master doc.
     " >>> echo riv#path#idx()
     " index
-    return g:_riv_c.p[a:0 ? a:1 : riv#id()].master_doc
+    return s:c.p[a:0 ? a:1 : s:id()].master_doc
 endfun "}}}
 fun! riv#path#idx_file(...) "{{{
     " >>> echo riv#path#idx_file()
@@ -53,7 +66,7 @@ fun! riv#path#idx_file(...) "{{{
 endfun "}}}
 
 fun! riv#path#p_ext(...) "{{{
-    return g:_riv_c.p[a:0 ? a:1 : riv#id()]._source_suffix
+    return s:c.p[a:0 ? a:1 : s:id()]._source_suffix
 endfun "}}}
 
 fun! riv#path#is_ext(file) "{{{
@@ -86,7 +99,8 @@ fun! riv#path#rel_to(dir, path) "{{{
     return substitute(path, dir, '', '')
 endfun "}}}
 fun! riv#path#is_rel_to(dir, path) "{{{
-    
+    " check if path is relatetive to dir
+    "
     let dir = riv#path#is_directory(a:dir) ? a:dir : a:dir.'/'
     let dir = fnamemodify(dir, ':gs?\?/?') 
     let path = fnamemodify(a:path, ':gs?\?/?') 
@@ -106,7 +120,6 @@ endfun "}}}
 fun! riv#path#par_to(dir,path) "{{{
     let dir = riv#path#is_directory(a:dir) ? a:dir : a:dir.'/'
     let dir = fnamemodify(dir, ':gs?\?/?') 
- 
     let path = fnamemodify(a:path, ':gs?\?/?') 
     if match(dir, path) == -1
         throw g:_riv_e.NOT_REL_PATH

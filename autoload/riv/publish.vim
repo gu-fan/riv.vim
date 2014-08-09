@@ -349,7 +349,11 @@ endfun "}}}
 
 fun! s:sys(arg) abort "{{{
     " XXX: error in windows tmp files
-    return system(a:arg)
+    if exists("*vimproc#system")
+        return vimproc#system(a:arg)
+    else
+        return system(a:arg)
+    endif
 endfun "}}}
 if expand('<sfile>:p') == expand('%:p') "{{{
     call doctest#start()

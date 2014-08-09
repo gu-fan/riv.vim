@@ -6,8 +6,8 @@ Riv: Take Notes in rst
 
     -- `Jon Stewart`_
 
-:Last Update: 2014-08-07
-:Version: 0.76 
+:Last Update: 2014-08-09
+:Version: 0.77 
 
 Intro
 =====
@@ -113,16 +113,16 @@ Here is the Screencast:
 * Riv: QuickStart_ (HD)
 
 
-Vim Novince
------------
+New To Vim
+----------
 
 * If you are new to Vim, you can get a basic overview of Vim using
   ``vimtutor``. To use it simply type ``vimtutor`` in your shell.
   
 * To view the quick reference of Vim, use ``:h quickref``.
 
-Rst Novince
-------------
+New TO Rst
+----------
 
 * To get a quick overview of reStructuredText, some of the available options
   are:
@@ -137,8 +137,8 @@ Rst Novince
 * Finally, you can use "`reStructuredText cheatsheet`_" for a quick review. Use
   ``:RivCheatSheet`` to open it in Vim.
 
-Riv Novince
------------
+New To Riv
+----------
 
 * For getting started with Riv, read "`QuickStart With Riv`_".
   You can also view it using ``:RivQuickStart`` in Vim.

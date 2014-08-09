@@ -56,7 +56,7 @@ fun! s:str_to_tar(str,loc) "{{{
     endif
 endfun "}}}
 
-fun! s:expand_link(word) "{{{
+fun! s:expand_link(word,...) "{{{
     " expand file, and let the refname expand
     let word = a:word
     if word=~ riv#ptn#link_file()
@@ -67,28 +67,33 @@ fun! s:expand_link(word) "{{{
                 let [ref, tar] = [word[:7].'_', '.. _' . word[:7].': '.word]
             else
                 let ref = word.'_'
-                let tar = '.. _'.word.': '.word
+                let loc = a:0 ? a:1 : word
+                let tar = '.. _'.word.': '.loc
             endif
         elseif word =~ g:_riv_p.link_ref_footnote
-            " footnote
+            " footnote, remove '[' and ']'
             let trim = strpart(word,  0 , len(word)-1)
             let ref = word
-            let tar = '.. '.trim.' '.trim
+            let loc = a:0 ? a:1 : word
+            let tar = '.. '.trim.' '.loc
         elseif word =~ g:_riv_p.link_ref_normal
             let trim = strpart(word,  0 , len(word)-1)
             let ref = word
-            let tar = '.. _'.trim.': '.trim
+            let loc = a:0 ? a:1 : word
+            let tar = '.. _'.trim.': '. loc
         elseif word =~ g:_riv_p.link_ref_anonymous
             " anonymous link
             let ref = word
-            let tar = '__ '.s:normal_phase(word)
+            let loc = a:0 ? a:1 : word
+            let tar = '__ '.s:normal_phase(loc)
         elseif word =~ g:_riv_p.link_ref_phase
             let trim = s:normal_phase(word)
             let ref = word
-            let tar = '.. _'.trim.': '.trim
+            let loc = a:0 ? a:1 : word
+            let tar = '.. _'.trim.': '.loc
         else
             let ref = s:str_to_ref(word)
-            let tar = s:str_to_tar(word, word)
+            let tar = s:str_to_tar(word, loc)
         endif
         return [ref, tar]
     endif
@@ -130,6 +135,7 @@ endfun "}}}
 fun! riv#create#link() "{{{
     let [row, col] = [line('.'), col('.')]
     let line = getline(row)
+    let eof = line('$')
 
     let obj = s:get_phase_obj()
     if empty(obj)
@@ -140,25 +146,32 @@ fun! riv#create#link() "{{{
         let idx  = obj.start + 1
         let end  = obj.end + 1
     else
-        let word = input("Input a link name:")
-        if word =~ '^\s*$'
-            return
-        endif
+        let word = input("Input link name:")
+        if word =~ '^\s*$' | return | endif
         let idx = col
         let end = col
     endif
 
-    let [ref, tar] = s:expand_link(word)
+    let loc = input("Input location:", word)
+    if loc =~ '^\s*$' | return | endif
+    let [ref, tar] = s:expand_link(word, loc)
 
     let line = substitute(line, '\%'.idx.'c.\{'.(end-idx).'}', ref, '')
-
+    
+    " set  reference line
     call setline(row , line)
+    
+    " select target line
     if g:riv_create_link_pos == '$' && tar !~ '^__'
-        call append(line('$'), ["",tar])
-        exe "normal! G0f:2lv$\<C-G>"
+        if  getline(eof) =~ '^\s*$\|^\.\.\_s'
+            call append(eof, [tar])
+        else
+            call append(eof, ["",tar])
+        endif
+        " exe "normal! G0f:2lv$\<C-G>"
     else
         call append(row, ["",tar])
-        exe "normal! jj0f:2lv$\<C-G>"
+        " exe "normal! jj0f:2lv$\<C-G>"
     endif
 endfun "}}}
 "}}}
@@ -308,13 +321,30 @@ fun! riv#create#auto_mkdir() "{{{
 endfun "}}}
 fun! riv#create#git_commit_url() "{{{
     if !exists("*fugitive#repo")
-        call riv#warning("NO fugitive")
+        call riv#warning(" NO fugitive installed.")
         return
     endif
-    let sha = fugitive#repo().rev_parse('HEAD')
+    try
+        let sha = fugitive#repo().rev_parse('HEAD')
+    catch
+        call riv#warning(" NOT a valid repo.")
+        return
+    endtry
 
     let [ref, tar] = s:expand_link(sha)
-    call append(line('.'), [ref,"",tar])
+
+    call append(line('.'), [ref])
+
+    if g:riv_create_link_pos == '$' 
+        let eof = line('$')
+        if  getline(eof) =~ '^\s*$\|^\.\.\_s'
+            call append(eof, [tar])
+        else
+            call append(eof, ["",tar])
+        endif
+    else
+        call append(line('.'), ["",tar])
+    endif
 endfun "}}}
 
 fun! riv#create#wrap_inline(sign,mode) "{{{
