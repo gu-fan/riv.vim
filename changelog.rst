@@ -6,7 +6,7 @@ Changelogs
 
 * 0.77: 
 
-  :Misc:    Make section title pos unchanged while use RivTitle 42c20948_
+  :Misc:    Make section title pos unchanged while use RivTitle 6470ad9f_
   :Publish: ``g:riv_auto_rst2html`` added for auto publish.
   :Misc:    rewrite riv#id(), fix the id's error. b97398b_ 
   :Misc:    optimize create#link behavior, 
@@ -234,3 +234,4 @@ __ www.163.c
 .. _Miscs: riv.rst#Miscs
 .. _b97398b: https://github.com/Rykka/riv.vim/commit/b97398beb9e06cd19eada24a78eb689d5eb32605
 .. _42c20948: 42c2094883ece4c3c467cce79b79f4c24a4aa280
+.. _6470ad9f: 6470ad9ff5033bbddfcce79dbb17de7f5876889b
