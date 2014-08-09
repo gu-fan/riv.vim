@@ -159,7 +159,7 @@ Common Issues
 -------------
 
 * If you get errors with folding in documents, you can try to force reload
-  using ``:RivTestReload`` or ``<C-E>t```.
+  using ``:RivReload`` or ``<C-E>t```.
 
   Or just `:w` as it will auto refolding after saving.
 

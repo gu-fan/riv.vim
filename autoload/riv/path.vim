@@ -133,7 +133,7 @@ fun! riv#path#is_relative(name) "{{{
     return a:name !~ '^[~/]\|^[a-zA-Z]:'
 endfun "}}}
 fun! riv#path#is_directory(name) "{{{
-    return a:name =~ '[\\/]$' 
+    return a:name =~ '\w[\\/]$' 
 endfun "}}}
 
 fun! riv#path#ext_to(file, ft) "{{{

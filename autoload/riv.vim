@@ -156,6 +156,7 @@ let s:default.options = {
     \'source_suffix'      : '.rst',
     \'master_doc'         : 'index',
     \'auto_rst2html'      :  0,
+    \'open_link_location' :  1,
     \}
 "}}}
 
@@ -362,7 +363,8 @@ fun! riv#load_conf() "{{{1
     let s:e.NOT_DATESTAMP = "Riv: Not a Datestamp"
     let s:e.NOT_RST_FILE  = "Riv: NOT A RST FILE"
     let s:e.FILE_NOT_FOUND = "Riv: Could not find the file"
-    let s:e.REF_NOT_FOUND = "Riv: Could not find the reference"
+    let s:e.REF_NOT_FOUND = "Riv: Could not find the link reference"
+    let s:e.TAR_NOT_FOUND = "Riv: Could not find the link targets"
 
 endfun "}}}
 fun! riv#load_aug() "{{{
@@ -392,8 +394,16 @@ endfun "}}}
 
 fun! riv#buf_load_aug() "{{{
     aug RIV_BUFFER "{{{
+        " NOTE:
+        " We should take care of the buffer loading here.
+        " use au! in each group to clear to avoid 
+        " duplicated loading
+        au! BufWritePost <buffer>  call riv#fold#update() 
+        au  BufWritePost <buffer>  call riv#todo#update()
+        au!  BufWritePre  <buffer>  call riv#create#auto_mkdir()
+        au!  WinLeave,BufWinLeave     <buffer>  call riv#file#update()
         if exists("g:riv_auto_format_table") && g:riv_auto_format_table == 1 "{{{
-            au InsertLeave <buffer> call riv#table#format_pos()
+            au! InsertLeave <buffer> call riv#table#format_pos()
         endif "}}}
         if exists("g:riv_auto_rst2html") && g:riv_auto_rst2html == 1 "{{{
             if b:riv_id != -1
@@ -402,14 +412,10 @@ fun! riv#buf_load_aug() "{{{
         endif "}}}
         if exists("g:riv_link_cursor_hl")  && g:riv_link_cursor_hl == 1 "{{{
             " cursor_link_highlight
-            au CursorMoved <buffer>  call riv#link#hi_hover()
+            au! CursorMoved <buffer>  call riv#link#hi_hover()
             " clear the highlight before bufwin/winleave
             au WinLeave,BufWinLeave     <buffer>  2match none
         endif "}}}
-        au  WinLeave,BufWinLeave     <buffer>  call riv#file#update()
-        au  BufWritePost <buffer>  call riv#fold#update() 
-        au  BufWritePost <buffer>  call riv#todo#update()
-        au  BufWritePre  <buffer>  call riv#create#auto_mkdir()
     aug END "}}}
 endfun "}}}
 fun! riv#buf_load_syn() "{{{

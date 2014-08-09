@@ -420,6 +420,7 @@ fun! riv#ptn#init() "{{{
     " [#]_ [*]_  [#xxx]_  [3]_    and citation [xxxx]_
     let ref_name = '[[:alnum:]]+%([_.-][[:alnum:]]+)*'
     let ref_end = '%($|\s|[''")\]}>/:.,;!?\\-])'
+    let ref_bgn = '%(\s|^|[''"([{</:])'
 
     let s:p.ref_name = ref_name
     let s:p.ref_end = ref_end
@@ -446,17 +447,20 @@ fun! riv#ptn#init() "{{{
     " .. __:   or   __
     " `xxx  <xxx>`
     let tar_footnote = '^\.\.\s\zs\[%(\d+|#|#='.ref_name .')\]\ze%(\s|$)'
-    let tar_inline = '%(\s|^|[''"([{</:])\zs_`[^`\\]+`\ze'.ref_end
+    let tar_inline = ref_bgn.'\zs_`[^`\\]+`\ze'.ref_end
     let tar_normal = '^\.\.\s\zs_[^:\\]+:\ze%(\s|$)'
     let tar_anonymous = '^\.\.\s\zs__:\ze%(\s|$)|^\zs__\ze%(\s|$)'
-    let tar_embed  = '^%(\s|\_^)\zs_`.+\s<\zs.+>`_\ze'.ref_end
+
+    " In fact, it's inline link, that's a reference 
+    let tar_embed  = '^%(\s|\_^)\zs`.+\s<\zs.+>`_\ze'.ref_end
+
 
     let s:p.link_tar_footnote = '\v'.tar_footnote
     let s:p.link_tar_inline = '\v'.tar_inline
     let s:p.link_tar_normal = '\v'.tar_normal
     let s:p.link_tar_anonymous = '\v'.tar_anonymous
-
     let s:p.link_tar_embed  = '\v'.tar_embed
+
 
     let link_target = tar_normal
             \.'|'. tar_inline .'|'. tar_footnote .'|'. tar_anonymous
@@ -464,7 +468,19 @@ fun! riv#ptn#init() "{{{
     let s:p.link_line_target = '\v'.tar_normal
             \.'|'. tar_footnote .'|'. tar_anonymous
 
+    " The link location in link target.
+    let loc_footnote = '^\.\.\s\[%(\d+|#|#='.ref_name .')\]%(\s|$)\zs.*'
 
+    let loc_inline = ref_bgn.'_`\zs[^`\\]+\ze`'.ref_end
+    let loc_normal = '^\.\.\s_[^:\\]+:%(\s|$)\zs.*'
+    let loc_anonymous = '^\.\.\s__:%(\s|$)\zs|^__%(\s|$)\zs.*'
+    let loc_embed  = '^%(\s|\_^)`.+\s<\zs.+\ze>`_'.ref_end
+
+    let s:p.location = '\v'.loc_inline.'|'. loc_normal
+                \.'|'.loc_anonymous
+    let s:p.loc_embed = '\v'.loc_embed 
+
+    let s:p.loc_normal = '\v'.loc_normal
 
     " sub match for all_link:
     " 1 link_tar

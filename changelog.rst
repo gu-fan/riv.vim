@@ -4,7 +4,9 @@ Changelogs
 ==========
 
 * 0.77: 
-  
+ 
+  :Fold:    Optimize folding, and sub the `\_s` pattern with
+            `(\s|$)`, due to vim's bug cc470cad_
   :Indent:  Rewrite indent behavior as #71 mentioned.  e7539c98_
   :Misc:    Make section title pos unchanged while use RivTitle 6470ad9f_
   :Publish: ``g:riv_auto_rst2html`` added for auto publish.
@@ -12,9 +14,7 @@ Changelogs
   :Misc:    optimize create#link behavior, 
             add `<c-e>cg` for create git commit link
 
-* 0.74 ~ 0.76:  Mainly a bug__ fix__ version.
-
-__ www.163.c
+* 0.74 ~ 0.76:  Mainly a bug fix version.
 
   :Intro:   Gif with InstantRst added.
   :Syntax:  Fix #43 pygment and vim code's different.
@@ -236,3 +236,4 @@ __ www.163.c
 .. _42c20948: 42c2094883ece4c3c467cce79b79f4c24a4aa280
 .. _6470ad9f: 6470ad9ff5033bbddfcce79dbb17de7f5876889b
 .. _e7539c98: e7539c98b54e25dc59dc316dd9c268ce4d425f33
+.. _cc470cad: cc470cadafe1899305a53fac0a9ad8cc81b8ae6f

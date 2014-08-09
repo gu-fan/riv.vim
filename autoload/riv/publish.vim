@@ -13,6 +13,7 @@ if has('win32') || has('win64')
 else
     let s:os = 'unix'
 endif
+let s:p = g:_riv_p
 fun! s:escape_file_ptn(file) "{{{
     return  '\v%(^|\s|[''"([{<,;!?])\zs\[\[' . a:file . '\]\]\ze%($|\s|[''")\]}>:.,;!?])'
 endfun "}}}
@@ -100,6 +101,7 @@ let s:tempdir = riv#path#directory(fnamemodify(s:tempfile,':h'))
 fun! s:create_tmp(file) "{{{
     update
     let lines = map(readfile(a:file),'s:repl_file_link(v:val)')
+    call map(lines , 's:sub_ext2html(v:val)')
     call writefile(lines, s:tempfile)       " not all OS can pipe
     return s:tempfile
 endfun "}}}
@@ -267,6 +269,18 @@ fun! riv#publish#file2(ft, browse) "{{{
         call s:single2(a:ft, file, a:browse)
     endif
 endfun "}}}
+fun! s:sub_ext2html(line)
+    " sub the .. xxx.rst: xxx.rst 
+    " to      .. xxx.rst: xxx.html
+    let line = a:line
+    let str = matchstr(line, s:p.loc_normal)
+    " >>> echo '.rst' =~ '\'.riv#path#ext().'$'
+    " >>> echo riv#path#ext()
+    if str != '' && str =~  '\'.riv#path#ext().'$'
+        let line = substitute(line, '\'.riv#path#ext().'\s*$','.html','')
+    endif
+    return line
+endfun
 fun! riv#publish#2(ft, file, path, browse) "{{{
     let file = expand(a:file)
     let out_path = a:path . riv#path#rel_to_root(file)
@@ -281,8 +295,15 @@ fun! riv#publish#2(ft, file, path, browse) "{{{
                     \})
 
     else
+        update
+        " sub ext 2 html
+        let lines = readfile(file)
+        call map(lines , 's:sub_ext2html(v:val)')
+        call writefile(lines, s:tempfile) 
+
         call s:convert({'filetype': a:ft,
-                    \'input': file,
+                    \'input': s:tempfile,
+                    \'real_file': file,
                     \'output': file_path,
                     \})
 

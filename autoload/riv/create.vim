@@ -62,7 +62,13 @@ fun! s:expand_link(word,...) "{{{
     if word=~ riv#ptn#link_file()
         return s:expand_file_link(word)
     else
-        if word =~ '\v^'.g:_riv_p.ref_name.'$'
+        if riv#path#is_directory(word) 
+            \ && riv#path#is_relative(word)
+            " Create Dir/index.rst here
+            let loc = word . riv#path#idx_file()
+            let ref = word[:-2].'_'
+            let tar = '.. _'.word[:-2].': '.loc
+        elseif word =~ '\v^'.g:_riv_p.ref_name.'$'
             if word =~ '^[[:alnum:]]\{40}$'
                 let [ref, tar] = [word[:7].'_', '.. _' . word[:7].': '.word]
             else
@@ -173,6 +179,8 @@ fun! riv#create#link() "{{{
         call append(row, ["",tar])
         " exe "normal! jj0f:2lv$\<C-G>"
     endif
+    redraw
+    echo 'Create Link Done.'
 endfun "}}}
 "}}}
 " scratch "{{{

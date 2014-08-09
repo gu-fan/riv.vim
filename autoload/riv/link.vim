@@ -8,6 +8,8 @@
 let s:cpo_save = &cpo
 set cpo-=C
 
+let s:p = g:_riv_p
+
 fun! riv#link#get_last_foot() "{{{
     " return  [ id , row]
     let pos = getpos('.')
@@ -24,11 +26,11 @@ fun! riv#link#finder(dir) "{{{
     let flag = a:dir=="b" ? 'Wnb' : 'Wn'
     let [srow,scol] = searchpos(riv#ptn#link_all(),flag,0,100)
     if srow[0] != 0
-        call setpos("'`",getpos('.'))
-        call cursor(srow, scol)
-
+        " call setpos("'`",getpos('.'))
         " NOTE: Add it to jumplist
         norm! m'
+        call cursor(srow, scol)
+
     endif
 endfun "}}}
 fun! s:normal_ptn(text) "{{{
@@ -95,7 +97,11 @@ fun! s:find_sect(ptn) "{{{
     endif
 endfun "}}}
 
-fun! riv#link#open() "{{{
+fun! s:is_file(file) "{{{
+    return filereadable(a:file)
+endfun "}}}
+
+fun! riv#link#open(...) "{{{
 
     let [row,col] = getpos('.')[1:2]
     let line = getline(row)
@@ -111,33 +117,87 @@ fun! riv#link#open() "{{{
     if empty(mo) || mo.start+1 > col || mo.end < col
         return
     endif
+    " s:p['link_all'.i] =
+    "             \  '\v('. link_target 
+    "             \ . ')|(' . link_reference
+    "             \ . ')|(' . link_uri 
+    "             \ . ')|(' . link_file{i}
+    "             \ . ')|(' . ext_file_link
+    "             \. ')'
+    " Link_target
     if !empty(mo.groups[1])
         " at it's target , find it's referrence
         let [sr,sc] = s:find_ref(mo.str)
         if sr != 0
-            call setpos("'`",getpos('.'))
+            " call setpos("'`",getpos('.'))
+            norm! m'
             call cursor(sr,sc)
+            " openfold and redrow
             normal! zvz.
             return 1
         else
             call riv#warning(g:_riv_e.REF_NOT_FOUND)
             return -1
         endif
+    " Link Reference
     elseif !empty(mo.groups[2])
         " check if it's embbed link
-        let em = matchstr(mo.groups[2], '`[^`]*\s<\zs[^`]*\ze>`_')
-        if empty(em)
+        let loc = matchstr(mo.groups[2], s:p.loc_embed)
+        let [sr, sc] = [0, 0]
+        if empty(loc)
             let [sr,sc] = s:find_tar(mo.str)
             if sr != 0
-                call setpos("'`",getpos('.'))
-                call cursor(sr,sc)
-                normal! zvz.
+                
+                " let norm_ptn = s:normal_ptn(a:text)
+                " let tar_ptn = s:target_ptn(norm_ptn)
+                " >>> echo mo
+                " >>> echo s:p.location
+                let loc = matchstr(getline(sr), s:p.location)
+
+                if loc == ''
+                    let [sr, sc] = searchpos('\S', 'n', 0 , 100)
+                    if sr == 0
+                        call riv#warning(g:_riv_e.TAR_NOT_FOUND)
+                        return -2
+                    endif
+                    let loc = getline(sr)
+
+                    " We put the cursor on the location.
+                else
+                    let sc = match(getline(sr), s:p.location)
+                endif
+
             else
-                call riv#warning(g:_riv_e.REF_NOT_FOUND)
+                call riv#warning(g:_riv_e.TAR_NOT_FOUND)
                 return -2
             endif
-        else
-            sil! exe "!".g:riv_web_browser." ". escape(em,'#%')." &"
+        endif
+
+        let move_only = a:0 ? a:1 : 0
+        if move_only != 1 && g:riv_open_link_location == 1 
+        " Open file have extenstins or exists
+            if s:is_file(loc) || loc =~ s:p.ext_file_link 
+                exe 'edit '.loc
+            redraw
+            echo "Use :RivLinkShow <C-E>ks to move to the location."
+            return 2
+            elseif loc =~ s:p.link_uri
+                if loc =~ s:p.link_mail
+                    let loc = 'mailto:' . loc
+                endif
+                sil! exe "!".g:riv_web_browser." ". escape(loc,'#%')." &"
+            return 2
+            redraw
+            echo "Use :RivLinkShow <C-E>ks to move to the location."
+            endif
+        endif
+        if sr != 0
+        " Just move there
+            norm! m'
+            call cursor([sr,1,0])
+            normal! zvz.
+            " NOTE: the cursor(row,col) not work for col.
+            exe 'norm! '.sc . 'l'
         endif
         return 2
     elseif !empty(mo.groups[3])

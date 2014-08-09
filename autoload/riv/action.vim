@@ -41,7 +41,7 @@ fun! riv#action#db_click(mouse) "{{{
     let row = line('.')
     if foldclosed(row) != -1
         exe "normal! zv"
-    elseif !riv#link#open()
+    elseif riv#link#open() == 0
         if s:is_in_sect_title(row)
             exe "normal! zc"
             return
