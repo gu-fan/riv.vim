@@ -14,17 +14,17 @@ else
     let s:os = 'unix'
 endif
 fun! s:escape_file_ptn(file) "{{{
-    return  '\v%(^|\s|[''"([{<,;!?])\zs\[\[' . a:file . '\]\]\ze%($|\s|[''")\]}>:.,;!?])'
+    if riv#path#file_link_style() == 2
+      return  '\v%(^|\s|[''"([{<,;!?])\zs:doc:`' . a:file . '`\ze%($|\s|[''")\]}>:.,;!?])'
+    else
+      return  '\v%(^|\s|[''"([{<,;!?])\zs\[\[' . a:file . '\]\]\ze%($|\s|[''")\]}>:.,;!?])'
+    endif
 endfun "}}}
 fun! s:escape(txt) "{{{
     return escape(a:txt, '~.*\[]^$')
 endfun "}}}
 fun! s:gen_embed_link(title, path) "{{{
-    if riv#path#file_link_style() == 2
-        return  '`['.a:title.'] <'.a:path.'>`_'
-    else
-        return  '`'.a:title.' <'.a:path.'>`_'
-    endif
+    return  '`'.a:title.' <'.a:path.'>`_'
 endfun "}}}
 
 fun! riv#publish#path(str) "{{{
@@ -35,10 +35,12 @@ fun! riv#publish#path(str) "{{{
     " [[/xxx]]  => _build/DOC_ROOT/xxx.html
     " [[/xxx/]]  => _build/DOC_ROOT/xxx/index.html
     " [[~/xxx]] => ~/xxx
+    "
+    " :doc:`xxx`      => _build/xxx.html
+    " :doc:`xxx.vim`  => _buld/xxx.vim
+    " :doc:`/xxx`     => _build/DOC_ROOT/xxx.html
 
-    let f = matchstr(a:str, '^\[\[\zs.*\ze\]\]$')
-    " absolute path are files. no html link
-    let t = f =~ '^([~]|[a-zA-Z]:)' ? 'file' : 'doc'
+    let [f, t] = riv#ptn#get_file(a:str)
 
     if riv#path#is_relative(f)
         let file = f
@@ -59,8 +61,8 @@ fun! riv#publish#path(str) "{{{
     elseif fnamemodify(file, ':e') == riv#path#p_ext() && t == 'doc'
         let file = fnamemodify(file, ':r') . '.html'
     endif
-    
-    return file
+
+    return [file, f]
 endfun "}}}
 
 fun! s:repl_file_link(line) "{{{
@@ -70,9 +72,14 @@ fun! s:repl_file_link(line) "{{{
     " [[index.vim]]   => `index.vim <index.vim>`_
     " [[index/]]      => `index/ <index/index.html>`_
     " [[/xxx/a.rst]]  => `/xxx/a.rst  <DOC_ROOT/xxx/a.rst>`_
-    
+    "
+    " :doc:`index`      => `index <index.html>`_
+    " :doc:`index.rst`  => `index <index.html>`_
+    " :doc:`index.vim`  => `index.vim <index.vim>`_
+    " :doc:`/xxx/a.rst` => `/xxx/a.rst <DOC_ROOT>/xxx/a.rst`_
+
     let line = a:line
-    
+
     " we will get the idx and find the pattern from origin line.
     let o_line = line
     let pre_idx = 0           " for the inline markup column check
@@ -83,9 +90,9 @@ fun! s:repl_file_link(line) "{{{
         " it's not in a inline markup
         if empty(obj)
             " substitute process
-            let title = s:escape(matchstr(str, '^\[\[\zs.*\ze\]\]$'))
-            let path = riv#publish#path(str)
-            let line = substitute(line, s:escape_file_ptn(title), 
+            let [path, f] = riv#publish#path(str)
+            let title = s:escape(f)
+            let line = substitute(line, s:escape_file_ptn(title),
                             \s:gen_embed_link(title, path), 'g')
         endif
         let idx = matchend(o_line, riv#ptn#link_file(),idx)
@@ -272,7 +279,7 @@ fun! riv#publish#2(ft, file, path, browse) "{{{
     let out_path = a:path . riv#path#rel_to_root(file)
     let file_path = riv#path#ext_to(out_path, a:ft)
     call riv#publish#auto_mkdir(out_path)
-    if riv#path#file_link_style() == 1
+    if riv#path#file_link_style()
 
         call s:convert({'filetype': a:ft,
                     \'input': s:create_tmp(file),
