@@ -3,7 +3,7 @@
 "    File: after/syntax/rst.vim
 "  Author: Rykka G.F
 " Summary: syntax file with options.
-"  Update: 2014-07-12
+"  Update: 2014-08-14
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -155,7 +155,7 @@ hi def link rstDefinitionList               Statement
 hi def link rstFieldList                    Function
 hi def link rstBibliographicField           Constant
 hi def link rstOptionList                   Statement
-hi def link rstRoles                        Function
+hi def link rstRoles                        Operator
 
 hi def link rstBlockQuoteAttr               Exception
 hi def link rstCommentTitle                 SpecialComment

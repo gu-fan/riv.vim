@@ -1,7 +1,7 @@
 " Vim syntax file
 " Language:         reStructuredText documentation format
 " Maintainer:       Nikolai Weibull <now@bitwi.se>
-" Latest Revision:  2014-07-24
+" Latest Revision:  2014-08-14
 
 if exists("b:current_syntax")
   finish
@@ -70,7 +70,9 @@ execute 'syn region rstExplicitMarkup keepend'
 syn match   rstExplicitMarkupDot       '^\s*\.\.\_s' contained
       \ nextgroup=@rstDirectives,rstSubstitutionDefinition,rstComment
 
-let s:ReferenceName = '[[:alnum:]]\+\%([_.-][[:alnum:]]\+\)*'
+" NOTE: the rst recongnize unicode_char_ target and refernce
+" So use [^[:punct:]] here.
+let s:ReferenceName = '[^[:punct:]]\+\%([_.-][^[:punct:]]\+\)*'
 
 " NOTE: #66 If we use '.*' all explicit markup will became comment.
 " So use '[^.]' here. us \_s to skip the exdirective match
@@ -198,7 +200,7 @@ hi def link rstDelimiter                    Delimiter
 hi def      rstEmphasis                     term=italic cterm=italic gui=italic
 hi def link rstStrongEmphasis               Special
 "term=bold cterm=bold gui=bold
-hi def link rstInterpretedTextOrHyperlinkReference  Constant
+hi def link rstInterpretedTextOrHyperlinkReference Float 
 hi def link rstInlineLiteral                String
 hi def link rstSubstitutionReference        PreProc
 hi def link rstInlineInternalTargets        Identifier

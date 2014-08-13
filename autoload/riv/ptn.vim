@@ -3,7 +3,7 @@
 "    File: ptn.vim
 " Summary: for all the patterns
 "  Author: Rykka G.F
-"  Update: 2012-09-13
+"  Update: 2014-08-14
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -418,7 +418,9 @@ fun! riv#ptn#init() "{{{
     " `xxx xx`_
     "  xxx__
     " [#]_ [*]_  [#xxx]_  [3]_    and citation [xxxx]_
-    let ref_name = '[[:alnum:]]+%([_.-][[:alnum:]]+)*'
+    " NOTE: the rst recongnize unicode_char_ target and refernce
+    " So use [^[:punct]] here.
+    let ref_name = '[^[:punct:]]+%([_.-][^[:punct]]+)*'
     let ref_end = '%($|\s|[''")\]}>/:.,;!?\\-])'
     let ref_bgn = '%(\s|^|[''"([{</:])'
 
@@ -560,10 +562,17 @@ fun! riv#ptn#exp_con_idt(line) "{{{
 endfun "}}}
 
 fun! riv#ptn#get(ptn,row) "{{{
+    " get the pattern at row and indent > 0
+    
+    " return 0 if find nothhing.
+    " else return the pattern's row
     
     let row = prevnonblank(a:row)
 
     let save_pos = getpos('.')
+
+    " XXX
+    " can we use another method without moving cursor.
     call cursor(row,1)
 
     while getline(row) !~ a:ptn && row != 0
