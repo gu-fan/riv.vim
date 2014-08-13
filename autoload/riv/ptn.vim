@@ -420,7 +420,7 @@ fun! riv#ptn#init() "{{{
     " [#]_ [*]_  [#xxx]_  [3]_    and citation [xxxx]_
     " NOTE: the rst recongnize unicode_char_ target and refernce
     " So use [^[:punct]] here.
-    let ref_name = '[^[:punct:]]+%([_.-][^[:punct]]+)*'
+    let ref_name = '[^[:cntrl:][:punct:][:space:]]+%([_.-][^[:space:][:punct:][:cntrl:]]+)*'
     let ref_end = '%($|\s|[''")\]}>/:.,;!?\\-])'
     let ref_bgn = '%(\s|^|[''"([{</:])'
 

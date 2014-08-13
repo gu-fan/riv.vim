@@ -71,8 +71,8 @@ syn match   rstExplicitMarkupDot       '^\s*\.\.\_s' contained
       \ nextgroup=@rstDirectives,rstSubstitutionDefinition,rstComment
 
 " NOTE: the rst recongnize unicode_char_ target and refernce
-" So use [^[:punct:]] here.
-let s:ReferenceName = '[^[:punct:]]\+\%([_.-][^[:punct:]]\+\)*'
+" So use [^[:punct:][:space:]] here.
+let s:ReferenceName = '[^[:cntrl:][:punct:][:space:]]\+\%([_.-][^[:space:][:punct:][:cntrl:]]\+\)*'
 
 " NOTE: #66 If we use '.*' all explicit markup will became comment.
 " So use '[^.]' here. us \_s to skip the exdirective match

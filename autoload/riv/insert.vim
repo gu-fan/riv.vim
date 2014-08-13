@@ -2,7 +2,7 @@
 "    Name: restin/insert.vim
 "    File: restin/insert.vim
 "  Author: Rykka G.Forest
-"  Update: 2014-07-11
+"  Update: 2014-08-14
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
