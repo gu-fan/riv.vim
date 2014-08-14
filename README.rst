@@ -18,31 +18,34 @@ Lots of changes were made, so take care, and
    **DON'T PANIC!**
 
 1. A brand new html theme for riv, 
-   provide much better view experience in browser.
+   provides much better view experience in browser.
 
-   you can preview it at http://rykka.github.io/rst-html-theme/test
+   You can preview it at http://rykka.github.io/rst-html-theme/test
 
    Any suggestion and other themes are welcome.
 
    Also, code syntax highlighting and themes are now supported,
    you can change the theme by setting ``g:riv_html_code_hl_style``, 
-   default is 'molokai'. (This option may change name in future.)
-
+   default is 'molokai'. 
+   (This option may change to ``g:riv_code_theme`` in future.)
 
    You can add your css theme's dir at ``g:riv_css_theme_dir``.
-
    then set the style to the filename.
 
-2. An option for auto convert to html on write is added:
+   For view and edit in vim, you can use most morden themes like molokai.
+   And the Galaxy.vim_ can be a good choice too.
 
-   ``g:riv_auto_rst2html``, set it to 1 to active.
+2. Auto convert to html on ``:w``:
 
+   Use option ``g:riv_auto_rst2html``, set it to 1 to active.
    default is 0. 
 
    If you even don't want to refresh the browser, use InstantRst_.
 
-3. New syntax and method for local files that is much better,
-   simpler, and robust (#72).
+3. New syntax and method for local files, 
+   which is much simpler, and robust.
+
+   see `#72`_ for details.
 
    Just input ``xxx.rst`` or ``xxx/``,
    Then use ``:RivCreatLink`` or ``<C-E>ck``, 
@@ -53,10 +56,10 @@ Lots of changes were made, so take care, and
 
    To disable this, set ``g:riv_open_link_location`` to 0.
    Then you will move to that location only.
-
    default is 1.
 
-   :NOTE: The xxx.rst in the file location will be auto convert
+   :NOTE: When convert to html,
+          the xxx.rst in the file location will be auto convert
           to xxx.html for navigation in browser.
    
    :NOTE:
@@ -66,7 +69,9 @@ Lots of changes were made, so take care, and
 
        The sphinx style (``:doc:`xxxx```) will go on.
 
-4. Reference links now supporting unicode names.
+4. Unicode Link names.
+
+   Reference links now supporting unicode names.
 
    Also filename supports unicode names too, 
    though that's not encouraged.
@@ -77,8 +82,9 @@ Lots of changes were made, so take care, and
 
        .. 名字: name.rst
 
-5. Redefine the indent behavior and it's simpler and faster 
-   (#71).
+5. Better and faster indent behavior.
+
+   see `#71`_ for details.
 
 6. Fixed lots of misc bugs and made lots of small optimization
 
@@ -100,7 +106,7 @@ Lots of changes were made, so take care, and
 
 Please help improving this plugin, for better writing and reading.
 
-Both bug reports and suggestions are welcomed.
+Both bug reports and suggestions are welcome.
 
 Many Thanks!
 
@@ -303,3 +309,5 @@ Common Issues
 .. _Galaxy.vim: https://github.com/Rykka/galaxy.vim
 .. _VOoM: https://github.com/vim-voom/VOoM
 .. _doctest.vim: https://github.com/Rykka/doctest.vim
+.. _`#71`: https://github.com/Rykka/riv.vim/issues/#71
+.. _`#72`: https://github.com/Rykka/riv.vim/issues/#72
