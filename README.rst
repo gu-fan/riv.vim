@@ -9,8 +9,9 @@ Riv: Take Notes in rst
 :Last Update: 2014-08-14
 :Version: 0.77
 
-Changes
-=======
+
+Changes in 0.77
+===============
 
 Lots of changes were made, so take care, and
 
@@ -23,9 +24,10 @@ Lots of changes were made, so take care, and
 
    Any suggestion and other themes are welcome.
 
-   Also, Code Syntax highlight and theme are now supported,
+   Also, code syntax highlighting and themes are now supported,
    you can change the theme by setting ``g:riv_html_code_hl_style``, 
-   default is 'molokai'.
+   default is 'molokai'. (This option may change name in future.)
+
 
    You can add your css theme's dir at ``g:riv_css_theme_dir``.
 
@@ -82,13 +84,13 @@ Lots of changes were made, so take care, and
 
    The error phase ptn. 
 
-   riv#id() work error.
+   Project's id working error.
 
-   editing a file missing working directory.
+   Editing a file missing working directory.
 
-   syntax highlighting error and optimize.
+   Syntax highlighting error and optimize.
 
-   improved doctest using doctest.vim_
+   Improved doctest using doctest.vim_
 
    ...
 
@@ -96,11 +98,11 @@ Lots of changes were made, so take care, and
 
    **And**
 
-Please help improving this plugin.
+Please help improving this plugin, for better writing and reading.
 
 Both bug reports and suggestions are welcomed.
 
-Thanks!
+Many Thanks!
 
 Intro
 =====
