@@ -3,7 +3,7 @@
 "    File: publish.vim
 " Summary: publish to html/pdf...
 "  Author: Rykka G.F
-"  Update: 2014-08-08
+"  Update: 2014-08-14
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -96,6 +96,8 @@ fun! s:repl_file_link(line) "{{{
     " :doc:`index.rst`  => `index <index.html>`_
     " :doc:`index.vim`  => `index.vim <index.vim>`_
     " :doc:`/xxx/a.rst` => `/xxx/a.rst <DOC_ROOT>/xxx/a.rst`_
+    " >>> echom s:repl_file_link(":doc:`/xxx/a.rst`") 
+    " /xxx/a.rst <DOC_ROOT>/xxx/a.rst`_
 
     let line = a:line
     
@@ -321,6 +323,7 @@ fun! riv#publish#2(ft, file, path, browse) "{{{
     " repl the file link
     " [[xxxx]] to `xxxx<xxxx.html>`_
     " :doc:`xxxx` to `xxxx<xxxx.html>`_
+
     let lines = map(lines, 's:repl_file_link(v:val)')
 
     call map(lines , 's:sub_ext2html(v:val)')
