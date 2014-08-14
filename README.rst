@@ -307,5 +307,5 @@ Common Issues
 .. _Galaxy.vim: https://github.com/Rykka/galaxy.vim
 .. _VOoM: https://github.com/vim-voom/VOoM
 .. _doctest.vim: https://github.com/Rykka/doctest.vim
-.. _`#71`: https://github.com/Rykka/riv.vim/issues/#71
-.. _`#72`: https://github.com/Rykka/riv.vim/issues/#72
+.. _`#71`: https://github.com/Rykka/riv.vim/issues/71
+.. _`#72`: https://github.com/Rykka/riv.vim/issues/72

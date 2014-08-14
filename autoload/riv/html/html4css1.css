@@ -718,6 +718,11 @@ table.borderless td, table.borderless th {
     margin-top: 1em ;
   margin-bottom: 1em }
 
+  div.line-block div.line {
+      background-color: #F7F7F7;
+      margin-top: 0.1em;
+      margin-bottom: 0.1em;
+  }
   div.line-block div.line-block {
     margin-top: 0 ;
     margin-bottom: 0 ;
@@ -928,3 +933,4 @@ table.borderless td, table.borderless th {
   /*}}}*/
   /*}}}*/
 /*  vim: set sw=2 fdm=marker  */
+
