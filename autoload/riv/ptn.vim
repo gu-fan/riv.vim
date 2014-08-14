@@ -359,6 +359,7 @@ fun! riv#ptn#init() "{{{
     "
     "    2. sphinx style
     "       :doc:`xxx`   
+    "       :file`/xxx/xxx.rst`
     "       :download:`/xxx/xxx.rst`
     "
     " NOTE:  the [[/xxx.rst]] for converting are not the same with 
@@ -414,7 +415,7 @@ fun! riv#ptn#init() "{{{
         " :doc:`file` for rst document
         " :download:`file.vim` for file link
         " :doc:`Test <test.rst>` could be used
-        let link_file2 = fname_bgn.'@<=:%(doc|download):`%(' 
+        let link_file2 = fname_bgn.'@<=:%(doc|download|file):`%(' 
                     \. file_name .'|[^`<>]*\<'.file_name.'\>'
                     \.')`\ze'. fname_end 
     " else
@@ -422,7 +423,7 @@ fun! riv#ptn#init() "{{{
     " endif
 
     let s:p.moin_link_str = '\[\[\zs.*\ze\]\]'
-    let s:p.sphinx_link_str = ':\%(doc\|download\):`\([^`<>]*<\zs[^`>]*\ze>\|\zs.*\ze\)`'
+    let s:p.sphinx_link_str = ':\%(doc\|download|file\):`\([^`<>]*<\zs[^`>]*\ze>\|\zs.*\ze\)`'
 
     let s:p.link_file0 = '\v'. link_file0
     let s:p.link_file1 = '\v'. link_file1

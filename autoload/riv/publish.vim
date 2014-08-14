@@ -3,7 +3,7 @@
 "    File: publish.vim
 " Summary: publish to html/pdf...
 "  Author: Rykka G.F
-"  Update: 2014-08-08
+"  Update: 2014-08-14
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -41,10 +41,13 @@ fun! riv#publish#path(str) "{{{
     " [[/xxx]]  => _build/DOC_ROOT/xxx.html
     " [[/xxx/]]  => _build/DOC_ROOT/xxx/index.html
     " [[~/xxx]] => ~/xxx
-
-    let f = matchstr(a:str, '^\[\[\zs.*\ze\]\]$')
-    " absolute path are files. no html link
-    let t = f =~ '^([~]|[a-zA-Z]:)' ? 'file' : 'doc'
+    "
+    " :doc:`xxx` => _build/xxx.html
+    " :doc:`xxx.vim` => _buld/xxx.vim
+    " :doc:`/xxx` => _build/DOC_ROOT/xxx.html
+    "
+   
+    let [f, t] = riv#ptn#get_file(a:str)
 
     if riv#path#is_relative(f)
         let file = f
@@ -58,6 +61,7 @@ fun! riv#publish#path(str) "{{{
             return file
         endif
     endif
+
     if riv#path#is_directory(file) && t == 'doc'
         let file = file . 'index.html'
     elseif fnamemodify(file, ':e') == '' && t == 'doc'
@@ -65,21 +69,18 @@ fun! riv#publish#path(str) "{{{
     elseif fnamemodify(file, ':e') == riv#path#p_ext() && t == 'doc'
         let file = fnamemodify(file, ':r') . '.html'
     endif
-    
-    return file
+
+    return [file, f]
 endfun "}}}
 fun! s:escape_file_ptn(file) "{{{
-    return  '\v%(^|\s|[''"([{<,;!?])\zs\[\[' . a:file . '\]\]\ze%($|\s|[''")\]}>:.,;!?])'
+    return  '\v%(^|\s|[''"([{<,;!?])\zs\[\[' . a:file . '\]\]\ze%($|\s|[''")\]}>:.,;!?])|'
+            \ .'%(^|\s|[''"([{<,;!?])\zs:doc:`' . a:file . '`\ze%($|\s|[''")\]}>:.,;!?])'
 endfun "}}}
 fun! s:escape(txt) "{{{
     return escape(a:txt, '~.*\[]^$')
 endfun "}}}
 fun! s:gen_embed_link(title, path) "{{{
-    if riv#path#file_link_style() == 2
-        return  '`['.a:title.'] <'.a:path.'>`_'
-    else
-        return  '`'.a:title.' <'.a:path.'>`_'
-    endif
+    return  '`'.a:title.' <'.a:path.'>`_'
 endfun "}}}
 
 
@@ -90,7 +91,14 @@ fun! s:repl_file_link(line) "{{{
     " [[index.vim]]   => `index.vim <index.vim>`_
     " [[index/]]      => `index/ <index/index.html>`_
     " [[/xxx/a.rst]]  => `/xxx/a.rst  <DOC_ROOT/xxx/a.rst>`_
-    
+    "
+    " :doc:`index`      => `index <index.html>`_
+    " :doc:`index.rst`  => `index <index.html>`_
+    " :doc:`index.vim`  => `index.vim <index.vim>`_
+    " :doc:`/xxx/a.rst` => `/xxx/a.rst <DOC_ROOT>/xxx/a.rst`_
+    " >>> echom s:repl_file_link(":doc:`/xxx/a.rst`") 
+    " /xxx/a.rst <DOC_ROOT>/xxx/a.rst`_
+
     let line = a:line
     
     " we will get the idx and find the pattern from origin_file line.
@@ -105,9 +113,9 @@ fun! s:repl_file_link(line) "{{{
         " it's not in a inline markup
         if empty(obj)
             " substitute process
-            let title = s:escape(matchstr(str, '^\[\[\zs.*\ze\]\]$'))
-            let path = riv#publish#path(str)
-            let line = substitute(line, s:escape_file_ptn(title), 
+            let [path, f] = riv#publish#path(str)
+            let title = s:escape(f)
+            let line = substitute(line, s:escape_file_ptn(title),
                             \s:gen_embed_link(title, path), 'g')
         endif
         let idx = matchend(o_line, riv#ptn#link_file(),idx)
@@ -314,15 +322,12 @@ fun! riv#publish#2(ft, file, path, browse) "{{{
     " here we can use append line with link
     " repl the file link
     " [[xxxx]] to `xxxx<xxxx.html>`_
-    if riv#path#file_link_style() == 1
-        let lines = map(lines, 's:repl_file_link(v:val)')
-        call map(lines , 's:sub_ext2html(v:val)')
-        call writefile(lines, s:temp_file)       " not all OS can pipe
-    else
-        " sub ext 2 html
-        call map(lines , 's:sub_ext2html(v:val)')
-        call writefile(lines, s:temp_file) 
-    endif
+    " :doc:`xxxx` to `xxxx<xxxx.html>`_
+
+    let lines = map(lines, 's:repl_file_link(v:val)')
+
+    call map(lines , 's:sub_ext2html(v:val)')
+    call writefile(lines, s:temp_file)       " not all OS can pipe
 
 
 
