@@ -25,6 +25,7 @@ Lots of changes were made, so take care, and
    Also, code syntax highlighting and themes are now truly supported,
    you can change the theme by setting ``g:riv_html_code_hl_style``, 
    default is 'molokai'. 
+
    (This option may change to ``g:riv_code_theme`` in future.)
 
    You can add your theme's css dir at ``g:riv_css_theme_dir``.
@@ -151,7 +152,7 @@ Features
     Improved syntax highlighting and folding support for reading document clearly.
 **Publish** 
     Convert rst files to a number of different formats: pdf, html, xml, latex and odt etc.
-    sofish's typo.css_ is added for better performance. 
+    A new theme rhythm.css_ is added for better performance. 
 **Plugins**   
     Support many plugins like Sphinx_ syntax support.
     Other rst plugins:
@@ -309,3 +310,4 @@ Common Issues
 .. _doctest.vim: https://github.com/Rykka/doctest.vim
 .. _`#71`: https://github.com/Rykka/riv.vim/issues/71
 .. _`#72`: https://github.com/Rykka/riv.vim/issues/72
+.. _rhythm.css: https://github.com/Rykka/rhythm.css
