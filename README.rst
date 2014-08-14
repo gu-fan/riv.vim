@@ -22,14 +22,12 @@ Lots of changes were made, so take care, and
 
    You can preview it at http://rykka.github.io/rst-html-theme/test
 
-   Any suggestion and other themes are welcome.
-
-   Also, code syntax highlighting and themes are now supported,
+   Also, code syntax highlighting and themes are now truly supported,
    you can change the theme by setting ``g:riv_html_code_hl_style``, 
    default is 'molokai'. 
    (This option may change to ``g:riv_code_theme`` in future.)
 
-   You can add your css theme's dir at ``g:riv_css_theme_dir``.
+   You can add your theme's css dir at ``g:riv_css_theme_dir``.
    then set the style to the filename.
 
    For view and edit in vim, you can use most morden themes like molokai.
