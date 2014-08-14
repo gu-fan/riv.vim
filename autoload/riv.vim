@@ -14,24 +14,28 @@ let s:tempdir = fnamemodify(tempname(),':p')
 
 " Miscs "{{{1
 fun! riv#echo(msg) "{{{
+    redraw
     echohl Type
     echo '[RIV]'
     echohl Normal
     echon a:msg
 endfun "}}}
 fun! riv#error(msg) "{{{
+    redraw
     echohl ErrorMsg
     echo '[RIV]'
     echohl Normal
     echon a:msg
 endfun "}}}
 fun! riv#warning(msg) "{{{
+    redraw
     echohl WarningMsg
     echo '[RIV]'
     echohl Normal
     echon a:msg
 endfun "}}}
 fun! riv#debug(msg) "{{{
+    redraw
     if g:riv_debug
         echohl KeyWord
         echom "[RIV]"
@@ -67,6 +71,14 @@ fun! riv#get_latest() "{{{
     echohl Statement
     echo "Get Latest Verion at https://github.com/Rykka/riv.vim"
     echohl Normal
+endfun "}}}
+fun! riv#system(arg) abort "{{{
+    " XXX: error in windows tmp files
+    if exists("*vimproc#system")
+        return vimproc#system(a:arg)
+    else
+        return system(a:arg)
+    endif
 endfun "}}}
 "}}}
 "{{{ Loading Functions
@@ -134,7 +146,7 @@ let s:default.options = {
     \'rst2s5_args'        : "",
     \'rst2latex_args'     : "",
     \'section_levels'     : '=-~"''`',
-    \'html_code_hl_style' : 'default',
+    \'html_code_hl_style' : 'molokai',
     \'fuzzy_help'         : 0,
     \'auto_format_table'  : 1,
     \'fold_info_pos'      : 'right',
@@ -157,6 +169,7 @@ let s:default.options = {
     \'master_doc'         : 'index',
     \'auto_rst2html'      :  0,
     \'open_link_location' :  1,
+    \'css_theme_dir'      :  '',
     \}
 "}}}
 
@@ -176,9 +189,9 @@ endfun "}}}
 fun! riv#index(...) "{{{
     let id = a:0 ? a:1 : 0
     if exists("g:_riv_c.p[id]")
-        " >>> echo riv#path#idx_file()
+        " >>> echo riv#path#root_index()
         " index.rst
-        exe "edit " . riv#path#root(id) . riv#path#idx_file(id)
+        exe "edit " . riv#path#root_index(id)
         " e g:_riv_c.p[id]._root_path
     else
         call riv#error("No such Project ID in g:riv_projects.")
@@ -237,6 +250,22 @@ fun! riv#load_conf() "{{{1
             let s:c.py_imported = 0
         endtry
     endif "}}}
+
+
+    " XXX:
+    " For using one rst both in windows and linux.
+    " This will cause things different, though vim will handle it.
+    "
+    " Is this correct way to define slash?
+    " can 'shellslash' be used?
+    
+    let s:c.is_windows = has('win16') || has('win32') || has('win64') || has('win95')
+    let s:c.is_cygwin = has('win32unix')
+    let s:c.is_mac = !s:c.is_windows && !s:c.is_cygwin
+    \ && (has('mac') || has('macunix') || has('gui_macvim') ||
+    \ (!isdirectory('/proc') && executable('sw_vers')))
+
+    let s:c.slash =  s:c.is_windows ? '\' : '/'
     
     " Project: "{{{
     let s:c.p_basic = {
@@ -406,9 +435,7 @@ fun! riv#buf_load_aug() "{{{
             au! InsertLeave <buffer> call riv#table#format_pos()
         endif "}}}
         if exists("g:riv_auto_rst2html") && g:riv_auto_rst2html == 1 "{{{
-            if b:riv_id != -1
-                au BufWritePost <buffer> sil! Riv2HtmlFile
-            endif
+            au BufWritePost <buffer> sil! Riv2HtmlFile
         endif "}}}
         if exists("g:riv_link_cursor_hl")  && g:riv_link_cursor_hl == 1 "{{{
             " cursor_link_highlight
@@ -445,6 +472,7 @@ fun! riv#buf_init() "{{{
     call riv#cmd#init_maps()
     call riv#buf_load_aug()
 endfun "}}}
+
 
 if expand('<sfile>:p') == expand('%:p') "{{{
     call riv#init()

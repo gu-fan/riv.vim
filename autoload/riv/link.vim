@@ -9,6 +9,37 @@ let s:cpo_save = &cpo
 set cpo-=C
 
 let s:p = g:_riv_p
+let s:sys = function('riv#system')
+
+fun! riv#link#browse(link) "{{{
+    " use browser to open link
+    " add 'mailto:' to 'mail@example.com', otherwise browser will open 
+    " example.com
+    let link = a:link
+    if link =~ s:p.link_mail
+        let link = 'mailto:' . link
+    endif
+    call s:sys(g:riv_web_browser." ". escape(link,'#%')." &")
+endfun "}}}
+fun! s:cursor(row, col) "{{{
+    " Move to cursor with jumplist changed.
+    
+    if a:row == 0 | return  | endif
+
+    " add to jumplist
+    norm! m'
+    call cursor(a:row, a:col)
+
+    " sometime column is not moved to, so use this.
+    " FIXED: maybe caused by `norm! z.`
+    " if getpos('.')[2] != a:col
+    "     exe 'norm! 0'.a:col. 'l'
+    " endif
+
+    " openfold, put center and redraw
+    normal! zvzz
+
+endfun "}}}
 
 fun! riv#link#get_last_foot() "{{{
     " return  [ id , row]
@@ -25,13 +56,7 @@ endfun "}}}
 fun! riv#link#finder(dir) "{{{
     let flag = a:dir=="b" ? 'Wnb' : 'Wn'
     let [srow,scol] = searchpos(riv#ptn#link_all(),flag,0,100)
-    if srow[0] != 0
-        " call setpos("'`",getpos('.'))
-        " NOTE: Add it to jumplist
-        norm! m'
-        call cursor(srow, scol)
-
-    endif
+    call s:cursor(srow, scol)
 endfun "}}}
 fun! s:normal_ptn(text) "{{{
     let text = substitute(a:text ,'\v(^__=|_=_$)','','g')
@@ -51,6 +76,10 @@ fun! s:reference_ptn(text) "{{{
 endfun "}}}
 
 fun! s:find_tar(text) "{{{
+    " XXX
+    " THIS function may should rewrite
+    " norm_ptn 
+    " with create.vim 's norm_ref and norm_tar
 
     if a:text =~ g:_riv_p.link_ref_anonymous
         let [a_row, a_col] = searchpos(g:_riv_p.link_tar_anonymous, 'wn', 0 , 100)
@@ -129,11 +158,6 @@ fun! riv#link#open(...) "{{{
         " at it's target , find it's referrence
         let [sr,sc] = s:find_ref(mo.str)
         if sr != 0
-            " call setpos("'`",getpos('.'))
-            norm! m'
-            call cursor(sr,sc)
-            " openfold and redrow
-            normal! zvz.
             return 1
         else
             call riv#warning(g:_riv_e.REF_NOT_FOUND)
@@ -147,11 +171,12 @@ fun! riv#link#open(...) "{{{
         if empty(loc)
             let [sr,sc] = s:find_tar(mo.str)
             if sr != 0
-                
+
                 " let norm_ptn = s:normal_ptn(a:text)
                 " let tar_ptn = s:target_ptn(norm_ptn)
                 " >>> echo mo
                 " >>> echo s:p.location
+
                 let loc = matchstr(getline(sr), s:p.location)
 
                 if loc == ''
@@ -161,8 +186,6 @@ fun! riv#link#open(...) "{{{
                         return -2
                     endif
                     let loc = getline(sr)
-
-                    " We put the cursor on the location.
                 else
                     let sc = match(getline(sr), s:p.location)
                 endif
@@ -173,33 +196,26 @@ fun! riv#link#open(...) "{{{
             endif
         endif
 
+        let pwd = expand('%:p')
+
         let move_only = a:0 ? a:1 : 0
         if move_only != 1 && g:riv_open_link_location == 1 
-        " Open file have extenstins or exists
+            " Open file have extenstins or exists
             if s:is_file(loc) || loc =~ s:p.ext_file_link 
-                exe 'edit '.loc
-            redraw
-            echo "Use :RivLinkShow <C-E>ks to move to the location."
+                call riv#file#edit(loc)
+                call riv#echo("Use :RivLinkShow <C-E>ks to move to link's location.")
             return 2
             elseif loc =~ s:p.link_uri
-                if loc =~ s:p.link_mail
-                    let loc = 'mailto:' . loc
-                endif
-                sil! exe "!".g:riv_web_browser." ". escape(loc,'#%')." &"
+                call riv#link#browse(loc)
+                call riv#echo("Use :RivLinkShow <C-E>ks to move to link's location.")
             return 2
-            redraw
-            echo "Use :RivLinkShow <C-E>ks to move to the location."
             endif
         endif
-        if sr != 0
-        " Just move there
-            norm! m'
-            call cursor([sr,1,0])
-            normal! zvz.
-            " NOTE: the cursor(row,col) not work for col.
-            exe 'norm! '.sc . 'l'
-        endif
+        " put cursor on location
+        call s:cursor(sr, sc+1)
+
         return 2
+
     elseif !empty(mo.groups[3])
         if !empty(mo.groups[4])             " it's file://xxx
             if mo.str =~ '^file'
@@ -207,13 +223,13 @@ fun! riv#link#open(...) "{{{
                 call riv#file#edit(expand(mo.groups[4]))
             else
                 " vim will expand the # and % , so escape it.
-                sil! exe "!".g:riv_web_browser." ". escape(mo.groups[4],'#%')." &"
+                call riv#link#browse()
             endif
         else
-            if mo.groups[3] =~ g:_riv_p.link_mail
+            if mo.groups[3] =~ s:p.link_mail
                 let mo.groups[3] = 'mailto:' . mo.groups[3]
             endif
-            sil! exe "!".g:riv_web_browser." ". escape(mo.groups[3],'#%')." &"
+            call riv#link#browse(mo.groups[3])
         endif
         return 3
     elseif !empty(mo.groups[5])
@@ -266,7 +282,7 @@ fun! riv#link#path(str) "{{{
 
     let [f,t] = riv#ptn#get_file(a:str)
     if riv#path#is_relative(f)
-        let file = expand('%:p:h').'/' . f
+        let file = riv#path#join(expand('%:p:h'), f)
     else
         " if it have '/' at start. 
         " it is the doc root for sphinx and moinmoin 

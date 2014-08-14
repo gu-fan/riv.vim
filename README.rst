@@ -6,14 +6,106 @@ Riv: Take Notes in rst
 
     -- `Jon Stewart`_
 
-:Last Update: 2014-08-09
-:Version: 0.77 
+:Last Update: 2014-08-14
+:Version: 0.77
+
+Changes
+=======
+
+Lots of changes were made, so take care, and
+
+   **DON'T PANIC!**
+
+1. A brand new html theme for riv, 
+   provide much better view experience in browser.
+
+   you can preview it at http://rykka.github.io/rst-html-theme/test
+
+   Any suggestion and other themes are welcome.
+
+   Also, Code Syntax highlight and theme are now supported,
+   you can change the theme by setting ``g:riv_html_code_hl_style``, 
+   default is 'molokai'.
+
+   You can add your css theme's dir at ``g:riv_css_theme_dir``.
+
+   then set the style to the filename.
+
+2. An option for auto convert to html on write is added:
+
+   ``g:riv_auto_rst2html``, set it to 1 to active.
+
+   default is 0. 
+
+   If you even don't want to refresh the browser, use InstantRst_.
+
+3. New syntax and method for local files that is much better,
+   simpler, and robust (#72).
+
+   Just input ``xxx.rst`` or ``xxx/``,
+   Then use ``:RivCreatLink`` or ``<C-E>ck``, 
+   you will get the file link.
+
+   When click on a reference which location is a file link,
+   you will open it directly.
+
+   To disable this, set ``g:riv_open_link_location`` to 0.
+   Then you will move to that location only.
+
+   default is 1.
+
+   :NOTE: The xxx.rst in the file location will be auto convert
+          to xxx.html for navigation in browser.
+   
+   :NOTE:
+
+       The moinmoin style (``[[xxxx]]``) is deprecated, and will be removed
+       in next few versions.
+
+       The sphinx style (``:doc:`xxxx```) will go on.
+
+4. Reference links now supporting unicode names.
+
+   Also filename supports unicode names too, 
+   though that's not encouraged.
+
+   like::
+
+       名字_
+
+       .. 名字: name.rst
+
+5. Redefine the indent behavior and it's simpler and faster 
+   (#71).
+
+6. Fixed lots of misc bugs and made lots of small optimization
+
+   The error phase ptn. 
+
+   riv#id() work error.
+
+   editing a file missing working directory.
+
+   syntax highlighting error and optimize.
+
+   improved doctest using doctest.vim_
+
+   ...
+
+----
+
+   **And**
+
+Please help improving this plugin.
+
+Both bug reports and suggestions are welcomed.
+
+Thanks!
 
 Intro
 =====
 
 **Riv** is a vim plugin for taking notes with reStructuredText_.
-
 
 A screencast with Riv in vim and InstantRst_
 
@@ -208,3 +300,4 @@ Common Issues
 .. _typo.css:  https://github.com/sofish/Typo.css 
 .. _Galaxy.vim: https://github.com/Rykka/galaxy.vim
 .. _VOoM: https://github.com/vim-voom/VOoM
+.. _doctest.vim: https://github.com/Rykka/doctest.vim

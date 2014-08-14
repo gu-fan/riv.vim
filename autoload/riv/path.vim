@@ -8,24 +8,18 @@
 let s:cpo_save = &cpo
 set cpo-=C
 
-let s:path_sep_pattern = (exists('+shellslash') ? '[\\/]' : '/') . '\+'
-let s:is_windows = has('win16') || has('win32') || has('win64') || has('win95')
-let s:is_cygwin = has('win32unix')
-let s:is_mac = !s:is_windows && !s:is_cygwin
-\ && (has('mac') || has('macunix') || has('gui_macvim') ||
-\ (!isdirectory('/proc') && executable('sw_vers')))
+let s:slash = g:_riv_c.slash
 
-" XXX:
-" For using one rst both in windows and linux.
-" This will cause things different, though vim will handle it.
-let s:slash = has('win32') || has('win64') ? '\' : '/'
-let s:win =  has('win32') || has('win64') ? 1 : 0
 
 let s:c = g:_riv_c
 let s:id = function("riv#id")
 
 fun! riv#path#root(...) "{{{
     return s:c.p[a:0 ? a:1 : s:id()]._root_path
+endfun "}}}
+fun! riv#path#root_index(...) "{{{
+    let id = a:0 ? a:1 : s:id()
+    return riv#path#root(id) . riv#path#idx_file(id)
 endfun "}}}
 
 fun! riv#path#build_ft(ft,...) "{{{
@@ -81,7 +75,14 @@ fun! riv#path#directory(path) "{{{
     return riv#path#is_directory(a:path) ? a:path : a:path . s:slash
 endfun "}}}
 fun! riv#path#rel_to(dir, path) "{{{
-    " return the related path to 'dir', default is current file's dir
+    " return the relative path to 'dir', 
+    "
+    " >>> echom riv#path#rel_to('/etc/X11/', '/etc/X11/home')
+    " home
+    " >>> echom riv#path#rel_to('/etc/X11/', '/etc/home')
+    " ../home
+    " >>> echom riv#path#rel_to('/etc/X11/', '/tc/home')
+    " Riv: Note a related path
     
     let dir = riv#path#is_directory(a:dir) ? a:dir : fnamemodify(a:dir,':h') . '/'
     let dir = fnamemodify(dir, ':gs?\?/?') 
@@ -136,7 +137,7 @@ fun! riv#path#is_directory(name) "{{{
     return a:name =~ '\w[\\/]$' 
 endfun "}}}
 
-fun! riv#path#ext_to(file, ft) "{{{
+fun! riv#path#ext_with(file, ft) "{{{
     return fnamemodify(a:file, ":r") . '.' . a:ft
 endfun "}}}
 fun! riv#path#ext_tail(file, ft) "{{{
@@ -155,10 +156,10 @@ fun! riv#path#join(a, ...)
     for b in a:000
         if !riv#path#is_relative(b)
             let path = b
-        elseif  path == '' ||  path =~ '/$'
+        elseif  path == '' ||  path =~ '[/\]$'
             let path .= b
         else 
-            let path .= '/' . b
+            let path .= s:slash . b
         endif
     endfor
     return path

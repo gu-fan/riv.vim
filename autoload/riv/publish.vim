@@ -8,24 +8,29 @@
 let s:cpo_save = &cpo
 set cpo-=C
 
-if has('win32') || has('win64')
-    let s:os = 'win'
-else
-    let s:os = 'unix'
-endif
+
+let s:sys = function("riv#system")
+let s:is_windows = g:_riv_c.is_windows
 let s:p = g:_riv_p
-fun! s:escape_file_ptn(file) "{{{
-    return  '\v%(^|\s|[''"([{<,;!?])\zs\[\[' . a:file . '\]\]\ze%($|\s|[''")\]}>:.,;!?])'
-endfun "}}}
-fun! s:escape(txt) "{{{
-    return escape(a:txt, '~.*\[]^$')
-endfun "}}}
-fun! s:gen_embed_link(title, path) "{{{
-    if riv#path#file_link_style() == 2
-        return  '`['.a:title.'] <'.a:path.'>`_'
-    else
-        return  '`'.a:title.' <'.a:path.'>`_'
-    endif
+
+fun! s:init() "{{{
+    let s:c = g:_riv_c
+    let s:temp_file = tempname()
+    let s:tempdir = riv#path#directory(fnamemodify(s:temp_file,':h'))
+    let s:css_html = g:_riv_c.riv_path.'html/html4css1.css'
+    let s:tex_default = g:_riv_c.riv_path.'latex/default.tex'
+    let s:tex_cjk = g:_riv_c.riv_path.'latex/cjk.tex'
+    let s:css_theme_dir = join([g:_riv_c.riv_path.'html/themes/',
+                \g:riv_css_theme_dir], ',')
+
+    let theme_paths = split(globpath(s:css_theme_dir, '*.css'),'\n')
+    let s:themes = []
+    for theme_path in theme_paths
+        let theme = matchstr(theme_path, '\w*\ze\.css')
+        let s:css_{theme} = theme_path
+        call add(s:themes, theme)
+    endfor
+    let g:_riv_c.themes = s:themes
 endfun "}}}
 
 fun! riv#publish#path(str) "{{{
@@ -63,6 +68,20 @@ fun! riv#publish#path(str) "{{{
     
     return file
 endfun "}}}
+fun! s:escape_file_ptn(file) "{{{
+    return  '\v%(^|\s|[''"([{<,;!?])\zs\[\[' . a:file . '\]\]\ze%($|\s|[''")\]}>:.,;!?])'
+endfun "}}}
+fun! s:escape(txt) "{{{
+    return escape(a:txt, '~.*\[]^$')
+endfun "}}}
+fun! s:gen_embed_link(title, path) "{{{
+    if riv#path#file_link_style() == 2
+        return  '`['.a:title.'] <'.a:path.'>`_'
+    else
+        return  '`'.a:title.' <'.a:path.'>`_'
+    endif
+endfun "}}}
+
 
 fun! s:repl_file_link(line) "{{{
     " File              Title   Path
@@ -74,11 +93,13 @@ fun! s:repl_file_link(line) "{{{
     
     let line = a:line
     
-    " we will get the idx and find the pattern from origin line.
+    " we will get the idx and find the pattern from origin_file line.
     let o_line = line
     let pre_idx = 0           " for the inline markup column check
     let idx = matchend(o_line, riv#ptn#link_file())
     let str = matchstr(o_line, riv#ptn#link_file())
+
+    " get all the object
     while idx != -1
         let obj = riv#ptn#get_inline_markup_obj(o_line, idx+1, pre_idx)
         " it's not in a inline markup
@@ -95,27 +116,25 @@ fun! s:repl_file_link(line) "{{{
     endwhile
     return line
 endfun "}}}
-
-let s:tempfile = tempname()
-let s:tempdir = riv#path#directory(fnamemodify(s:tempfile,':h'))
-fun! s:create_tmp(file) "{{{
-    update
-    let lines = map(readfile(a:file),'s:repl_file_link(v:val)')
-    call map(lines , 's:sub_ext2html(v:val)')
-    call writefile(lines, s:tempfile)       " not all OS can pipe
-    return s:tempfile
+fun! s:sub_ext2html(line) "{{{
+    " sub the .. xxx.rst: xxx.rst 
+    " to      .. xxx.rst: xxx.html
+    let line = a:line
+    let str = matchstr(line, s:p.loc_normal)
+    " >>> echo '.rst' =~ '\'.riv#path#ext().'$'
+    " >>> echo riv#path#ext()
+    if str != '' && str =~  '\'.riv#path#ext().'$'
+        let line = substitute(line, '\'.riv#path#ext().'\s*$','.html','')
+    endif
+    return line
 endfun "}}}
 
-let s:css_default = g:_riv_c.riv_path.'html/default.css'
-let s:css_emacs = g:_riv_c.riv_path.'html/emacs.css'
-let s:css_friendly = g:_riv_c.riv_path.'html/friendly.css'
-let s:css_html = g:_riv_c.riv_path.'html/html4css1.css'
-let s:css_size = g:_riv_c.riv_path.'html/docsize.css'
-let s:css_typo = g:_riv_c.riv_path.'html/typo.css'
-let s:tex_default = g:_riv_c.riv_path.'latex/default.tex'
-let s:tex_cjk = g:_riv_c.riv_path.'latex/cjk.tex'
 
 fun! s:convert(options) "{{{
+    " TODO
+    "
+    " This should rewrite to match sphinx
+
     " options {
     "   filetype: 'html',
     "   input: 'tmp/xxx.rst',
@@ -123,7 +142,7 @@ fun! s:convert(options) "{{{
     "   real_file: 'rst/xxx.rst' or input,
     " }
     
-    let ft =   get(a:options, 'filetype', 'html')
+    let ft = get(a:options, 'filetype', 'html')
     let o_ft = ''
     let input = get(a:options, 'input', '')
     let output = get(a:options, 'output', '')
@@ -159,12 +178,17 @@ fun! s:convert(options) "{{{
 
     " try 2 first , for py3 version should decode to 'bytes'.
     if ft == 'html' 
-        if g:riv_html_code_hl_style =~ '^\(default\|emacs\|friendly\)$'
-            let style = ' --stylesheet='.s:css_html.','
-                        \.s:css_{g:riv_html_code_hl_style}.','
-                        \.s:css_size
+        if index(s:themes, g:riv_html_code_hl_style)            
+            let st = g:riv_html_code_hl_style
+            let style = ' --stylesheet='
+                        \.s:css_html.','
+                        \.s:css_{st}.','
         elseif filereadable(g:riv_html_code_hl_style)
             let style = ' --stylesheet='.g:riv_html_code_hl_style
+        else
+            let style = ' --stylesheet='
+                        \.s:css_html.','
+                        \.s:css_murphy.','
         endif
 
         " Copy the images for figure and image directives.
@@ -174,7 +198,10 @@ fun! s:convert(options) "{{{
         call s:copy_img(input, output)
     endif
 
-    call s:sys( exe." ". style ." ". args ." "
+    " the syntax css are short format
+    let syn = '--syntax-highlight=short'
+
+    call s:sys( exe." ". style ." " . syn . "  " . args . " "
                 \.shellescape(input) 
                 \." > ".shellescape(output) )
     if o_ft=='pdf'
@@ -195,32 +222,34 @@ fun! s:copy_img(input, output) "{{{
         return
     endif
     let out_path = fnamemodify(a:output, ':p:h')
-    let old_path = fnamemodify(a:input, ':p:h')
+    let origin_path = fnamemodify(a:input, ':p:h')
     let file = readfile(a:input)
     for line in file
-        if line =~ '^.. \(figure\|image\)::'
-            let img = matchstr(line, '^.. \(figure\|image\):: \s*\zs.*\ze\s*$')
-            if riv#path#is_relative(img)
-                let old_file = riv#path#join(old_path, img) 
-                let new_file = riv#path#join(out_path, img) 
+        let img = matchstr(line, '^.. \(figure\|image\):: \s*\zs.*\ze\s*$')
+        if img != '' && riv#path#is_relative(img)
+            let origin_file = riv#path#join(origin_path, img) 
+            let new_file = riv#path#join(out_path, img) 
+
+            if filereadable(origin_file)
                 let new_path = fnamemodify(new_file, ":p:h")
                 if !isdirectory(new_path)
                     call mkdir(new_path, 'p')
                 endif
-                if s:os == 'win'
-                    " /c : Ignores errors.
-                    " /q : Suppresses messages.
-                    " /i : Creates new directory.
-                    " /e : Copies all subdirectories.
-                    " /y : Suppresses prompting to confirm.
-                    let cmd = 'xcopy /E /Y /C /I '
-                                \.shellescape(old_file).' '
-                                \.new_file
-                else
-                    let cmd = 'cp -rf '.old_file.' '.new_file
-                endif
-                call s:sys(cmd) 
+            endi
+
+            if s:is_windows
+                " /c : Ignores errors.
+                " /q : Suppresses messages.
+                " /i : Creates new directory.
+                " /e : Copies all subdirectories.
+                " /y : Suppresses prompting to confirm.
+                let cmd = 'xcopy /E /Y /C /I '
+                            \.shellescape(origin_file).' '
+                            \.new_file
+            else
+                let cmd = 'cp -rf '.origin_file.' '.new_file
             endif
+            call s:sys(cmd) 
         endif
     endfor
 endfun "}}}
@@ -232,7 +261,7 @@ fun! s:single2(ft, file, browse) "{{{
     " if it's 1 put in tempdir
     " else if it's a dir, put it in that dir.
     if empty(g:riv_temp_path)
-        let out_file = riv#path#ext_to(file, a:ft)
+        let out_file = riv#path#ext_with(file, a:ft)
     elseif g:riv_temp_path == 1
         let temp_path = s:tempdir
         let out_file = temp_path . riv#path#ext_tail(file, a:ft)
@@ -269,52 +298,67 @@ fun! riv#publish#file2(ft, browse) "{{{
         call s:single2(a:ft, file, a:browse)
     endif
 endfun "}}}
-fun! s:sub_ext2html(line)
-    " sub the .. xxx.rst: xxx.rst 
-    " to      .. xxx.rst: xxx.html
-    let line = a:line
-    let str = matchstr(line, s:p.loc_normal)
-    " >>> echo '.rst' =~ '\'.riv#path#ext().'$'
-    " >>> echo riv#path#ext()
-    if str != '' && str =~  '\'.riv#path#ext().'$'
-        let line = substitute(line, '\'.riv#path#ext().'\s*$','.html','')
-    endif
-    return line
-endfun
 fun! riv#publish#2(ft, file, path, browse) "{{{
     let file = expand(a:file)
+    let lines = readfile(file)
     let out_path = a:path . riv#path#rel_to_root(file)
-    let file_path = riv#path#ext_to(out_path, a:ft)
+    let out_file = riv#path#ext_with(out_path, a:ft)
+
+
+
+    " Do the preparing work
+    update
     call riv#publish#auto_mkdir(out_path)
+
+    " XXX
+    " here we can use append line with link
+    " repl the file link
+    " [[xxxx]] to `xxxx<xxxx.html>`_
     if riv#path#file_link_style() == 1
-
-        call s:convert({'filetype': a:ft,
-                    \'input': s:create_tmp(file),
-                    \'real_file': file,
-                    \'output': file_path,
-                    \})
-
-    else
-        update
-        " sub ext 2 html
-        let lines = readfile(file)
+        let lines = map(lines, 's:repl_file_link(v:val)')
         call map(lines , 's:sub_ext2html(v:val)')
-        call writefile(lines, s:tempfile) 
-
-        call s:convert({'filetype': a:ft,
-                    \'input': s:tempfile,
-                    \'real_file': file,
-                    \'output': file_path,
-                    \})
-
+        call writefile(lines, s:temp_file)       " not all OS can pipe
+    else
+        " sub ext 2 html
+        call map(lines , 's:sub_ext2html(v:val)')
+        call writefile(lines, s:temp_file) 
     endif
+
+
+
+    " Convert with rst2xxx
+    call s:convert({'filetype': a:ft,
+                \'input': s:temp_file,
+                \'real_file': file,
+                \'output': out_file,
+                \})
+
+
+    let ft_path = riv#path#build_ft(a:ft)
+    let out_path = ft_path . riv#path#rel_to_root(file)
+    call riv#publish#auto_mkdir(out_path)
+    for line in lines
+        " Copy all exists file under directory.
+        let file = matchstr(line, '^\s*\.\. image::\s\zs.*')
+        if file == ''  
+            let file = matchstr(line, s:p.loc_normal)
+        endif
+        if file == '' | continue | endif
+        " Here we have not check file outside or inside 
+        " folder.
+        if filereadable(file)
+            call s:sys( 'cp -f '. file. ' '.  fnamemodify(out_path, ':h'))
+        endif
+    endfor
+
+
     if a:browse
         if a:ft == "latex"
-            exe 'sp ' file_path
+            exe 'sp ' out_file
         elseif a:ft == "odt"
-            call s:sys(g:riv_ft_browser . ' '. file_path . ' &')
+            call s:sys(g:riv_ft_browser . ' '. out_file . ' &')
         else
-            let escaped_path = substitute(file_path, ' ', '\\ ', 'g')
+            let escaped_path = substitute(out_file, ' ', '\\ ', 'g')
             call s:sys(g:riv_web_browser . ' '. escaped_path . ' &')
         endif
     endif
@@ -328,8 +372,8 @@ fun! riv#publish#open_path() "{{{
     exe 'sp ' riv#path#build_path()
 endfun "}}}
 
-fun! riv#publish#copy2proj(file,html_path) abort "{{{
-    let out_path = a:html_path . riv#path#rel_to_root(expand(a:file))
+fun! riv#publish#copy2proj(file,ft_path) abort "{{{
+    let out_path = a:ft_path . riv#path#rel_to_root(expand(a:file))
     call riv#publish#auto_mkdir(out_path)
     call s:sys( 'cp -f '. a:file. ' '.  fnamemodify(out_path, ':h'))
 endfun "}}}
@@ -368,16 +412,11 @@ fun! riv#publish#auto_mkdir(path) "{{{
     endif
 endfun "}}}
 
-fun! s:sys(arg) abort "{{{
-    " XXX: error in windows tmp files
-    if exists("*vimproc#system")
-        return vimproc#system(a:arg)
-    else
-        return system(a:arg)
-    endif
-endfun "}}}
+call s:init()
+
 if expand('<sfile>:p') == expand('%:p') "{{{
     call doctest#start()
 endif "}}}
+
 let &cpo = s:cpo_save
 unlet s:cpo_save

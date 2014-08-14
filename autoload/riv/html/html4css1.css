@@ -1,325 +1,930 @@
-/*
-:Author: David Goodger (goodger@python.org)
-:Id: $Id: html4css1.css 7434 2012-05-11 21:06:27Z milde $
-:Copyright: This stylesheet has been placed in the public domain.
+/* normalize {{{ */
+/*! normalize.css v3.0.1 | MIT License | git.io/normalize */
 
-Default cascading style sheet for the HTML output of Docutils.
+/**
+ * 1. Set default font family to sans-serif.
+ * 2. Prevent iOS text size adjust after orientation change, without disabling
+ *    user zoom.
+ */
 
-See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
-customize this style sheet.
-*/
+html {
+  font-family: sans-serif; /* 1 */
+  -ms-text-size-adjust: 100%; /* 2 */
+  -webkit-text-size-adjust: 100%; /* 2 */
+}
 
-/* used to remove borders from tables and images */
-.borderless, table.borderless td, table.borderless th {
-  border: 0 }
+/**
+ * Remove default margin.
+ */
 
-table.borderless td, table.borderless th {
-  /* Override padding for "table.docutils td" with "! important".
-     The right padding separates the table cells. */
-  padding: 0 0.5em 0 0 ! important }
+body {
+  margin: 0;
+}
 
-.first {
-  /* Override more specific margin styles with "! important". */
-  margin-top: 0 ! important }
+/* HTML5 display definitions
+========================================================================== */
 
-.last, .with-subtitle {
-  margin-bottom: 0 ! important }
+/**
+ * Correct `block` display not defined for any HTML5 element in IE 8/9.
+ * Correct `block` display not defined for `details` or `summary` in IE 10/11 and Firefox.
+ * Correct `block` display not defined for `main` in IE 11.
+ */
 
-.hidden {
-  display: none }
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section,
+summary {
+  display: block;
+}
 
-a.toc-backref {
-  text-decoration: none ;
-  color: black }
+/**
+ * 1. Correct `inline-block` display not defined in IE 8/9.
+ * 2. Normalize vertical alignment of `progress` in Chrome, Firefox, and Opera.
+ */
 
-blockquote.epigraph {
-  margin: 2em 5em ; }
+audio,
+canvas,
+progress,
+video {
+  display: inline-block; /* 1 */
+  vertical-align: baseline; /* 2 */
+}
 
-dl.docutils dd {
-  margin-bottom: 0.5em }
+/**
+ * Prevent modern browsers from displaying `audio` without controls.
+ * Remove excess height in iOS 5 devices.
+ */
 
-object[type="image/svg+xml"], object[type="application/x-shockwave-flash"] {
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+
+/**
+ * Address `[hidden]` styling not present in IE 8/9/10.
+ * Hide the `template` element in IE 8/9/11, Safari, and Firefox < 22.
+ */
+
+[hidden],
+template {
+  display: none;
+}
+
+/* Links
+========================================================================== */
+
+/**
+ * Remove the gray background color from active links in IE 10.
+ */
+
+a {
+  background: transparent;
+}
+
+/**
+ * Improve readability when focused and also mouse hovered in all browsers.
+ */
+
+a:active,
+a:hover {
+  outline: 0;
+}
+
+/* Text-level semantics
+========================================================================== */
+
+/**
+ * Address styling not present in IE 8/9/10/11, Safari, and Chrome.
+ */
+
+abbr[title] {
+  border-bottom: 1px dotted;
+}
+
+/**
+ * Address style set to `bolder` in Firefox 4+, Safari, and Chrome.
+ */
+
+b,
+strong {
+  font-weight: bold;
+}
+
+/**
+ * Address styling not present in Safari and Chrome.
+ */
+
+dfn {
+  font-style: italic;
+}
+
+/**
+ * Address variable `h1` font-size and margin within `section` and `article`
+ * contexts in Firefox 4+, Safari, and Chrome.
+ */
+
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+/**
+ * Address styling not present in IE 8/9.
+ */
+
+mark {
+  background: #ff0;
+  color: #000;
+}
+
+/**
+ * Address inconsistent and variable font size in all browsers.
+ */
+
+small {
+  font-size: 80%;
+}
+
+/**
+ * Prevent `sub` and `sup` affecting `line-height` in all browsers.
+ */
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sup {
+  top: -0.5em;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+/* Embedded content
+========================================================================== */
+
+/**
+ * Remove border when inside `a` element in IE 8/9/10.
+ */
+
+img {
+  border: 0;
+}
+
+/**
+ * Correct overflow not hidden in IE 9/10/11.
+ */
+
+svg:not(:root) {
   overflow: hidden;
 }
 
-/* Uncomment (and remove this text!) to get bold-faced definition list terms
-dl.docutils dt {
-  font-weight: bold }
-*/
+/* Grouping content
+========================================================================== */
 
-div.abstract {
-  margin: 2em 5em }
+/**
+ * Address margin not present in IE 8/9 and Safari.
+ */
 
-div.abstract p.topic-title {
-  font-weight: bold ;
-  text-align: center }
-
-div.admonition, div.attention, div.caution, div.danger, div.error,
-div.hint, div.important, div.note, div.tip, div.warning {
-  margin: 2em ;
-  border: medium outset ;
-  padding: 1em }
-
-div.admonition p.admonition-title, div.hint p.admonition-title,
-div.important p.admonition-title, div.note p.admonition-title,
-div.tip p.admonition-title {
-  font-weight: bold ;
-  font-family: sans-serif }
-
-div.attention p.admonition-title, div.caution p.admonition-title,
-div.danger p.admonition-title, div.error p.admonition-title,
-div.warning p.admonition-title {
-  color: red ;
-  font-weight: bold ;
-  font-family: sans-serif }
-
-/* Uncomment (and remove this text!) to get reduced vertical space in
-   compound paragraphs.
-div.compound .compound-first, div.compound .compound-middle {
-  margin-bottom: 0.5em }
-
-div.compound .compound-last, div.compound .compound-middle {
-  margin-top: 0.5em }
-*/
-
-div.dedication {
-  margin: 2em 5em ;
-  text-align: center ;
-  font-style: italic }
-
-div.dedication p.topic-title {
-  font-weight: bold ;
-  font-style: normal }
-
-div.figure {
-  margin-left: 2em ;
-  margin-right: 2em }
-
-div.footer, div.header {
-  clear: both;
-  font-size: smaller }
-
-div.line-block {
-  display: block ;
-  margin-top: 1em ;
-  margin-bottom: 1em }
-
-div.line-block div.line-block {
-  margin-top: 0 ;
-  margin-bottom: 0 ;
-  margin-left: 1.5em }
-
-div.sidebar {
-  margin: 0 0 0.5em 1em ;
-  border: medium outset ;
-  padding: 1em ;
-  background-color: #ffffee ;
-  width: 40% ;
-  float: right ;
-  clear: right }
-
-div.sidebar p.rubric {
-  font-family: sans-serif ;
-  font-size: medium }
-
-div.system-messages {
-  margin: 5em }
-
-div.system-messages h1 {
-  color: red }
-
-div.system-message {
-  border: medium outset ;
-  padding: 1em }
-
-div.system-message p.system-message-title {
-  color: red ;
-  font-weight: bold }
-
-div.topic {
-  margin: 2em }
-
-h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
-h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
-  margin-top: 0.4em }
-
-h1.title {
-  text-align: center }
-
-h2.subtitle {
-  text-align: center }
-
-hr.docutils {
-  width: 75% }
-
-img.align-left, .figure.align-left, object.align-left {
-  clear: left ;
-  float: left ;
-  margin-right: 1em }
-
-img.align-right, .figure.align-right, object.align-right {
-  clear: right ;
-  float: right ;
-  margin-left: 1em }
-
-img.align-center, .figure.align-center, object.align-center {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+figure {
+  margin: 1em 40px;
 }
 
-.align-left {
-  text-align: left }
+/**
+ * Address differences between Firefox and other browsers.
+ */
 
-.align-center {
-  clear: both ;
-  text-align: center }
-
-.align-right {
-  text-align: right }
-
-/* reset inner alignment in figures */
-div.align-right {
-  text-align: inherit }
-
-/* div.align-center * { */
-/*   text-align: left } */
-
-ol.simple, ul.simple {
-  margin-bottom: 1em }
-
-ol.arabic {
-  list-style: decimal }
-
-ol.loweralpha {
-  list-style: lower-alpha }
-
-ol.upperalpha {
-  list-style: upper-alpha }
-
-ol.lowerroman {
-  list-style: lower-roman }
-
-ol.upperroman {
-  list-style: upper-roman }
-
-p.attribution {
-  text-align: right ;
-  margin-left: 50% }
-
-p.caption {
-  font-style: italic }
-
-p.credits {
-  font-style: italic ;
-  font-size: smaller }
-
-p.label {
-  white-space: nowrap }
-
-p.rubric {
-  font-weight: bold ;
-  font-size: larger ;
-  color: maroon ;
-  text-align: center }
-
-p.sidebar-title {
-  font-family: sans-serif ;
-  font-weight: bold ;
-  font-size: larger }
-
-p.sidebar-subtitle {
-  font-family: sans-serif ;
-  font-weight: bold }
-
-p.topic-title {
-  font-weight: bold }
-
-pre.address {
-  margin-bottom: 0 ;
-  margin-top: 0 ;
-  font: inherit }
-
-pre.literal-block, pre.doctest-block, pre.math, pre.code {
-  margin-left: 2em ;
-  margin-right: 2em }
-
-pre.code .ln { /* line numbers */
-  color: grey;
+hr {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0;
 }
 
-.code, .literal, .literal-block {
-  background-color: #eeeeee
-}
-
-span.classifier {
-  font-family: sans-serif ;
-  font-style: oblique }
-
-span.classifier-delimiter {
-  font-family: sans-serif ;
-  font-weight: bold }
-
-span.interpreted {
-  font-family: sans-serif }
-
-span.option {
-  white-space: nowrap }
-
-span.pre {
-  white-space: pre }
-
-span.problematic {
-  color: red }
-
-span.section-subtitle {
-  /* font-size relative to parent (h1..h6 element) */
-  font-size: 80% }
-
-table.citation {
-  border-left: solid 1px gray;
-  margin-left: 1px }
-
-table.docinfo {
-  margin: 2em 4em }
-
-table.docutils {
-  margin-top: 0.5em ;
-  margin-bottom: 0.5em }
-
-table.footnote {
-  border-left: solid 1px black;
-  margin-left: 1px }
-
-table.docutils td, table.docutils th,
-table.docinfo td, table.docinfo th {
-  padding-left: 0.5em ;
-  padding-right: 0.5em ;
-  vertical-align: top }
-
-table.docutils th.field-name, table.docinfo th.docinfo-name {
-  font-weight: bold ;
-  text-align: left ;
-  white-space: nowrap ;
-  padding-left: 0 }
-
-h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
-h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
-  font-size: 100% }
-
-ul.auto-toc {
-  list-style-type: none }
-
-.title {
-    font-size: 42px;
-    font-weight: bold;
-}
+/**
+ * Contain overflow in all browsers.
+ */
 
 pre {
+  overflow: auto;
+}
+
+/**
+ * Address odd `em`-unit font size rendering in all browsers.
+ */
+
+code,
+kbd,
+pre,
+samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+
+/* Forms
+========================================================================== */
+
+/**
+ * Known limitation: by default, Chrome and Safari on OS X allow very limited
+ * styling of `select`, unless a `border` property is set.
+ */
+
+/**
+ * 1. Correct color not being inherited.
+ *    Known issue: affects color of disabled elements.
+ * 2. Correct font properties not being inherited.
+ * 3. Address margins set differently in Firefox 4+, Safari, and Chrome.
+ */
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  color: inherit; /* 1 */
+  font: inherit; /* 2 */
+  margin: 0; /* 3 */
+}
+
+/**
+ * Address `overflow` set to `hidden` in IE 8/9/10/11.
+ */
+
+button {
+  overflow: visible;
+}
+
+/**
+ * Address inconsistent `text-transform` inheritance for `button` and `select`.
+ * All other form control elements do not inherit `text-transform` values.
+ * Correct `button` style inheritance in Firefox, IE 8/9/10/11, and Opera.
+ * Correct `select` style inheritance in Firefox.
+ */
+
+button,
+select {
+  text-transform: none;
+}
+
+/**
+ * 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio`
+ *    and `video` controls.
+ * 2. Correct inability to style clickable `input` types in iOS.
+ * 3. Improve usability and consistency of cursor style between image-type
+ *    `input` and others.
+ */
+
+button,
+html input[type="button"], /* 1 */
+input[type="reset"],
+input[type="submit"] {
+  -webkit-appearance: button; /* 2 */
+  cursor: pointer; /* 3 */
+}
+
+/**
+ * Re-set default cursor for disabled elements.
+ */
+
+button[disabled],
+html input[disabled] {
+  cursor: default;
+}
+
+/**
+ * Remove inner padding and border in Firefox 4+.
+ */
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+/**
+ * Address Firefox 4+ setting `line-height` on `input` using `!important` in
+ * the UA stylesheet.
+ */
+
+input {
+  line-height: normal;
+}
+
+/**
+ * It's recommended that you don't attempt to style these elements.
+ * Firefox's implementation doesn't respect box-sizing, padding, or width.
+ *
+ * 1. Address box sizing set to `content-box` in IE 8/9/10.
+ * 2. Remove excess padding in IE 8/9/10.
+ */
+
+input[type="checkbox"],
+input[type="radio"] {
+  box-sizing: border-box; /* 1 */
+  padding: 0; /* 2 */
+}
+
+/**
+ * Fix the cursor style for Chrome's increment/decrement buttons. For certain
+ * `font-size` values of the `input`, it causes the cursor style of the
+ * decrement button to change from `default` to `text`.
+ */
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+
+/**
+ * 1. Address `appearance` set to `searchfield` in Safari and Chrome.
+ * 2. Address `box-sizing` set to `border-box` in Safari and Chrome
+ *    (include `-moz` to future-proof).
+ */
+
+input[type="search"] {
+  -webkit-appearance: textfield; /* 1 */
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box; /* 2 */
+  box-sizing: content-box;
+}
+
+/**
+ * Remove inner padding and search cancel button in Safari and Chrome on OS X.
+ * Safari (but not Chrome) clips the cancel button when the search input has
+ * padding (and `textfield` appearance).
+ */
+
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/**
+ * Define consistent border, margin, and padding.
+ */
+
+fieldset {
+  border: 1px solid #c0c0c0;
+  margin: 0 2px;
+  padding: 0.35em 0.625em 0.75em;
+}
+
+/**
+ * 1. Correct `color` not being inherited in IE 8/9/10/11.
+ * 2. Remove padding so people aren't caught out if they zero out fieldsets.
+ */
+
+legend {
+  border: 0; /* 1 */
+  padding: 0; /* 2 */
+}
+
+/**
+ * Remove default vertical scrollbar in IE 8/9/10/11.
+ */
+
+textarea {
+  overflow: auto;
+}
+
+/**
+ * Don't inherit the `font-weight` (applied by a rule above).
+ * NOTE: the default cannot safely be changed in Chrome and Safari on OS X.
+ */
+
+optgroup {
+  font-weight: bold;
+}
+
+/* Tables
+========================================================================== */
+
+/**
+ * Remove most spacing between table cells.
+ */
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+td,
+th {
+  padding: 0;
+} /*}}}*/
+/* Font basic {{{ */
+body {
+  background: #fefefe;
+  color: #424242;
+  font-family: "Open Sans", arial, sans-serif;
+font-size: 18px; }
+
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 33px;
+text-transform: none; }
+
+h1 {
+font-size: 26px; }
+
+h2 {
+font-size: 24px; }
+
+h3 {
+  font-size: 20px;
+margin-bottom: 20px; }
+
+h4 {
+  font-size: 18px;
+margin-bottom: 18px; }
+
+h5 {
+  font-size: 16px;
+margin-bottom: 15px; }
+
+h6 {
+  font-size: 14px;
+margin-bottom: 12px; }
+
+p {
+  line-height: 1.2;
+margin: 0 0 30px; }
+
+a { color: #F03838;
+text-decoration: none; }
+a:hover { text-decoration: underline; }
+/*}}}*/
+/* Document media size {{{*/
+.document {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 5px;
+}
+@media (min-width:320px) { 
+/* smartphones, iPhone, portrait 480x320 phones */ 
+    .document { width: auto; }
+}
+@media (min-width:481px) {
+/* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */ 
+    .document { width: auto; }
+}
+@media (min-width:641px) {
+/* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+    .document { width: 620px; }
+}
+@media (min-width:961px) {
+/* tablet, landscape iPad, lo-res laptops ands desktops */ 
+    .document { width: 940px; }
+}
+@media (min-width:1025px) {
+/* big landscape tablets, laptops, and desktops */ 
+    .document { width: 940px; }
+}
+@media (min-width:1281px) {
+/* hi-res laptops and desktops */
+    .document { width: 940px; }
+}
+/*}}}*/
+/* html4css {{{*/
+/*
+ * changed from docutils's html4css
+ * http://docutils.sf.net/docs/howto/html-stylesheets.html 
+ */
+/* Basic setting {{{*/
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+  The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+  .first {
+    /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+  .last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+  .hidden {
+  display: none }
+
+  /*}}}*/
+  /* Basic: align {{{*/
+  .align-left {
+  text-align: left }
+
+  .align-center {
+    clear: both ;
+  text-align: center }
+
+  .align-right {
+  text-align: right }
+
+  /* reset inner alignment in figures */
+  div.align-right {
+  text-align: inherit }
+
+  /* div.align-center * { */
+  /*   text-align: left } */
+
+  /*}}}*/
+  /* Basic: transition {{{*/
+  hr.docutils {
+    border: none;
+    border-bottom: 1px dashed #999997;
+    margin: 45px 0;
+  }
+  /*}}}*/
+  /* Section:title {{{*/
+
+  h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+  h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+  h1.title {
+  text-align: center }
+
+  h2.subtitle {
+  text-align: center }
+
+  span.section-subtitle {
+    /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+  .title {
+    font-size: 42px;
+    font-weight: bold;
+  }
+
+  /*}}}*/
+  /* List: definition list {{{*/
+  dl.docutils dd {
+  margin-bottom: 0.5em }
+
+  dl.docutils dt {
+  font-weight: bold }
+
+  span.classifier {
+  font-style: oblique }
+
+  span.classifier-delimiter {
+  font-weight: bold }
+  /*}}}*/
+  /* List: bullet & enumerated {{{ */
+  ul, ol {
+    line-height: 1.2;
+    margin: 0 0 2em 1.2em;
+  padding: 0; }
+  ul ul, ul ol, ol ul, ol ol {
+  margin: 0.8em 0 0 1.2em; }
+  ul li, ol li { margin: 0 0 10px; }
+  ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+  ol.arabic {
+  list-style: decimal }
+
+  ol.loweralpha {
+  list-style: lower-alpha }
+
+  ol.upperalpha {
+  list-style: upper-alpha }
+
+  ol.lowerroman {
+  list-style: lower-roman }
+
+  ol.upperroman {
+  list-style: upper-roman }
+  /*}}}*/
+  /* Tables: include fieldlist/footnote/docinfo/etc {{{*/
+  /* all table in docutls */
+  table.docutils { margin-top: 0.5em ; margin-bottom: 2em; width: 100%; }
+  table.docutils th { padding: 0.5em; text-align: left; }
+  table.docutils td { padding: 0.5em; }
+  table.docutils th,
+  table.docutils tr,
+  table.docutils td { border: 1px dotted #AEADAD; }
+  table.docutils th { border-bottom: 1px solid #AEADAD; }
+
+  table.docutils.citation th,
+  table.docutils.citation tr,
+  table.docutils.citation td,
+  table.docutils.footnote th,
+  table.docutils.footnote tr,
+  table.docutils.footnote td,
+  table.docutils.field-list th,
+  table.docutils.field-list tr,
+  table.docutils.field-list td,
+  table.docutils.option-list th,
+  table.docutils.option-list tr,
+  table.docutils.option-list td,
+  table.docutils.docinfo th,
+  table.docutils.docinfo tr,
+  table.docutils.docinfo td
+  { border: none; }
+
+  table tbody > tr:nth-child(odd) > td,
+  table tbody > tr:nth-child(odd) > th { background-color: #f7f7f3; }
+
+  table.field-list tbody > tr:nth-child(odd) > td,
+  table.field-list tbody > tr:nth-child(odd) > th,
+  table.footnote tbody > tr:nth-child(odd) > td,
+  table.footnote tbody > tr:nth-child(odd) > th,
+  table.citation tbody > tr:nth-child(odd) > td,
+  table.citation tbody > tr:nth-child(odd) > th,
+  table.docinfo tbody > tr:nth-child(odd) > td,
+  table.docinfo tbody > tr:nth-child(odd) > th { background-color: transparent; }
+
+  /* [test]_ */
+  table.citation {
+    width: auto;
+    border-left: solid 1px gray;
+    margin-left: 1px 
+  }
+
+
+  /* :field: item */
+  table.field-list {
+    width: auto;
+  }
+
+  /* :field: item */
+  table.option-list { }
+  span.option { white-space: nowrap }
+
+  /* :version: item */
+  table.docinfo {
+    width: auto;
+  margin: 2em 4em }
+
+
+  /* [1] */
+  table.footnote {
+    width: auto;
+    border-left: solid 1px black;
+  margin-left: 1px }
+    
+  p.label { white-space: nowrap }
+
+  table.docutils td, table.docutils th,
+  table.docinfo td, table.docinfo th {
+    padding-left: 0.5em ;
+    padding-right: 0.5em ;
+  vertical-align: top }
+  table.docinfo td {
+    line-height: 1.2;
+  padding: 0.5em;  }
+
+  table.docutils th.field-name, table.docinfo th.docinfo-name {
+    line-height: 1.2;
+    font-weight: bold ;
+    text-align: left ;
+    white-space: nowrap ;
+  padding: 0.5em;  }
+
+  /*}}}*/
+  /* Blockquote {{{*/
+  p.attribution {
+    font-weight:bold;
+    text-align: right ;
+  margin-left: 50% }
+
+  blockquote {
+    opacity: 0.6;
+    border-left: 3px solid #DDD;
+    margin: 0 0 2em;
+    padding: 0.8em 1em; 
+  }
+
+  blockquote.epigraph {
+  margin: 2em 5em ; }
+  /*}}}*/
+  /* Block: line-block {{{*/
+  div.line-block {
+    display: block ;
+    margin-top: 1em ;
+  margin-bottom: 1em }
+
+  div.line-block div.line-block {
+    margin-top: 0 ;
+    margin-bottom: 0 ;
+  margin-left: 1.5em }
+  /*}}}*/
+  /* Block: literal-block & code {{{*/
+
+  pre {
     padding: 1em;
-}
+  }
 
-blockquote {
+
+  pre.doctest-block {
+    margin-left: 2em ;
+    margin-right: 2em;
+    background-color: #F7F5E4;
+  }
+  pre.address {
+    margin-bottom: 0 ;
+    margin-top: 0 ;
+  font: inherit }
+
+  pre.literal-block, pre.doctest-block, pre.math, pre.code {
+    margin-left: 2em ;
+    margin-right: 2em
+  }
+
+  pre.code .ln { /* line numbers */
+    color: grey;
+  }
+    
+  pre.code {
+    border: 1px dotted #333333;
+  }
+
+  .code, .literal, .literal-block {
+    background-color: #F7F7F7;
+  }
+
+  /* Inline Literal */
+  tt.literal { padding: 3px; }
+
+  /* Inline interpreted text*/
+  cite { }
+
+  h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+  h4 tt.docutils, h5 tt.docutils, h6 tt.docutils { font-size: 100% }
+
+
+  /*}}}*/
+  /* Directive: admonition */ /*{{{*/
+
+  div.admonition, div.attention, div.caution, div.danger, div.error,
+  div.hint, div.important, div.note, div.tip, div.warning {
+    margin: 2em ;
+    border: 1px dotted;
+  padding: 1em }
+
+  div.admonition p.admonition-title, div.hint p.admonition-title,
+  div.important p.admonition-title, div.note p.admonition-title,
+  div.tip p.admonition-title {
+    font-weight: bold ;
+  font-family: sans-serif }
+
+  div.attention p.admonition-title, div.caution p.admonition-title,
+  div.danger p.admonition-title, div.error p.admonition-title,
+  div.warning p.admonition-title {
+    color: #DB6270;
+    font-weight: bold ;
+  font-family: sans-serif }
+
+  div.note p.admonition-title,
+  div.important p.admonition-title{
+    color: #639FDB;
+  }
+  div.hint p.admonition-title,
+  div.tip p.admonition-title {
+    color: #57DB57;
+  }
+  /*}}}*/
+  /* Directive: sidebar/rubric{{{*/
+  div.sidebar {
+    margin: 0 0 0.5em 1em ;
+    border: 1px dotted;
+    padding: 1em ;
+    background-color: #FAFAF5;
+    width: 40% ;
+    float: right ;
+  clear: right }
+
+  div.sidebar p.rubric {
+    font-family: sans-serif ;
+  font-size: medium }
+
+  p.rubric {
+    font-weight: bold ;
+    font-size: larger ;
+    color: maroon ;
+  text-align: center }
+
+  p.sidebar-title {
+    font-family: sans-serif ;
+    font-weight: bold ;
+  font-size: larger }
+
+  p.sidebar-subtitle {
+    font-family: sans-serif ;
+  font-weight: bold }
+  /*}}}*/
+  /* Directive: image & embedded {{{*/
+  object[type="image/svg+xml"], object[type="application/x-shockwave-flash"] {
+    overflow: hidden;
+  }
+
+/* a graphic with a caption */
+  div.figure {
+    margin-left: 2em ;
+    margin-right: 2em }
+  p.caption { font-style: italic }
+
+  img.align-left, .figure.align-left, object.align-left {
+    clear: left ;
+    float: left ;
+  margin-right: 1em }
+
+  img.align-right, .figure.align-right, object.align-right {
+    clear: right ;
+    float: right ;
+  margin-left: 1em }
+
+  img.align-center, .figure.align-center, object.align-center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  /*}}}*/
+  /* Directive: content {{{*/
+  div.topic {
+  margin: 2em }
+
+  p.topic-title {
+  font-weight: bold }
+
+  ul.auto-toc {
+  list-style-type: none }
+
+  a.toc-backref {
+    text-decoration: none ;
+  color: black }
+  /*}}}*/
+  /* Directives: misc {{{*/
+
+  div.footer, div.header {
+    clear: both;
+  font-size: smaller }
+
+  /*}}}*/
+  /* List: Bibliographic Fields {{{*/
+  div.abstract {
+  margin: 2em 5em }
+
+  div.dedication p.topic-title {
+    font-weight: bold ;
+  font-style: normal }
+
+  div.abstract p.topic-title {
+    font-weight: bold ;
+  text-align: center }
+
+  div.dedication {
+    margin: 2em 5em ;
+    text-align: center ;
+  font-style: italic }
+  /*}}}*/
+  /* Docutil:error messages */ /*{{{*/
+  span.problematic {
+  color: #993117; }
+
+  div.system-messages {
+  margin: 5em }
+
+  div.system-messages h1 {
+  color: #993117; }
+
+  div.system-message {
+    border: medium solid;
     margin: 1em;
-}
+  padding: 1em }
 
+  div.system-message p.system-message-title {
+    color: #993117 ;
+  font-weight: bold }
+  /*}}}*/
+  /* UNKNOW {{{*/
+
+  span.interpreted {
+  font-family: sans-serif }
+
+
+  span.pre {
+  white-space: pre }
+
+  p.credits {
+    font-style: italic ;
+  font-size: smaller }
+
+
+  /*}}}*/
+  /*}}}*/
+/*  vim: set sw=2 fdm=marker  */

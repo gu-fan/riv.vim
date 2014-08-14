@@ -375,8 +375,23 @@ fun! riv#ptn#init() "{{{
 
     let s:p.file_ext_ptn = g:_riv_t.doc_exts
                 \.'|'. join(g:_riv_t.file_ext_lst,'|')
+    let s:p.file_ext_ptn = s:p.file_ext_ptn .'vimrc|bashrc|zshrc'
+
     " NOTE: the ~/.xxx should not highlight  '~/.' part
-    let file_name = '[[:alnum:]~./][[:alnum:]~:./\\_-]*[[:alnum:]/\\]'
+    
+
+    " XXX Use new filename ptn to match all unicode file names.
+    " Using this will make matching it much slower.
+    " Is it worthing this???
+    
+    "
+    " XXX
+    " There is a bug that the filename must contain more than 
+    " one str, Solving it may made this ptn more complex.
+    " So Skip.
+    "
+    " let file_name = '[[:alnum:]~./][[:alnum:]~:./\\_-]*[[:alnum:]/\\]'
+    let file_name = '%([^[:cntrl:][:punct:][:space:]]|[~./])%([^[:cntrl:][:punct:][:space:]]|[~:./\\_-])*%([^[:cntrl:][:punct:][:space:]]|[/\\])'
     
     " The link for ext file, for in vim only.
     if g:riv_file_ext_link_hl == 1
@@ -454,8 +469,7 @@ fun! riv#ptn#init() "{{{
     let tar_anonymous = '^\.\.\s\zs__:\ze%(\s|$)|^\zs__\ze%(\s|$)'
 
     " In fact, it's inline link, that's a reference 
-    let tar_embed  = '^%(\s|\_^)\zs`.+\s<\zs.+>`_\ze'.ref_end
-
+    let tar_embed  = '^%(\s|\_^)\zs`.+\s\<\zs.+\>`_\ze'.ref_end
 
     let s:p.link_tar_footnote = '\v'.tar_footnote
     let s:p.link_tar_inline = '\v'.tar_inline
@@ -472,14 +486,15 @@ fun! riv#ptn#init() "{{{
 
     " The link location in link target.
     let loc_footnote = '^\.\.\s\[%(\d+|#|#='.ref_name .')\]%(\s|$)\zs.*'
-
     let loc_inline = ref_bgn.'_`\zs[^`\\]+\ze`'.ref_end
     let loc_normal = '^\.\.\s_[^:\\]+:%(\s|$)\zs.*'
     let loc_anonymous = '^\.\.\s__:%(\s|$)\zs|^__%(\s|$)\zs.*'
-    let loc_embed  = '^%(\s|\_^)`.+\s<\zs.+\ze>`_'.ref_end
+    let loc_embed  = '^%(\s|\_^)`.+\s\<\zs.+\ze\>`_'.ref_end
 
-    let s:p.location = '\v'.loc_inline.'|'. loc_normal
+    let s:p.location = '\v'.loc_inline
+                \.'|'. loc_normal
                 \.'|'.loc_anonymous
+                \.'|'.loc_footnote
     let s:p.loc_embed = '\v'.loc_embed 
 
     let s:p.loc_normal = '\v'.loc_normal
@@ -491,12 +506,11 @@ fun! riv#ptn#init() "{{{
     " 4 link_uri_body
     " 5 link_file
     for i in range(3)
-        let s:p['link_all'.i] = '\v('. link_target 
-                    \ . ')|(' . link_reference
-                    \ . ')|(' . link_uri 
-                    \ . ')|(' . link_file{i}
-                    \ . ')|(' . ext_file_link
-                    \. ')'
+        let s:p['link_all'.i] = '\v('. link_target . ')' 
+                    \ . '|(' . link_reference . ')' 
+                    \ . '|(' . link_uri  . ')' 
+                    \ . '|(' . link_file{i} . ')' 
+                    \ . '|(' . ext_file_link . ')' 
     endfor
     "}}}4
     "
