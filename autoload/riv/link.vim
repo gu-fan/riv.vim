@@ -3,7 +3,7 @@
 "    File: link.vim
 " Summary: link ref and targets.
 "  Author: Rykka G.F
-"  Update: 2014-07-11
+"  Update: 2014-08-14
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -223,7 +223,7 @@ fun! riv#link#open(...) "{{{
                 call riv#file#edit(expand(mo.groups[4]))
             else
                 " vim will expand the # and % , so escape it.
-                call riv#link#browse()
+                call riv#link#browse(mo.groups[4])
             endif
         else
             if mo.groups[3] =~ s:p.link_mail
