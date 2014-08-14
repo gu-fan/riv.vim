@@ -20,7 +20,7 @@ Lots of changes were made, so take care, and
 1. A brand new html theme for riv, 
    provides much better view experience in browser.
 
-   You can preview it at http://rykka.github.io/rst-html-theme/test
+   You can preview it at http://rykka.github.io/rhythm.css/test
 
    Also, code syntax highlighting and themes are now truly supported,
    you can change the theme by setting ``g:riv_html_code_hl_style``, 
