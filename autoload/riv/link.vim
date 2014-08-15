@@ -87,12 +87,11 @@ fun! s:find_tar(text) "{{{
     endif
 
     let norm_ptn = s:normal_ptn(a:text)
-    let [c_row,c_col] = getpos('.')[1:2]
 
     " The section title are implicit targets.
-    let row = s:find_sect('\v\c^\s*'.norm_ptn.'\s*$')
+    let [row, col]  = s:find_sect('\v\c^\s*'.norm_ptn.'\s*$')
     if row > 0
-        return [row, c_col]
+        return [row, col]
     endif
     let tar_ptn = s:target_ptn(norm_ptn)
     let [a_row, a_col] = searchpos(tar_ptn, 'wn', 0 , 100)
@@ -120,10 +119,12 @@ fun! s:find_sect(ptn) "{{{
                 let line = getline(sect.bgn+1)
             endif
             if line =~ a:ptn
-                return sect.bgn
+                let col = match(line, '\v\S') + 1
+                return [sect.bgn, col]
             endif
         endfor
     endif
+    return [0, 0]
 endfun "}}}
 
 fun! s:is_file(file) "{{{
@@ -138,9 +139,9 @@ fun! riv#link#open(...) "{{{
     let idx = s:get_link_idx(line,col)
 
     if idx == -1
-        return 
+        return
     endif
-    
+
     let mo = riv#ptn#match_object(line, riv#ptn#link_all(), idx)
 
     if empty(mo) || mo.start+1 > col || mo.end < col
@@ -158,6 +159,7 @@ fun! riv#link#open(...) "{{{
         " at it's target , find it's referrence
         let [sr,sc] = s:find_ref(mo.str)
         if sr != 0
+            call s:cursor(sr, sc)
             return 1
         else
             call riv#warning(g:_riv_e.REF_NOT_FOUND)
@@ -179,13 +181,14 @@ fun! riv#link#open(...) "{{{
 
                 let loc = matchstr(getline(sr), s:p.location)
 
-                if loc == ''
-                    let [sr, sc] = searchpos('\S', 'n', 0 , 100)
-                    if sr == 0
+                if empty(loc)
+                    let [srx, scx] = searchpos('\S', 'n', 0 , 100)
+                    if srx == 0
                         call riv#warning(g:_riv_e.TAR_NOT_FOUND)
                         return -2
                     endif
-                    let loc = getline(sr)
+                    call s:cursor(sr, sc)
+                    return 2
                 else
                     let sc = match(getline(sr), s:p.location)
                 endif
@@ -201,14 +204,19 @@ fun! riv#link#open(...) "{{{
         let move_only = a:0 ? a:1 : 0
         if move_only != 1 && g:riv_open_link_location == 1 
             " Open file have extenstins or exists
-            if s:is_file(loc) || loc =~ s:p.ext_file_link 
-                call riv#file#edit(loc)
-                call riv#echo("Use :RivLinkShow <C-E>ks to move to link's location.")
-            return 2
-            elseif loc =~ s:p.link_uri
+            if loc =~ s:p.link_uri
                 call riv#link#browse(loc)
                 call riv#echo("Use :RivLinkShow <C-E>ks to move to link's location.")
-            return 2
+                return 2
+            else
+                if fnamemodify(loc, ":e") == 'html'
+                    let loc = fnamemodify(loc, ":s?html?rst?")
+                endif
+                if s:is_file(loc) || loc =~ s:p.ext_file_link
+                    call riv#file#edit(loc)
+                    call riv#echo("Use :RivLinkShow <C-E>ks to move to link's location.")
+                    return 2
+              endif
             endif
         endif
         " put cursor on location

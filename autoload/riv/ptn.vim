@@ -376,7 +376,7 @@ fun! riv#ptn#init() "{{{
 
     let s:p.file_ext_ptn = g:_riv_t.doc_exts
                 \.'|'. join(g:_riv_t.file_ext_lst,'|')
-    let s:p.file_ext_ptn = s:p.file_ext_ptn .'vimrc|bashrc|zshrc'
+    let s:p.file_ext_ptn = s:p.file_ext_ptn .'|vimrc|bashrc|zshrc'
 
     " NOTE: the ~/.xxx should not highlight  '~/.' part
     
