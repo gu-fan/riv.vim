@@ -3,7 +3,7 @@
 "    File: publish.vim
 " Summary: publish to html/pdf...
 "  Author: Rykka G.F
-"  Update: 2014-08-14
+"  Update: 2014-08-15
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -17,7 +17,7 @@ fun! s:init() "{{{
     let s:c = g:_riv_c
     let s:temp_file = tempname()
     let s:tempdir = riv#path#directory(fnamemodify(s:temp_file,':h'))
-    let s:css_html = g:_riv_c.riv_path.'html/html4css1.css'
+    let s:css_html = g:_riv_c.riv_path.'html/rhythm.css'
     let s:tex_default = g:_riv_c.riv_path.'latex/default.tex'
     let s:tex_cjk = g:_riv_c.riv_path.'latex/cjk.tex'
     let s:css_theme_dir = join([g:_riv_c.riv_path.'html/themes/',

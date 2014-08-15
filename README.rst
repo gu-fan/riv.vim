@@ -17,10 +17,16 @@ Lots of changes were made, so take care, and
 
    **DON'T PANIC!**
 
-1. A brand new html theme for riv, 
-   provides much better view experience in browser.
+1. A brand new html theme for riv, rhythm.css_
+   Much better view experience. 
 
-   You can preview it at http://rykka.github.io/rhythm.css/test
+   `Syntax Preview`__ 
+
+   `Article Preview`__
+
+   __ http://rykka.github.io/rhythm.css/rst_syntax
+   __ http://rykka.github.io/rhythm.css/article
+
 
    Also, code syntax highlighting and themes are now truly supported,
    you can change the theme by setting ``g:riv_html_code_hl_style``, 
@@ -311,3 +317,4 @@ Common Issues
 .. _`#71`: https://github.com/Rykka/riv.vim/issues/71
 .. _`#72`: https://github.com/Rykka/riv.vim/issues/72
 .. _rhythm.css: https://github.com/Rykka/rhythm.css
+.. _rhythm.css: http://rykka.github.io/rhythm.css/
