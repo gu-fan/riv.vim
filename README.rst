@@ -6,7 +6,7 @@ Riv: Take Notes in rst
 
     -- `Jon Stewart`_
 
-:Last Update: 2014-08-14
+:Last Update: 2014-08-15
 :Version: 0.77
 
 
@@ -317,4 +317,3 @@ Common Issues
 .. _`#71`: https://github.com/Rykka/riv.vim/issues/71
 .. _`#72`: https://github.com/Rykka/riv.vim/issues/72
 .. _rhythm.css: https://github.com/Rykka/rhythm.css
-.. _rhythm.css: http://rykka.github.io/rhythm.css/
