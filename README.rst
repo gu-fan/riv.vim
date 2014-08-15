@@ -18,7 +18,8 @@ Lots of changes were made, so take care, and
    **DON'T PANIC!**
 
 1. A brand new html theme for riv, rhythm.css_
-   Much better view experience. 
+
+   Provides much better view experience. 
 
    `Syntax Preview`__ 
 
