@@ -21,16 +21,16 @@ fun! s:norm_ref(str) "{{{
         return ''.a:str.'_'
     endif
 endfun "}}}
-fun! s:norm_tar_line(str, loc) "{{{
+fun! s:norm_tar(str) "{{{
     " return normalized tar name
     " >>> echo s:norm_tar_line('其他', 'hello.rst')
     " .. _其他: hello.rst
     " >>> echo s:norm_tar_line('sep one.rst', 'hello.rst')
     " .. _`sep one.rst`: hello.rst
     if a:str !~ '\v^'.s:p.ref_name.'$'
-        return '.. _`'.a:str.'`: '.a:loc
+        return '.. _`'.a:str.'`: '
     else
-        return '.. _'.a:str.': '.a:loc
+        return '.. _'.a:str.': '
     endif
 endfun "}}}
 fun! s:normal_phase(text) "{{{
@@ -114,7 +114,7 @@ fun! s:expand_link(word,...) "{{{
         else
             let loc = a:0 ? a:1 : word
             let ref = s:norm_ref(word)
-            let tar = word
+            let tar = s:norm_tar(word)
         endif
         return [ref, tar, loc]
     endif
@@ -199,7 +199,6 @@ fun! riv#create#link(...) range "{{{
 
     if loc =~ '^\s*$' | return | endif
 
-    " let tar_line = s:norm_tar_line(tar, loc)
     let tar_line = tar.loc
     
     " Change current line with Ref
