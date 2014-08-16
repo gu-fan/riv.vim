@@ -149,18 +149,18 @@ fun! s:get_phase_obj() "{{{
     endif
     return obj
 endfun "}}}
-fun! riv#create#link() range "{{{
+fun! riv#create#link(...) range "{{{
     " TODO: add visual mode support for creating phase link.
-    
-    " echom mode()
-    " echom visualmode()
-    " echom vs
-    " let _v = @v
-    " " get visual lines
-    " norm! gv"zy
-    " let vs = @v
-    " let @v = _v
-
+    " if a:0 && a:1 == 'v'
+    "     echom 'V'
+    "     let _v = @v
+    "     " get visual lines
+    "     norm! gv"vy
+    "     let vs = @v
+    "     let @v = _v
+    "     echom vs
+    " endif
+    "
     let [row, col] = [line('.'), col('.')]
     let line = getline(row)
     let eof = line('$')
@@ -169,6 +169,7 @@ fun! riv#create#link() range "{{{
     if empty(obj)
         let obj = s:get_cWORD_obj()
     endif
+
     if !empty(obj)
         let word = obj.str
         let idx  = obj.start + 1

@@ -271,10 +271,10 @@ let g:riv_default.cmds = [
     \'type': 'buf', 'mode': 'm', 'maps': ['uc'], 'keys': [],
 \},
 \{'menu': '---Edit---' ,'type': 'menu' } ,
-\{'name': 'RivCreateLink' , 'act': 'call riv#create#link()',
+\{'name': 'RivCreateLink' , 'act': 'call riv#create#link(mode().visualmode())',
     \'note': 'Create Link based on current word',
     \'menu': 'Insert.Link',
-    \'type': 'buf', 'mode': 'mi', 'maps': ['ck'], 'keys': [],
+    \'type': 'buf', 'mode': 'vmi', 'maps': ['ck'], 'keys': [],
 \},
 \{'name': 'RivCreateGitLink' , 'act': 'call riv#create#git_commit_url()',
     \'note': 'Create github commit link',
@@ -646,9 +646,21 @@ fun! riv#cmd#init_maps() "{{{
     elseif cmd.type == 'expr'
       if has_key(cmd, 'maps')
         for key in map(copy(cmd.maps), 'leader.v:val') + cmd.keys
+          if cmd.mode =~ 'i'
             if index(g:riv_default.ignored_imaps, key) == -1
               exe "ino <silent><buffer><expr>" key cmd.act 
             endif
+          endif
+          if cmd.mode =~ 'v'
+            if index(g:riv_default.ignored_vmaps, key) == -1
+              exe "vno <silent><buffer><expr>" key cmd.act 
+            endif
+          endif
+          if cmd.mode =~ 'n'
+            if index(g:riv_default.ignored_nmaps, key) == -1
+              exe "vno <silent><buffer><expr>" key cmd.act 
+            endif
+          endif
         endfor
       endif
     elseif cmd.type == 'norm'
