@@ -3,7 +3,7 @@
 "    File: riv/create.vim
 " Summary: Create miscellaneous things.
 "  Author: Rykka G.Forest
-"  Update: 2012-09-17
+"  Update: 2014-08-16
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -149,7 +149,18 @@ fun! s:get_phase_obj() "{{{
     endif
     return obj
 endfun "}}}
-fun! riv#create#link() "{{{
+fun! riv#create#link() range "{{{
+    " TODO: add visual mode support for creating phase link.
+    
+    " echom mode()
+    " echom visualmode()
+    " echom vs
+    " let _v = @v
+    " " get visual lines
+    " norm! gv"zy
+    " let vs = @v
+    " let @v = _v
+
     let [row, col] = [line('.'), col('.')]
     let line = getline(row)
     let eof = line('$')
@@ -187,7 +198,8 @@ fun! riv#create#link() "{{{
 
     if loc =~ '^\s*$' | return | endif
 
-    let tar_line = s:norm_tar_line(word, loc)
+    " let tar_line = s:norm_tar_line(tar, loc)
+    let tar_line = tar.loc
     
     " Change current line with Ref
     let line = substitute(line, '\%>'.(idx-1).'c.*\%<'.(end+1).'c', ref, '')
