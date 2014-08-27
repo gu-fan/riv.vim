@@ -6,105 +6,21 @@ Riv: Take Notes in rst
 
     -- `Jon Stewart`_
 
-:Last Update: 2014-08-15
+:Last Update: 2014-08-28
 :Version: 0.77
 
 
-Changes in 0.77
-===============
+What's New
+===========
 
-Lots of changes were made, so take care, and
+Lots of changes were made, See changelog_ for details.
 
-   **DON'T PANIC!**
-
-1. A brand new html theme for riv, rhythm.css_
-
-   Provides much better view experience. 
-
-   `Syntax Preview`__ 
-
-   `Article Preview`__
-
-   __ http://rykka.github.io/rhythm.css/rst_syntax
-   __ http://rykka.github.io/rhythm.css/article
-
-
-   Also, code syntax highlighting and themes are now truly supported,
-   you can change the theme by setting ``g:riv_html_code_hl_style``, 
-   default is 'molokai'. 
-
-   (This option may change to ``g:riv_code_theme`` in future.)
-
-   You can add your theme's css dir at ``g:riv_css_theme_dir``.
-   then set the style to the filename.
-
-   For view and edit in vim, you can use most morden themes like molokai.
-   And the Galaxy.vim_ can be a good choice too.
-
-2. Auto convert to html on ``:w``:
-
-   Use option ``g:riv_auto_rst2html``, set it to 1 to active.
-   default is 0. 
-
-   If you even don't want to refresh the browser, use InstantRst_.
-
-3. New syntax and method for local files, 
-   which is much simpler, and robust.
-
-   see `#72`_ for details.
-
-   Just input ``xxx.rst`` or ``xxx/``,
-   Then use ``:RivCreatLink`` or ``<C-E>ck``, 
-   you will get the file link.
-
-   When click on a reference which location is a file link,
-   you will open it directly.
-
-   To disable this, set ``g:riv_open_link_location`` to 0.
-   Then you will move to that location only.
-   default is 1.
-
-   :NOTE: When convert to html,
-          the xxx.rst in the file location will be auto convert
-          to xxx.html for navigation in browser.
-   
-   :NOTE:
-
-       The moinmoin style (``[[xxxx]]``) is deprecated, and will be removed
-       in next few versions.
-
-       The sphinx style (``:doc:`xxxx```) will go on.
-
-4. Unicode Link names.
-
-   Reference links now supporting unicode names.
-
-   Also filename supports unicode names too, 
-   though that's not encouraged.
-
-   like::
-
-       名字_
-
-       .. 名字: name.rst
-
-5. Better and faster indent behavior.
-
-   see `#71`_ for details.
-
-6. Fixed lots of misc bugs and made lots of small optimization
-
-   The error phase ptn. 
-
-   Project's id working error.
-
-   Editing a file missing working directory.
-
-   Syntax highlighting error and optimize.
-
-   Improved doctest using doctest.vim_
-
-   ...
+  A. A brand new html theme for riv, rhythm.css_
+  B. Auto converting to html on ``:write``:
+  C. New syntax and method for local files, 
+  D. Unicode Link names.
+  E. Better and faster indent behavior.
+  F. Fixed lots of misc bugs and made lots of small optimization
 
 ----
 
@@ -116,12 +32,15 @@ Both bug reports and suggestions are welcome.
 
 Many Thanks!
 
+----
+
 Intro
 =====
 
 **Riv** is a vim plugin for taking notes with reStructuredText_.
 
-A screencast with Riv in vim and InstantRst_
+
+Screencast(It's a bit outdated,  anyone create a new one are welcome)
 
 .. image:: intro.gif
 
@@ -310,11 +229,12 @@ Common Issues
 .. _Nikola: https://github.com/getnikola/nikola
 .. _`@rykkaf`: https://twitter.com/rykkaf
 .. _InstantRst: https://github.com/Rykka/InstantRst
+.. _Galaxy.vim: https://github.com/Rykka/galaxy.vim
 .. _HoverCraft: https://github.com/regebro/hovercraft
 .. _typo.css:  https://github.com/sofish/Typo.css 
-.. _Galaxy.vim: https://github.com/Rykka/galaxy.vim
 .. _VOoM: https://github.com/vim-voom/VOoM
 .. _doctest.vim: https://github.com/Rykka/doctest.vim
 .. _`#71`: https://github.com/Rykka/riv.vim/issues/71
 .. _`#72`: https://github.com/Rykka/riv.vim/issues/72
 .. _rhythm.css: https://github.com/Rykka/rhythm.css
+.. _changelog: changelog.rst

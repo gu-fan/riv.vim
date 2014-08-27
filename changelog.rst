@@ -4,6 +4,94 @@ Changelogs
 ==========
 
 * 0.77: 
+
+  A. A brand new html theme for riv, rhythm.css_
+
+     Provides much better view experience. 
+
+     `Syntax Preview`__ 
+
+     `Article Preview`__
+
+     __ http://rykka.github.io/rhythm.css/rst_syntax
+     __ http://rykka.github.io/rhythm.css/article
+
+
+     Also, code syntax highlighting and themes are now truly supported,
+     you can change the theme by setting ``g:riv_html_code_hl_style``, 
+     default is 'molokai'. 
+
+     (This option may change to ``g:riv_code_theme`` in future.)
+
+     You can add your theme's css dir at ``g:riv_css_theme_dir``.
+     then set the style to the filename.
+
+     For view and edit in vim, you can use most morden themes like molokai.
+     And the Galaxy.vim_ can be a good choice too.
+
+  B. Auto convert to html on ``:w``:
+
+     Use option ``g:riv_auto_rst2html``, set it to 1 to active.
+     default is 0. 
+
+     If you even don't want to refresh the browser, use InstantRst_.
+
+  C. New syntax and method for local files, 
+     which is much simpler, and robust.
+
+     see `#72`_ for details.
+
+     Just input ``xxx.rst`` or ``xxx/``,
+     Then use ``:RivCreatLink`` or ``<C-E>ck``, 
+     you will get the file link.
+
+     When click on a reference which location is a file link,
+     you will open it directly.
+
+     To disable this, set ``g:riv_open_link_location`` to 0.
+     Then you will move to that location only.
+     default is 1.
+
+     :NOTE: When convert to html,
+            the xxx.rst in the file location will be auto convert
+            to xxx.html for navigation in browser.
+   
+     :NOTE:
+
+         The moinmoin style (``[[xxxx]]``) is deprecated, and will be removed
+         in next few versions.
+
+         The sphinx style (``:doc:`xxxx```) will go on.
+
+  D. Unicode Link names.
+
+     Reference links now supporting unicode names.
+
+     Also filename supports unicode names too, 
+     though that's not encouraged.
+
+     like::
+
+         名字_
+
+         .. 名字: name.rst
+
+  E. Better and faster indent behavior.
+
+     see `#71`_ for details.
+
+  F. Fixed lots of misc bugs and made lots of small optimization
+
+     The error phase ptn. 
+
+     Project's id working error.
+
+     Editing a file missing working directory.
+
+     Syntax highlighting error and optimize.
+
+     Improved doctest using doctest.vim_
+
  
   :Fold:    Optimize folding, and sub the `\_s` pattern with
             `(\s|$)`, due to vim's bug cc470cad_
@@ -237,3 +325,9 @@ Changelogs
 .. _6470ad9f: 6470ad9ff5033bbddfcce79dbb17de7f5876889b
 .. _e7539c98: e7539c98b54e25dc59dc316dd9c268ce4d425f33
 .. _cc470cad: cc470cadafe1899305a53fac0a9ad8cc81b8ae6f
+.. _rhythm.css: https://github.com/Rykka/rhythm.css
+.. _doctest.vim: https://github.com/Rykka/doctest.vim
+.. _`#71`: https://github.com/Rykka/riv.vim/issues/71
+.. _`#72`: https://github.com/Rykka/riv.vim/issues/72
+.. _InstantRst: https://github.com/Rykka/InstantRst
+.. _Galaxy.vim: https://github.com/Rykka/galaxy.vim
