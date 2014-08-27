@@ -26,11 +26,11 @@ Lots of changes were made, See changelog_ for details.
 
    **And**
 
-Please help improving this plugin, for better writing and reading.
+   Please help improving this plugin, for better writing and reading.
 
-Both bug reports and suggestions are welcome.
+   Both bug reports and suggestions are welcome.
 
-Many Thanks!
+   Many Thanks!
 
 ----
 
