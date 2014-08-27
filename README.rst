@@ -32,7 +32,6 @@ Lots of changes were made, See changelog_ for details.
 
    Many Thanks!
 
-----
 
 Intro
 =====
