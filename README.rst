@@ -40,6 +40,7 @@ Intro
 
 
 Screencast with InstantRst_
+
 .. image:: https://github.com/Rykka/github_things/raw/master/image/rst_quick_start.gif 
 
 Comparion
