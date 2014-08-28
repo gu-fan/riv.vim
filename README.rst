@@ -39,9 +39,11 @@ Intro
 **Riv** is a vim plugin for taking notes with reStructuredText_.
 
 
-Screencast with InstantRst_
 
-.. image:: https://github.com/Rykka/github_things/raw/master/image/rst_quick_start.gif 
+.. figure:: https://github.com/Rykka/github_things/raw/master/image/rst_quick_start.gif 
+    :align: center
+
+    Screencast with InstantRst_
 
 Comparion
 =========
