@@ -45,6 +45,8 @@ Intro
 
     Screencast with InstantRst_
 
+    Theme with Rhythm.css_
+
 Comparion
 =========
 
