@@ -6,7 +6,7 @@ Riv: Take Notes in rst
 
     -- `Jon Stewart`_
 
-:Last Update: 2014-08-28
+:Last Update: 2014-08-29
 :Version: 0.77
 
 
@@ -16,8 +16,9 @@ What's New
 Lots of changes were made, See changelog_ for details.
 
   A. A brand new html theme for riv, rhythm.css_
-  B. Auto converting to html on ``:write``:
-  C. New syntax and method for local files, 
+  B. New option for auto converting to html on ``:write``.
+     Also you can use InstantRst_ to preview document instantly.
+  C. New syntax and method for local files. 
   D. Unicode Link names.
   E. Better and faster indent behavior.
   F. Fixed lots of misc bugs and made lots of small optimization
@@ -25,8 +26,6 @@ Lots of changes were made, See changelog_ for details.
 ----
 
    **And**
-
-   Please help improving this plugin, for better writing and reading.
 
    Both bug reports and suggestions are welcome.
 
@@ -42,9 +41,7 @@ Intro
 .. figure:: https://github.com/Rykka/github_things/raw/master/image/rst_quick_start.gif
     :align: center
 
-    Screencast with InstantRst_
-
-    Theme with Rhythm.css_
+    riv.vim_ (vim) +  InstantRst_ (web server) +  Rhythm.css_ (theme)
 
 Comparion
 =========
@@ -240,3 +237,4 @@ Common Issues
 .. _`#72`: https://github.com/Rykka/riv.vim/issues/72
 .. _rhythm.css: https://github.com/Rykka/rhythm.css
 .. _changelog: changelog.rst
+.. _riv.vim: http://github.com/Rykka/riv.vim
