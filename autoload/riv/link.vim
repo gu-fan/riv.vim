@@ -3,7 +3,7 @@
 "    File: link.vim
 " Summary: link ref and targets.
 "  Author: Rykka G.F
-"  Update: 2014-08-14
+"  Update: 2014-08-28
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -206,7 +206,7 @@ fun! riv#link#open(...) "{{{
             " Open file have extenstins or exists
             if loc =~ s:p.link_uri
                 call riv#link#browse(loc)
-                call riv#echo("Use :RivLinkShow <C-E>ks to move to link's location.")
+                " call riv#echo("Use :RivLinkShow <C-E>ks to move to link's location.")
                 return 2
             else
                 if fnamemodify(loc, ":e") == 'html'
@@ -214,7 +214,7 @@ fun! riv#link#open(...) "{{{
                 endif
                 if s:is_file(loc) || loc =~ s:p.ext_file_link
                     call riv#file#edit(loc)
-                    call riv#echo("Use :RivLinkShow <C-E>ks to move to link's location.")
+                    " call riv#echo("Use :RivLinkShow <C-E>ks to move to link's location.")
                     return 2
               endif
             endif
