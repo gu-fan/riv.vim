@@ -2,12 +2,14 @@
 Riv: Take Notes in rst
 #######################
 
+:Last Update: 2014-08-29
+:Version: 0.77
+
+..
+
     The Internet is just a world passing around notes in a classroom.
 
     -- `Jon Stewart`_
-
-:Last Update: 2014-08-29
-:Version: 0.77
 
 
 What's New
