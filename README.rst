@@ -43,7 +43,7 @@ Intro
 .. figure:: https://github.com/Rykka/github_things/raw/master/image/rst_quick_start.gif
     :align: center
 
-    riv.vim_ (vim) +  InstantRst_ (web server) +  Rhythm.css_ (theme)
+    riv.vim_ (vim) +  InstantRst_ (web server) +  rhythm.css_ (theme)
 
 Comparion
 =========
