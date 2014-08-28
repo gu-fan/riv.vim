@@ -371,7 +371,7 @@ endfun "}}}
 
 
 fun! riv#table#newline(type) "{{{
-    " TODO: break a row will break the content into two lines
+    " TODO: break a line in a table
     call riv#breakundo()
     let [row,col] = getpos('.')[1:2]
     call s:get_table().add_line(a:type)
