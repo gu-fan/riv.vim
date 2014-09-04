@@ -9,6 +9,8 @@ endif
 let s:cpo_save = &cpo
 set cpo&vim
 
+call riv#load_opt()
+
 syn match   rstTodo         '\v(<|:)%(FIXME|TODO|XXX|NOTE)%(:|\_s@=)' contained
 
 syn case ignore
@@ -26,21 +28,21 @@ syn cluster rstCruft                contains=rstEmphasis,rstStrongEmphasis,
 " A blank line is needed after the LiteralBlock
 syn region  rstLiteralBlock         matchgroup=rstDelimiter
       \ start='::\_s*\n\s*\n\ze\z(\s\+\)' skip='^$' end='^\z1\@!'
-      \ contains=@NoSpell
+      \ contains=@Spell
 
 syn region  rstLineBlock
       \ start='^\s*\ze|\_s' end='^\s*$'
-      \ contains=@NoSpell
+      \ contains=@Spell
 
 syn region  rstQuotedLiteralBlock   matchgroup=rstDelimiter
       \ start="::\_s*\n\ze\z([!\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]\)"
-      \ end='^\z1\@!' contains=@NoSpell
+      \ end='^\z1\@!' contains=@Spell
 
 syn region  rstDoctestBlock         display matchgroup=rstDelimiter
       \ start='^>>>\s' end='^\s*$'
 
 syn region  rstTable                transparent start='\%(\_^\s*\n\)\@<=\s*+[-=+]\+' end='^\s*$'
-      \ contains=rstTableLines,@rstCruft
+      \ contains=rstTableLines,@rstCruft,@Spell
 syn match   rstTableLines           contained display '|\|+\%(=\+\|-\+\)\='
 
 syn region  rstSimpleTable          transparent
@@ -72,7 +74,13 @@ syn match   rstExplicitMarkupDot       '^\s*\.\.\_s' contained
 
 " NOTE: the rst recongnize unicode_char_ target and refernce
 " So use [^[:punct:][:space:]] here.
-let s:ReferenceName = '[^[:cntrl:][:punct:][:space:]]\+\%([_.-][^[:space:][:punct:][:cntrl:]]\+\)*'
+if g:riv_unicode_ref_name == 1
+    let s:ReferenceName = '[^[:cntrl:][:punct:][:space:]]\+\%([_.-][^[:space:][:punct:][:cntrl:]]\+\)*'
+" XXX
+" unicode mathing seems a bit slow
+else
+    let s:ReferenceName = '\w\+\%([_.-]\w\+\)*'
+endif
 
 " NOTE: #66 If we use '.*' all explicit markup will became comment.
 " So use '[^.]' here. us \_s to skip the exdirective match
@@ -82,19 +90,19 @@ execute 'syn region rstComment contained'
         \ ' start=#[^.|[_[:blank:]]\+[^:[:blank:]]\_s\@=#'
         \ ' skip=+^$+' .
         \ ' end=+^\s\@!+'
-        \ ' contains=@rstCommentGroup'
+        \ ' contains=@rstCommentGroup,@Spell'
 
 execute 'syn region rstFootnote contained matchgroup=rstDirective' .
       \ ' start=+\[\%(\d\+\|#\%(' . s:ReferenceName . '\)\=\|\*\)\]\_s+' .
       \ ' skip=+^$+' .
       \ ' end=+^\s\@!+'
-      \ ' contains=@rstCruft,@NoSpell'
+      \ ' contains=@rstCruft,@Spell'
 
 execute 'syn region rstCitation contained matchgroup=rstDirective' .
       \ ' start=+\[' . s:ReferenceName . '\]\_s+' .
       \ ' skip=+^$+' .
       \ ' end=+^\s\@!+'
-      \ ' contains=@s:ReferenceNamerstCruft,@NoSpell'
+      \ ' contains=@s:ReferenceNamerstCruft,@Spell'
 
 syn region rstHyperlinkTarget contained matchgroup=rstDirective
       \ start='_\%(_\|[^:\\]*\%(\\.[^:\\]*\)*\):\_s' skip=+^$+ end=+^\s\@!+

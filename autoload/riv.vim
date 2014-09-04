@@ -82,8 +82,9 @@ fun! riv#system(arg) abort "{{{
 endfun "}}}
 "}}}
 "{{{ Loading Functions
-fun! riv#load_opt(opt_dic) "{{{
-    for [opt,var] in items(a:opt_dic)
+fun! riv#load_opt(...) "{{{
+    let opts = get(a:000, 0, s:default.options)
+    for [opt,var] in items(opts)
         if !exists('g:riv_'.opt)
             let g:riv_{opt} = var
         elseif type(g:riv_{opt}) != type(var)
@@ -170,6 +171,7 @@ let s:default.options = {
     \'auto_rst2html'      :  0,
     \'open_link_location' :  1,
     \'css_theme_dir'      :  '',
+    \'unicode_ref_name'   :  0,
     \}
 "}}}
 
@@ -415,7 +417,7 @@ fun! riv#load_aug() "{{{
 endfun "}}}
 fun! riv#init() "{{{
     " for init autoload
-    call riv#load_opt(s:default.options)
+    call riv#load_opt()
     call riv#cmd#init()
     call riv#load_conf()
     call riv#load_aug()
