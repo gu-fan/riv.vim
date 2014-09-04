@@ -459,7 +459,9 @@ endfun "}}}
 fun! riv#buf_init() "{{{
     call riv#id()
     " for the rst buffer
-    if g:riv_disable_folding == 0
+    if exists("g:riv_disable_folding") && g:riv_disable_folding != 0
+        " Do nothing
+    else
         setl foldmethod=expr foldexpr=riv#fold#expr(v:lnum) 
         setl foldtext=riv#fold#text()
     endif
