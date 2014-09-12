@@ -87,7 +87,7 @@ Features
     - Vim & Python: InstantRst_ for preview rst document instantly.
     - Vim & Python: Syntastic_ for syntax checking. Requires Docutils_ and Pygments_.
     - Python: Sphinx_ for Sphinx users.
-    - Python: Nikola_ for static blogging with rst syntax.
+    - Python: Nikola_ or pelican_ for static blogging with rst syntax.
     - Python: HoverCraft_ for writing presentation from rst.
 
     Contribution to this list are welcome.
@@ -240,3 +240,4 @@ Common Issues
 .. _rhythm.css: https://github.com/Rykka/rhythm.css
 .. _changelog: changelog.rst
 .. _riv.vim: http://github.com/Rykka/riv.vim
+.. _pelican: https://github.com/getpelican/pelican
