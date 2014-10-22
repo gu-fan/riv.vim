@@ -40,7 +40,6 @@ fun! s:cursor(row, col) "{{{
     normal! zvzz
 
 endfun "}}}
-
 fun! riv#link#get_last_foot() "{{{
     " return  [ id , row]
     let pos = getpos('.')
@@ -66,7 +65,6 @@ fun! s:normal_ptn(text) "{{{
     let text = substitute(riv#ptn#escape(text),'\s\+','\\s+','g')
     return text
 endfun "}}}
-
 fun! s:target_ptn(text) "{{{
     return '\v\c(_`\zs'. a:text .'`|\_^\.\.\s\zs\['.a:text.'\]|\_^\.\.\s\zs_'.a:text.':)'
 endfun "}}}

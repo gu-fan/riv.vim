@@ -361,10 +361,12 @@ fun! riv#publish#2(ft, file, path, browse) "{{{
         if a:ft == "latex"
             exe 'sp ' out_file
         elseif a:ft == "odt"
-            call s:sys(g:riv_ft_browser . ' '. out_file . ' &')
+            " call s:sys(g:riv_ft_browser . ' '. out_file . ' &')
+            call clickable#util#browse(out_file, g:riv_ft_browser)
         else
             let escaped_path = substitute(out_file, ' ', '\\ ', 'g')
-            call s:sys(g:riv_web_browser . ' '. escaped_path . ' &')
+            " call s:sys(g:riv_web_browser . ' '. escaped_path . ' &')
+            call clickable#util#browse(escaped_path, g:riv_web_browser)
         endif
     endif
 endfun "}}}

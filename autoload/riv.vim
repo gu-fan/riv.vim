@@ -439,12 +439,12 @@ fun! riv#buf_load_aug() "{{{
         if exists("g:riv_auto_rst2html") && g:riv_auto_rst2html == 1 "{{{
             au BufWritePost <buffer> sil! Riv2HtmlFile
         endif "}}}
-        if exists("g:riv_link_cursor_hl")  && g:riv_link_cursor_hl == 1 "{{{
-            " cursor_link_highlight
-            au! CursorMoved <buffer>  call riv#link#hi_hover()
-            " clear the highlight before bufwin/winleave
-            au WinLeave,BufWinLeave     <buffer>  2match none
-        endif "}}}
+        " if exists("g:riv_link_cursor_hl")  && g:riv_link_cursor_hl == 1 "{{{
+        "     " cursor_link_highlight
+        "     au! CursorMoved <buffer>  call riv#link#hi_hover()
+        "     " clear the highlight before bufwin/winleave
+        "     au WinLeave,BufWinLeave     <buffer>  2match none
+        " endif "}}}
     aug END "}}}
 endfun "}}}
 fun! riv#buf_load_syn() "{{{
