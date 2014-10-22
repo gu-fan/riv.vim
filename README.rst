@@ -3,7 +3,7 @@ Riv: Take Notes in rst
 #######################
 
 :Last Update: 2014-08-29
-:Version: 0.77
+:Version: 0.78
 
 ..
 
@@ -12,18 +12,13 @@ Riv: Take Notes in rst
     -- `Jon Stewart`_
 
 
-What's New
-===========
+What's New in 0.78
+==================
 
-Lots of changes were made, See changelog_ for details.
+1. Using clickable.vim for clicking function.
 
-  A. A brand new html theme for riv, rhythm.css_
-  B. New option for auto converting to html on ``:write``.
-     Also you can use InstantRst_ to preview document instantly.
-  C. New syntax and method for local files. 
-  D. Unicode Link names.
-  E. Better and faster indent behavior.
-  F. Fixed lots of misc bugs and made lots of small optimization
+   add 'rykka/clickable.vim' to your bundle setting.
+
 
 ----
 
