@@ -18,6 +18,8 @@ What's New in 0.78
 1. Using clickable.vim for clicking function.
 
    add 'rykka/clickable.vim' to your bundle setting.
+   also add 'rykka/os.vim' (though this will migrate to the vital.vim sooner
+   or later)
 
 
 ----

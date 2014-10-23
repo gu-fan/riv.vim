@@ -417,10 +417,16 @@ fun! riv#load_aug() "{{{
 endfun "}}}
 fun! riv#init() "{{{
     " for init autoload
+    "
+    " updating message
     call riv#load_opt()
     call riv#cmd#init()
     call riv#load_conf()
     call riv#load_aug()
+    sil! let _t = clickable#highlight#init()
+    if !exists("_t")
+        echom "[RIV] clickable.vim is needed for link. Add it to your bundle"
+    endif
 endfun "}}}
 
 fun! riv#buf_load_aug() "{{{
