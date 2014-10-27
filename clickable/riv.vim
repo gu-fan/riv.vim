@@ -1,3 +1,4 @@
+call riv#init()
 let s:p = g:_riv_p
 fun! s:normal_ptn(text) "{{{
     let text = substitute(a:text ,'\v(^__=|_=_$)','','g')
