@@ -101,8 +101,8 @@ function! s:init_clickable() "{{{
         \ 'pattern': g:_riv_p.link_tar,
         \ 'tooltip': 'riv tar:',
         \ 'syn_sep': '~',
-        \ 'contained_in': '.* contained',
         \ 'filetype': 'rst',
+        \ 'syn_args': 'containedin=ALLBUT,'.clickable#get_opt('prefix').'.* contained',
         \})
 
     function! config.riv_tar.trigger(...) dict "{{{
