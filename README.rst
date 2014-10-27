@@ -15,7 +15,7 @@ Riv: Take Notes in rst
 What's New in 0.78
 ==================
 
-1. Using clickable.vim for clicking function.
+1. Using clickable.vim_ for clicking function.
 
    add 'rykka/clickable.vim' to your bundle setting.
    also add 'rykka/os.vim' (though this will migrate to the vital.vim sooner
@@ -238,3 +238,4 @@ Common Issues
 .. _changelog: changelog.rst
 .. _riv.vim: http://github.com/Rykka/riv.vim
 .. _pelican: https://github.com/getpelican/pelican
+.. _clickable.vim: https://github.com/Rykka/clickable.vim
