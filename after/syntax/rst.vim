@@ -108,7 +108,7 @@ for code in g:_riv_t.highlight_code
 endfor
 let b:current_syntax = "rst"
 
-if !exists("g:_riv_incluing_python_rst") && has("spell")
+if !exists("g:_riv_including_python_rst") && has("spell")
     " Enable spelling on the whole file if we're not being included to parse
     " docstrings
     syn spell toplevel
