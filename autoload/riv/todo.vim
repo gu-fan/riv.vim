@@ -490,7 +490,7 @@ fun! riv#todo#todo_helper() "{{{
     let Prior3 = filter(copy(All),'v:val=~s:p.help_prior3 ') 
     let s:todo.contents = [Todo,Done,All,Prior1,Prior2,Prior3]
     let prior_strs = map(range(3), '"#".s:t.prior_str[v:val]')
-    let s:todo.contents_name = ['Todo', 'Done', 'ALl'] + prior_strs
+    let s:todo.contents_name = ['Todo', 'Done', 'All'] + prior_strs
     let s:todo.content_title = "Todos"
 
     let s:todo.maps['<Enter>'] = ':cal riv#todo#enter()<CR>'
