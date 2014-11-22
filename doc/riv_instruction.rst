@@ -1117,6 +1117,9 @@ A window for helping project management.
   + ``<Enter>`` or Double Click to jump to the item.
   + ``<Esc>`` or ``q`` to quit the window
 
+    Set '`g:riv_todo_helper_ignore_done`_' to 1 to ignore TODOs that are marked
+    as DONE in the display.
+
 Todo Helper
 """""""""""
 
@@ -1838,6 +1841,10 @@ Options
 |                                            | - %t is the section title                              |
 +--------------------------------------------+--------------------------------------------------------+
 | _`g:riv_fuzzy_help`                        | Fuzzy searching in helper.                             |
+|                                            |                                                        |
+| 0                                          |                                                        |
++--------------------------------------------+--------------------------------------------------------+
+| _`g:riv_todo_helper_ignore_done`           | Ignore TODOs that are marked as DONE in helper.        |
 |                                            |                                                        |
 | 0                                          |                                                        |
 +--------------------------------------------+--------------------------------------------------------+
