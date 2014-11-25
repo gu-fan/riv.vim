@@ -9,7 +9,7 @@ let s:cpo_save = &cpo
 set cpo-=C
 
 let s:autoload_path = expand('<sfile>:p:h')
-let g:riv_version = '0.77'
+let g:riv_version = '0.79'
 let s:tempdir = fnamemodify(tempname(),':p')
 
 " Miscs "{{{1
