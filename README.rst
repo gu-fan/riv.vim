@@ -2,8 +2,8 @@
 Riv: Take Notes in rst
 #######################
 
-:Last Update: 2014-08-29
-:Version: 0.77
+:Last Update: 2014-11-07
+:Version: 0.79
 
 ..
 
@@ -15,15 +15,17 @@ Riv: Take Notes in rst
 What's New
 ===========
 
-Lots of changes were made, See changelog_ for details.
 
-  A. A brand new html theme for riv, rhythm.css_
-  B. New option for auto converting to html on ``:write``.
-     Also you can use InstantRst_ to preview document instantly.
-  C. New syntax and method for local files. 
-  D. Unicode Link names.
-  E. Better and faster indent behavior.
-  F. Fixed lots of misc bugs and made lots of small optimization
+As The clickable is not stable. And with many voting to disable it.
+
+I revert to 0.77.
+
+There are other features should be done in this version.
+
+But I don't have enough time currently.
+
+But You can give me advice here too.
+
 
 ----
 
