@@ -20,11 +20,13 @@ As The clickable is not stable. And with many voting to disable it.
 
 I revert to 0.77.
 
-There are other features should be done in this version.
+There are other features should be done in this version 0.79.
 
 But I don't have enough time currently.
 
-But You can give me advice here too.
+But You can give me advice here too. 
+
+And any advice for 0.8 is welcome.
 
 
 ----
