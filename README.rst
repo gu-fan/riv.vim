@@ -2,8 +2,8 @@
 Riv: Take Notes in rst
 #######################
 
-:Last Update: 2014-08-29
-:Version: 0.78
+:Last Update: 2014-11-25
+:Version: 0.79
 
 ..
 
