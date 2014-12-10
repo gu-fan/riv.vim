@@ -118,13 +118,7 @@ fun! riv#util#clear_highlight() "{{{
 endfun "}}}
 
 fun! riv#util#browse(url, ...) "{{{
-    if !exists("s:os")
-        if !exists("*os#init")
-            call riv#error(" os#init is needed, please install bundle 'rykka/os.vim' ")
-        else
-            let s:os = os#init()
-        endif
-    endif
+    let s:os = riv#os#init()
     let url = a:url
     " let url = url =~? '\v^%(https=|file|ftp|fap|gopher|mailto|news):' ? url : 'http://'. url
     let browser = get(a:000, 0, riv#get_opt('web_browser'))
