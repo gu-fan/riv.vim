@@ -72,6 +72,13 @@ fun! riv#get_latest() "{{{
     echo "Get Latest Verion at https://github.com/Rykka/riv.vim"
     echohl Normal
 endfun "}}}
+fun! riv#get_opt(name) "{{{
+    if exists("g:riv_".a:name)
+        return g:riv_{a:name}
+    else
+        return ''
+    endif
+endfun "}}}
 fun! riv#system(arg) abort "{{{
     " XXX: error in windows tmp files
     if exists("*vimproc#system")
