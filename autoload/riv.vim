@@ -179,6 +179,8 @@ let s:default.options = {
     \'open_link_location' :  1,
     \'css_theme_dir'      :  '',
     \'unicode_ref_name'   :  0,
+    \'use_calendar'       :  1,
+    \'diary_rel_path'     : 'diary',
     \}
 "}}}
 
@@ -403,6 +405,11 @@ fun! riv#load_conf() "{{{1
     let s:e.FILE_NOT_FOUND = "Riv: Could not find the file"
     let s:e.REF_NOT_FOUND = "Riv: Could not find the link reference"
     let s:e.TAR_NOT_FOUND = "Riv: Could not find the link targets"
+
+    if g:riv_use_calendar
+        let g:calendar_action = 'riv#diary#calendar_action'
+        let g:calendar_sign = 'riv#diary#calendar_sign'
+    endif
 
 endfun "}}}
 fun! riv#load_aug() "{{{
