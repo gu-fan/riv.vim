@@ -2,6 +2,10 @@
 Riv: Take Notes in rst
 #######################
 
+.. image:: https://badges.gitter.im/Join%20Chat.svg
+   :alt: Join the chat at https://gitter.im/Rykka/riv.vim
+   :target: https://gitter.im/Rykka/riv.vim?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+
 :Last Update: 2014-11-07
 :Version: 0.79
 
