@@ -19,7 +19,9 @@ fun! riv#link#browse(link) "{{{
     if link =~ s:p.link_mail
         let link = 'mailto:' . link
     endif
-    call s:sys(g:riv_web_browser." ". escape(link,'#%')." &")
+    " call s:sys(g:riv_web_browser." ". escape(link,'#%')." &")
+    echom link
+    call riv#util#open(link)
 endfun "}}}
 fun! s:cursor(row, col) "{{{
     " Move to cursor with jumplist changed.
@@ -231,7 +233,8 @@ fun! riv#link#open(...) "{{{
                 call riv#file#edit(expand(mo.groups[4]))
             else
                 " vim will expand the # and % , so escape it.
-                call riv#link#browse(mo.groups[4])
+                " XXX: the groups[4] will remove the http/https , so use entire
+                call riv#link#browse(mo.groups[0])
             endif
         else
             if mo.groups[3] =~ s:p.link_mail
@@ -372,7 +375,7 @@ fun! riv#link#hi_hover() "{{{
 endfun "}}}
 
 if expand('<sfile>:p') == expand('%:p') "{{{
-    call doctest#start()
+    " call doctest#start()
 endif "}}}
 let &cpo = s:cpo_save
 unlet s:cpo_save
