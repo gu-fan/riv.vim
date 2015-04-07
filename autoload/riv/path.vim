@@ -166,7 +166,7 @@ fun! riv#path#join(a, ...)
 endfun
 
 if expand('<sfile>:p') == expand('%:p') "{{{
-    call doctest#start()
+    " call doctest#start()
 endif "}}}
 let &cpo = s:cpo_save
 unlet s:cpo_save

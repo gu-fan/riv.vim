@@ -304,7 +304,7 @@ fun! riv#load_conf() "{{{1
     " insert a temp file path at last one
     " >>> echo fnamemodify(tempname(), ':h')
     call add(s:c.p, {'path': fnamemodify(tempname(), ':h'),
-                   \ 'name': 'Temp Project'})
+                   \ 'name': 'TEMP'})
 
     for i in range(len(s:c.p))
         let s:c.p[i].id = i
@@ -323,12 +323,16 @@ fun! riv#load_conf() "{{{1
             let b_path =  expand(proj.build_path)
         endif
         let proj._build_path =  riv#path#directory(b_path)
-        if riv#path#is_relative(proj.scratch_path)
+        if proj.name == 'TEMP'
+            let s_path =  s:c.p[0]._root_path . s:c.p[0].scratch_path
+        elseif riv#path#is_relative(proj.scratch_path)
             let s_path =  proj._root_path . proj.scratch_path
         else
             let s_path =   expand(proj.scratch_path)
         endif
+
         let proj._scratch_path =  riv#path#directory(s_path)
+
         " the plain one
         " >>> echo matchstr('.rst', '^\.\zs.*$')
         " rst
