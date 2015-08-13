@@ -288,10 +288,10 @@ fun! s:single2(ft, file, browse) "{{{
             exe 'sp ' out_file
         elseif a:ft == "odt"
             " call s:sys(g:riv_ft_browser . ' '. shellescape(out_file) . ' &')
-            call riv#util#open(shellescape(out_file))
+            call riv#util#open(out_file)
         else
             " call s:sys(g:riv_web_browser . ' '. shellescape(out_file) . ' &')
-            call riv#util#open(shellescape(out_file))
+            call riv#util#open(out_file)
         endif
     endif
 endfun "}}}
