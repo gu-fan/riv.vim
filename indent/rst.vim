@@ -12,7 +12,11 @@ setlocal nosmartindent
 setlocal ww=b,s,<,>,[,]
 setlocal bs=indent,eol,start
 " NOTE: Fix del here, Does it have any sideeffects?
-fixdel
+
+if ! has('nvim')
+    " neovim got rid of the fixdel command
+    fixdel
+endif
 
 if exists("g:riv_disable_indent") && g:riv_disable_indent == 1
     " from vim74/indent/rst.vim
