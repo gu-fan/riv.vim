@@ -13,9 +13,11 @@ setlocal ww=b,s,<,>,[,]
 setlocal bs=indent,eol,start
 " NOTE: Fix del here, Does it have any sideeffects?
 
-if ! has('nvim')
-    " neovim got rid of the fixdel command
-    fixdel
+if exists("g:riv_disable_del") && g:riv_disable_del != 1
+    if ! has('nvim')
+        " neovim got rid of the fixdel command
+        fixdel
+    endif
 endif
 
 if exists("g:riv_disable_indent") && g:riv_disable_indent == 1
