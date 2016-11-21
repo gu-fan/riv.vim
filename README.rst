@@ -28,7 +28,7 @@ There are other features should be done in this version 0.79.
 
 But I don't have enough time currently.
 
-But You can give me advice here too. 
+But You can give me advice here too.
 
 And any advice for 0.8 is welcome.
 
@@ -53,42 +53,42 @@ Intro
 
     riv.vim_ (vim) +  InstantRst_ (web server) +  rhythm.css_ (theme)
 
-Comparion
-=========
+Comparison
+==========
 
 First things first.
 
-As there are some other note plugins in vim. 
+As there are some other note plugins in vim.
 like vimwiki_, vim-notes_,  VOoM_ etc.
 
-Also org-mode_ if you are Emacs fan.
+Also org-mode_ if you are an Emacs fan.
 
-**Why using this plugin?**
+**Why should you use this plugin?**
 
-In comparition, the most advantage of **Riv.vim** is reStructuredText_ support. 
+In comparison, the primary advantage of **Riv.vim** is its reStructuredText_ support.
 
     reStructuredText is a markup language.
 
-    It's syntax are markdown_ alike, but more powerful and extensible, table, LaTex ect. are supported.
+    Its syntax is similar to markdown_, but is more powerful and extensible, tables, LaTeX etc. are supported.
 
-    It's widely used in python community. And have many relevent plugins. Sphinx_ (www.readthedocs.org) Pygments_, Nikola_, etc.
+    It's widely used in the Python community, and has many relevant plugins. Sphinx_ (www.readthedocs.org) Pygments_, Nikola_, etc.
 
-    There is a post of comparions between reStructuredText and markdown https://gist.github.com/dupuy/1855764
+    There is a post of comparisons between reStructuredText and markdown https://gist.github.com/dupuy/1855764
 
 
 Features
 ========
 
-**Wiki**  
+**Wiki**
     Write wiki with project and file link support. **TODO** syntax is added.
-**Editing**   
+**Editing**
     Faster typing, easier navigation, clear intending, auto formatting etc.
-**Reading** 
+**Reading**
     Improved syntax highlighting and folding support for reading document clearly.
-**Publish** 
+**Publish**
     Convert rst files to a number of different formats: pdf, html, xml, latex and odt etc.
-    A new theme rhythm.css_ is added for better performance. 
-**Plugins**   
+    A new theme rhythm.css_ is added for better performance.
+**Plugins**
     Support many plugins like Sphinx_ syntax support.
     Other rst plugins:
 
@@ -109,7 +109,7 @@ Using Vundle_
 **Recommended**
 Add this line to your .vimrc (after you
 have properly set up Vundle_)::
- 
+
     Bundle 'Rykka/riv.vim'
 
 Downloaded zip/tar.gz file
@@ -127,7 +127,7 @@ You can add projects with ``g:riv_projects``::
 
 More options see the ``:RivInstruction``
 
-Make sure your .vim directory is before $VIMRUNTIME in 
+Make sure your .vim directory is before $VIMRUNTIME in
 ``runtimepath``.  By default it *IS* present before $VIMRUNTIME.
 
 Also Make sure ``filetype plugin indent on`` and ``syntax on`` options
@@ -142,7 +142,7 @@ Tutorials
 
 You can have a quick start with ``:RivQuickStart``.
 
-Here is the Screencast: 
+Here is the Screencast:
 
 * Riv: QuickStart_ (HD)
 
@@ -152,7 +152,7 @@ New To Vim
 
 * If you are new to Vim, you can get a basic overview of Vim using
   ``vimtutor``. To use it simply type ``vimtutor`` in your shell.
-  
+
 * To view the quick reference of Vim, use ``:h quickref``.
 
 New TO Rst
@@ -185,7 +185,7 @@ Issues
 
 The bug tracker for Riv is at https://github.com/Rykka/riv.vim/issues.
 You can use it to report bugs and open feature requests. Discussions related
-to Riv are welcome too. 
+to Riv are welcome too.
 
 You can follow my twitter `@rykkaf`_ and notice me there too.
 
@@ -198,16 +198,16 @@ Common Issues
   Or just `:w` as it will auto refolding after saving.
 
 * Windows:
-  
-  - Converting to other formats may fail. 
-    
+
+  - Converting to other formats may fail.
+
     This could happen due to Docutils not working correctly with
     ``vimrun.exe``.
 
 * Mac OS:
 
   - Lists don't act as expected.
-  
+
     This could happen if the ``<C-Enter>`` key could not be mapped. Try some
     other mapping instead.
 
@@ -230,17 +230,17 @@ Common Issues
 .. _riv_todo: https://github.com/Rykka/riv.vim/blob/master/doc/riv_todo.rst
 .. _reStructuredText Specification: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html
 .. _reStructuredText cheatsheet: http://docutils.sourceforge.net/docs/user/rst/cheatsheet.txt
-.. _vimwiki: https://github.com/vimwiki/vimwiki 
-.. _vim-notes: https://github.com/xolox/vim-notes 
+.. _vimwiki: https://github.com/vimwiki/vimwiki
+.. _vim-notes: https://github.com/xolox/vim-notes
 .. _markdown: http://daringfireball.net/projects/markdown/
 .. _org-mode: http://orgmode.org/
-.. _Jon Stewart: http://en.wikipedia.org/wiki/Jon_Stewart 
+.. _Jon Stewart: http://en.wikipedia.org/wiki/Jon_Stewart
 .. _Nikola: https://github.com/getnikola/nikola
 .. _`@rykkaf`: https://twitter.com/rykkaf
 .. _InstantRst: https://github.com/Rykka/InstantRst
 .. _Galaxy.vim: https://github.com/Rykka/galaxy.vim
 .. _HoverCraft: https://github.com/regebro/hovercraft
-.. _typo.css:  https://github.com/sofish/Typo.css 
+.. _typo.css:  https://github.com/sofish/Typo.css
 .. _VOoM: https://github.com/vim-voom/VOoM
 .. _doctest.vim: https://github.com/Rykka/doctest.vim
 .. _`#71`: https://github.com/Rykka/riv.vim/issues/71
@@ -249,3 +249,4 @@ Common Issues
 .. _changelog: changelog.rst
 .. _riv.vim: http://github.com/Rykka/riv.vim
 .. _pelican: https://github.com/getpelican/pelican
+
