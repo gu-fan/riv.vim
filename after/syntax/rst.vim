@@ -46,7 +46,8 @@ syn cluster rstCommentGroup contains=rstCommentTitle,rstTodo
 syn cluster rstCruft add=rstStandaloneHyperlink
 syn cluster rstCommentGroup add=@rstLinkGroup
 if g:riv_file_ext_link_hl == 1
-    exe 'syn match rstFileExtLink &'.s:s.rstFileExtLink.'&'
+    exe 'syn match rstFileExtLink &'.s:s.rstFileExtLink.'& contains=rstFileExtLinkConceal'
+    exe 'syn match rstFileExtLinkConceal &\v\.rst(\_s)@=& conceal contained'
     syn cluster rstCruft add=rstFileExtLink
 endif
 
@@ -133,6 +134,7 @@ else
     hi def rstFileLink    guifg=#58A261  gui=underline ctermfg=77 cterm=underline
 endif
 hi link rstFileExtLink rstFileLink
+hi link rstFileExtLinkConceal rstFileLink
 
 if exists("g:riv_code_indicator") && g:riv_code_indicator == 1
     hi def link rstCodeBlockIndicator DiffAdd
