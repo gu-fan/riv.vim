@@ -6,8 +6,8 @@ Riv: Take Notes in rst
    :alt: Join the chat at https://gitter.im/Rykka/riv.vim
    :target: https://gitter.im/Rykka/riv.vim?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 
-:Last Update: 2014-11-07
-:Version: 0.79
+:Last Update: 2017-02-07
+:Version: 0.791
 
 ..
 
@@ -19,28 +19,7 @@ Riv: Take Notes in rst
 What's New
 ===========
 
-
-As The clickable is not stable. And with many voting to disable it.
-
-I revert to 0.77.
-
-There are other features should be done in this version 0.79.
-
-But I don't have enough time currently.
-
-But You can give me advice here too. 
-
-And any advice for 0.8 is welcome.
-
-
-----
-
-   **And**
-
-   Both bug reports and suggestions are welcome.
-
-   Many Thanks!
-
+0.791: Add a conceal syntax for *.rst filelink
 
 Intro
 =====
