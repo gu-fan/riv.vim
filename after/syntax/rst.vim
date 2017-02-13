@@ -91,9 +91,9 @@ for code in g:_riv_t.highlight_code
             unlet! b:current_syntax
             exe "syn include @rst_".scode." ".s:{vcode}path
             exe 'syn region rstDirective_'.scode.' matchgroup=rstDirective fold '
-                \.'start=#\%(sourcecode\|code\%(-block\)\=\)::\s\+'.pcode.'\s*$# '
+                \.'start=#^\z(\s*\)\.\. \%(sourcecode\|code\%(-block\)\=\)::\s\+'.pcode.'\s*$# '
                 \.'skip=#^$# '
-                \.'end=#^\s\@!# contains=@NoSpell,rstCodeBlockIndicator,@rst_'.scode
+                \.'end=#^\(\z1\s\)\@!# contains=@NoSpell,rstCodeBlockIndicator,@rst_'.scode
             exe 'syn cluster rstDirectives add=rstDirective_'.scode
 
             " For sphinx , the highlight directive can be used for highlighting
