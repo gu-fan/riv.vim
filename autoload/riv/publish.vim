@@ -211,7 +211,7 @@ fun! s:convert(options) "{{{
 
     call s:sys( exe." ". style ." " . syn . "  " . args . " "
                 \.shellescape(input) 
-                \." > ".shellescape(output) )
+                \." ".shellescape(output) )
     if o_ft=='pdf'
         " See :Man pdflatex for option details
         if executable('pdflatex')
