@@ -402,7 +402,7 @@ fun! riv#create#wrap_inline(sign,mode) "{{{
     exe 'norm!' region.'c'.a:sign."\<C-R>\"".a:sign.recov 
 endfun "}}}
 fun! riv#create#transition() "{{{
-    let lines = ['','---','']
+    let lines = ['','----','']
     call append('.',lines)
     norm! 4j
 endfun "}}}
