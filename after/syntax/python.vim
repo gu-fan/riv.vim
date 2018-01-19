@@ -14,7 +14,7 @@ if g:riv_python_rst_hl == 1
     let g:_riv_stored_syntax = b:current_syntax
     " Let the after/syntax/rst.vim know that this is not a full RST file, this
     " way, it won't enable spelling on the whole file
-    let g:_riv_incluing_python_rst = 1
+    let g:_riv_including_python_rst = 1
 
     unlet! b:current_syntax
     syn include @python_rst <sfile>:p:h:h:h/syntax/rst.vim
@@ -26,7 +26,7 @@ if g:riv_python_rst_hl == 1
     let b:current_syntax = g:_riv_stored_syntax
     " Clear the temporary variable
     unlet! g:_riv_stored_syntax
-    unlet! g:_riv_incluing_python_rst
+    unlet! g:_riv_including_python_rst
 endif
 
 let &cpo = s:cpo_save
