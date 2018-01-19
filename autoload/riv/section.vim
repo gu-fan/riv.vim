@@ -131,6 +131,7 @@ fun! riv#section#title(level,...) "{{{
     " a:1 must be a number
     let row = a:0 ? a:1 : line('.')
     let line = getline(row)
+    let [rows,idx] = [0,0]
     if s:is_blank(line)
         let txt = s:get_sect_txt()
         if !empty(txt)
