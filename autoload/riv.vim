@@ -206,11 +206,16 @@ fun! riv#index_list() "{{{
                 \map(copy(g:_riv_c.p), 'v:val.id+1. "  " . v:val._name . " : " . v:val.path') )
     if id == '' || id == 0 | return | endif
     if id != 0
+        let g:_riv_c.main_idx = id
         call riv#index(id-1)
     endif
 endfun "}}}
 fun! riv#index(...) "{{{
-    let id = a:0 ? a:1 : 0
+    if exists("g:_riv_c.main_idx") 
+        let id = g:_riv_c.main_idx
+    else
+        let id = a:0 ? a:1 : 0
+    endif
     if exists("g:_riv_c.p[id]")
         " >>> echo riv#path#root_index()
         " index.rst
