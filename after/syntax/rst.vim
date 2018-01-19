@@ -21,8 +21,8 @@ fun! s:def_inline_char(name, start, end, char_left, char_right) "{{{
       \.'\\]*'.a:end.'\ze\%($\|\s\|[''")\]}>/:.,;!?\\-]\)+'
 endfun "}}}
 
-for pair in ['""', "''", '()', '{}', '<>']
-    call s:def_inline_char('PhaseHyperLinkReference', '`', '`__\=', pair[0] ,pair[1],)
+for s:_pair in ['""', "''", '()', '{}', '<>']
+    call s:def_inline_char('PhaseHyperLinkReference', '`', '`__\=', s:_pair[0] ,s:_pair[1],)
 endfor
 call s:def_inline_char('PhaseHyperLinkReference', '`', '`__\=', '\[','\]')
 call s:def_inline_char('PhaseHyperLinkReference', '`', '`__\=', '\%(^\|\s\|[/:]\)','')
