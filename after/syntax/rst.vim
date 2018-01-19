@@ -5,6 +5,12 @@
 " Summary: syntax file with options.
 "  Update: 2014-08-14
 "=============================================
+"
+" if exists("b:af_rst_loaded")
+"     finish
+" endif
+" let b:af_rst_loaded = 1
+
 let s:cpo_save = &cpo
 set cpo-=C
 
@@ -58,15 +64,14 @@ syn match rstCodeBlockIndicator `^\_.` contained
 
 " FIXME To Fix #61 ( Not Working!!!)
 " For no code file contained , we still highlight in code group.
-"
 exe 'syn region rstDirective_code matchgroup=rstDirective fold '
     \.'start=#\%(sourcecode\|code\%(-block\)\=\)::\s\+\S\+\s*$# '
     \.'skip=#^$# '
     \.'end=#^\s\@!# contains=@NoSpell,rstCodeBlockIndicator,@rst_code'
 exe 'syn cluster rstDirectives add=rstDirective_code'
-
 " TODO Can we use dynamical loading? 
 " parse the code name of code directives dynamicly and load the syntax file?
+
 for code in g:_riv_t.highlight_code
     " for performance , use $VIMRUNTIME and first in &rtp
     let path = join([$VIMRUNTIME, split(&rtp,',')[0]],',')
@@ -86,10 +91,18 @@ for code in g:_riv_t.highlight_code
     let paths = split(globpath(path, "syntax/".vcode.".vim"), '\n')
    
     if !empty(paths)
-        let s:{vcode}path= fnameescape(paths[0])
-        if filereadable(s:{vcode}path)
+        " let s:{vcode}path= fnameescape(paths[0])
+        let s:rst_{vcode}path= paths[0]
+        " if exists("s:has_".vcode)
+        "     continue
+        " endif
+        " let s:has_{vcode} = 1
+        if filereadable(s:rst_{vcode}path)
             unlet! b:current_syntax
-            exe "syn include @rst_".scode." ".s:{vcode}path
+            " echo "SYN INCLUDE ". scode
+            " echo fnameescape(s:{vcode}path)
+            exe "syn include @rst_".scode." ".fnameescape(s:rst_{vcode}path)
+            " exe "syn include @rst_".scode." ".s:{vcode}path
             exe 'syn region rstDirective_'.scode.' matchgroup=rstDirective fold '
                 \.'start=#\%(sourcecode\|code\%(-block\)\=\)::\s\+'.pcode.'\s*$# '
                 \.'skip=#^$# '
@@ -104,7 +117,9 @@ for code in g:_riv_t.highlight_code
                 \.'end=#\_^\(..\shighlights::\)\@=# contains=@NoSpell,@rst_'.scode
             exe 'syn cluster rstDirectives add=rstDirective_hl_'.scode
         endif
-        unlet s:{vcode}path
+        if exists("s:rst_".vcode."path")
+            unlet s:rst_{vcode}path
+        endif
     endif
 endfor
 let b:current_syntax = "rst"
@@ -165,5 +180,7 @@ hi def link rstBlockQuoteAttr               Exception
 hi def link rstCommentTitle                 SpecialComment
 
 
-let &cpo = s:cpo_save
-unlet s:cpo_save
+if exists("s:cpo_save")
+    let &cpo = s:cpo_save
+    unlet s:cpo_save
+endif
