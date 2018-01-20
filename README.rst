@@ -9,9 +9,10 @@ New Changes
 ===========
 
 0.792: fix the python/rst syntax file
+
 0.791: Add a conceal syntax for !*.rst filelink
-0.79: As The clickable is not stable, and with many voting to disable it,
-I revert to 0.77.
+
+0.79: As The clickable is not stable, and with many voting to disable it, revert to 0.77.
 
 
 Intro
