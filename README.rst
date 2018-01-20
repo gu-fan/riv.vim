@@ -2,45 +2,16 @@
 Riv: Take Notes in rst
 #######################
 
-.. image:: https://badges.gitter.im/Join%20Chat.svg
-   :alt: Join the chat at https://gitter.im/Rykka/riv.vim
-   :target: https://gitter.im/Rykka/riv.vim?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+:Last Update: 2018-01-21
+:Version: 0.792
 
-:Last Update: 2017-02-07
-:Version: 0.791
-
-..
-
-    The Internet is just a world passing around notes in a classroom.
-
-    -- `Jon Stewart`_
-
-
-What's New
+New Changes
 ===========
 
-0.791: Add a conceal syntax for *.rst filelink
-=======
-
-As The clickable is not stable, and with many voting to disable it,
+0.792: fix the python/rst syntax file
+0.791: Add a conceal syntax for !*.rst filelink
+0.79: As The clickable is not stable, and with many voting to disable it,
 I revert to 0.77.
-
-There are other features should be done in this version 0.79.
-
-But I don't have enough time currently.
-
-But you can give me advice here too. 
-
-And any advice for 0.8 is welcome.
-
-
-----
-
-   **And**
-
-   Both bug reports and suggestions are welcome.
-
-   Many Thanks!
 
 
 Intro
@@ -48,8 +19,7 @@ Intro
 
 **Riv** is a vim plugin for taking notes with reStructuredText_.
 
-
-.. figure:: https://github.com/Rykka/github_things/raw/master/image/rst_quick_start.gif
+.. figure:: https://user-images.githubusercontent.com/579129/35188163-ea914ce8-fe6b-11e7-8a8e-11527785122b.gif
     :align: center
 
     riv.vim_ (vim) +  InstantRst_ (web server) +  rhythm.css_ (theme)
