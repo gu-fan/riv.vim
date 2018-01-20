@@ -3,13 +3,14 @@
 "    File: after/syntax/rst.vim
 "  Author: Rykka G.F
 " Summary: syntax file with options.
-"  Update: 2014-08-14
+"  Update: 2018-01-21
 "=============================================
-"
-" if exists("b:af_rst_loaded")
-"     finish
-" endif
-" let b:af_rst_loaded = 1
+
+if exists("b:af_rst_loaded")
+    finish
+endif
+
+let b:af_rst_loaded = 1
 
 let s:cpo_save = &cpo
 set cpo-=C
@@ -72,6 +73,9 @@ exe 'syn cluster rstDirectives add=rstDirective_code'
 " TODO Can we use dynamical loading? 
 " parse the code name of code directives dynamicly and load the syntax file?
 
+if exists("b:af_py_loaded")
+    finish
+endif
 for code in g:_riv_t.highlight_code
     " for performance , use $VIMRUNTIME and first in &rtp
     let path = join([$VIMRUNTIME, split(&rtp,',')[0]],',')
@@ -91,18 +95,20 @@ for code in g:_riv_t.highlight_code
     let paths = split(globpath(path, "syntax/".vcode.".vim"), '\n')
    
     if !empty(paths)
-        " let s:{vcode}path= fnameescape(paths[0])
         let s:rst_{vcode}path= paths[0]
-        " if exists("s:has_".vcode)
-        "     continue
-        " endif
-        " let s:has_{vcode} = 1
         if filereadable(s:rst_{vcode}path)
             unlet! b:current_syntax
-            " echo "SYN INCLUDE ". scode
-            " echo fnameescape(s:{vcode}path)
-            exe "syn include @rst_".scode." ".fnameescape(s:rst_{vcode}path)
+            " echohl WarningMsg 
+            " echom "SYN INCLUDE ". scode
+            " echohl None
+            " echom fnameescape(s:rst_{vcode}path)
+            " echom "syntax/".vcode.".vim"
+          
+            " " NOTE: Use this can not include correctly.
+            " (maybe with space in 'program file' dir name)
             " exe "syn include @rst_".scode." ".s:{vcode}path
+           
+            exe "syn include @rst_".scode." "."syntax/".vcode.".vim"
             exe 'syn region rstDirective_'.scode.' matchgroup=rstDirective fold '
                 \.'start=#\%(sourcecode\|code\%(-block\)\=\)::\s\+'.pcode.'\s*$# '
                 \.'skip=#^$# '
