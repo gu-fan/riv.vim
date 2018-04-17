@@ -29,7 +29,7 @@ if g:riv_python_rst_hl == 1
     syn include @python_rst <sfile>:p:h:h:h/syntax/rst.vim
     syn include @python_rst <sfile>:p:h/rst.vim
     syn region pythonRstString matchgroup=pythonString
-        \ start=+[uU]\=\z('''\|"""\)+ end="\z1" keepend
+        \ start=+[bBfFrRuU]\{0,2}\z('''\|"""\)+ end="\z1" keepend
         \ contains=@python_rst,@Spell
     " Restore the previous syntax
     if exists('g:_riv_stored_syntax')
