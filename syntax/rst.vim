@@ -17,8 +17,8 @@ syn case ignore
 
 " NOTE: When the above line length longer than '::' , then it's literal_block
 " but we can not compare it's length, so we ignore '::' and '..'
-syn match   rstSections /\v%(\S\s*\n)@<!\_^\s*\S.*\n%(([=`'"~^_*+#-])\1*|([:.])\2{2,})\s*$/
-syn match   rstSections /\v%(\S\s*\n)@<!\_^(([=`:.'"~^_*+#-])\2*\s*)\n\s*\S.*\n\1$/
+syn match   rstSections /\v%(\S\s*\n)@<!\_^\s*\S.*\n%(([=`'"~^_*+#-])\1+|([:.])\2{2,})\s*$/
+syn match   rstSections /\v%(\S\s*\n)@<!\_^(([=`:.'"~^_*+#-])\2+\s*)\n\s*\S.*\n\1$/
 syn match   rstTransition  /\v%(\_^\s*\n)@<=\_^[=`:.'"~^_*+#-]{4,}\s*(\n\s*\_$)\@=/
 
 syn cluster rstCruft                contains=rstEmphasis,rstStrongEmphasis,
