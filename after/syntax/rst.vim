@@ -3,8 +3,15 @@
 "    File: after/syntax/rst.vim
 "  Author: Rykka G.F
 " Summary: syntax file with options.
-"  Update: 2014-08-14
+"  Update: 2018-01-21
 "=============================================
+
+if exists("b:af_rst_loaded")
+    finish
+endif
+
+let b:af_rst_loaded = 1
+
 let s:cpo_save = &cpo
 set cpo-=C
 
@@ -21,8 +28,8 @@ fun! s:def_inline_char(name, start, end, char_left, char_right) "{{{
       \.'\\]*'.a:end.'\ze\%($\|\s\|[''")\]}>/:.,;!?\\-]\)+'
 endfun "}}}
 
-for pair in ['""', "''", '()', '{}', '<>']
-    call s:def_inline_char('PhaseHyperLinkReference', '`', '`__\=', pair[0] ,pair[1],)
+for s:_pair in ['""', "''", '()', '{}', '<>']
+    call s:def_inline_char('PhaseHyperLinkReference', '`', '`__\=', s:_pair[0] ,s:_pair[1],)
 endfor
 call s:def_inline_char('PhaseHyperLinkReference', '`', '`__\=', '\[','\]')
 call s:def_inline_char('PhaseHyperLinkReference', '`', '`__\=', '\%(^\|\s\|[/:]\)','')
@@ -58,15 +65,17 @@ syn match rstCodeBlockIndicator `^\_.` contained
 
 " FIXME To Fix #61 ( Not Working!!!)
 " For no code file contained , we still highlight in code group.
-"
 exe 'syn region rstDirective_code matchgroup=rstDirective fold '
     \.'start=#\%(sourcecode\|code\%(-block\)\=\)::\s\+\S\+\s*$# '
     \.'skip=#^$# '
     \.'end=#^\s\@!# contains=@NoSpell,rstCodeBlockIndicator,@rst_code'
 exe 'syn cluster rstDirectives add=rstDirective_code'
-
 " TODO Can we use dynamical loading? 
 " parse the code name of code directives dynamicly and load the syntax file?
+
+if exists("b:af_py_loaded")
+    finish
+endif
 for code in g:_riv_t.highlight_code
     " for performance , use $VIMRUNTIME and first in &rtp
     let path = join([$VIMRUNTIME, split(&rtp,',')[0]],',')
@@ -86,10 +95,20 @@ for code in g:_riv_t.highlight_code
     let paths = split(globpath(path, "syntax/".vcode.".vim"), '\n')
    
     if !empty(paths)
-        let s:{vcode}path= fnameescape(paths[0])
-        if filereadable(s:{vcode}path)
+        let s:rst_{vcode}path= paths[0]
+        if filereadable(s:rst_{vcode}path)
             unlet! b:current_syntax
-            exe "syn include @rst_".scode." ".s:{vcode}path
+            " echohl WarningMsg 
+            " echom "SYN INCLUDE ". scode
+            " echohl None
+            " echom fnameescape(s:rst_{vcode}path)
+            " echom "syntax/".vcode.".vim"
+          
+            " " NOTE: Use this can not include correctly.
+            " (maybe with space in 'program file' dir name)
+            " exe "syn include @rst_".scode." ".s:{vcode}path
+           
+            exe "syn include @rst_".scode." "."syntax/".vcode.".vim"
             exe 'syn region rstDirective_'.scode.' matchgroup=rstDirective fold '
                 \.'start=#\%(sourcecode\|code\%(-block\)\=\)::\s\+'.pcode.'\s*$# '
                 \.'skip=#^$# '
@@ -104,12 +123,14 @@ for code in g:_riv_t.highlight_code
                 \.'end=#\_^\(..\shighlights::\)\@=# contains=@NoSpell,@rst_'.scode
             exe 'syn cluster rstDirectives add=rstDirective_hl_'.scode
         endif
-        unlet s:{vcode}path
+        if exists("s:rst_".vcode."path")
+            unlet s:rst_{vcode}path
+        endif
     endif
 endfor
 let b:current_syntax = "rst"
 
-if !exists("g:_riv_incluing_python_rst") && has("spell")
+if !exists("g:_riv_including_python_rst") && has("spell")
     " Enable spelling on the whole file if we're not being included to parse
     " docstrings
     syn spell toplevel
@@ -165,5 +186,7 @@ hi def link rstBlockQuoteAttr               Exception
 hi def link rstCommentTitle                 SpecialComment
 
 
-let &cpo = s:cpo_save
-unlet s:cpo_save
+if exists("s:cpo_save")
+    let &cpo = s:cpo_save
+    unlet s:cpo_save
+endif

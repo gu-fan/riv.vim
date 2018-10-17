@@ -175,7 +175,7 @@ fun! riv#create#link(...) range "{{{
         let idx  = obj.start + 1
         let end  = obj.end + 1
     else
-        let word = input("Input link name:")
+        let word = input("Input link name: ")
         if word =~ '^\s*$' | return | endif
         let idx = col
         let end = col
@@ -195,7 +195,7 @@ fun! riv#create#link(...) range "{{{
         let [ref, tar, loc] = s:expand_link(word)
     endif
 
-    let loc = input("Input link location of '". ref . "':\n", loc, "file")
+    let loc = input("\nInput link location of '". ref . "':\n", loc, "file")
 
     if loc =~ '^\s*$' | return | endif
 
@@ -402,7 +402,7 @@ fun! riv#create#wrap_inline(sign,mode) "{{{
     exe 'norm!' region.'c'.a:sign."\<C-R>\"".a:sign.recov 
 endfun "}}}
 fun! riv#create#transition() "{{{
-    let lines = ['','---','']
+    let lines = ['','----','']
     call append('.',lines)
     norm! 4j
 endfun "}}}

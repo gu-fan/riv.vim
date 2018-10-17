@@ -2,32 +2,25 @@
 Riv: Take Notes in rst
 #######################
 
-.. image:: https://badges.gitter.im/Join%20Chat.svg
-   :alt: Join the chat at https://gitter.im/Rykka/riv.vim
-   :target: https://gitter.im/Rykka/riv.vim?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+:Last Update: 2018-01-21
+:Version: 0.792
 
-:Last Update: 2017-02-07
-:Version: 0.791
-
-..
-
-    The Internet is just a world passing around notes in a classroom.
-
-    -- `Jon Stewart`_
-
-
-What's New
+New Changes
 ===========
 
-0.791: Add a conceal syntax for *.rst filelink
+0.792: fix the python/rst syntax file
+
+0.791: Add a conceal syntax for \*.rst filelink
+
+0.79: As The clickable is not stable, and with many voting to disable it, revert to 0.77.
+
 
 Intro
 =====
 
 **Riv** is a vim plugin for taking notes with reStructuredText_.
 
-
-.. figure:: https://github.com/Rykka/github_things/raw/master/image/rst_quick_start.gif
+.. figure:: https://user-images.githubusercontent.com/579129/35188163-ea914ce8-fe6b-11e7-8a8e-11527785122b.gif
     :align: center
 
     riv.vim_ (vim) +  InstantRst_ (web server) +  rhythm.css_ (theme)
@@ -37,22 +30,24 @@ Comparion
 
 First things first.
 
-As there are some other note plugins in vim. 
-like vimwiki_, vim-notes_,  VOoM_ etc.
+There are some other note plugins in Vim, like vimwiki_, vim-notes_, VOoM_, etc.
 
-Also org-mode_ if you are Emacs fan.
+Also org-mode_ if you are an Emacs fan.
 
-**Why using this plugin?**
+**Why use this plugin?**
 
-In comparition, the most advantage of **Riv.vim** is reStructuredText_ support. 
+In comparison, the biggest advantage of **Riv.vim** is reStructuredText_ support. 
 
     reStructuredText is a markup language.
 
-    It's syntax are markdown_ alike, but more powerful and extensible, table, LaTex ect. are supported.
+    Its syntax is similar to markdown_, but more powerful and extensible.
+    Tables, LaTex, etc. are supported.
 
-    It's widely used in python community. And have many relevent plugins. Sphinx_ (www.readthedocs.org) Pygments_, Nikola_, etc.
+    It's widely used in the Python community, and has many relevant plugins.
+    Sphinx_ (www.readthedocs.org) Pygments_, Nikola_, etc.
 
-    There is a post of comparions between reStructuredText and markdown https://gist.github.com/dupuy/1855764
+    Here is a post comparing reStructuredText and Markdown:
+    https://gist.github.com/dupuy/1855764
 
 
 Features
@@ -61,21 +56,21 @@ Features
 **Wiki**  
     Write wiki with project and file link support. **TODO** syntax is added.
 **Editing**   
-    Faster typing, easier navigation, clear intending, auto formatting etc.
+    Faster typing, easier navigation, clear indenting, auto formatting etc.
 **Reading** 
     Improved syntax highlighting and folding support for reading document clearly.
 **Publish** 
-    Convert rst files to a number of different formats: pdf, html, xml, latex and odt etc.
+    Convert RST files to a number of different formats: PDF, HTML, XML, Latex and ODT, etc.
     A new theme rhythm.css_ is added for better performance. 
 **Plugins**   
     Support many plugins like Sphinx_ syntax support.
-    Other rst plugins:
+    Other RST plugins:
 
-    - Vim & Python: InstantRst_ for preview rst document instantly.
+    - Vim & Python: InstantRst_ for previewing RST documents instantly.
     - Vim & Python: Syntastic_ for syntax checking. Requires Docutils_ and Pygments_.
     - Python: Sphinx_ for Sphinx users.
-    - Python: Nikola_ or pelican_ for static blogging with rst syntax.
-    - Python: HoverCraft_ for writing presentation from rst.
+    - Python: Nikola_ or pelican_ for static blogging with RST syntax.
+    - Python: HoverCraft_ for writing presentation from RST.
 
     Contribution to this list are welcome.
 
@@ -86,8 +81,7 @@ Using Vundle_
 -------------
 
 **Recommended**
-Add this line to your .vimrc (after you
-have properly set up Vundle_)::
+Add this line to your ``.vimrc`` (after you have properly set up Vundle_)::
  
     Bundle 'Rykka/riv.vim'
 
@@ -101,20 +95,21 @@ Config
 
 You can add projects with ``g:riv_projects``::
 
-    let proj1 = { 'path': '~/Dropbox/rst',}
+    let proj1 = { 'path': '~/Dropbox/rst', }
     let g:riv_projects = [proj1]
 
 More options see the ``:RivInstruction``
 
-Make sure your .vim directory is before $VIMRUNTIME in 
-``runtimepath``.  By default it *IS* present before $VIMRUNTIME.
+Make sure your ``.vim`` directory is before ``$VIMRUNTIME`` in ``runtimepath``.
+By default it *is* present before ``$VIMRUNTIME``.
 
-Also Make sure ``filetype plugin indent on`` and ``syntax on`` options
-are present in your .vimrc.
+Also make sure ``filetype plugin indent on`` and ``syntax on`` options
+are present in your ``.vimrc``.
 
 Related tools
 -------------
 
+.. TODO
 
 Tutorials
 =========
@@ -134,7 +129,7 @@ New To Vim
   
 * To view the quick reference of Vim, use ``:h quickref``.
 
-New TO Rst
+New To RST
 ----------
 
 * To get a quick overview of reStructuredText, some of the available options
@@ -166,7 +161,7 @@ The bug tracker for Riv is at https://github.com/Rykka/riv.vim/issues.
 You can use it to report bugs and open feature requests. Discussions related
 to Riv are welcome too. 
 
-You can follow my twitter `@rykkaf`_ and notice me there too.
+You can follow my twitter `@rykkaf`_ and tweet me there too.
 
 Common Issues
 -------------
@@ -174,7 +169,7 @@ Common Issues
 * If you get errors with folding in documents, you can try to force reload
   using ``:RivReload`` or ``<C-E>t```.
 
-  Or just `:w` as it will auto refolding after saving.
+  Or just `:w` as it will auto-refold after saving.
 
 * Windows:
   
