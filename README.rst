@@ -7,7 +7,6 @@ Riv: Take Notes in rst
 
 New Changes
 ===========
-<<<<<<< HEAD
 
 0.792: fix the python/rst syntax file
 
@@ -15,15 +14,6 @@ New Changes
 
 0.79: As The clickable is not stable, and with many voting to disable it, revert to 0.77.
 
-=======
-
-0.792: fix the python/rst syntax file
-
-0.791: Add a conceal syntax for \*.rst filelink
-
-0.79: As The clickable is not stable, and with many voting to disable it, revert to 0.77.
-
->>>>>>> fb6d6f8c9d85128fd69c74f11bb7413addc002e8
 
 Intro
 =====
