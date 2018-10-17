@@ -190,6 +190,10 @@ Common Issues
     This could happen if the ``<C-Enter>`` key could not be mapped. Try some
     other mapping instead.
 
+License
+-------
+
+MIT
 
 
 .. _Vim text editor: http://www.vim.org/
