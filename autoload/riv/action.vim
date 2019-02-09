@@ -13,26 +13,29 @@ fun! riv#action#tutor(fname, bname) "{{{
     " Read tutor in a nofile buffer.
     "   if not exists, create buffer
     "   if buffer exists, load buffer.
-    if riv#win#new(a:bname)
-        setl buftype=nofile bufhidden=hide noswapfile
-        set ft=rst
-        let file = g:_riv_c.doc_path . a:fname . '.rst'
-        try
-            call setline(1, readfile(file))
-        catch
-            call riv#error('Error while reading file: '.v:exception)
-        endtry
-        update
-    endif
+    let [dir, loc, size] = ['','', 12]
+    let loc = empty(loc) ? 'bot' : loc
+    silent! exec loc.' '.size.dir.'new '. a:bname
+    
+    setl buftype=nofile bufhidden=hide noswapfile
+    set ft=rst
+    let file = g:_riv_c.doc_path . a:fname . '.rst'
+    try
+        call setline(1, readfile(file))
+    catch
+        call riv#error('Error while reading file: '.v:exception)
+    endtry
+    update
 
 endfun "}}}
 fun! riv#action#open(name) "{{{
     let file = g:_riv_c.doc_path . 'riv_'.a:name.'.rst'
-    if riv#win#new(file)
-        " exe 'noa keepa bot sp' file
+    let [dir, loc, size] = ['','', 12]
+    let loc = empty(loc) ? 'bot' : loc
+    silent! exec loc.' '.size.dir.'new '. file
+    
         setl ro noma ft=rst
         update
-    endif
 endfun "}}}
 
 fun! riv#action#db_click(mouse) "{{{

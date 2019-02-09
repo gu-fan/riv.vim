@@ -477,6 +477,10 @@ let g:riv_default.cmds = [
     \'menu': 'About.Riv\ Intruction',
     \'type': 'menu'
 \},
+\{'name': 'RivDoc' , 'act': 'call riv#action#tutor("riv_quickstart", "[Riv_QuickStart]")',
+    \'note': 'Show Riv QuickStart',
+    \'type': 'menu'
+\},
 \{'name': 'RivQuickStart' , 'act': 'call riv#action#tutor("riv_quickstart", "[Riv_QuickStart]")',
     \'note': 'Show Riv QuickStart',
     \'menu': 'About.Riv\ QuickStart',

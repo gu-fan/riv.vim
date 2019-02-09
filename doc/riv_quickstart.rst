@@ -362,7 +362,7 @@ For Vim help, use ``:h``.
 
 To get a quick view of reStructuredText, use ``:RivPrimer``
 
-To view the detailed Riv instruction, use ``:RivInstruction``
+To view the detailed Riv instruction, use ``:RivInstruction`` or ``:RivDoc``
 
 Get Latest Riv or post issues at riv.vim_
 
