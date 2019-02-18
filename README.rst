@@ -9,6 +9,7 @@ New Changes
 ===========
 
 0.793: fix the RivInstruction, add RivDoc
+
 0.792: fix the python/rst syntax file
 
 0.791: Add a conceal syntax for \*.rst filelink
