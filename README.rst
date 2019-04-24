@@ -27,7 +27,7 @@ Intro
 
     riv.vim_ (vim) +  InstantRst_ (web server) +  rhythm.css_ (theme)
 
-Comparion
+Comparison
 =========
 
 First things first.
