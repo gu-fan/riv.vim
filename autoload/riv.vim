@@ -256,12 +256,12 @@ fun! riv#load_conf() "{{{1
     let s:c.doc_path  = fnamemodify(s:autoload_path ,':h').'/doc/'
 
     " Python:
-    if has("python") "{{{
+    if has("python3") "{{{
+        let s:c['py3'] = "py3 "
+        let s:c.has_py = 3
+    elseif has("python")
         let s:c['py'] = "py "
         let s:c.has_py = 2
-    elseif has("python3")
-        let s:c['py'] = "py3 "
-        let s:c.has_py = 3
     else
         let s:c['py'] = "echom 'No Python: ' "
         let s:c.has_py = 0
