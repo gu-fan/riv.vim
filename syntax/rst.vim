@@ -133,7 +133,7 @@ function! s:DefineOneInlineMarkup(name, start, middle, end, char_left, char_righ
         \ ' start=+' . a:char_left . '\zs' . a:start .
         \ '\ze[^[:space:]' . a:char_right . a:start[strlen(a:start) - 1] . ']+' .
         \ a:middle .
-        \ ' end=+\S' . a:end . '\ze\%($\|\s\|[''")\]}>/:.,;!?\\-]\)+'
+        \ ' end=+\S' . a:end . '\ze\%($\|\s\|[''")\]}>/:.,;!?\\-\u00A0]\)+'
 endfunction
 
 function! s:DefineInlineMarkup(name, start, middle, end)
