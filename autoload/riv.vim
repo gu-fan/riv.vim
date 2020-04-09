@@ -257,7 +257,7 @@ fun! riv#load_conf() "{{{1
 
     " Python:
     if has("python3") "{{{
-        let s:c['py'] = "py3 "
+        let s:c['py3'] = "py3 "
         let s:c.has_py = 3
     elseif has("python")
         let s:c['py'] = "py "
