@@ -206,7 +206,7 @@ fun! riv#index_list() "{{{
                 \map(copy(g:_riv_c.p), 'v:val.id+1. "  " . v:val._name . " : " . v:val.path') )
     if id == '' || id == 0 | return | endif
     if id != 0
-        let g:_riv_c.main_idx = id
+        let g:_riv_c.main_idx = id - 1
         call riv#index(id-1)
     endif
 endfun "}}}
