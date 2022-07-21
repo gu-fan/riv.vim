@@ -412,9 +412,14 @@ fun! riv#publish#proj2(ft) abort "{{{
 endfun "}}}
 
 fun! s:rst_args(ft) "{{{
-    return exists("g:riv_rst2".a:ft."_args") ? 
-                \ !empty(g:riv_rst2{a:ft}_args)
-                \ ? g:riv_rst2{a:ft}_args : '' : ''
+    let l:var_args = 'rst2'.a:ft.'_args'
+    let l:args = ''
+    if exists("g:_riv_c.main_idx")
+        let l:args = get(g:_riv_c.p[g:_riv_c.main_idx], l:var_args, '')
+    else
+        args = get(g, 'riv_'.l:var_args, '')
+    endif
+    return l:args
 endfun "}}}
 fun! riv#publish#auto_mkdir(path) "{{{
     if !isdirectory(fnamemodify(a:path,':h')) 
