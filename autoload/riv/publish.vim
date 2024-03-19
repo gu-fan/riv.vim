@@ -156,7 +156,6 @@ fun! s:convert(options) "{{{
     let output = get(a:options, 'output', '')
     let real_file = get(a:options, 'real_file', input)
     let style = ''
-    let args = s:rst_args(ft) 
     
     " For PDF file , we should try rst2latex and rst2xetex.
     if ft=='pdf'
@@ -168,6 +167,7 @@ fun! s:convert(options) "{{{
         let o_ft = 'pdf'
     endif
 
+    let args = s:rst_args(ft) 
 
     let exe = 'rst2'.ft.'2.py'
     if !executable(exe)
