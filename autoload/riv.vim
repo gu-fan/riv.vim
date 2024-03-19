@@ -304,6 +304,11 @@ fun! riv#load_conf() "{{{1
         \'source_suffix'      : g:riv_source_suffix ,
         \'master_doc'         : g:riv_master_doc ,
         \'file_link_style'    : g:riv_file_link_style,
+        \'rst2html_args'      : g:riv_rst2html_args,
+        \'rst2odt_args'       : g:riv_rst2odt_args,
+        \'rst2xml_args'       : g:riv_rst2xml_args,
+        \'rst2s5_args'        : g:riv_rst2s5_args,
+        \'rst2latex_args'     : g:riv_rst2latex_args,
         \}
     let s:c.p = []
 
